@@ -1,15 +1,19 @@
-const Seasons = [
-  'Invierno',
-  'Verano',
-  'Transversal',
+const Seasons = {
+  'invierno':'Invierno',
+  'verano':'Verano',
+  'transversal':'Transversal',
 
-];
+};
 
-const Categories = [
-  'Snack',
-  'Gaseosa',
-  'Instant Soup',
-
-];
+const Categories = {
+  'desayuno':'Desayuno',
+  'latam':"Latam",
+  'liquidos':"Líquidos",
+  'mascotas':"Mascotas",
+  'miscelaneo':"Misceláneo",
+  'picoteo':"Picoteo",
+  'preparados':"Preparados",
+  'snack':"Snack"
+};
 
 export {Seasons,Categories};

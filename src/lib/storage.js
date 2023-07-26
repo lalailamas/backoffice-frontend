@@ -7,6 +7,9 @@ const S = {
   },
   clear: () => {
     localStorage.clear()
+  },
+  delete: (key) => {
+    localStorage.removeItem(key)
   }
 }
 export default S;

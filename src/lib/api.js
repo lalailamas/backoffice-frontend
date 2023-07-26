@@ -22,15 +22,29 @@ const DspApi = {
   updateProductStock: (object) => {
     return axios.put(process.env.NEXT_PUBLIC_DSP_API_BASE + `product/stock`, object, { headers: { 'content-type': 'application/x-www-form-urlencoded' } });
   },
-  findProductByEAN:(ean) => {
+  findProductByEAN: (ean) => {
     return axios.get(process.env.NEXT_PUBLIC_DSP_API_BASE + `product/find?ean=${ean}`, { headers: { 'content-type': 'application/x-www-form-urlencoded' } });
   },
 
-  getProduct:(id) => {
+  getProduct: (id) => {
     return axios.get(process.env.NEXT_PUBLIC_DSP_API_BASE + `product/?id=${id}`, { headers: { 'content-type': 'application/x-www-form-urlencoded' } });
   },
   deleteProduct: (id) => {
-    return axios.delete(process.env.NEXT_PUBLIC_DSP_API_BASE + `product/delete`, {id:id} , { headers: { 'content-type': 'application/x-www-form-urlencoded' } }); 
+    return axios.delete(process.env.NEXT_PUBLIC_DSP_API_BASE + `product/delete`,  { data: { id: id } , headers: { 'content-type': 'application/x-www-form-urlencoded' } });
+  },
+  updateProductImage: (id, file) => {
+    var data = new FormData();
+
+    data.append('id', id);
+    data.append('image', file);
+
+    return axios.put(process.env.NEXT_PUBLIC_DSP_API_BASE + `product/update-image`, data, { headers: { 'content-type': "multipart/form-data" } });
+    
+
+  },
+  listWarehouses: (limit, page) => {
+    return axios.get(process.env.NEXT_PUBLIC_DSP_API_BASE + `warehouse/list?limit=${limit}&page=${page}`, { headers: { 'content-type': 'application/x-www-form-urlencoded' } });
+
   }
 }
 
