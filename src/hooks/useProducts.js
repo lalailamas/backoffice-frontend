@@ -11,7 +11,7 @@ const useGetProducts = (params, cachekey) => {
 
   const fetchData = () => {
     setLoading(true)
-    DspApi.listProducts(params.limit, params.page).then(
+    DspApi.listProducts(params.limit, params.page, params.search).then(
       (response) => {
         setProducts(response.data.data)
         setMeta(response.data.meta)

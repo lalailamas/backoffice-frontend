@@ -4,3 +4,7 @@
 @tailwind components;
 @tailwind utilities;
 
+#manufacture_date_id > div > div > div,
+#expiration_date_id > div > div > div {
+  @apply bg-d-white
+}

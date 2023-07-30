@@ -6,8 +6,15 @@ const DspApi = {
   loginUser: (credentials) => {
     return axios.post(process.env.NEXT_PUBLIC_DSP_API_BASE + 'app-user/login', credentials, { headers: { 'content-type': 'application/x-www-form-urlencoded' } });
   },
-  listProducts: (limit, page) => {
-    return axios.get(process.env.NEXT_PUBLIC_DSP_API_BASE + `product/list?limit=${limit}&page=${page}`, { headers: { 'content-type': 'application/x-www-form-urlencoded' } });
+  listProducts: (limit, page,search) => {
+    if (search != '') {
+
+      return axios.get(process.env.NEXT_PUBLIC_DSP_API_BASE + `product/list?limit=${limit}&page=${page}&search=${search}`, { headers: { 'content-type': 'application/x-www-form-urlencoded' } });
+    }
+    else {
+      return axios.get(process.env.NEXT_PUBLIC_DSP_API_BASE + `product/list?limit=${limit}&page=${page}`, { headers: { 'content-type': 'application/x-www-form-urlencoded' } });
+      
+    }
   },
   createProduct: (product) => {
     var data = new FormData();
