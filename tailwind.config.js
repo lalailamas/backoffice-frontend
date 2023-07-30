@@ -6,7 +6,11 @@ module.exports = {
     './src/app/**/*.{js,ts,jsx,tsx,mdx}',
   ],
   theme: {
+    fontFamily: {
+      'albert-sans': ['Albert Sans', 'sans-serif'],
+    },
     colors: {
+      'd-title-purple': '#6b648d',
       'd-dark-dark-purple':'#462b99',
       'd-soft-soft-purple':'#d5d3fb',
       'd-dark-purple': "#504695",
