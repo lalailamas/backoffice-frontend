@@ -8,3 +8,14 @@
 #expiration_date_id > div > div > div {
   @apply bg-d-white
 }
+
+
+
+@media (max-width:767px) {
+
+  .login-background {
+    background-image:url(/img/bg.svg);
+    background-size:8rem;
+  }
+
+}
