@@ -42,6 +42,7 @@ export default function InsideLayout({ children }) {
         <div className="drawer-side">
           <label htmlFor="dsp-drawer" className="drawer-overlay"></label>
           <Sidebar />
+
         </div>
 
       </div>
