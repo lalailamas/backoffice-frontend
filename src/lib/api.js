@@ -16,6 +16,12 @@ const DspApi = {
       
     }
   },
+
+  listTasks: () => {
+      return axios.get(process.env.NEXT_PUBLIC_DSP_API_BASE + `task`, { headers: { 'content-type': 'application/x-www-form-urlencoded' }});
+  },
+  
+
   createProduct: (product) => {
     var data = new FormData();
     for (var key of Object.keys(product)) {
