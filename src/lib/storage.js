@@ -1,6 +1,6 @@
 const S = {
-  set: (key,val) => {
-    localStorage.setItem(key,JSON.stringify(val))
+  set: (key, val) => {
+    localStorage.setItem(key, JSON.stringify(val))
   },
   get: (key) => {
     return JSON.parse(localStorage.getItem(key))
@@ -12,4 +12,4 @@ const S = {
     localStorage.removeItem(key)
   }
 }
-export default S;
+export default S
