@@ -4,6 +4,7 @@
 @tailwind components;
 @tailwind utilities;
 
+/*
 #manufacture_date_id > div > div > div,
 #expiration_date_id > div > div > div {
   @apply bg-d-white
@@ -12,6 +13,7 @@
 #datepicker > div > div {
   @apply bg-d-white; 
 }
+*/
 
 @media (max-width:767px) {
 
