@@ -1,30 +1,36 @@
-import { useEffect, useState } from 'react'
-import { getInventoryByStore } from '../api/store'
-//import { getLayout } from '../api/layout'
+import { useEffect, useState } from 'react';
+import { getInventoryByStore, getLayout } from '../api/store';
 
-function StepTwo (selectedStore) {
-  const [inventory, setInventory] = useState([])
-  const [layout, setLayout] = useState([])
-  function sendInventory () {
-    /*
-    getInventoryByStore(selectedStore.external_id).then((response) => {
-      if (response.data) {
-        setInventory(response.data)
-        setLayout(response.data.layoutId)
+function StepTwo({ selectedStore }) {
+  const [inventory, setInventory] = useState([]);
+  const [layout, setLayout] = useState([]);
+
+  async function sendInventory() {
+    try {
+      const inventoryResponse = await getInventoryByStore(selectedStore.external_id);
+      console.log('la respuesta del coso');
+      console.log(inventoryResponse);
+      if (inventoryResponse.data) {
+        setInventory(inventoryResponse.data);
+        const layoutId = inventoryResponse.data.layoutId;
+        //const layoutResponse = await getLayout(layoutId);
+        //setLayout(layoutResponse.data);
       }
-    }).then(() => {
-      getLayout(layout).then((response) => {
-        console.log(response)
-      })
-    })
-    */
+    } catch (error) {
+      console.error('Error fetching inventory or layout:', error);
+    }
   }
+
   useEffect(() => {
-    sendInventory()
-  }, [selectedStore])
+    sendInventory();
+  }, [selectedStore]);
+
   return (
-    <div>stepTwo</div>
-  )
+    <div>
+      <div>stepTwo</div>
+      {/* Render layout data here */}
+    </div>
+  );
 }
 
-export default StepTwo
+export default StepTwo;
