@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react'
 import { getInventoryByStore } from '../api/store'
-import { getLayout } from '../api/layout'
+//import { getLayout } from '../api/layout'
 
 function StepTwo (selectedStore) {
   const [inventory, setInventory] = useState([])
   const [layout, setLayout] = useState([])
   function sendInventory () {
+    /*
     getInventoryByStore(selectedStore.external_id).then((response) => {
       if (response.data) {
         setInventory(response.data)
@@ -16,6 +17,7 @@ function StepTwo (selectedStore) {
         console.log(response)
       })
     })
+    */
   }
   useEffect(() => {
     sendInventory()
