@@ -1,13 +1,21 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { getInventoryByStore, getLayout } from '../api/store';
 
-function StepTwo({ selectedStore }) {
+function StepTwo({ selectedStore, currentStep }) {
   const [inventory, setInventory] = useState([]);
   const [layout, setLayout] = useState([]);
 
-  async function sendInventory() {
+  const shouldFetchData = selectedStore && currentStep === 2;
+
+  useEffect(() => {
+    if (shouldFetchData) {
+      fetchInventoryAndLayout(selectedStore.external_id);
+    }
+  }, [shouldFetchData, selectedStore]);
+
+  async function fetchInventoryAndLayout(storeId) {
     try {
-      const inventoryResponse = await getInventoryByStore(selectedStore.external_id);
+      const inventoryResponse = await getInventoryByStore(storeId);
       console.log('la respuesta del coso');
       console.log(inventoryResponse);
       if (inventoryResponse.data) {
@@ -21,13 +29,8 @@ function StepTwo({ selectedStore }) {
     }
   }
 
-  useEffect(() => {
-    sendInventory();
-  }, [selectedStore]);
-
   return (
     <div>
-      <div>stepTwo</div>
       {/* Render layout data here */}
     </div>
   );
