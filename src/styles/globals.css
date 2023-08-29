@@ -9,7 +9,9 @@
   @apply bg-d-white
 }
 
-
+#datepicker > div > div {
+  @apply bg-d-white; 
+}
 
 @media (max-width:767px) {
 
