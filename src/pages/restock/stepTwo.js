@@ -31,7 +31,7 @@ function StepTwo({ selectedStore, currentStep }) {
 
   return (
     <div>
-      {/* Render layout data here */}
+    <pre>{JSON.stringify(inventory, null, 2)}</pre>
     </div>
   );
 }
