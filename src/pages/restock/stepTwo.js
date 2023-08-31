@@ -16,6 +16,7 @@ function StepTwo ({ selectedStore, currentStep }) {
 
   useEffect(() => {
     if (shouldFetchData) {
+      console.log('use effect call')
       fetchInventoryAndLayout(selectedStore.external_id)
     } else {
       resetStepTwo()
@@ -31,6 +32,7 @@ function StepTwo ({ selectedStore, currentStep }) {
   }
 
   async function fetchInventoryAndLayout (storeId) {
+    console.log('fetch')
     try {
       const inventoryResponse = await getInventoryByStore(storeId)
       console.log('la respuesta del coso')
@@ -43,7 +45,7 @@ function StepTwo ({ selectedStore, currentStep }) {
         fetchProducts(inventoryResponse.data)
       }
     } catch (error) {
-      console.error('Error fetching inventory or layout:', error)
+      console.error('Error fetching data:', error)
     }
   }
   async function fetchProducts (inventory) {
