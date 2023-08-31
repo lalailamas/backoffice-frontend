@@ -39,7 +39,7 @@ export const getReiteData = (id, url, contentType) => {
   if (id !== '') {
     return axios.get(urlApiReite + url + `?storeId=${id}`, { headers: { 'content-type': contentType } })
   } else {
-    return axios.get(urlApiReite + url + '?storeId=CNV_003', { headers: { 'content-type': contentType } })
+    return axios.get(urlApiReite + url, { headers: { 'content-type': contentType } })
   }
 }
 export const getReiteDataById = (id, url, contentType) => {

@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { getInventoryByStore } from '../api/store'
 import { getLayout } from '../api/layout'
-import { getReiteData } from '../api/product/reite'
+import { getAllReiteData } from '../api/product/reite'
+import DspLoader from '@/components/admin/common/loader'
+import AccordeonCard from './acordeonCard'
 // import AccordeonCard from './acordeonCard'
 
 function StepTwo ({ selectedStore, currentStep }) {
@@ -15,8 +17,18 @@ function StepTwo ({ selectedStore, currentStep }) {
   useEffect(() => {
     if (shouldFetchData) {
       fetchInventoryAndLayout(selectedStore.external_id)
+    } else {
+      resetStepTwo()
+      setRender(false)
     }
   }, [shouldFetchData, selectedStore, render])
+  const resetStepTwo = () => {
+    // Restablecer los estados relevantes para StepTwo
+    // Puedes usar setSelectedStore, setCurrentStep u otros estados según sea necesario
+    setInventory([])
+    setLayout([])
+    // ... restablecer otros estados ...
+  }
 
   async function fetchInventoryAndLayout (storeId) {
     try {
@@ -37,14 +49,9 @@ function StepTwo ({ selectedStore, currentStep }) {
   async function fetchProducts (inventory) {
     console.log('entré al fetchProducts')
     try {
-      const productsResponse = await Promise.all(
-        inventory.products.map(async (item) => {
-          const productResponse = await getReiteData(item.productId)
-          return productResponse.data
-        })
-      )
-      console.log('aca tengo los products', productsResponse)
-      setProducts(productsResponse)
+      const productsResponse = await getAllReiteData()
+      console.log('aca tengo los products', productsResponse.data)
+      setProducts(productsResponse.data)
       setRender(true)
     } catch (error) {
       console.error('Error fetching products:', error)
@@ -53,59 +60,62 @@ function StepTwo ({ selectedStore, currentStep }) {
 
   return (
     <div>
-      {render && layout && layout.trays &&
-    layout.trays.map((tray, index) => {
-      return (
-        <div key={index}>
-          <h1>Tray</h1>
-          {
-            tray
+      {selectedStore
+        ? <div><h1 className='text-d-dark-dark-purple text-2xl font-bold text-center'>Confirma el inventario de {selectedStore.name} </h1></div>
+        : null}
+      {
+        !render
+          ? <DspLoader />
+          : layout && layout.trays && layout.trays.map((tray, index) => {
+            return (
+              <div key={index} className='text-center border-b-2 border-gray-300 pb-5 mb-5'>
+                <h2 className='text-d-soft-purple text-2x2 font-bold'>Bandeja N°{index}</h2>
+                <div className='flex gap-5 justify-center'>
 
-              ? tray.columns.map((item, index) => {
-                console.log('aca tengo el item', item)
-                const product = products.filter((product) => product.productId === item.productId)
-                console.log('aca tengo el product', product)
-                // const quantityProd = inventory.products.find((prod) => parseInt(prod.productId) === parseInt(item.productId))
+                  {
+                  tray
+                    ? tray.columns.map((column, index) => {
+                      const product = products.filter((product) => product.productId === column.productId)
+                      const quantityProd = inventory.products.find((prod) => prod.productId === column.productId)
+                      console.log('aca tengo el product', product)
+                      console.log('aca tengo el quantityProd', quantityProd ? quantityProd.quantity : 'No encontrado')
+                      return (
+                        <AccordeonCard
+                          key={index}
+                          header={
+                            <div className=' gap-3 items-center justify-center'>
+                              <figure className='flex justify-center'>
+                                <img
+                                  className='w-auto max-w-[50px] h-[50px]'
+                                  src={product[0].metadata.imageUrl}
+                                  width={120}
+                                  height={120}
+                                  alt='Product'
+                                />
+                              </figure>
+                              <h1 className='flex justify-center items-center text-d-title-purple font-bold m-1'>{product[0].productName}</h1>
+                              <p className='ml-auto font-bold text-d-dark-dark-purple'> {quantityProd ? quantityProd.quantity : '??'}</p>
+                            </div>
+                        }
+                        />
+                      // <div key={index}>
+                      //   <pre>{JSON.stringify(inventory, null, 2)}</pre>
+                      // </div>
 
-                // console.log('aca tengo el quantity', quantityProd)
+                      )
+                    })
+                    : null
+                }
+                </div>
+              </div>
 
-                // console.log('aca tengo el product', product)
-                // console.log('este es el id del tray.columns.map.item', item.productId)
-                return (
-                //  <AccordeonCard
-                //    key={index} header={
-                //      <div className='flex gap-3 items-center'>
-                //        <figure className=''>
-                //          {/* <img
-                //            className='w-auto max-w-[50px] h-[35px]'
-                //            src={product.metadata.imageUrl}
-                //            width={120}
-                //            height={120}
-                //            alt='Product'
-                //          /> */}
-                //        </figure>
-                //        <h2 className='capitalize font-semibold text-left'>{product.productName}</h2>
-                //        <p className='ml-auto font-semibold'>{quantity}</p>
-                //      </div>
+            )
+          })
 
-                // }
-                //  />
-                  <div key={item}>
-                    <pre>{JSON.stringify(item.productId, null, 2)}</pre>
-                  </div>
+      }
 
-                )
-              })
-              : <div>no hay nada</div>
-
-            }
-        </div>
-      )
-    })}
     </div>
-  // <div>
-  //   <pre>{JSON.stringify(products, null, 2)}</pre>
-  // </div>
+
   )
 }
 

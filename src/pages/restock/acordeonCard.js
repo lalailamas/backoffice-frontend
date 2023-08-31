@@ -9,9 +9,9 @@ const AccordeonCard = ({
   const [isOpen, setIsOpen] = useState(true)
 
   return (
-    <div className={`bg-white rounded-lg shadow-lg p-3 h-fit ${className}`}>
+    <div className={`max-w-sm m-1 p-2 rounded overflow-hidden shadow-lg ${className} gap-3`}>
       <button
-        className='block w-full'
+        className='block w-50'
         type='button'
         onClick={() => setIsOpen(!isOpen)}
       >
