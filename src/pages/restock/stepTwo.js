@@ -81,6 +81,7 @@ function StepTwo ({ selectedStore, currentStep }) {
                     ? tray.columns.map((column, index) => {
                       const product = products.filter((product) => product.productId === column.productId)
                       const quantityProd = inventory.products.find((prod) => prod.productId === column.productId)
+                      const maxQuantity = column.maxQuantity
                       console.log('aca tengo el product', product)
                       console.log('aca tengo el quantityProd', quantityProd ? quantityProd.quantity : 'No encontrado')
                       return (
@@ -98,7 +99,7 @@ function StepTwo ({ selectedStore, currentStep }) {
                                 />
                               </figure>
                               <h1 className='flex justify-center items-center text-d-title-purple font-bold m-1'>{product[0].productName}</h1>
-                              <p className='ml-auto font-bold text-d-dark-dark-purple'> {quantityProd ? quantityProd.quantity : '??'}</p>
+                              <p className='ml-auto font-bold text-d-dark-dark-purple'> {quantityProd ? `${quantityProd.quantity}/${maxQuantity}` : '??'}</p>
                             </div>
                         }
                         />
