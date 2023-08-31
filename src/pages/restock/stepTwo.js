@@ -13,40 +13,45 @@ function StepTwo ({ selectedStore, currentStep }) {
 
   useEffect(() => {
     if (shouldFetchData) {
+      console.log('use effect call')
       fetchInventoryAndLayout(selectedStore.external_id)
     }
   }, [shouldFetchData, selectedStore])
 
   async function fetchInventoryAndLayout (storeId) {
+    console.log('fetch')
     try {
-      const inventoryResponse = await getInventoryByStore(storeId)
-      //   console.log('la respuesta del coso')
-      //   console.log(inventoryResponse)
-      if (inventoryResponse.data) {
-        setInventory(inventoryResponse.data)
-        const layoutId = selectedStore.layout_id
-        const layoutResponse = await getLayout(layoutId)
-        setLayout(layoutResponse.data)
-        if (layoutResponse.data) {
-          fetchProducts(inventoryResponse.data)
-        }
+      const [inventoryResponse, layoutResponse] = await Promise.all([
+        getInventoryByStore(storeId),
+        getLayout(selectedStore.layout_id),
+      ]);
+
+      setInventory(inventoryResponse.data);
+      setLayout(layoutResponse.data);
+
+      if (layoutResponse.data) {
+        fetchProducts(inventoryResponse.data.products);
       }
     } catch (error) {
-      console.error('Error fetching inventory or layout:', error)
+      console.error('Error fetching data:', error);
     }
   }
-  async function fetchProducts (inventory) {
-    // console.log('entré al fetchProducts')
+
+  async function fetchProducts(productsList) {
     try {
       const productsResponse = await Promise.all(
-        inventory.products.map(async (item) => {
-          const productResponse = await getReiteData(item.productId)
-          return productResponse.data
+        productsList.map(async (item) => {
+          console.log('item query');
+          console.log(item);
+          const productResponse = await getReiteData(item.productId);
+          return productResponse.data;
         })
-      )
-      setProducts(productsResponse)
+      );
+      console.log('productos done');
+      console.log(productsResponse);
+      setProducts(productsResponse);
     } catch (error) {
-      console.error('Error fetching products:', error)
+      console.error('Error fetching products:', error);
     }
   }
 
@@ -59,35 +64,9 @@ function StepTwo ({ selectedStore, currentStep }) {
           <h1>Tray</h1>
           {
          tray.columns.map((item, index) => {
-           const product = products.filter((product) => parseInt(product.productId) !== parseInt(item.productId))
-           const quantityProd = inventory.products.find((prod) => prod.productId === item.productId).quantity
-           console.log('aca tengo el product', product)
-           console.log('aca tengo el quantity', quantityProd)
-           console.log('este es el id del tray.columns.map.item', item.productId)
-           return (
-           //  <AccordeonCard
-           //    key={index} header={
-           //      <div className='flex gap-3 items-center'>
-           //        <figure className=''>
-           //          {/* <img
-           //            className='w-auto max-w-[50px] h-[35px]'
-           //            src={product.metadata.imageUrl}
-           //            width={120}
-           //            height={120}
-           //            alt='Product'
-           //          /> */}
-           //        </figure>
-           //        <h2 className='capitalize font-semibold text-left'>{product.productName}</h2>
-           //        <p className='ml-auto font-semibold'>{quantity}</p>
-           //      </div>
-
-           // }
-           //  />
-             <div key={item}>
-               <pre>{JSON.stringify(product, null, 2)}</pre>
-             </div>
-
-           )
+           <div key={item}>
+             <pre>{JSON.stringify(item, null, 2)}</pre>
+           </div>
          })
 
            }
