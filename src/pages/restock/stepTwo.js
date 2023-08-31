@@ -61,18 +61,20 @@ function StepTwo ({ selectedStore, currentStep }) {
   }
 
   return (
-    <div>
-      {selectedStore
-        ? <div><h1 className='text-d-dark-dark-purple text-2xl font-bold text-center'>Confirma el inventario de {selectedStore.name} </h1></div>
-        : null}
+    <div className='px-4 md:px-6 lg:px-8'>
+      {selectedStore && (
+        <div className='text-center mb-4 md:mb-8'>
+          <h1 className='text-d-dark-dark-purple text-2x2 font-bold'>Confirma el inventario de {selectedStore.name}</h1>
+        </div>
+      )}
       {
         !render
           ? <DspLoader />
           : layout && layout.trays && layout.trays.map((tray, index) => {
             return (
-              <div key={index} className='text-center border-b-2 border-gray-300 pb-5 mb-5'>
-                <h2 className='text-d-soft-purple text-2x2 font-bold'>Bandeja N°{index}</h2>
-                <div className='flex gap-5 justify-center'>
+              <div key={index} className='text-center border-b-2 border-gray-300 pb-5 mb-5 md:mb-8'>
+                <h2 className='ttext-d-soft-purple text-2x2 font-bold pb-5 mb-5 md:mb-8'>Bandeja N°{index}</h2>
+                <div className='flex flex-col md:flex-row gap-4 items-center md:items-start'>
 
                   {
                   tray
