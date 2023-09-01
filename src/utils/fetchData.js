@@ -42,3 +42,7 @@ export const getReiteData = (id, url, contentType) => {
 export const getReiteDataById = (id, url, contentType) => {
   return axios.get(urlApiReite + url + `/${id}`, { headers: { 'content-type': contentType } })
 }
+
+export const getDataStock = (url, contentType) => {
+  return axios.get(urlApiReite + url, { headers: { 'content-type': contentType } })
+}
