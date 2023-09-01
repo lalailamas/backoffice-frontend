@@ -21,9 +21,6 @@ export const getData = (order, limit, page, search, ean, id, url, contentType) =
 }
 
 export const getTimeStampData = (url, contentType, startDate, endDate) => {
-  console.log('api call')
-  console.log(startDate)
-  console.log(endDate)
   return axios.get(urlApiReite + url + `?startTimestamp=${startDate}` + `&endTimestamp=${endDate}`, { headers: { 'content-type': contentType } })
 }
 // api/reite/restock?startTimestamp=2022-03-30&endTimestamp=2023-08-30

@@ -25,7 +25,7 @@ module.exports = {
         'd-soft-green': '#d8dcb0',
         'd-dark-gray': '#e8e8d8',
         'd-gray': '#e5e5e3',
-        'd-white': '#ffffff',
+        'd-white': '#ffffff'
         // ...
       },
       backgroundImage: {
@@ -33,7 +33,7 @@ module.exports = {
         'gradient-conic':
           'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))'
       }
-    },
+    }
   },
   plugins: [require('daisyui')]
-};
+}
