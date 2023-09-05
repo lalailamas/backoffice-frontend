@@ -2,6 +2,7 @@ import axios from 'axios'
 
 const urlApi = process.env.NEXT_PUBLIC_DSP_API_BASE
 const urlApiReite = process.env.NEXT_PUBLIC_DSP_API_BASE + 'reite/'
+
 export const postData = (credentials, url, contentType) => {
   return axios.post(urlApi + url, credentials, { headers: { 'content-type': contentType } })
 }
@@ -25,7 +26,11 @@ export const getTimeStampData = (url, contentType, startDate, endDate) => {
 }
 // api/reite/restock?startTimestamp=2022-03-30&endTimestamp=2023-08-30
 export const putData = (data, url, contentType) => {
-  return axios.put(urlApi + url, data, { headers: { 'content-type': contentType } })
+  if (data !== '') {
+    return axios.put(urlApi + url, data, { headers: { 'content-type': contentType } })
+  } else {
+    return axios.put(urlApi + url, { headers: { 'content-type': contentType } })
+  }
 }
 
 export const deleteData = (id, url, contentType) => {
