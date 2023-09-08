@@ -18,37 +18,38 @@ export default function UsersTable ({ data }) {
   return (
     <>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <table className='table text-d-dark-dark-purple table-zebra'>
-          <thead>
-            <tr className='bg-d-dark-dark-purple text-d-white'>
-              <th />
-              <th>ID</th>
-              <th>Nombre</th>
-              <th>Rol</th>
-              <th>Editar</th>
-              <th>Eliminar</th>
-            </tr>
-          </thead>
-          <tbody>
-            {data.map((user) => (
-              <tr key={user.fullname}>
-                <td />
-                <td>{user.id}</td>
-                <td>{user.fullname}</td>
-                <td>{user.role}</td>
-                <td>
-
-                  <Link href='/users/edit/'>
-                    <p>✎</p>
-                  </Link>
-                </td>
-                <td>🗑</td>
+        <div className='overflow-x-auto'>
+          <table className='table text-d-dark-dark-purple table-zebra'>
+            <thead>
+              <tr className='bg-d-dark-dark-purple text-d-white'>
+                <th />
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Rol</th>
+                <th>Editar</th>
+                <th>Eliminar</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-        <div />
+            </thead>
+            <tbody>
+              {data.map((user) => (
+                <tr key={user.fullname}>
+                  <td />
+                  <td>{user.id}</td>
+                  <td>{user.fullname}</td>
+                  <td>{user.role}</td>
+                  <td>
+                    <Link href='/users/edit/'>
+                      <p>✎</p>
+                    </Link>
+                  </td>
+                  <td>🗑</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </form>
+
     </>
   )
 }
