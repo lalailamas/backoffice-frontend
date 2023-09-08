@@ -65,7 +65,6 @@ function CreateUserForm () {
                   <p className='text-error'>{formState.errors.role.message}</p>
                 )}
               </div>
-
               <div className='pb-4'>
                 <label className='label'>Nombre</label>
                 <Controller
@@ -90,7 +89,6 @@ function CreateUserForm () {
                   )}
                 />
               </div>
-
               <div className='pb-4'>
                 <label className='label'>Apellido Paterno</label>
                 <Controller
@@ -115,7 +113,6 @@ function CreateUserForm () {
                   )}
                 />
               </div>
-
               <div className='pb-4'>
                 <label className='label'>Apellido Materno</label>
                 <Controller
@@ -168,7 +165,6 @@ function CreateUserForm () {
                   )}
                 />
               </div>
-
               <div className='pb-4'>
                 <label className='label'>Confirmar Email</label>
                 <Controller
@@ -194,7 +190,6 @@ function CreateUserForm () {
                   )}
                 />
               </div>
-
               <div className='pb-4'>
                 <label className='label'>Contraseña</label>
                 <Controller
@@ -223,7 +218,6 @@ function CreateUserForm () {
                   )}
                 />
               </div>
-
               <div className='pb-4'>
                 <label className='label'>Confirmar Contraseña</label>
                 <Controller
@@ -266,7 +260,6 @@ function CreateUserForm () {
                 </button>
               </div>
             </form>
-
           </div>
           <div>
             {successMessage &&
