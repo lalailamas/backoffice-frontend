@@ -5,7 +5,7 @@ import InsideLayout from '@/components/admin/layouts/inside'
 
 export default function EditUserForm () {
   const router = useRouter()
-  const { id } = router.query // Obtener el ID del usuario de la URL
+  const { id } = router.query
   const { register, handleSubmit } = useForm()
 
   const onSubmit = (editedUserData) => {

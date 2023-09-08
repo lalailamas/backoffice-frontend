@@ -12,42 +12,39 @@ function CreateUserForm () {
       first_name: '',
       first_lastname: '',
       second_lastname: '',
-      role: ''
+      role: 'restock'
     }
   })
   const [successMessage, setSuccessMessage] = useState('')
   const router = useRouter()
 
   const onSubmit = handleSubmit((data) => {
-    console.log(data, 'aqui esta la data')
     createUser(data)
       .then((response) => {
-        console.log(response, 'entre al createUser')
-        setSuccessMessage('Usuario creado exitosamente')
+        setSuccessMessage(response, 'Usuario creado exitosamente')
         setTimeout(() => {
           router.push('/users')
         }, 2000)
       })
       .catch((error) => {
-        console.error('Error al crear la cuenta:', error)
-        setError('Error al crear la cuenta. Por favor, inténtelo de nuevo.')
+        setError('Error al crear la cuenta. Por favor, inténtelo de nuevo', error)
       })
   })
 
   return (
     <>
       <InsideLayout />
-      <div className='bg-grey-lighter min-h-screen flex flex-col'>
+      <div className='flex flex-col p-8 mb-8'>
         <div className='container max-w-sm mx-auto flex-1 flex flex-col items-center justify-center'>
-          <div className='bg-white px-6 py-3 w-full'>
-            <h1 className='text-d-dark-dark-purple text-2xl font-bold pb-4'>Crear cuenta</h1>
+          <div className='bg-white px-6 py-3'>
+            <h1 className='text-d-dark-dark-purple text-2xl font-bold pb-4'>Crear usuario</h1>
             <form onSubmit={onSubmit}>
               <div className='pb-4'>
                 <label className='label'>Tipo de perfil</label>
                 <Controller
                   name='role'
                   control={control}
-                  defaultValue='read'
+                  defaultValue='restock'
                   rules={{ required: 'Seleccione un tipo de perfil' }}
                   render={({ field }) => (
                     <select
@@ -82,8 +79,8 @@ function CreateUserForm () {
                         className='input input-bordered w-full bg-d-white rounded-full text-d-dark-dark-purple'
                         placeholder='Nombre'
                       />
-                      {formState.errors.firstName && (
-                        <p className='text-error'>{formState.errors.firstName.message}</p>
+                      {formState.errors.first_name && (
+                        <p className='text-error'>{formState.errors.first_name.message}</p>
                       )}
                     </>
                   )}
@@ -107,8 +104,8 @@ function CreateUserForm () {
                         className='input input-bordered w-full bg-d-white rounded-full text-d-dark-dark-purple'
                         placeholder='Apellido Paterno'
                       />
-                      {formState.errors.firstLastName && (
-                        <p className='text-error'>{formState.errors.firstLastName.message}</p>
+                      {formState.errors.first_lastname && (
+                        <p className='text-error'>{formState.errors.first_lastname.message}</p>
                       )}
                     </>
                   )}
@@ -132,8 +129,8 @@ function CreateUserForm () {
                         className='input input-bordered w-full bg-d-white rounded-full text-d-dark-dark-purple'
                         placeholder='Apellido Materno'
                       />
-                      {formState.errors.secondLastName && (
-                        <p className='text-error'>{formState.errors.secondLastName.message}</p>
+                      {formState.errors.second_lastname && (
+                        <p className='text-error'>{formState.errors.second_lastname.message}</p>
                       )}
                     </>
                   )}
@@ -168,7 +165,7 @@ function CreateUserForm () {
                 />
               </div>
 
-              {/* <div className='pb-4'>
+              <div className='pb-4'>
                 <label className='label'>Confirmar Email</label>
                 <Controller
                   name='confirmEmail'
@@ -192,7 +189,7 @@ function CreateUserForm () {
                     </>
                   )}
                 />
-              </div> */}
+              </div>
 
               <div className='pb-4'>
                 <label className='label'>Contraseña</label>
@@ -254,7 +251,7 @@ function CreateUserForm () {
                 type='submit'
                 className='btn border-none mt-4 rounded-2xl bg-d-dark-dark-purple text-d-white hover:bg-d-soft-soft-purple hover:text-d-dark-dark-purple disabled:text-d-white'
               >
-                Crear cuenta
+                Crear usuario
               </button>
             </form>
 

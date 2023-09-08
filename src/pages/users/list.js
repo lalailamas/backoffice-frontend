@@ -11,9 +11,7 @@ export default function UsersTable ({ data }) {
 
   if (!data || data.length === 0) {
     return (
-      <div className='h-screen'>
-        <p className='text-center'>No hay datos disponibles</p>
-      </div>
+      <p className='text-center'>No hay datos disponibles</p>
     )
   }
 
@@ -28,7 +26,7 @@ export default function UsersTable ({ data }) {
               <th>Nombre</th>
               <th>Rol</th>
               <th>Editar</th>
-              <th>Borrar</th>
+              <th>Eliminar</th>
             </tr>
           </thead>
           <tbody>
