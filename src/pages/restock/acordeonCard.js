@@ -28,7 +28,7 @@ const AccordeonCard = ({
   }
 
   return (
-    <div className={`max-w-sm m-1 p-2 rounded overflow-hidden shadow-lg ${className} gap-3`}>
+    <div className={`max-w-sm m-1 p-2 rounded overflow-hidden shadow-lg ${className} gap-6 h-[200px]`}>
       <button
         className='block w-50'
         type='button'
@@ -37,10 +37,12 @@ const AccordeonCard = ({
         {header}
       </button>
       {/* <p className='ml-auto font-bold text-d-dark-dark-purple'> {initialQuantity}/{maxQuantity}</p> */}
-      <div className='flex justify-center text-center items-center'>
+
+      {/* TODO: BOTON + Y TICKET ESPACIADO AQUI */}
+      <div className='flex justify-center text-center items-center h-[120px] gap-3'>
 
         <button className='btn btn-sm join-item rounded-full bg-d-dark-dark-purple border-none text-d-white hover:bg-d-soft-soft-purple hover:text-d-dark-dark-purple' onClick={handleDecrease}>-</button>
-        <p className='flex items-center justify-center w-16 h-8 ml-2 font-bold text-d-dark-dark-purple'>{quantity}/{maxQuantity}</p>
+        <p className='flex items-center justify-center  h-8 ml-2 font-bold text-d-dark-dark-purple'>{quantity}/{maxQuantity}</p>
         <button className='btn btn-sm join-item rounded-full bg-d-dark-dark-purple border-none text-d-white hover:bg-d-soft-soft-purple hover:text-d-dark-dark-purple' onClick={handleIncrease}>+</button>
         <button className='btn btn-sm join-item rounded-full bg-d-dark-dark-purple border-none text-d-white hover:bg-d-soft-soft-purple hover:text-d-dark-dark-purple' onClick={handleCheck}>✓</button>
       </div>
