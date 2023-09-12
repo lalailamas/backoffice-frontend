@@ -5,9 +5,15 @@
 @tailwind utilities;
 
 #manufacture_date_id > div > div > div,
+#search_date_id > div > div > div,
+#end_date_id > div > div > div,
+#start_date_id> div > div > div,
 #expiration_date_id > div > div > div {
   @apply bg-d-white
 }
+
+
+
 
 
 
