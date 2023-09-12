@@ -11,22 +11,22 @@ export default function InsideLayout({ children }) {
   const router = useRouter();
   const [loading,setLoading] = useState(true);
 
-  // useEffect(
-  //   () => {
-  //     var user = S.get('user');
-  //     console.log(user);
-  //     if (!user) {
-  //       router.push('/admin/login');
-  //     }
-  //     setLoading(false);
-  //   },
-  //   [router.isReady]
-  // );
+  useEffect(
+    () => {
+      var user = S.get('user');
+      console.log(user);
+      if (!user) {
+        router.push('/admin/login');
+      }
+      setLoading(false);
+    },
+    [router.isReady]
+  );
 
-  //  if (loading) {
-  //   return <DspLoader />
+   if (loading) {
+    return <DspLoader />
 
-  //  }
+   }
 
   return (
     <>
