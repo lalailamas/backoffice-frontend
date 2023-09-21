@@ -1,4 +1,5 @@
 import '../styles/globals.css'
+import { UserProvider } from '@/hooks/userContext'
 
 export default function Despnsa24 ({ Component, pageProps }) {
   // Use the layout defined at the page level, if available
@@ -6,8 +7,9 @@ export default function Despnsa24 ({ Component, pageProps }) {
 
   return getLayout(
     <>
-
-      <Component {...pageProps} />
+      <UserProvider>
+        <Component {...pageProps} />
+      </UserProvider>
     </>
 
   )
