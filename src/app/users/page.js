@@ -1,3 +1,4 @@
+'use client'
 import InsideLayout from '@/components/admin/layouts/inside'
 import Link from 'next/link'
 import { listUsers } from '../../api/user'
