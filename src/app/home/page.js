@@ -1,9 +1,8 @@
-import InsideLayout from '@/components/admin/layouts/inside'
 import { Card, Text, Metric, Flex, ProgressBar } from '@tremor/react'
 
 export default () => (
   <>
-    <InsideLayout />
+
     <div className='p-4'>
       <Card className='max-w-xs mx-auto'>
         <Text>Sales</Text>

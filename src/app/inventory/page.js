@@ -1,3 +1,4 @@
+'use client'
 // import Image from 'next/image's
 import { Inter } from 'next/font/google'
 import InsideLayout from '@/components/admin/layouts/inside'
@@ -199,6 +200,7 @@ export default function Inventory () {
 
   return (
     <>
+      <InsideLayout />
 
       {/* <pre>{JSON.stringify(warehouses, null, 2)}</pre> */}
       {/* <div className="overflow-x-auto"><table className="table table-zebra w-full"><thead><tr><th>Id</th><th>Nombre</th><th>Precio</th><th>Precio oferta</th><th>Descripción</th><th>Activa</th><th>Acciones</th></tr></thead><tbody><tr><th>1</th><td>Mediana</td><td>14.000</td><td>14.000</td><td>Lorem ipsum dolor sit amet. Dolor sit amet.</td><td></td><td><button className="btn btn-sm btn-outline">Editar</button></td></tr><tr><th>2</th><td>Grande</td><td>14.000</td><td>14.000</td><td>Lorem ipsum dolor sit amet. Dolor sit amet.</td><td></td><td><button className="btn btn-sm btn-outline">Editar</button></td></tr><tr><th>3</th><td>Súper grande</td><td>14.000</td><td>14.000</td><td>Lorem ipsum dolor sit amet. Dolor sit amet.</td><td></td><td><button className="btn btn-sm btn-outline">Editar</button></td></tr><tr><th>4</th><td>Jumbo</td><td>14.000</td><td>14.000</td><td>Lorem ipsum dolor sit amet. Dolor sit amet.</td><td></td><td><button className="btn btn-sm btn-outline">Editar</button></td></tr></tbody></table></div> */}

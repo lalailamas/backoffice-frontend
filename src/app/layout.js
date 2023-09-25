@@ -1,6 +1,7 @@
 import SessionAuthProvider from '../context/SessionAuthProvider'
-import Sidebar from '@/components/admin/common/sidebar'
-import Navbar from '@/components/admin/common/navbar'
+import 'tailwindcss/tailwind.css'
+// import Sidebar from '@/components/admin/common/sidebar'
+// import Navbar from '@/components/admin/common/navbar'
 
 export default function RootLayout ({ children }) {
   return (
@@ -8,16 +9,16 @@ export default function RootLayout ({ children }) {
       <body data-theme='light' className='bg-d-white'>
         <SessionAuthProvider>
           <div className='drawer-content overflow-x-auto bg-d-white'>
-            <Navbar />
+            {/* <Navbar /> */}
             {children}
 
           </div>
 
-          <div className='z-10 drawer-side'>
+          {/* <div className='z-10 drawer-side'>
             <label htmlFor='dsp-drawer' className='drawer-overlay' />
             <Sidebar />
 
-          </div>
+          </div> */}
         </SessionAuthProvider>
       </body>
     </html>
