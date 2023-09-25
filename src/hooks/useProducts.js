@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { listProducts } from '@/pages/api/product'
+import { listProducts } from '@/api/product'
 
 const useGetProducts = (params, cachekey) => {
   const [products, setProducts] = useState(null)
