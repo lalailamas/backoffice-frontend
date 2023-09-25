@@ -1,3 +1,4 @@
+'use client'
 import Image from 'next/image'
 import { Inter } from 'next/font/google'
 import InsideLayout from '@/components/admin/layouts/inside'
@@ -35,10 +36,6 @@ export default function Inventory () {
   const [currentROrder, setCurrentROrder] = useState({})
   const [currentWarehouse, setCurrentWarehouse] = useState(0)
   const [currentQuantity, setCurrentQuantity] = useState(1)
-
-  const [showTraining, setShowTraining] = useState(false)
-  const [showMachines, setShowMachines] = useState(false)
-  const [showExpiration, setShowExpiration] = useState(false)
 
   const handleNewROrder = () => {
     setCurrentROrder({})

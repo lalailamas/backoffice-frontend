@@ -1,3 +1,4 @@
+'use client'
 import RepositionTable from '@/components/admin/tables/repositionTable'
 import { getRestockProducts } from '../../api/restock'
 import { useState, useEffect } from 'react'

@@ -1,3 +1,4 @@
+'use client'
 import InsideLayout from '@/components/admin/layouts/inside'
 import StockTable from '@/components/admin/tables/stockTable'
 import { useEffect, useState } from 'react'

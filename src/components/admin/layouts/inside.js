@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import Navbar from '../common/navbar'
 import Sidebar from '../common/sidebar'
 import S from '@/lib/storage'
-import { useRouter } from 'next/navigation'
+// import { useRouter } from 'next/navigation'
 import DspLoader from '../common/loader'
 
 export default function InsideLayout ({ children }) {
