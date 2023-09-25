@@ -3,7 +3,7 @@ import { getInventoryByStore } from '../../api/store'
 import { getLayout } from '../../api/layout'
 import { getAllReiteData } from '../../api/product/reite'
 import DspLoader from '@/components/admin/common/loader'
-import AccordeonCard from '../../pages/restock/acordeonCard'
+import AccordeonCard from './acordeonCard'
 // import AccordeonCard from './acordeonCard'
 
 function StepTwo ({ selectedStore, currentStep }) {
