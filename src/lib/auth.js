@@ -1,4 +1,4 @@
-import { loginUser } from '@/src/api/user'
+import { loginUser } from '../api/user'
 
 import CredentialsProvider from 'next-auth/providers/credentials'
 
@@ -14,16 +14,6 @@ export const authOptions = {
       authorize: async (credentials) => {
         // console.log(credentials);
         try {
-          // const response = await fetch(
-          //   "https://api.despnsa247.com/api/app-user/login",
-          //   {
-          //     method: "POST",
-          //     body: JSON.stringify(credentials),
-          //     headers: {
-          //       "Content-Type": "application/json"
-          //     }
-          //   }
-          // );
           const response = await loginUser(credentials)
           // console.log(response.data, 'este es el response')
           // const data = await response.json();

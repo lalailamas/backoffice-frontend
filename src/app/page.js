@@ -1,10 +1,11 @@
+'use client'
 /* eslint-disable camelcase */
 // import Image from 'next/image'
 // import { Inter } from 'next/font/google'
 import { useEffect, useState } from 'react'
 import { loginUser } from '@/api/user'
 import S from '@/lib/storage'
-import { useRouter } from 'next/router'
+import { useRouter } from 'next/navigation'
 import { useUser } from '@/hooks/userContext'
 
 // const inter = Inter({ subsets: ['latin'] })
@@ -15,15 +16,11 @@ export default function Home () {
   const [loginError, setLoginError] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
   const router = useRouter()
-  const { setUser } = useUser()
 
   const performLogin = () => {
     setLoginError(false)
     loginUser({ email, password })
       .then((response) => {
-        const { fullname, role } = response.data.appUser
-        const user = { fullname, role }
-        setUser(user)
         const now = Math.round(Date.now() / 1000)
         S.set('user', { ...response.data.AuthenticationResult, loggedAt: now })
         router.push('/home')
