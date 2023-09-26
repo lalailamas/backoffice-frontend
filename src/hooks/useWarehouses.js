@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { listWarehouses } from '@/pages/api/warehouse'
+import { listWarehouses } from '@/api/warehouse'
 
 const useGetWarehouses = (params, cachekey) => {
   const [warehouses, setWarehouses] = useState(null)
