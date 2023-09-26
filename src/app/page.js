@@ -5,12 +5,12 @@
 import { useEffect, useState } from 'react'
 import S from '@/lib/storage'
 import { useRouter } from 'next/navigation'
-import { signIn, useSession } from 'next-auth/react'
+import { signIn } from 'next-auth/react'
 
 // const inter = Inter({ subsets: ['latin'] })
 
 export default function Home () {
-  const { data: session } = useSession()
+  // const { data: session } = useSession()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [loginError, setLoginError] = useState(false)
@@ -19,34 +19,15 @@ export default function Home () {
 
   const performLogin = async () => {
     setLoginError(false)
-    try {
-      const result = await signIn('credentials', {
-        email,
-        password,
-        redirect: false
-      })
-      console.log(result, 'SOY EL RESULTADO')
 
-      if (result.ok) {
-        if (session) {
-          // El usuario ha iniciado sesión
-
-          console.log('Rol del usuario:', session)
-          console.log(session.user)
-          if (session.user.role === 'admin') {
-            router.push('/admin/inventory')
-          } else {
-            router.push('/tasks')
-          }
-        }
-      } else {
-        console.log(result, 'ERROR DEL INDEX')
-        setLoginError(true)
-      }
-    } catch (error) {
-      console.error(error, 'ERROR DEL INDEX')
-      setLoginError(true)
-    }
+    const result = await signIn('credentials', {
+      email,
+      password,
+      redirect: false
+    })
+    console.log(result, 'SOY EL RESULTADO')
+    if (result?.error) { setLoginError(true); return }
+    router.push('/home')
   }
 
   useEffect(
