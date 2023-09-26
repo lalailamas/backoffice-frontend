@@ -3,35 +3,50 @@
 // import Image from 'next/image'
 // import { Inter } from 'next/font/google'
 import { useEffect, useState } from 'react'
-import { loginUser } from '@/api/user'
 import S from '@/lib/storage'
 import { useRouter } from 'next/navigation'
+import { signIn, useSession } from 'next-auth/react'
 
 // const inter = Inter({ subsets: ['latin'] })
 
 export default function Home () {
+  const { data: session } = useSession()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [loginError, setLoginError] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
   const router = useRouter()
 
-  const performLogin = () => {
+  const performLogin = async () => {
     setLoginError(false)
-    loginUser({ email, password })
-      .then((response) => {
-        const now = Math.round(Date.now() / 1000)
-        S.set('user', { ...response.data.AuthenticationResult, loggedAt: now })
-        router.push('/inventory')
-      }
-      ).catch((error) => {
-        if (error.response && (error.response.status === 401 || error.response.status === 422)) {
-          setLoginError(true)
+    try {
+      const result = await signIn('credentials', {
+        email,
+        password,
+        redirect: false
+      })
+      console.log(result, 'SOY EL RESULTADO')
+
+      if (result.ok) {
+        if (session) {
+          // El usuario ha iniciado sesión
+
+          console.log('Rol del usuario:', session)
+          console.log(session.user)
+          if (session.user.role === 'admin') {
+            router.push('/admin/inventory')
+          } else {
+            router.push('/tasks')
+          }
         }
-      // console.log();
-      // console.log(error.message)
+      } else {
+        console.log(result, 'ERROR DEL INDEX')
+        setLoginError(true)
       }
-      )
+    } catch (error) {
+      console.error(error, 'ERROR DEL INDEX')
+      setLoginError(true)
+    }
   }
 
   useEffect(
