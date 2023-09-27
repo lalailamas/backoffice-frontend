@@ -42,15 +42,15 @@ export const authOptions = {
 
   secret: 'TuClaveSecretaAqui',
   callbacks: {
-    async signIn (user, account, profile) {
-      // Determina la URL de inicio de sesión basada en el rol del usuario
-      console.log(user, 'user dentro de signIn')
+    // async signIn (user, account, profile) {
+    // // Determina la URL de inicio de sesión basada en el rol del usuario
+    //   console.log(user, 'user dentro de signIn')
 
-      user.role = 'valor personalizado' // Puedes personalizar este valor
+    //   user.role = 'valor personalizado' // Puedes personalizar este valor
 
-      // Retorna la respuesta modificada
-      return user
-    },
+    //   // Retorna la respuesta modificada
+    //   return user
+    // },
     async jwt ({ token, user }) {
       if (user) {
         // console.log(user, 'user dentro de jwt')

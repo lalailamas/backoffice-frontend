@@ -28,17 +28,14 @@ export default function Home () {
     console.log(result, 'SOY EL RESULTADO')
     console.log(session, 'SOY EL SESSION')
     if (result?.error) { setLoginError(true) }
-    if (session.user.role === 'admin') router.push('/inventory')
-    else router.push('/tasks')
   }
 
-  useEffect(
-    () => {
-      S.delete('user')
-    },
-    []
-
-  )
+  useEffect(() => {
+    if (session) {
+      if (session.user.role === 'admin') router.push('/inventory')
+      else router.push('tasks')
+    }
+  }, [session, router])
 
   return (
 
