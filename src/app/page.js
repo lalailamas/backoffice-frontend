@@ -3,14 +3,14 @@
 // import Image from 'next/image'
 // import { Inter } from 'next/font/google'
 import { useEffect, useState } from 'react'
-// import { loginUser } from '@/api/user'
 import S from '@/lib/storage'
 import { useRouter } from 'next/navigation'
-import { signIn } from 'next-auth/react'
+import { signIn, useSession } from 'next-auth/react'
 
 // const inter = Inter({ subsets: ['latin'] })
 
 export default function Home () {
+  const { data: session } = useSession()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [loginError, setLoginError] = useState(false)
@@ -24,19 +24,20 @@ export default function Home () {
       email,
       password,
       redirect: false
-    })
+    }, { callbackUrl: '' })
     console.log(result, 'SOY EL RESULTADO')
-    if (result?.error) { setLoginError(true); return }
-    router.push('/inventory')
+    console.log(session, 'SOY EL SESSION')
+    if (result?.error) { setLoginError(true) }
+    // router.push('/inventory')
   }
 
-  useEffect(
-    () => {
-      S.delete('user')
-    },
-    []
-
-  )
+  useEffect(() => {
+    if (session !== null && session !== undefined) {
+      console.log(session, 'session del useEffect')
+      if (session.user.role === 'admin') router.push('/inventory')
+      if (session.user.role === 'restock') router.push('/tasks')
+    }
+  }, [session])
 
   return (
 

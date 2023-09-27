@@ -1,6 +1,7 @@
 'use client'
 import { useState, useEffect } from 'react'
 import { listTasks, updateTasks } from '../../api/task'
+import InsideLayout from '@/components/admin/layouts/inside'
 
 const TaskItem = ({ task }) => {
   const [completed, setCompleted] = useState(task.checked)
@@ -49,6 +50,7 @@ const Tasks = () => {
 
   return (
     <>
+      <InsideLayout />
       <div className='flex flex-col gap-2 antialiased p-8 mt-8'>
         <h2 className='text-d-dark-dark-purple text-2xl font-bold text-center'>Listado de tareas</h2>
         <p className='label-text pr-4 text-d-dark-dark-purple text-center'>
