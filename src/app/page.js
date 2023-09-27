@@ -28,8 +28,10 @@ export default function Home () {
     console.log(result, 'SOY EL RESULTADO')
     console.log(session, 'SOY EL SESSION')
     if (result?.error) { setLoginError(true) }
+    router.push('/inventory')
   }
 
+  /*
   useEffect(() => {
     if (session !== null && session !== undefined) {
       console.log(session)
@@ -37,6 +39,7 @@ export default function Home () {
       if (session.user.role === 'restock') router.push('/users')
     }
   }, [session])
+  */
 
   return (
 
