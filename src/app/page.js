@@ -31,15 +31,13 @@ export default function Home () {
     router.push('/inventory')
   }
 
-  /*
-  useEffect(() => {
-    if (session !== null && session !== undefined) {
-      console.log(session)
-      if (session.user.role === 'admin') router.push('/inventory')
-      if (session.user.role === 'restock') router.push('/users')
-    }
-  }, [session])
-  */
+  // useEffect(() => {
+  //   if (session !== null && session !== undefined) {
+  //     console.log(session)
+  //     if (session.user.role === 'admin') router.push('/inventory')
+  //     if (session.user.role === 'restock') router.push('/users')
+  //   }
+  // }, [session])
 
   return (
 
