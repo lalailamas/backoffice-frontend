@@ -1,6 +1,7 @@
+'use client'
 import React from 'react'
 import { useForm } from 'react-hook-form'
-import { useRouter } from 'next/router'
+import { useRouter } from 'next/navigation'
 import InsideLayout from '@/components/admin/layouts/inside'
 
 export default function EditUserForm () {
@@ -16,7 +17,6 @@ export default function EditUserForm () {
   return (
     <div>
       <InsideLayout />
-
       <h2>Editar Usuario</h2>
       <form onSubmit={handleSubmit(onSubmit)}>
         <input type='hidden' {...register('id')} value={id} />

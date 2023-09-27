@@ -12,7 +12,7 @@ export const authOptions = {
 
       },
       authorize: async (credentials) => {
-        // console.log(credentials);
+        console.log(credentials)
         try {
           const response = await loginUser(credentials)
           // console.log(response.data, 'este es el response')
@@ -23,7 +23,7 @@ export const authOptions = {
           if (response.data) {
             // console.log('login OK');
             // Si la autenticación es exitosa, devuelve el token de usuario y otros datos si es necesario
-            // console.log(response.data.appUser, 'este es el response.data.appUser')
+            console.log(response.data.appUser, 'este es el response.data.appUser')
             return Promise.resolve(response.data.appUser)
           } else {
             // Si la autenticación falla, devuelve null
@@ -36,6 +36,8 @@ export const authOptions = {
       }
     })
   ],
+
+  secret: 'TuClaveSecretaAqui',
   callbacks: {
     async jwt ({ token, user }) {
       if (user) {

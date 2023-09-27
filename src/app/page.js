@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react'
 import S from '@/lib/storage'
 import { useRouter } from 'next/navigation'
 import { signIn } from 'next-auth/react'
+import { signIn } from 'next-auth/react'
 
 // const inter = Inter({ subsets: ['latin'] })
 
@@ -27,7 +28,7 @@ export default function Home () {
     })
     console.log(result, 'SOY EL RESULTADO')
     if (result?.error) { setLoginError(true); return }
-    router.push('/home')
+    router.push('/inventory')
   }
 
   useEffect(
