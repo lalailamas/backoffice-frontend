@@ -12,7 +12,7 @@ export const authOptions = {
 
       },
       authorize: async (credentials) => {
-        console.log(credentials)
+        // console.log(credentials)
         try {
           const response = await loginUser(credentials)
           // console.log(response.data, 'este es el response')
@@ -20,11 +20,14 @@ export const authOptions = {
 
           // console.log(data);
 
-          if (response.data) {
-            // console.log('login OK');
-            // Si la autenticación es exitosa, devuelve el token de usuario y otros datos si es necesario
-            console.log(response.data.appUser, 'este es el response.data.appUser')
-            return Promise.resolve(response.data.appUser)
+          if (response.data && response.data.appUser) {
+            // Obtén el rol real del usuario desde la respuesta
+            const user = response.data.appUser
+
+            // Agrega el rol a la respuesta
+            credentials.role = user.role
+
+            return Promise.resolve(credentials)
           } else {
             // Si la autenticación falla, devuelve null
             return Promise.resolve(null)
@@ -39,6 +42,15 @@ export const authOptions = {
 
   secret: 'TuClaveSecretaAqui',
   callbacks: {
+    async signIn (user, account, profile) {
+      // Determina la URL de inicio de sesión basada en el rol del usuario
+      console.log(user, 'user dentro de signIn')
+
+      user.role = 'valor personalizado' // Puedes personalizar este valor
+
+      // Retorna la respuesta modificada
+      return user
+    },
     async jwt ({ token, user }) {
       if (user) {
         // console.log(user, 'user dentro de jwt')

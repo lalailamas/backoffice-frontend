@@ -5,12 +5,12 @@
 import { useEffect, useState } from 'react'
 import S from '@/lib/storage'
 import { useRouter } from 'next/navigation'
-import { signIn } from 'next-auth/react'
+import { signIn, useSession } from 'next-auth/react'
 
 // const inter = Inter({ subsets: ['latin'] })
 
 export default function Home () {
-  // const { data: session } = useSession()
+  const { data: session } = useSession()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [loginError, setLoginError] = useState(false)
@@ -26,8 +26,10 @@ export default function Home () {
       redirect: false
     })
     console.log(result, 'SOY EL RESULTADO')
-    if (result?.error) { setLoginError(true); return }
-    router.push('/inventory')
+    console.log(session, 'SOY EL SESSION')
+    if (result?.error) { setLoginError(true) }
+    if (session.user.role === 'admin') router.push('/inventory')
+    else router.push('/tasks')
   }
 
   useEffect(
