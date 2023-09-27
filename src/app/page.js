@@ -3,9 +3,10 @@
 // import Image from 'next/image'
 // import { Inter } from 'next/font/google'
 import { useEffect, useState } from 'react'
-import { loginUser } from '@/api/user'
+// import { loginUser } from '@/api/user'
 import S from '@/lib/storage'
 import { useRouter } from 'next/navigation'
+import { signIn } from 'next-auth/react'
 
 // const inter = Inter({ subsets: ['latin'] })
 
@@ -16,22 +17,17 @@ export default function Home () {
   const [showPassword, setShowPassword] = useState(false)
   const router = useRouter()
 
-  const performLogin = () => {
+  const performLogin = async () => {
     setLoginError(false)
-    loginUser({ email, password })
-      .then((response) => {
-        const now = Math.round(Date.now() / 1000)
-        S.set('user', { ...response.data.AuthenticationResult, loggedAt: now })
-        router.push('/inventory')
-      }
-      ).catch((error) => {
-        if (error.response && (error.response.status === 401 || error.response.status === 422)) {
-          setLoginError(true)
-        }
-      // console.log();
-      // console.log(error.message)
-      }
-      )
+
+    const result = await signIn('credentials', {
+      email,
+      password,
+      redirect: false
+    })
+    console.log(result, 'SOY EL RESULTADO')
+    if (result?.error) { setLoginError(true); return }
+    router.push('/inventory')
   }
 
   useEffect(
