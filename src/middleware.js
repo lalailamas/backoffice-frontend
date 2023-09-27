@@ -12,18 +12,18 @@ export default withAuth(
     ) {
       return new NextResponse('You are not authorized!')
     }
-    if (
-      req.nextUrl.pathname === '/stock' &&
-      req.nextauth.token?.role !== 'admin'
-    ) {
-      return new NextResponse('You are not authorized!')
-    }
-    if (
-      req.nextUrl.pathname === '/tasks' &&
-      req.nextauth.token?.role !== 'admin'
-    ) {
-      return new NextResponse('You are not authorized!')
-    }
+    // if (
+    //   req.nextUrl.pathname === '/stock' &&
+    //   req.nextauth.token?.role !== 'admin'
+    // ) {
+    //   return new NextResponse('You are not authorized!')
+    // }
+    // if (
+    //   req.nextUrl.pathname === '/tasks' &&
+    //   req.nextauth.token?.role !== 'admin'
+    // ) {
+    //   return new NextResponse('You are not authorized!')
+    // }
   },
   {
     callbacks: {
@@ -35,4 +35,4 @@ export default withAuth(
   }
 )
 
-export const config = { matcher: ['/admin-dashboard', '/profile-page', '/tasks', '/stock'] }
+export const config = { matcher: ['/admin-dashboard', '/profile-page'] }

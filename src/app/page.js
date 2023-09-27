@@ -31,11 +31,12 @@ export default function Home () {
   }
 
   useEffect(() => {
-    if (session) {
+    if (session !== null && session !== undefined) {
+      console.log(session)
       if (session.user.role === 'admin') router.push('/inventory')
-      else router.push('tasks')
+      if (session.user.role === 'restock') router.push('/users')
     }
-  }, [session, router])
+  }, [session])
 
   return (
 
