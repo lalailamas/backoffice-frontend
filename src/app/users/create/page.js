@@ -1,8 +1,9 @@
+'use client'
 import { useState } from 'react'
 import InsideLayout from '@/components/admin/layouts/inside'
 import { useForm, Controller } from 'react-hook-form'
-import { useRouter } from 'next/router'
-import { createUser } from '../../api/user'
+import { useRouter } from 'next/navigation'
+import { createUser } from '@/api/user'
 
 function CreateUserForm () {
   const { control, handleSubmit, setError, formState, watch } = useForm({

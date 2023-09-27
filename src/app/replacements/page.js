@@ -1,6 +1,6 @@
 'use client'
-import RepositionTable from '@/components/admin/tables/repositionTable'
-import { getRestockProducts } from '../../api/restock'
+import RepositionTable from './repositionTable/page'
+import { getRestockProducts } from '@/api/restock'
 import { useState, useEffect } from 'react'
 import InsideLayout from '@/components/admin/layouts/inside'
 import DatePicker from '@/components/admin/common/datepicker/double'
@@ -9,8 +9,6 @@ import dayjs from 'dayjs'
 function Replacements () {
   const [restockData, setRestockData] = useState([])
   const [dateRange, setDateRange] = useState({
-    // startDate: dayjs('2022-03-30'),
-    // endDate: dayjs('2023-08-30')
     startDate: dayjs().subtract(1, 'month'),
     endDate: dayjs()
   })
