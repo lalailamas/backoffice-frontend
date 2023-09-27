@@ -3,7 +3,7 @@ export const menuItems = [
     label: 'Inventario',
     icon: 'rotate-180',
     subMenuLinks: [
-      { label: 'Productos', href: '/admin/inventory' },
+      { label: 'Productos', href: '/inventory' },
       { label: 'Órdenes de reabastecimiento', href: '/admin/replenishment-orders' }
     ]
   },

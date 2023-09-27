@@ -6,7 +6,6 @@ import { useEffect, useState } from 'react'
 import S from '@/lib/storage'
 import { useRouter } from 'next/navigation'
 import { signIn } from 'next-auth/react'
-import { signIn } from 'next-auth/react'
 
 // const inter = Inter({ subsets: ['latin'] })
 
