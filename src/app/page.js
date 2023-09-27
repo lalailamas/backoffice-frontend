@@ -24,20 +24,20 @@ export default function Home () {
       email,
       password,
       redirect: false
-    })
+    }, { callbackUrl: '' })
     console.log(result, 'SOY EL RESULTADO')
     console.log(session, 'SOY EL SESSION')
     if (result?.error) { setLoginError(true) }
-    router.push('/inventory')
+    // router.push('/inventory')
   }
 
-  // useEffect(() => {
-  //   if (session !== null && session !== undefined) {
-  //     console.log(session)
-  //     if (session.user.role === 'admin') router.push('/inventory')
-  //     if (session.user.role === 'restock') router.push('/users')
-  //   }
-  // }, [session])
+  useEffect(() => {
+    if (session !== null && session !== undefined) {
+      console.log(session, 'session del useEffect')
+      if (session.user.role === 'admin') router.push('/inventory')
+      if (session.user.role === 'restock') router.push('/tasks')
+    }
+  }, [session])
 
   return (
 

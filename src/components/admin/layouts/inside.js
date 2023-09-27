@@ -12,8 +12,6 @@ export default function InsideLayout ({ children }) {
 
   useEffect(
     () => {
-      const user = S.get('user')
-      console.log(user)
       // if (!user) {
       //   router.push('/admin/login')
       // }
