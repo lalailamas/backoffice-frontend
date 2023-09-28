@@ -23,13 +23,13 @@ export const authOptions = {
           if (response.data && response.data.appUser) {
             // Obtén el rol real del usuario desde la respuesta
             const user = response.data.appUser
-            console.log(user, 'user dentro de authorize')
+            // console.log(user, 'user dentro de authorize')
 
             // Agrega el rol a la respuesta
             credentials.role = user.role
             credentials.fullname = user.fullname
             credentials.callbackUrl = 'http://localhost:3000/'
-            console.log(credentials, 'credentials dentro de authorize')
+            // console.log(credentials, 'credentials dentro de authorize')
 
             return Promise.resolve(credentials)
           } else {
@@ -44,7 +44,7 @@ export const authOptions = {
     })
   ],
 
-  secret: 'TuClaveSecretaAqui',
+  // secret: 'TuClaveSecretaAqui',
   callbacks: {
     // async signIn (user, account, profile) {
     // // Determina la URL de inicio de sesión basada en el rol del usuario
@@ -56,27 +56,30 @@ export const authOptions = {
     //   return user
     // },
     async jwt ({ token, user }) {
-      if (user) {
-        // console.log(user, 'user dentro de jwt')
-        token.role = user.role
-        token.sub = user.role
-        token.username = user.fullname
-        token.id = user.id
-        // console.log('token ===========');
-        // console.log(token);
-      }
-      return token
+      // if (user) {
+      //   // console.log(user, 'user dentro de jwt')
+      //   token.role = user.role
+      //   token.sub = user.role
+      //   token.username = user.fullname
+      //   token.id = user.id
+      //   // console.log('token ===========');
+      //   console.log(token)
+      // }
+      // return token
+      return { ...token, ...user }
     },
     async session ({ session, token }) {
       // Personaliza los datos que se almacenan en la sesión
       // console.log(token, 'token dentro de session')
-      session.user = {
-        id: token.id,
-        email: token.email,
-        username: token.username,
-        role: token.role
-        // Agrega otros datos según tus necesidades
-      }
+      // session.user = {
+      //   id: token.id,
+      //   email: token.email,
+      //   username: token.username,
+      //   role: token.role,
+      //   token: token.accessToken
+      //   // Agrega otros datos según tus necesidades
+      // }
+      session.user = token
       return session
     }
   },
