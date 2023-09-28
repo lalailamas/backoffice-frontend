@@ -16,4 +16,4 @@ export default async function middleware (req, res, next) {
   return NextResponse.next()
 }
 
-export const config = { matcher: ['/inventory', '/tasks', '/users'] }
+export const config = { matcher: ['/inventory', '/tasks', '/users', '/replacements', '/replenishment_orders', '/restock', '/stock', '/stock_request', '/home'] }

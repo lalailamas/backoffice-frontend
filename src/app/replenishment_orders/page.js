@@ -1,5 +1,4 @@
 'use client'
-import Image from 'next/image'
 import { Inter } from 'next/font/google'
 import InsideLayout from '@/components/admin/layouts/inside'
 import useGetROrders from '@/hooks/useROrders'
@@ -9,13 +8,14 @@ import Pager from '@/components/admin/common/pager'
 import DspApi from '@/lib/api'
 import EditROrderModal from '@/components/admin/modals/replenishment-orders/edit/page'
 import useGetWarehouses from '@/hooks/useWarehouses'
-import S from '@/lib/storage'
 import { SearchField } from '@/components/admin/common/search'
 import Datepicker from 'react-tailwindcss-datepicker'
+import { useUserRole } from '@/hooks/useUserRole'
 
 const inter = Inter({ subsets: ['latin'] })
 
 export default function Inventory () {
+  const { checkUserRole } = useUserRole()
   const [cachekey, setCachekey] = useState(0)
 
   const [searchKey, setSearchKey] = useState('')
@@ -65,14 +65,12 @@ export default function Inventory () {
     setShowModal(!showModal)
   }
 
-  // useEffect(
-  //     () => {
-  //         if (scanMode === true) {
-  //             setCurrentQuantity(1);
-  //         }
-  //     },
-  //     [scanMode]
-  // )
+  useEffect(
+    () => {
+      checkUserRole()
+    },
+    []
+  )
 
   // useEffect(
   //     () => {
