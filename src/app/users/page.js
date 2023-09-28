@@ -4,9 +4,19 @@ import Link from 'next/link'
 import { listUsers } from '../../api/user'
 import { useEffect, useState } from 'react'
 import UsersTable from './list'
+// import { handler } from '@/hooks/userRoleSession'
+import { useSession } from 'next-auth/react'
+import { useRouter } from 'next/navigation'
 
 function Users () {
   const [users, setUsers] = useState([])
+  const { data: session } = useSession()
+  const router = useRouter()
+
+  if (session?.user.role !== 'admin') {
+    // Si el rol no es "admin", puedes mostrar un mensaje de acceso denegado o redirigir a otra página.
+    return router.push('/tasks')
+  }
 
   useEffect(() => {
     listUsers()
