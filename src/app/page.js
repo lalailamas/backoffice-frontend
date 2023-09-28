@@ -3,7 +3,6 @@
 // import Image from 'next/image'
 // import { Inter } from 'next/font/google'
 import { useEffect, useState } from 'react'
-import S from '@/lib/storage'
 import { useRouter } from 'next/navigation'
 import { signIn, useSession } from 'next-auth/react'
 
