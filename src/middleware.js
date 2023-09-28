@@ -1,38 +1,19 @@
-import { withAuth } from 'next-auth/middleware'
+import { getToken } from 'next-auth/jwt'
 import { NextResponse } from 'next/server'
 
-export default withAuth(
-  // `withAuth` augments your `Request` with the user's token.
-  function middleware (req) {
-    // console.log(req.nextauth, "req.nextauth");
-    console.log(req.nextUrl.pathname, 'req.nextUrl.pathname')
-    if (
-      req.nextUrl.pathname === '/admin-dashboard' &&
-      req.nextauth.token?.role !== 'admin'
-    ) {
-      return new NextResponse('You are not authorized!')
-    }
-    // if (
-    //   req.nextUrl.pathname === '/stock' &&
-    //   req.nextauth.token?.role !== 'admin'
-    // ) {
-    //   return new NextResponse('You are not authorized!')
-    // }
-    // if (
-    //   req.nextUrl.pathname === '/tasks' &&
-    //   req.nextauth.token?.role !== 'admin'
-    // ) {
-    //   return new NextResponse('You are not authorized!')
-    // }
-  },
-  {
-    callbacks: {
-      authorized: (params) => {
-        const { token } = params
-        return !!token
-      }
-    }
-  }
-)
+export default async function middleware (req, res, next) {
+  const session = await getToken({ req, secret: process.env.NEXTAUTH_SECRET })
+  console.log(session, 'SESSION DEL MIDDLEWARE')
+  if (!session) {
+    const requestedPage = req.nextUrl.pathname
+    const url = req.nextUrl.clone()
+    url.pathname = '/'
+    url.search = `p=${requestedPage}`
 
-export const config = { matcher: ['/admin-dashboard', '/profile-page'] }
+    return NextResponse.redirect(url)
+  }
+
+  return NextResponse.next()
+}
+
+export const config = { matcher: ['/inventory', '/tasks', '/users'] }
