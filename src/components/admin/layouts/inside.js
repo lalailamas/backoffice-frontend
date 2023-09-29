@@ -2,24 +2,22 @@ import { useEffect, useState } from 'react'
 import Navbar from '../common/navbar'
 import Sidebar from '../common/sidebar'
 import S from '@/lib/storage'
-import { useRouter } from 'next/router'
+// import { useRouter } from 'next/navigation'
 import DspLoader from '../common/loader'
 
 export default function InsideLayout ({ children }) {
   const [showDrawer, setShowDrawer] = useState(false)
-  const router = useRouter()
+  // const router = useRouter()
   const [loading, setLoading] = useState(true)
 
   useEffect(
     () => {
-      const user = S.get('user')
-      console.log(user)
-      if (!user) {
-        router.push('/admin/login')
-      }
+      // if (!user) {
+      //   router.push('/admin/login')
+      // }
       setLoading(false)
     },
-    [router.isReady]
+    []
   )
 
   if (loading) {
