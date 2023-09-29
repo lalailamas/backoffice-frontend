@@ -4,11 +4,15 @@ import Link from 'next/link'
 import { listUsers } from '../../api/user'
 import { useEffect, useState } from 'react'
 import UsersTable from './list'
+// import { handler } from '@/hooks/userRoleSession'
+import { useUserRole } from '@/hooks/useUserRole'
 
 function Users () {
   const [users, setUsers] = useState([])
+  const { checkUserRole } = useUserRole()
 
   useEffect(() => {
+    checkUserRole()
     listUsers()
       .then((response) => {
         setUsers(response.data.data)

@@ -11,10 +11,13 @@ import useGetWarehouses from '@/hooks/useWarehouses'
 import S from '@/lib/storage'
 import { SearchField } from '@/components/admin/common/search'
 import { findProductByEAN, getProduct, updateProductImage, updateProductStock, deleteProduct, createProduct, updateProduct } from '@/api/product'
+import { useUserRole } from '@/hooks/useUserRole'
 
 const inter = Inter({ subsets: ['latin'] }) //eslint-disable-line
 
 export default function Inventory () {
+  const { checkUserRole } = useUserRole()
+
   const [cachekey, setCachekey] = useState(0)
 
   const [searchKey, setSearchKey] = useState('')
@@ -62,6 +65,7 @@ export default function Inventory () {
 
   useEffect(
     () => {
+      checkUserRole()
       if (scanMode === true) {
         setCurrentQuantity(1)
       }
@@ -69,28 +73,28 @@ export default function Inventory () {
     [scanMode]
   )
 
-  useEffect(
-    () => {
-      const t = S.get('showTraining')
-      const e = S.get('showExpiration')
-      const m = S.get('showMachines')
-      const w = S.get('currentWarehouse')
-      if (t === true) {
-        setShowTraining(true)
-      }
-      if (e === true) {
-        setShowExpiration(true)
-      }
-      if (m === true) {
-        setShowMachines(true)
-      }
-      if (w) {
-        setCurrentWarehouse(parseInt(w))
-      }
-    },
-    []
+  // useEffect(
+  //   () => {
+  //     const t = S.get('showTraining')
+  //     const e = S.get('showExpiration')
+  //     const m = S.get('showMachines')
+  //     const w = S.get('currentWarehouse')
+  //     if (t === true) {
+  //       setShowTraining(true)
+  //     }
+  //     if (e === true) {
+  //       setShowExpiration(true)
+  //     }
+  //     if (m === true) {
+  //       setShowMachines(true)
+  //     }
+  //     if (w) {
+  //       setCurrentWarehouse(parseInt(w))
+  //     }
+  //   },
+  //   []
 
-  )
+  // )
 
   const handleScan = async (e) => {
     e.preventDefault()

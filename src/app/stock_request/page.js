@@ -38,7 +38,7 @@ function StockRequest () {
     <div>
 
       <InsideLayout />
-      <div className>
+      <div>
         <div className='p-5'>
 
           <select

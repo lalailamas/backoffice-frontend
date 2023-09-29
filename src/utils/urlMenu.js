@@ -4,7 +4,7 @@ export const menuItems = [
     icon: 'rotate-180',
     subMenuLinks: [
       { label: 'Productos', href: '/inventory' },
-      { label: 'Órdenes de reabastecimiento', href: '/admin/replenishment-orders' }
+      { label: 'Órdenes de reabastecimiento', href: '/replenishment-orders' }
     ]
   },
   {
