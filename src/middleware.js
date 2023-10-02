@@ -3,7 +3,7 @@ import { NextResponse } from 'next/server'
 
 export default async function middleware (req, res, next) {
   const session = await getToken({ req, secret: process.env.NEXTAUTH_SECRET })
-  console.log(session, 'SESSION DEL MIDDLEWARE')
+  // console.log(session, 'SESSION DEL MIDDLEWARE')
   if (!session) {
     const requestedPage = req.nextUrl.pathname
     const url = req.nextUrl.clone()
