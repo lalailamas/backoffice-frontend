@@ -1,13 +1,11 @@
-import { useState, useEffect } from 'react';
-import DspApi from '@/lib/api';
-
-
+import { useState, useEffect } from 'react'
+import { DspApi } from '@/utils/fetchData'
 
 const useGetStores = (params, cachekey) => {
-  const [stores, setStores] = useState(null);
-  const [meta, setMeta] = useState(null);
-  const [error, setError] = useState('');
-  const [loading, setLoading] = useState(true);
+  const [stores, setStores] = useState(null)
+  const [meta, setMeta] = useState(null)
+  const [error, setError] = useState('')
+  const [loading, setLoading] = useState(true)
 
   const fetchData = () => {
     setLoading(true)
@@ -17,21 +15,18 @@ const useGetStores = (params, cachekey) => {
         setMeta(response.data.meta)
       }
     ).catch((err) => {
-      setError(err);
+      setError(err)
     }).finally(() => {
-      setLoading(false);
-    });
+      setLoading(false)
+    })
   }
 
-
   useEffect(() => {
-    fetchData();
-  }, [params, cachekey]);
+    fetchData()
+  }, [params, cachekey])
 
   // custom hook returns value
-  return { stores, meta, error, loading };
-
-
+  return { stores, meta, error, loading }
 }
 
-export default useGetStores;
+export default useGetStores

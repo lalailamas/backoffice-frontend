@@ -1,18 +1,13 @@
 'use client'
-// import Image from 'next/image's
-import { Inter } from 'next/font/google'
 import InsideLayout from '@/components/admin/layouts/inside'
 import useGetProducts from '@/hooks/useProducts'
 import { useEffect, useRef, useState } from 'react'
 import ProductsTable from '@/components/admin/tables/products'
-// import Pager from '@/components/admin/common/pager'
 import EditProductModal from '@/components/admin/modals/product/edit'
 import useGetWarehouses from '@/hooks/useWarehouses'
 import S from '@/lib/storage'
 import { SearchField } from '@/components/admin/common/search'
 import { findProductByEAN, getProduct, updateProductImage, updateProductStock, deleteProduct, createProduct, updateProduct } from '@/api/product'
-
-const inter = Inter({ subsets: ['latin'] }) //eslint-disable-line
 
 export default function Inventory () {
   const [cachekey, setCachekey] = useState(0)
@@ -20,8 +15,8 @@ export default function Inventory () {
   const [searchKey, setSearchKey] = useState('')
   const [params, setParams] = useState({ limit: 10, page: 1, search: '' })
   const [warehouseParams] = useState({ limit: 10, page: 1 })
-  const { products, meta } = useGetProducts(params, cachekey)
-  const { warehouses, meta: metaW, error: errorW, loading: loadingW } = useGetWarehouses(warehouseParams, cachekey) //eslint-disable-line
+  const { products } = useGetProducts(params, cachekey)
+  const { warehouses } = useGetWarehouses(warehouseParams, cachekey)
   const [scanMode, setScanMode] = useState(false)
   const [currentEan, setCurrentEan] = useState('')
 
@@ -35,7 +30,7 @@ export default function Inventory () {
   const [currentQuantity, setCurrentQuantity] = useState(1)
 
   const [showTraining, setShowTraining] = useState(false)
-  const [showMachines, setShowMachines] = useState(false)
+  const [showMachines] = useState(false)
   const [showExpiration, setShowExpiration] = useState(false)
 
   const handleNewProduct = () => {
@@ -67,29 +62,6 @@ export default function Inventory () {
       }
     },
     [scanMode]
-  )
-
-  useEffect(
-    () => {
-      const t = S.get('showTraining')
-      const e = S.get('showExpiration')
-      const m = S.get('showMachines')
-      const w = S.get('currentWarehouse')
-      if (t === true) {
-        setShowTraining(true)
-      }
-      if (e === true) {
-        setShowExpiration(true)
-      }
-      if (m === true) {
-        setShowMachines(true)
-      }
-      if (w) {
-        setCurrentWarehouse(parseInt(w))
-      }
-    },
-    []
-
   )
 
   const handleScan = async (e) => {
@@ -138,8 +110,6 @@ export default function Inventory () {
   }
   const handleSave = (data) => {
     if (action === 'create') {
-      // data.expiration_date = data.expiration_date.split("T")[0];
-      // data.manufacture_date = data.manufacture_date.split("T")[0];
       data.expiration_date = data.expiration_date.startDate
       data.manufacture_date = data.manufacture_date.startDate
 
@@ -151,11 +121,9 @@ export default function Inventory () {
       )
     } else {
       const image = data.image
-      // data.expiration_date = data.expiration_date.split("T")[0];
-      // data.manufacture_date = data.manufacture_date.split("T")[0];
       data.expiration_date = data.expiration_date.startDate
       data.manufacture_date = data.manufacture_date.startDate
-      // delete (data.image);
+
       updateProduct(data).then(
         () => {
           if (image) {
@@ -174,11 +142,6 @@ export default function Inventory () {
       )
     }
   }
-  // const setPage = (page) => {
-  //   const clone = JSON.parse(JSON.stringify(params))
-  //   clone.page = page
-  //   setParams(clone)
-  // }
 
   useEffect(
     () => {
@@ -201,9 +164,6 @@ export default function Inventory () {
   return (
     <>
       <InsideLayout />
-
-      {/* <pre>{JSON.stringify(warehouses, null, 2)}</pre> */}
-      {/* <div className="overflow-x-auto"><table className="table table-zebra w-full"><thead><tr><th>Id</th><th>Nombre</th><th>Precio</th><th>Precio oferta</th><th>Descripción</th><th>Activa</th><th>Acciones</th></tr></thead><tbody><tr><th>1</th><td>Mediana</td><td>14.000</td><td>14.000</td><td>Lorem ipsum dolor sit amet. Dolor sit amet.</td><td></td><td><button className="btn btn-sm btn-outline">Editar</button></td></tr><tr><th>2</th><td>Grande</td><td>14.000</td><td>14.000</td><td>Lorem ipsum dolor sit amet. Dolor sit amet.</td><td></td><td><button className="btn btn-sm btn-outline">Editar</button></td></tr><tr><th>3</th><td>Súper grande</td><td>14.000</td><td>14.000</td><td>Lorem ipsum dolor sit amet. Dolor sit amet.</td><td></td><td><button className="btn btn-sm btn-outline">Editar</button></td></tr><tr><th>4</th><td>Jumbo</td><td>14.000</td><td>14.000</td><td>Lorem ipsum dolor sit amet. Dolor sit amet.</td><td></td><td><button className="btn btn-sm btn-outline">Editar</button></td></tr></tbody></table></div> */}
       <div className='w-full p-8'>
         <div className='flex flex-col md:flex-row mt-4 gap-y-4 md:gap-y-0 md:gap-x-4 mb-4'>
           <h2 className='text-d-dark-dark-purple text-2xl font-bold'>Productos</h2>
@@ -237,8 +197,6 @@ export default function Inventory () {
         <div className='flex flex-col md:flex-row mt-4 gap-y-4 md:gap-y-0 md:gap-x-4 mb-4'>
 
           <div className='join  w-full md:max-w-xs'>
-            {/* value={currentEan} onChange={(e) => setCurrentEan(e.target.value)} */}
-
             <SearchField type='text' placeholder='Búsqueda' name='search' className='input input-sm input-bordered w-full  bg-d-white join-item rounded-full text-d-dark-dark-purple' onChange={(v) => setSearchKey(v)} />
 
             <button type='button ' onClick={() => setSearchKey('')} className='btn btn-sm join-item rounded-r-full bg-d-dark-dark-purple border-none text-d-white  hover:bg-d-soft-soft-purple hover:text-d-dark-dark-purple'>
@@ -273,7 +231,6 @@ export default function Inventory () {
               </div>
               <form onSubmit={(e) => handleScan(e)}>
                 <div className='join  w-full'>
-                  {/* value={currentEan} onChange={(e) => setCurrentEan(e.target.value)} */}
                   <input disabled={!scanMode} type='text' placeholder='EAN' name='ean' className='input input-sm input-bordered w-full bg-d-white join-item rounded-l-full text-d-dark-dark-purple' ref={scanElement} />
                   <button disabled={!scanMode} type='submit ' className='btn btn-sm join-item rounded-r-full bg-d-dark-dark-purple border-none text-d-white  hover:bg-d-soft-soft-purple hover:text-d-dark-dark-purple'>
                     <svg viewBox='131 -131 512 512' xmlns='http://www.w3.org/2000/svg' fill='currentColor' strokeWidth={1} stroke='currentColor' className='w-6 h-6'>
@@ -291,16 +248,8 @@ export default function Inventory () {
             </div>}
         </div>
         <div className='divider' />
-        {/* <div className="flex flex-col md:flex-row gap-y-4 md:gap-y-0 md:gap-x-4 mb-4">
-
-                </div> */}
-
         <ProductsTable products={products} edit={handleEditProduct} showTraining={showTraining} showMachines={showMachines} showExpiration={showExpiration} warehouses={warehouses} />
-        {/* <pre>{JSON.stringify(products, null, 2)}</pre>
-                <pre>{JSON.stringify(products, null, 2)}</pre> */}
-        <div className='w-full flex flex-row mt-4'>
-          {/* <Pager meta={meta} setPage={setPage} /> */}
-        </div>
+        <div className='w-full flex flex-row mt-4' />
       </div>
 
       {showModal &&
