@@ -2,6 +2,7 @@ export const accessData = [
   {
     role: 'Admin',
     menuItems_label: [
+      'Dashboard',
       'Inventario',
       'Reposiciones',
       'Tiendas',
