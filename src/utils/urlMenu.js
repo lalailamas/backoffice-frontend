@@ -37,12 +37,12 @@ export const menuItems = [
       { label: 'Listado', href: '/users' },
       { label: 'Crear Usuario', href: '/users/create' }
     ]
-  },
-  {
-    label: 'Tareas',
-    icon: 'rotate-180',
-    subMenuLinks: [
-      { label: 'Listado Tareas', href: '/tasks' }
-    ]
   }
+  // {
+  //   label: 'Tareas',
+  //   icon: 'rotate-180',
+  //   subMenuLinks: [
+  //     { label: 'Listado Tareas', href: '/tasks' }
+  //   ]
+  // }
 ]

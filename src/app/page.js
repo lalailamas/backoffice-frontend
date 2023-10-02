@@ -34,7 +34,7 @@ export default function Home () {
     if (session !== null && session !== undefined) {
       console.log(session, 'session del useEffect')
       if (session.user.role === 'admin') router.push('/dashboard')
-      if (session.user.role === 'restock') router.push('/tasks')
+      if (session.user.role === 'restock') router.push('/restock')
     }
   }, [session])
 
