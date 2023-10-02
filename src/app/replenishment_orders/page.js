@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 'use client'
 import Image from 'next/image'
 import { Inter } from 'next/font/google'
@@ -6,7 +7,7 @@ import useGetROrders from '@/hooks/useROrders'
 import { useEffect, useRef, useState } from 'react'
 import ROrdersTable from '@/components/admin/tables/replenishment-orders'
 import Pager from '@/components/admin/common/pager'
-import DspApi from '@/lib/api'
+import { DspApi } from '@/utils/fetchData'
 import EditROrderModal from '@/components/admin/modals/replenishment-orders/edit/page'
 import useGetWarehouses from '@/hooks/useWarehouses'
 import S from '@/lib/storage'
@@ -44,7 +45,7 @@ export default function Inventory () {
   }
 
   const handleEditROrder = (forEdit) => {
-    DspApi.getReplenishmentOrder(forEdit.id).then((response) => {
+    DspApi.listReplenishmentOrders(forEdit.id).then((response) => {
       setCurrentROrder(response.data)
       setAction('edit')
       setShowModal(true)
@@ -65,42 +66,10 @@ export default function Inventory () {
     setShowModal(!showModal)
   }
 
-  // useEffect(
-  //     () => {
-  //         if (scanMode === true) {
-  //             setCurrentQuantity(1);
-  //         }
-  //     },
-  //     [scanMode]
-  // )
-
-  // useEffect(
-  //     () => {
-  //         const t = S.get('showTraining');
-  //         const e = S.get('showExpiration');
-  //         const m = S.get('showMachines');
-  //         const w = S.get('currentWarehouse');
-  //         if (t === true) {
-  //             setShowTraining(true);
-  //         }
-  //         if (e === true) {
-  //             setShowExpiration(true);
-  //         }
-  //         if (m === true) {
-  //             setShowMachines(true);
-  //         }
-  //         if (w) {
-  //             setCurrentWarehouse(parseInt(w));
-  //         }
-  //     },
-  //     []
-
-  // )
-
   const handleScan = async (e) => {
     e.preventDefault()
     const ean = scanElement.current.value
-    if (ean != '') {
+    if (ean !== '') {
       setCurrentEan(ean)
       scanElement.current.value = ''
 
@@ -115,7 +84,7 @@ export default function Inventory () {
         let newStock = currentQuantity
 
         if (rorder.warehouse_rorder && rorder.warehouse_rorder.length > 0) {
-          const filtered = rorder.warehouse_rorder.filter(w => w.warehouse_id == currentWarehouse)[0]
+          const filtered = rorder.warehouse_rorder.filter(w => w.warehouse_id === currentWarehouse)[0]
           if (filtered) {
             newStock = parseInt(filtered.stock) + currentQuantity
           }
@@ -276,7 +245,7 @@ export default function Inventory () {
 
             </>}
 
-          {currentEan != '' &&
+          {currentEan !== '' &&
             <div className=' flex flex-row text-lg items-center pl-4'>
               <strong>Último EAN escaneado: </strong> {currentEan}
             </div>}
