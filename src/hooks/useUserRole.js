@@ -6,9 +6,10 @@ export function useUserRole () {
   const router = useRouter()
 
   const checkUserRole = async () => {
+    console.log('session useUserRole', session)
     if (!session?.user || session.user.role !== 'admin') {
       // Si el usuario no está autenticado o su rol no es "admin", redirige a otra página.
-      await router.push('/tasks')
+      router.push('/tasks')
     }
   }
 

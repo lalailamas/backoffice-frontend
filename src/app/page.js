@@ -24,8 +24,8 @@ export default function Home () {
       password,
       redirect: false
     }, { callbackUrl: '' })
-    console.log(result, 'SOY EL RESULTADO')
-    console.log(session, 'SOY EL SESSION')
+    // console.log(result, 'SOY EL RESULTADO')
+    // console.log(session, 'SOY EL SESSION')
     if (result?.error) { setLoginError(true) }
     // router.push('/inventory')
   }
@@ -33,7 +33,7 @@ export default function Home () {
   useEffect(() => {
     if (session !== null && session !== undefined) {
       console.log(session, 'session del useEffect')
-      if (session.user.role === 'admin') router.push('/inventory')
+      if (session.user.role === 'admin') router.push('/dashboard')
       if (session.user.role === 'restock') router.push('/tasks')
     }
   }, [session])
