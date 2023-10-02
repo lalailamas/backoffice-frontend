@@ -70,16 +70,16 @@ export default function MyComponent () {
               </div>
               <Grid numItemsMd={1} numItemsLg={2} className='gap-5 mt-6'>
                 <div className='max-w-sm mx-auto space-y-6'>
-                  {/* <Select value={value} onValueChange={setValue} placeholder='Todas las tiendas' className='select-bordered rounded-full md:max-w-xs w-64'>
+                  <Select value={value} onValueChange={setValue} placeholder='Todas las tiendas' className='select-bordered rounded-full md:max-w-xs w-64'>
                     <SelectItem value='1'>Hub Cenco</SelectItem>
                     <SelectItem value='2'>Dieciocho 715</SelectItem>
                     <SelectItem value='3'>Calle Nueva 120</SelectItem>
                     <SelectItem value='4'>PUC Lo Contador</SelectItem>
                     <SelectItem value='5'>PUC San Joaquín</SelectItem>
-                  </Select> */}
+                  </Select>
                 </div>
                 <div className='max-w-sm mx-auto space-y-6'>
-                  {/* <Select value={month} onValueChange={setMonth} placeholder='Mes' className='select-bordered rounded-full md:max-w-xs w-64'>
+                  <Select value={month} onValueChange={setMonth} placeholder='Mes' className='select-bordered rounded-full md:max-w-xs w-64'>
                     <SelectItem value='1'>Enero 2023</SelectItem>
                     <SelectItem value='2'>Febrero 2023</SelectItem>
                     <SelectItem value='3'>Marzo 2023</SelectItem>
@@ -92,7 +92,7 @@ export default function MyComponent () {
                     <SelectItem value='10'>Octubre 2023</SelectItem>
                     <SelectItem value='11'>Noviembre 2023</SelectItem>
                     <SelectItem value='12'>Diciembre 2023</SelectItem>
-                  </Select> */}
+                  </Select>
                 </div>
               </Grid>
 
