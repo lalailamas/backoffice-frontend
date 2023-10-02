@@ -23,6 +23,7 @@ import {
 } from '@tremor/react'
 import {
   StatusOnlineIcon,
+  CogIcon,
   ClockIcon
 
 } from '@heroicons/react/outline'
@@ -56,15 +57,42 @@ export default function MyComponent () {
             <TabPanel>
               <div className='mt-6'>
                 <Card className='rounded-xl'>
-                  {/* <Text className='text-center'>Estado de las máquinas</Text>
+                  <Text className='text-center'>Estado de las máquinas</Text>
 
                   <Grid numItems={1} numItemsSm={2} numItemsLg={5} className='gap-2 mt-3'>
-                    <StoreCard name='HUB Cenco' statusColor='emerald' />
-                    <StoreCard name='Dieciocho 715' statusColor='red' />
-                    <StoreCard name='Calle Nueva 120' statusColor='yellow' />
-                    <StoreCard name='PUC Lo Contador' statusColor='emerald' />
-                    <StoreCard name='PUC San Joaquín' statusColor='emerald' />
-                  </Grid> */}
+                    <Card className='rounded-xl'>
+                      <div className='text-center'>HUB Cenco
+                        <br />
+
+                        <Badge size='lg' icon={StatusOnlineIcon} color='emerald' />
+
+                      </div>
+                    </Card>
+                    <Card className='rounded-xl' decorationColor='neutral'>
+                      <div className='text-center'>Dieciocho 715
+                        <br />
+                        <Badge size='lg' icon={StatusOnlineIcon} color='red' />
+                      </div>
+                    </Card>
+                    <Card className='rounded-xl'>
+                      <div className='text-center'>Calle Nueva 120
+                        <br />
+                        <Badge size='lg' icon={StatusOnlineIcon} color='yellow' />
+                      </div>
+                    </Card>
+                    <Card className='rounded-xl'>
+                      <div className='text-center'>PUC Lo Contador
+                        <br />
+                        <Badge size='lg' icon={StatusOnlineIcon} color='emerald' />
+                      </div>
+                    </Card>
+                    <Card className='rounded-xl'>
+                      <div className='text-center'>PUC San Joaquín
+                        <br />
+                        <Badge size='lg' icon={StatusOnlineIcon} color='emerald' />
+                      </div>
+                    </Card>
+                  </Grid>
                 </Card>
 
               </div>
@@ -98,7 +126,7 @@ export default function MyComponent () {
 
               <Grid numItems={1} numItemsSm={1} numItemsMd={1} numItemsLg={2} className='gap-2 mt-3'>
                 <Card className='text-center h-96 mb-2'>
-                  {/* <Text>Ventas por día</Text>
+                  <Text>Ventas por día</Text>
                   <AreaChart
                     className='h-72 mt-4 text-sm'
                     data={chartdata}
@@ -106,11 +134,12 @@ export default function MyComponent () {
                     categories={['Septiembre']}
                     colors={['indigo']}
                     valueFormatter={dataFormatter}
-                  /> */}
+                    key={chartdata.length}
+                  />
                 </Card>
 
                 <Card className='text-center h-96 mb-2'>
-                  {/* <Title className='text-center'>TOP 5 SKU's</Title>
+                  <Title className='text-center'>TOP 5 SKU's</Title>
                   <Table className='mt-2'>
                     <TableHead>
                       <TableRow>
@@ -121,13 +150,14 @@ export default function MyComponent () {
                       </TableRow>
                     </TableHead>
                     <TableBody>
-                      <TableCell>1</TableCell>
-                      <TableCell className='hidden sm:block' />
-                      <TableCell>Coca Cola Zero 500ml (Bebidas)</TableCell>
-                      <TableCell>$ 50.700 </TableCell>
-
+                      <TableRow>
+                        <TableCell>1</TableCell>
+                        <TableCell className='hidden sm:block' />
+                        <TableCell>Coca Cola Zero 500ml (Bebidas)</TableCell>
+                        <TableCell>$ 50.700 </TableCell>
+                      </TableRow>
                     </TableBody>
-                  </Table> */}
+                  </Table>
                 </Card>
               </Grid>
 
