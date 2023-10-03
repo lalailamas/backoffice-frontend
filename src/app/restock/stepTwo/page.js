@@ -1,35 +1,42 @@
+'use client'
 import React, { useEffect, useState } from 'react'
-import { getInventoryByStore } from '../../api/store'
-import { getLayout } from '../../api/layout'
-import { getAllReiteData } from '../../api/product/reite'
+import { getInventoryByStore } from '@/api/store'
+import { getLayout } from '@/api/layout'
+import { getAllReiteData } from '@/api/product/reite'
 import DspLoader from '@/components/admin/common/loader'
-import AccordeonCard from './acordeonCard'
+import AccordeonCard from '../acordeonCard'
+import { useSearchParams } from 'next/navigation'
 // import AccordeonCard from './acordeonCard'
 
-function StepTwo ({ selectedStore, currentStep }) {
+function StepTwo () {
+  const searchParams = useSearchParams()
+  const externalId = searchParams.get('external_id')
+  const layoutId = searchParams.get('layout_id')
+  const storeName = searchParams.get('store_name')
+
   const [inventory, setInventory] = useState([])
   const [layout, setLayout] = useState([])
   const [products, setProducts] = useState([])
 
-  const shouldFetchData = selectedStore && currentStep === 2
+  // const shouldFetchData = selectedStore && currentStep === 2
   const [render, setRender] = useState(false)
 
   useEffect(() => {
-    if (shouldFetchData) {
-      console.log('use effect call')
-      fetchInventoryAndLayout(selectedStore.external_id)
-    } else {
-      resetStepTwo()
-      setRender(false)
-    }
-  }, [shouldFetchData, selectedStore, render])
-  const resetStepTwo = () => {
-    // Restablecer los estados relevantes para StepTwo
-    // Puedes usar setSelectedStore, setCurrentStep u otros estados según sea necesario
-    setInventory([])
-    setLayout([])
-    // ... restablecer otros estados ...
-  }
+    console.log(searchParams, 'search params getAll')
+    console.log('use effect call')
+    console.log(externalId, 'external_id')
+    console.log(layoutId, 'layout_id')
+    if (externalId && layoutId) {
+      fetchInventoryAndLayout(externalId)
+    } else return alert('this is not working')
+  }, [render])
+  // const resetStepTwo = () => {
+  //   // Restablecer los estados relevantes para StepTwo
+  //   // Puedes usar setSelectedStore, setCurrentStep u otros estados según sea necesario
+  //   setInventory([])
+  //   setLayout([])
+  //   // ... restablecer otros estados ...
+  // }
 
   async function fetchInventoryAndLayout (storeId) {
     console.log('fetch')
@@ -39,7 +46,7 @@ function StepTwo ({ selectedStore, currentStep }) {
       console.log(inventoryResponse.data)
       if (inventoryResponse.data) {
         setInventory(inventoryResponse.data)
-        const layoutId = selectedStore.layout_id
+
         const layoutResponse = await getLayout(layoutId)
         setLayout(layoutResponse.data)
         fetchProducts(inventoryResponse.data)
@@ -62,9 +69,9 @@ function StepTwo ({ selectedStore, currentStep }) {
 
   return (
     <div className='px-4 md:px-6 lg:px-8'>
-      {selectedStore && (
+      {externalId && (
         <div className='text-center mb-4 md:mb-8'>
-          <h1 className='text-d-dark-dark-purple text-2x2 font-bold'>Confirma el inventario de {selectedStore.name}</h1>
+          <h1 className='text-d-dark-dark-purple text-2x2 font-bold'>Confirma el inventario de {storeName}</h1>
         </div>
       )}
       {
@@ -125,3 +132,5 @@ function StepTwo ({ selectedStore, currentStep }) {
 
   )
 }
+
+export default StepTwo
