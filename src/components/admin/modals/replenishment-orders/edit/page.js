@@ -1,37 +1,34 @@
 'use client'
-import { Categories, Seasons } from '@/lib/constants'
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import DeleteROrderModal from '../delete/page'
 import Datepicker from 'react-tailwindcss-datepicker'
-import { TimepickerUI } from 'timepicker-ui'
 import useGetStores from '@/hooks/useStores'
 import useGetWarehouses from '@/hooks/useWarehouses'
-import useGetProducts from '@/hooks/useProducts'
-import DspApi from '@/lib/api'
-import { Rock_3D } from 'next/font/google'
+// import useGetProducts from '@/hooks/useProducts'
+import { DspApi } from '@/utils/fetchData'
 
 export default function EditROrderModal (props) {
   const { rorder, show, toggleModal, action, save, deleter } = props
   const [editROrder, setEditROrder] = useState({})
-  const [params, setParams] = useState({ limit: 1000, page: 1 })
-  const { stores, meta: metaStores, error: errorStores, loading: loadingStores } = useGetStores(params, 0)
-  const { warehouses, meta: metaWarehouses, error: errorWarehouses, loading: loadingWarehouses } = useGetWarehouses(params, 0)
-  const { products, meta: metaProducts, error: errorProducts, loading: loadingProducts } = useGetProducts(params, 0)
+  const [params] = useState({ limit: 1000, page: 1 })
+  const { stores } = useGetStores(params, 0)
+  const { warehouses } = useGetWarehouses(params, 0)
+  // const { products, meta: metaProducts, error: errorProducts, loading: loadingProducts } = useGetProducts(params, 0)
 
   const [pickingOperationsToDelete, setPickingOperationsToDelete] = useState([])
 
   const [warehousesProducts, setWarehousesProducts] = useState({})
 
-  const [tempProductId, setTempProductId] = useState([])
-  const [tempProduct, setTempProduct] = useState(null)
-  const [tempProductQuantity, setTempProductQuantity] = useState([])
+  // const [tempProductId, setTempProductId] = useState([])
+  // const [tempProduct, setTempProduct] = useState(null)
+  // const [tempProductQuantity, setTempProductQuantity] = useState([])
 
-  const [doneLoading, setDoneLoading] = useState(false)
+  // const [doneLoading, setDoneLoading] = useState(false)
   const nameRef = useRef()
 
   const [showDeleteModal, setShowDeleteModal] = useState(false)
 
-  const [currentROrder, setCurrentROrder] = useState(null)
+  // const [currentROrder, setCurrentROrder] = useState(null)
 
   const toggleDeleteModal = () => {
     setShowDeleteModal(!showDeleteModal)
@@ -71,12 +68,12 @@ export default function EditROrderModal (props) {
   }
 
   const removePickingOperation = (index) => {
-    if (action == 'create') {
-      var clone = JSON.parse(JSON.stringify(editROrder))
+    if (action === 'create') {
+      const clone = JSON.parse(JSON.stringify(editROrder))
       clone.picking_operation.splice(index, 1)
       setEditROrder(clone)
     } else {
-      var clone = JSON.parse(JSON.stringify(editROrder))
+      const clone = JSON.parse(JSON.stringify(editROrder))
       const toDelete = clone.picking_operation.splice(index, 1)
       setPickingOperationsToDelete((c) => [...c, ...toDelete])
       setEditROrder(clone)
@@ -86,8 +83,8 @@ export default function EditROrderModal (props) {
   const handleChangePickingOperation = (key, index, value) => {
     const clone = JSON.parse(JSON.stringify(editROrder))
 
-    if (key == 'origin_warehouse_id') {
-      if (warehousesProducts[value] == undefined) {
+    if (key === 'origin_warehouse_id') {
+      if (warehousesProducts[value] === undefined) {
         DspApi.listWarehouseProducts(value).then((response) => {
           setWarehousesProducts(current => { return { ...current, ...{ [value]: response.data } } })
         })
@@ -125,42 +122,42 @@ export default function EditROrderModal (props) {
 
   const handleSaveRO = async () => {
     const clone = JSON.parse(JSON.stringify(editROrder))
-    const second_clone = JSON.parse(JSON.stringify(clone))
-    const third_clone = JSON.parse(JSON.stringify(clone))
+    const secondClone = JSON.parse(JSON.stringify(clone))
+    // const thirdClone = JSON.parse(JSON.stringify(clone))
     const pos = JSON.parse(JSON.stringify(clone.picking_operation))
     delete (clone.picking_operation)
-    const start_date = clone.start_date.startDate// + "T" + clone['start_hour'] + ":" + clone['start_minutes'] + ":00.000Z";
-    const end_date = clone.end_date.startDate// + "T" + clone['end_hour'] + ":" + clone['end_minutes'] + ":00.000Z";
+    const startDate = clone.start_date.startDate// + "T" + clone['start_hour'] + ":" + clone['start_minutes'] + ":00.000Z";
+    const endDate = clone.end_date.startDate// + "T" + clone['end_hour'] + ":" + clone['end_minutes'] + ":00.000Z";
     delete (clone.start_date)
     delete (clone.end_date)
     delete (clone.start_hour)
     delete (clone.end_hour)
     delete (clone.start_minutes)
     delete (clone.end_minutes)
-    clone.start_date = start_date
-    clone.end_date = end_date
+    clone.start_date = startDate
+    clone.end_date = endDate
 
-    if (action == 'create') {
+    if (action === 'create') {
       // try {
       const response = await DspApi.createReplenishmentOrder(clone)
       Promise.all([response])
 
       if (response) {
         const rro = response.data
-        for (var po of pos) {
-          var create_response = await DspApi.createPickingOperation(rro.id, {
-            start_date,
+        for (const po of pos) {
+          const createResponse = await DspApi.createPickingOperation(rro.id, {
+            startDate,
             origin_warehouse_id: po.origin_warehouse_id
           })
-          Promise.all([create_response])
+          Promise.all([createResponse])
 
-          if (create_response) {
-            var rpo = create_response.data
-            var update_response = await DspApi.updatePickingOperation(rro.id, rpo.id, {
+          if (createResponse) {
+            const rpo = createResponse.data
+            const updateResponse = await DspApi.updatePickingOperation(rro.id, rpo.id, {
               products: po.products,
               origin_warehouse_id: po.origin_warehouse_id
             })
-            Promise.all([update_response])
+            Promise.all([updateResponse])
           }
         }
       }
@@ -181,24 +178,24 @@ export default function EditROrderModal (props) {
     } else {
       // delete picking operations
 
-      for (var po of pickingOperationsToDelete) {
+      for (const po of pickingOperationsToDelete) {
         DspApi.deletePickingOperation(po)
       }
-      for (var po of second_clone.picking_operation) {
-        if (po.id == undefined) {
-          var create_response = await DspApi.createPickingOperation(clone.id, {
-            start_date,
+      for (const po of secondClone.picking_operation) {
+        if (po.id === undefined) {
+          const createResponse = await DspApi.createPickingOperation(clone.id, {
+            startDate,
             origin_warehouse_id: po.origin_warehouse_id
           })
-          Promise.all([create_response])
+          Promise.all([createResponse])
 
-          if (create_response) {
-            var rpo = create_response.data
-            var update_response = await DspApi.updatePickingOperation(clone.id, rpo.id, {
+          if (createResponse) {
+            const rpo = createResponse.data
+            const updateResponse = await DspApi.updatePickingOperation(clone.id, rpo.id, {
               products: po.products,
               origin_warehouse_id: po.origin_warehouse_id
             })
-            Promise.all([update_response])
+            Promise.all([updateResponse])
           }
         } else {
           DspApi.updatePickingOperation(po.replenishment_order_id, po.id, po)
@@ -215,11 +212,11 @@ export default function EditROrderModal (props) {
     () => {
       if (rorder && Object.keys(rorder).length > 0) {
         const clone = JSON.parse(JSON.stringify(rorder))
-        const start_date = {
+        const startDate = {
           startDate: clone.start_date.split('T')[0],
           endDate: clone.start_date.split('T')[0]
         }
-        const end_date = {
+        const endDate = {
           startDate: clone.end_date.split('T')[0],
           endDate: clone.end_date.split('T')[0]
         }
@@ -229,12 +226,12 @@ export default function EditROrderModal (props) {
         clone.end_hour = clone.end_date.split('T')[1].split(':')[0]
         clone.end_minutes = clone.end_date.split('T')[1].split(':')[1]
 
-        clone.start_date = start_date
-        clone.end_date = end_date
+        clone.start_date = startDate
+        clone.end_date = endDate
 
         clone.picking_operation = clone.picking_operation.map(
           (po) => {
-            if (warehousesProducts[po.origin_warehouse_id] == undefined) {
+            if (warehousesProducts[po.origin_warehouse_id] === undefined) {
               DspApi.listWarehouseProducts(po.origin_warehouse_id).then((response) => {
                 setWarehousesProducts(current => { return { ...current, ...{ [po.origin_warehouse_id]: response.data } } })
               })
@@ -270,20 +267,20 @@ export default function EditROrderModal (props) {
     [rorder]
   )
 
-  const getWarehouseProducts = (products, editROrder, index) => {
-    return products.filter(p => p.warehouse_product.findIndex(wp => wp.warehouse_id == editROrder.picking_operation[index].origin_warehouse_id) !== -1)
-  }
+  // const getWarehouseProducts = (products, editROrder, index) => {
+  //   return products.filter(p => p.warehouse_product.findIndex(wp => wp.warehouse_id === editROrder.picking_operation[index].origin_warehouse_id) !== -1)
+  // }
 
-  const getWarehouseIndex = (p, editROrder, index) => {
-    return p.warehouse_product.findIndex(wp => wp.warehouse_id == editROrder.picking_operation[index].origin_warehouse_id)
-  }
-  const getWarehouseProductAux = (p, warehouse_index) => {
-    return p.warehouse_product[warehouse_index]
-  }
+  // const getWarehouseIndex = (p, editROrder, index) => {
+  //   return p.warehouse_product.findIndex(wp => wp.warehouse_id == editROrder.picking_operation[index].origin_warehouse_id)
+  // }
+  // const getWarehouseProductAux = (p, warehouse_index) => {
+  //   return p.warehouse_product[warehouse_index]
+  // }
 
-  const getWarehouseProduct = (p, editROrder, index) => {
-    return getWarehouseProductAux(p, getWarehouseIndex(p, editROrder, index))
-  }
+  // const getWarehouseProduct = (p, editROrder, index) => {
+  //   return getWarehouseProductAux(p, getWarehouseIndex(p, editROrder, index))
+  // }
 
   return (
 
@@ -301,7 +298,7 @@ export default function EditROrderModal (props) {
 
           </div> */}
 
-          <h3 className='font-bold text-lg'>{action == 'create' ? 'Crear' : 'Editar'} Orden de reabastecimiento</h3>
+          <h3 className='font-bold text-lg'>{action === 'create' ? 'Crear' : 'Editar'} Orden de reabastecimiento</h3>
           <div className='grid grid-cols-12 gap-2'>
             <div className='col-span-12 md:col-span-6 form-control w-full'>
               <label className='label'>
@@ -424,7 +421,7 @@ export default function EditROrderModal (props) {
             <div className='col-span-12 md:col-span-12 form-control w-full mt-4'>
               <label className='label border-b border-d-soft-green '>
                 <span className='label-text'><strong>Operaciones de picking</strong></span>
-                <button className='btn btn-xs rounded-full bg-d-dark-dark-purple border-none text-d-white  hover:bg-d-soft-soft-purple hover:text-d-dark-dark-purple' disabled={!warehouses || (editROrder.picking_operation && editROrder.picking_operation.length == warehouses.length)} onClick={() => addPickingOperation()}>Agregar</button>
+                <button className='btn btn-xs rounded-full bg-d-dark-dark-purple border-none text-d-white  hover:bg-d-soft-soft-purple hover:text-d-dark-dark-purple' disabled={!warehouses || (editROrder.picking_operation && editROrder.picking_operation.length === warehouses.length)} onClick={() => addPickingOperation()}>Agregar</button>
               </label>
             </div>
             {editROrder.picking_operation && editROrder.picking_operation.map(
@@ -442,7 +439,7 @@ export default function EditROrderModal (props) {
                       <select className='join-item select select-bordered' value={editROrder.picking_operation[index].origin_warehouse_id} onChange={(e) => handleChangePickingOperation('origin_warehouse_id', index, parseInt(e.target.value))}>
                         <option disabled selected className='' value=''>Elija una bodega</option>
                         {warehouses && warehouses.map(
-                          (w) => <option key={w.id} value={w.id} disabled={editROrder.picking_operation.findIndex((p) => p.origin_warehouse_id == w.id) !== -1 && editROrder.picking_operation[index].origin_warehouse_id != w.id}>{w.name}</option>
+                          (w) => <option key={w.id} value={w.id} disabled={editROrder.picking_operation.findIndex((p) => p.origin_warehouse_id === w.id) !== -1 && editROrder.picking_operation[index].origin_warehouse_id !== w.id}>{w.name}</option>
                         )}
                       </select>
                     </div>
@@ -489,7 +486,7 @@ export default function EditROrderModal (props) {
                               </select>
 
                               <input
-                                disabled={editROrder.picking_operation[index].products[subindex].id == '' || editROrder.picking_operation[index].products[subindex].id == null}
+                                disabled={editROrder.picking_operation[index].products[subindex].id === '' || editROrder.picking_operation[index].products[subindex].id == null}
                                 type='number'
                                 min={1}
                                 // max={ ((editROrder['picking_operation'][index]['products'][subindex]['id']) && warehousesProducts["" + editROrder['picking_operation'][index].origin_warehouse_id] )? warehousesProducts["" + editROrder['picking_operation'][index].origin_warehouse_id].warehouse_product.find(wp => wp.id == editROrder['picking_operation'][index]['products'][subindex]['id']).stock : 1}
@@ -517,7 +514,7 @@ export default function EditROrderModal (props) {
 
           <div className='divider' />
           <div className='modal-action flex flex-row'>
-            {action != 'create' &&
+            {action !== 'create' &&
               <div className='grow-0'>
                 <button className='btn rounded-full' onClick={() => setShowDeleteModal(true)}>Eliminar</button>
               </div>}

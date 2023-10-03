@@ -1,30 +1,19 @@
 'use client'
-import Image from 'next/image'
-import { Inter } from 'next/font/google'
 import InsideLayout from '@/components/admin/layouts/inside'
-import useGetROrders from '@/hooks/useROrders'
-import { useEffect, useRef, useState } from 'react'
-import ROrdersTable from '@/components/admin/tables/replenishment-orders'
-import Pager from '@/components/admin/common/pager'
-import DspApi from '@/lib/api'
-import EditROrderModal from '@/components/admin/modals/replenishment-orders/edit/page'
+import { useEffect, useState } from 'react'
+import { DspApi } from '@/utils/fetchData'
 import useGetWarehouses from '@/hooks/useWarehouses'
-import S from '@/lib/storage'
-import { SearchField } from '@/components/admin/common/search'
-import Datepicker from 'react-tailwindcss-datepicker'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
 import DspLoader from '@/components/admin/common/loader'
 import useGetStores from '@/hooks/useStores'
 import { useUserRole } from '@/hooks/useUserRole'
 
-const inter = Inter({ subsets: ['latin'] })
-
 export default function Inventory () {
   const router = useRouter()
   const { id } = router.query
-  const [params, setParams] = useState({ limit: 100, page: 1, search: '' })
-  const { stores, meta, error, loading } = useGetStores(params, 0)
+  const [params] = useState({ limit: 100, page: 1, search: '' })
+  const { stores } = useGetStores(params, 0)
   const { warehouses } = useGetWarehouses(params, 0)
   const [currentROrder, setCurrentROrder] = useState(null)
   const { checkUserRole } = useUserRole()
@@ -76,7 +65,7 @@ export default function Inventory () {
                 <strong>Tienda de destino:</strong>
               </div>
               <div className='col-span-12 md:col-span-6 text-sm'>
-                {stores.filter(s => { return s.id == currentROrder.destination_store_id })[0].name}
+                {stores.filter(s => { return s.id === currentROrder.destination_store_id })[0].name}
               </div>
               <div className='col-span-12 md:col-span-6 text-sm'>
                 <strong>Fecha de inicio:</strong>
@@ -102,53 +91,51 @@ export default function Inventory () {
 
           </div>
           {currentROrder.picking_operation.map((po, index) =>
-            <>
-              <div className='col-span-12 shadow-lg p-4'>
-                <div className='border-b border-b-d-soft-green pb-2 mb-2'><strong>Resumen de operación de picking #{index + 1}</strong></div>
-                <div className='grid grid-cols-12'>
-                  <div className='col-span-12 md:col-span-2 border-r border-r-d-soft-green'>
-                    <strong>
-                      <div>{warehouses.find(w => w.id == po.origin_warehouse_id).name}</div>
-                    </strong>
-                  </div>
+            <div key={po.id} className='col-span-12 shadow-lg p-4'>
+              <div className='border-b border-b-d-soft-green pb-2 mb-2'><strong>Resumen de operación de picking #{index + 1}</strong></div>
+              <div className='grid grid-cols-12'>
+                <div className='col-span-12 md:col-span-2 border-r border-r-d-soft-green'>
+                  <strong>
+                    <div>{warehouses.find(w => w.id === po.origin_warehouse_id).name}</div>
+                  </strong>
+                </div>
 
-                  <div className='col-span-12 md:col-span-10'>
-                    <table className='table'>
-                      <thead>
-                        <tr className=''>
-                          <th className='font-bold'>Producto</th>
-                          <th className='font-bold'>Stock solicitado</th>
-                          <th className='font-bold'>Stock bodega</th>
-                          <th className='font-bold'>Transferido desde bodega</th>
-                          <th className='font-bold'>Encontrado</th>
-                          <th className='font-bold'>No encontrado</th>
-                          <th className='font-bold'>% Rate</th>
+                <div className='col-span-12 md:col-span-10'>
+                  <table className='table'>
+                    <thead>
+                      <tr className=''>
+                        <th className='font-bold'>Producto</th>
+                        <th className='font-bold'>Stock solicitado</th>
+                        <th className='font-bold'>Stock bodega</th>
+                        <th className='font-bold'>Transferido desde bodega</th>
+                        <th className='font-bold'>Encontrado</th>
+                        <th className='font-bold'>No encontrado</th>
+                        <th className='font-bold'>% Rate</th>
+                      </tr>
+
+                    </thead>
+                    <tbody>
+                      {po.picking_operation_product.map((pop) =>
+
+                        <tr key={pop.id} className=''>
+                          <th className=''>{pop.warehouse_product.product.name}</th>
+                          <td className=''>{pop.requested_stock}</td>
+                          <td className=''>{pop.warehouse_product.stock}</td>
+                          <td className=''>-</td>
+                          <td className=''>{pop.found_stock}</td>
+                          <td className=''>-</td>
                         </tr>
 
-                      </thead>
-                      <tbody>
-                        {po.picking_operation_product.map((pop) =>
+                      )}
 
-                          <tr key={pop.id} className=''>
-                            <th className=''>{pop.warehouse_product.product.name}</th>
-                            <td className=''>{pop.requested_stock}</td>
-                            <td className=''>{pop.warehouse_product.stock}</td>
-                            <td className=''>-</td>
-                            <td className=''>{pop.found_stock}</td>
-                            <td className=''>-</td>
-                          </tr>
+                    </tbody>
 
-                        )}
-
-                      </tbody>
-
-                    </table>
-
-                  </div>
+                  </table>
 
                 </div>
+
               </div>
-            </>
+            </div>
 
           )}
 
