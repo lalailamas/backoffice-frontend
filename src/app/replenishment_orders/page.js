@@ -1,5 +1,5 @@
 'use client'
-import { Inter } from 'next/font/google'
+// import { Inter } from 'next/font/google'
 import InsideLayout from '@/components/admin/layouts/inside'
 import useGetROrders from '@/hooks/useROrders'
 import { useEffect, useRef, useState } from 'react'
@@ -7,13 +7,13 @@ import ROrdersTable from '@/components/admin/tables/replenishment-orders'
 import Pager from '@/components/admin/common/pager'
 import { DspApi } from '@/utils/fetchData'
 import EditROrderModal from '@/components/admin/modals/replenishment-orders/edit/page'
-import useGetWarehouses from '@/hooks/useWarehouses'
+// import useGetWarehouses from '@/hooks/useWarehouses'
 import { SearchField } from '@/components/admin/common/search'
 import Datepicker from 'react-tailwindcss-datepicker'
-import { useUserRole } from '@/hooks/useUserRole'
+// import { useUserRole } from '@/hooks/useUserRole'
 
 export default function Inventory () {
-  const { checkUserRole } = useUserRole()
+  // const { checkUserRole } = useUserRole()
   const [cachekey, setCachekey] = useState(0)
 
   const [setSearchKey] = useState('')
