@@ -123,7 +123,7 @@ export default function EditROrderModal (props) {
   const handleSaveRO = async () => {
     const clone = JSON.parse(JSON.stringify(editROrder))
     const secondClone = JSON.parse(JSON.stringify(clone))
-    const thirdClone = JSON.parse(JSON.stringify(clone))
+    // const thirdClone = JSON.parse(JSON.stringify(clone))
     const pos = JSON.parse(JSON.stringify(clone.picking_operation))
     delete (clone.picking_operation)
     const startDate = clone.start_date.startDate// + "T" + clone['start_hour'] + ":" + clone['start_minutes'] + ":00.000Z";
@@ -421,7 +421,7 @@ export default function EditROrderModal (props) {
             <div className='col-span-12 md:col-span-12 form-control w-full mt-4'>
               <label className='label border-b border-d-soft-green '>
                 <span className='label-text'><strong>Operaciones de picking</strong></span>
-                <button className='btn btn-xs rounded-full bg-d-dark-dark-purple border-none text-d-white  hover:bg-d-soft-soft-purple hover:text-d-dark-dark-purple' disabled={!warehouses || (editROrder.picking_operation && editROrder.picking_operation.length == warehouses.length)} onClick={() => addPickingOperation()}>Agregar</button>
+                <button className='btn btn-xs rounded-full bg-d-dark-dark-purple border-none text-d-white  hover:bg-d-soft-soft-purple hover:text-d-dark-dark-purple' disabled={!warehouses || (editROrder.picking_operation && editROrder.picking_operation.length === warehouses.length)} onClick={() => addPickingOperation()}>Agregar</button>
               </label>
             </div>
             {editROrder.picking_operation && editROrder.picking_operation.map(
@@ -439,7 +439,7 @@ export default function EditROrderModal (props) {
                       <select className='join-item select select-bordered' value={editROrder.picking_operation[index].origin_warehouse_id} onChange={(e) => handleChangePickingOperation('origin_warehouse_id', index, parseInt(e.target.value))}>
                         <option disabled selected className='' value=''>Elija una bodega</option>
                         {warehouses && warehouses.map(
-                          (w) => <option key={w.id} value={w.id} disabled={editROrder.picking_operation.findIndex((p) => p.origin_warehouse_id == w.id) !== -1 && editROrder.picking_operation[index].origin_warehouse_id != w.id}>{w.name}</option>
+                          (w) => <option key={w.id} value={w.id} disabled={editROrder.picking_operation.findIndex((p) => p.origin_warehouse_id === w.id) !== -1 && editROrder.picking_operation[index].origin_warehouse_id !== w.id}>{w.name}</option>
                         )}
                       </select>
                     </div>
@@ -486,7 +486,7 @@ export default function EditROrderModal (props) {
                               </select>
 
                               <input
-                                disabled={editROrder.picking_operation[index].products[subindex].id == '' || editROrder.picking_operation[index].products[subindex].id == null}
+                                disabled={editROrder.picking_operation[index].products[subindex].id === '' || editROrder.picking_operation[index].products[subindex].id == null}
                                 type='number'
                                 min={1}
                                 // max={ ((editROrder['picking_operation'][index]['products'][subindex]['id']) && warehousesProducts["" + editROrder['picking_operation'][index].origin_warehouse_id] )? warehousesProducts["" + editROrder['picking_operation'][index].origin_warehouse_id].warehouse_product.find(wp => wp.id == editROrder['picking_operation'][index]['products'][subindex]['id']).stock : 1}

@@ -5,13 +5,12 @@ import { useEffect, useRef, useState } from 'react'
 import ProductsTable from '@/components/admin/tables/products'
 import EditProductModal from '@/components/admin/modals/product/edit'
 import useGetWarehouses from '@/hooks/useWarehouses'
-import S from '@/lib/storage'
+// import S from '@/lib/storage'
 import { SearchField } from '@/components/admin/common/search'
 import { findProductByEAN, getProduct, updateProductImage, updateProductStock, deleteProduct, createProduct, updateProduct } from '@/api/product'
 
 export default function Inventory () {
   const [cachekey, setCachekey] = useState(0)
-
   const [searchKey, setSearchKey] = useState('')
   const [params, setParams] = useState({ limit: 10, page: 1, search: '' })
   const [warehouseParams] = useState({ limit: 10, page: 1 })
@@ -167,7 +166,7 @@ export default function Inventory () {
       <div className='w-full p-8'>
         <div className='flex flex-col md:flex-row mt-4 gap-y-4 md:gap-y-0 md:gap-x-4 mb-4'>
           <h2 className='text-d-dark-dark-purple text-2xl font-bold'>Productos</h2>
-          <select value={currentWarehouse} onChange={(e) => { setCurrentWarehouse(e.target.value); S.set('currentWarehouse', e.target.value) }} className='select select-sm select-bordered  rounded-full w-full md:max-w-xs'>
+          <select value={currentWarehouse} onChange={(e) => { setCurrentWarehouse(e.target.value) }} className='select select-sm select-bordered  rounded-full w-full md:max-w-xs'>
             <option disabled value={0}>Bodega</option>
             {warehouses && warehouses.map(w =>
               <option key={w.id} value={w.id}>{w.name}</option>
@@ -178,7 +177,7 @@ export default function Inventory () {
             <div className='form-control'>
               <label className='label p-0'>
                 <span className='label-text pr-4 text-d-dark-dark-purple'>Mostrar Entrenamiento</span>
-                <input type='checkbox' className='toggle  toggle-sm  toggle-primary' checked={showTraining} onChange={() => { S.set('showTraining', !showTraining); setShowTraining(!showTraining) }} />
+                <input type='checkbox' className='toggle  toggle-sm  toggle-primary' checked={showTraining} onChange={() => { setShowTraining(!showTraining) }} />
               </label>
             </div>
           </div>
@@ -187,7 +186,7 @@ export default function Inventory () {
             <div className='form-control'>
               <label className='label p-0'>
                 <span className='label-text pr-4 text-d-dark-dark-purple'>Mostrar Expiración</span>
-                <input type='checkbox' className='toggle toggle-sm toggle-primary' checked={showExpiration} onChange={() => { S.set('showExpiration', !showExpiration); setShowExpiration(!showExpiration) }} />
+                <input type='checkbox' className='toggle toggle-sm toggle-primary' checked={showExpiration} onChange={() => { setShowExpiration(!showExpiration) }} />
               </label>
             </div>
           </div>
