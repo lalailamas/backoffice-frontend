@@ -7,14 +7,15 @@ import useGetReiteProd from '@/hooks/useGetReiteProd'
 // import DspLoader from '@/components/admin/common/loader'
 import AccordeonCard from '../acordeonCard'
 import DspLoader from '@/components/admin/common/loader'
+import useGetInventory from '@/hooks/useGetInventory'
 
-export default function page () {
+export default function stepFour () {
   const searchParams = useSearchParams()
   const router = useRouter()
   const externalId = searchParams.get('external_id')
   const layoutId = searchParams.get('layout_id')
   const storeName = searchParams.get('store_name')
-  // const { inventory } = useGetInventory(externalId)
+  const { inventory } = useGetInventory(externalId)
   const { layout } = useGetLayout(layoutId)
   const { products, loading } = useGetReiteProd()
 
@@ -52,13 +53,15 @@ export default function page () {
                                 tray
                                   ? tray.columns.map((column, index) => {
                                     const product = products?.filter((product) => product.productId === column.productId)
-                                    // const quantityProd = inventory.products.find((prod) => prod.productId === column.productId)
+                                    const quantityProd = inventory.products.find((prod) => prod.productId === column.productId)
                                     const maxQuantity = column.maxQuantity
                                     console.log('aca tengo el product', product)
                                     // console.log('aca tengo el quantityProd', quantityProd ? quantityProd.quantity : 'No encontrado')
                                     return (
                                       <AccordeonCard
                                         key={index}
+                                        initialQuantity={quantityProd ? quantityProd.quantity : 0}
+                                        price={product[0].prices[externalId] ? product[0].prices[externalId] : null}
                                         maxQuantity={maxQuantity}
                                         header={
                                           <div className=' w-full gap-3 items-center justify-center'>
@@ -99,12 +102,12 @@ export default function page () {
         type='button'
         onClick={() => {
           router.push(
-            'stepFour' + `?external_id=${externalId}&layout_id=${layoutId}&store_name=${storeName}`
+            '/restock'
           )
         }}
         className='inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-d-dark-dark-purple rounded-lg hover:bg-d-soft-soft-purple hover:text-d-dark-dark-purple focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800'
       >
-        Confirmar Restock
+        Confirmar Operación
         <svg className='w-3.5 h-3.5 ml-2' aria-hidden='true' xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 14 10'>
           <path stroke='currentColor' strokeLinecap='round' strokeLinejoin='round' strokeWidth='2' d='M1 5h12m0 0L9 1m4 4L9 9' />
         </svg>
