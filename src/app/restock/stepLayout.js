@@ -13,8 +13,8 @@ function StepLayout () {
       <ul className='steps p-8'>
         <li className={`step ${pathname === '/restock' ? 'step-primary' : ''}`}>Elige la tienda</li>
         <li className={`step ${pathname === '/restock/stepTwo' ? 'step-primary' : ''}`}>Confirma inventario</li>
-        <li className='step'>Agrega o quita productos</li>
-        <li className='step'>Confirma</li>
+        <li className={`step ${pathname === '/restock/stepThree' ? 'step-primary' : ''}`}>Agrega o quita productos</li>
+        <li className={`step ${pathname === '/restock/stepFour' ? 'step-primary' : ''}`}>Confirma</li>
       </ul>
     </div>
   )
