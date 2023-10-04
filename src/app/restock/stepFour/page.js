@@ -59,6 +59,7 @@ export default function stepFour () {
                                     // console.log('aca tengo el quantityProd', quantityProd ? quantityProd.quantity : 'No encontrado')
                                     return (
                                       <AccordeonCard
+                                        step={4}
                                         key={index}
                                         initialQuantity={quantityProd ? quantityProd.quantity : 0}
                                         price={product[0].prices[externalId] ? product[0].prices[externalId] : null}

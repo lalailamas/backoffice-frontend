@@ -5,13 +5,18 @@ const AccordeonCard = ({
   initialQuantity,
   maxQuantity,
   header,
-  price
+  price, step
 }) => {
-  const [quantity, setQuantity] = useState(initialQuantity) // Estado local para la cantidad
+  const [quantity, setQuantity] = useState(initialQuantity || 0) // Estado local para la cantidad
+  const [quantityPurchased, setQuantityPurchased] = useState(0) // Estado local para la cantidad
 
   const handleIncrease = () => {
     // Lógica para aumentar la cantidad
     setQuantity(quantity + 1)
+  }
+  const handleIncreasePurchased = () => {
+    // Lógica para aumentar la cantidad
+    setQuantityPurchased(quantityPurchased + 1)
   }
 
   const handleDecrease = () => {
@@ -20,13 +25,27 @@ const AccordeonCard = ({
       setQuantity(quantity - 1)
     }
   }
+  const handleDecreasePurchased = () => {
+    // Lógica para disminuir la cantidad
+    if (quantityPurchased > 0) {
+      setQuantityPurchased(quantityPurchased - 1)
+    }
+  }
 
   const handleCheck = () => {
     // Lógica para confirmar la cantidad, podrías enviarla al servidor aquí si es necesario
   }
+  const handleInputChange = (e) => {
+    const inputQuantity = parseInt(e.target.value, 10)
+    setQuantity(isNaN(inputQuantity) ? 0 : inputQuantity)
+  }
+  const handleInputChangePurchased = (e) => {
+    const inputQuantityPurchased = parseInt(e.target.value, 10)
+    setQuantityPurchased(isNaN(inputQuantityPurchased) ? 0 : inputQuantityPurchased)
+  }
 
   return (
-    <div className='max-w-md m-1 p-2 rounded overflow-hidden shadow-lg gap-6 h-full'>
+    <div className='max-w-md m-3 p-2 rounded overflow-hidden shadow-lg gap-6 h-full '>
 
       {header}
 
@@ -34,7 +53,7 @@ const AccordeonCard = ({
 
       {/* TODO: BOTON + Y TICKET ESPACIADO AQUI */}
 
-      {price !== undefined
+      {step === 4
         ? (
 
           <div className='flex justify-center text-center items-center h-[120px] gap-3'>
@@ -43,7 +62,7 @@ const AccordeonCard = ({
           </div>
 
           )
-        : initialQuantity
+        : step === 2
           ? (
             <div className='flex justify-center text-center items-center h-[120px] gap-3'>
 
@@ -56,16 +75,19 @@ const AccordeonCard = ({
             )
 
           : (
-            <div className='flex flex-col gap-4 h-[150px] items-center'>
+            <div className='flex flex-col gap-4 h-[150px] items-center '>
               <div className='custom-number-input h-8 w-32'>
                 <label for='custom-input-number' className='w-full text-gray-500 text-xs font-light'>productos añadidos
                 </label>
                 <div className='flex flex-row h-10 w-full rounded-lg relative bg-transparent mt-1'>
-                  <button data-action='decrement' className=' bg-gray-300 text-gray-600 hover:text-gray-700 hover:bg-gray-400 h-full w-20 rounded-l cursor-pointer outline-none'>
+                  <button data-action='decrement' className=' bg-gray-300 text-gray-600 hover:text-gray-700 hover:bg-gray-400 h-full w-20 rounded-l cursor-pointer outline-none' onClick={handleDecrease}>
                     <span className='m-auto text-2xl font-thin'>−</span>
                   </button>
-                  <input type='number' className='outline-none focus:outline-none text-center w-full bg-gray-300 font-semibold text-md hover:text-black focus:text-black  md:text-basecursor-default flex items-center text-gray-700  outline-none' name='custom-input-number' value='0' />
-                  <button data-action='increment' className='bg-gray-300 text-gray-600 hover:text-gray-700 hover:bg-gray-400 h-full w-20 rounded-r cursor-pointer'>
+                  <input
+                    className='outline-none focus:outline-none text-center w-full bg-gray-300 font-semibold text-md hover:text-black focus:text-black  md:text-basecursor-default flex items-center text-gray-700  outline-none' name='custom-input-number' value={quantity}
+                    onChange={handleInputChange}
+                  />
+                  <button data-action='increment' className='bg-gray-300 text-gray-600 hover:text-gray-700 hover:bg-gray-400 h-full w-20 rounded-r cursor-pointer' onClick={handleIncrease}>
                     <span className='m-auto text-2xl font-thin'>+</span>
                   </button>
                 </div>
@@ -74,11 +96,14 @@ const AccordeonCard = ({
                 <label for='custom-input-number' className='w-full text-gray-500 text-xs font-light'>productos retirados
                 </label>
                 <div className='flex flex-row h-10 w-full rounded-lg relative bg-transparent mt-1'>
-                  <button data-action='decrement' className=' bg-gray-300 text-gray-600 hover:text-gray-700 hover:bg-gray-400 h-full w-20 rounded-l cursor-pointer outline-none'>
+                  <button data-action='decrement' className=' bg-gray-300 text-gray-600 hover:text-gray-700 hover:bg-gray-400 h-full w-20 rounded-l cursor-pointer outline-none' onClick={handleDecreasePurchased}>
                     <span className='m-auto text-2xl font-thin'>−</span>
                   </button>
-                  <input type='number' className='outline-none focus:outline-none text-center w-full bg-gray-300 font-semibold text-md hover:text-black focus:text-black  md:text-basecursor-default flex items-center text-gray-700  outline-none' name='custom-input-number' value='0' />
-                  <button data-action='increment' className='bg-gray-300 text-gray-600 hover:text-gray-700 hover:bg-gray-400 h-full w-20 rounded-r cursor-pointer'>
+                  <input
+                    className='outline-none focus:outline-none text-center w-full bg-gray-300 font-semibold text-md hover:text-black focus:text-black  md:text-basecursor-default flex items-center text-gray-700  outline-none' name='custom-input-number' value={quantityPurchased}
+                    onChange={handleInputChangePurchased}
+                  />
+                  <button data-action='increment' className='bg-gray-300 text-gray-600 hover:text-gray-700 hover:bg-gray-400 h-full w-20 rounded-r cursor-pointer' onClick={handleIncreasePurchased}>
                     <span className='m-auto text-2xl font-thin'>+</span>
                   </button>
                 </div>

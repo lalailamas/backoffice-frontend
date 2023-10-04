@@ -96,10 +96,9 @@ function StepTwo () {
                       const product = products.filter((product) => product.productId === column.productId)
                       const quantityProd = inventory.products.find((prod) => prod.productId === column.productId)
                       const maxQuantity = column.maxQuantity
-                      // console.log('aca tengo el product', product)
-                      // console.log('aca tengo el quantityProd', quantityProd ? quantityProd.quantity : 'No encontrado')
                       return (
                         <AccordeonCard
+                          step={2}
                           key={index}
                           initialQuantity={quantityProd ? quantityProd.quantity : 0}
                           maxQuantity={maxQuantity}
@@ -115,13 +114,9 @@ function StepTwo () {
                                 />
                               </figure>
                               <h1 className='flex justify-center items-center text-d-title-purple font-bold m-1'>{product[0].productName}</h1>
-                              {/* <p className='ml-auto font-bold text-d-dark-dark-purple'> {quantityProd ? `${quantityProd.quantity}/${maxQuantity}` : '??'}</p> */}
                             </div>
                         }
                         />
-                      // <div key={index}>
-                      //   <pre>{JSON.stringify(inventory, null, 2)}</pre>
-                      // </div>
 
                       )
                     })

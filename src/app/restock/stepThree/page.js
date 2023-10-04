@@ -58,6 +58,7 @@ export default function page () {
                                     // console.log('aca tengo el quantityProd', quantityProd ? quantityProd.quantity : 'No encontrado')
                                     return (
                                       <AccordeonCard
+                                        step={3}
                                         key={index}
                                         maxQuantity={maxQuantity}
                                         header={
