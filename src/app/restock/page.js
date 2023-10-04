@@ -4,6 +4,7 @@ import { getStores } from '../../api/store'
 import InsideLayout from '@/components/admin/layouts/inside'
 // import StepTwo from './stepTwo'
 import { useRouter } from 'next/navigation'
+import StepLayout from './stepLayout'
 
 function Restock () {
   const [stores, setStores] = useState([])
@@ -38,15 +39,7 @@ function Restock () {
     <div>
       <InsideLayout />
       <div className='text-center pt-8'>
-        <div className=''>
-          <h2 className='text-d-dark-dark-purple text-2xl font-bold'>Restock</h2>
-        </div>
-        <ul className='steps p-8'>
-          <li className={`step ${currentStep === 1 ? 'step-primary' : ''}`}>Elige la tienda</li>
-          <li className={`step ${currentStep === 2 ? 'step-primary' : ''}`}>Confirma inventario</li>
-          <li className='step'>Agrega o quita productos</li>
-          <li className='step'>Finalizar</li>
-        </ul>
+        <StepLayout />
 
         <div className={currentStep === 1 ? 'flex-col m-4 p-4' : 'hidden'}>
           <select
