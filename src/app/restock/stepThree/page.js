@@ -14,15 +14,9 @@ export default function page () {
   const externalId = searchParams.get('external_id')
   const layoutId = searchParams.get('layout_id')
   const storeName = searchParams.get('store_name')
-  // const { inventory } = useGetInventory(externalId)
   const { layout } = useGetLayout(layoutId)
   const { products, loading } = useGetReiteProd()
 
-  // useEffect(() => {
-  //   console.log(externalId, 'external_id')
-  //   console.log(layoutId, 'layout_id')
-  //   console.log(storeName, 'store_name')
-  // }, [])
   return (
     <div>
       {loading
@@ -45,7 +39,7 @@ export default function page () {
                   return (
                     <div key={index} className='text-center border-b-2 border-gray-300 pb-5 mb-5 md:mb-8'>
 
-                      <h2 className='text-d-soft-purple text-2x2 font-bold pb-5 mb-5 md:mb-8'>Bandeja N°{index}</h2>
+                      <h2 className='text-d-soft-purple text-2x2 font-bold pb-5 mb-5 md:mb-8'>Bandeja N°{index + 1}</h2>
                       <div className='flex flex-col md:flex-row gap-4 items-center md:items-start h-full w-full'>
 
                         {
@@ -77,9 +71,6 @@ export default function page () {
                                           </div>
                                       }
                                       />
-                                    // <div key={index}>
-                                    //   <pre>{JSON.stringify(inventory, null, 2)}</pre>
-                                    // </div>
 
                                     )
                                   })

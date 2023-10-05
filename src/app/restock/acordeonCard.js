@@ -49,10 +49,6 @@ const AccordeonCard = ({
 
       {header}
 
-      {/* <p className='ml-auto font-bold text-d-dark-dark-purple'> {initialQuantity}/{maxQuantity}</p> */}
-
-      {/* TODO: BOTON + Y TICKET ESPACIADO AQUI */}
-
       {step === 4
         ? (
 

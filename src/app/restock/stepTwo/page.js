@@ -87,7 +87,7 @@ function StepTwo () {
             return (
               <div key={index} className='text-center border-b-2 border-gray-300 pb-5 mb-5 md:mb-8'>
 
-                <h2 className='text-d-soft-purple text-2x2 font-bold pb-5 mb-5 md:mb-8'>Bandeja N°{index}</h2>
+                <h2 className='text-d-soft-purple text-2x2 font-bold pb-5 mb-5 md:mb-8'>Bandeja N°{index + 1}</h2>
                 <div className='flex flex-col md:flex-row gap-4 items-center md:items-start'>
 
                   {

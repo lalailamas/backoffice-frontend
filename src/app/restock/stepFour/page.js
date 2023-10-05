@@ -19,11 +19,6 @@ export default function stepFour () {
   const { layout } = useGetLayout(layoutId)
   const { products, loading } = useGetReiteProd()
 
-  // useEffect(() => {
-  //   console.log(externalId, 'external_id')
-  //   console.log(layoutId, 'layout_id')
-  //   console.log(storeName, 'store_name')
-  // }, [])
   return (
     <div>
       {loading
@@ -32,7 +27,6 @@ export default function stepFour () {
           <div>
             <InsideLayout />
             <div className='text-center'>
-
               <StepLayout />
             </div>
             <div className='px-4 md:px-6 lg:px-8'>
@@ -46,7 +40,7 @@ export default function stepFour () {
                   return (
                     <div key={index} className='text-center border-b-2 border-gray-300 pb-5 mb-5 md:mb-8'>
 
-                      <h2 className='text-d-soft-purple text-2x2 font-bold pb-5 mb-5 md:mb-8'>Bandeja N°{index}</h2>
+                      <h2 className='text-d-soft-purple text-2x2 font-bold pb-5 mb-5 md:mb-8'>Bandeja N°{index + 1}</h2>
                       <div className='flex flex-col md:flex-row gap-4 items-center md:items-start h-full w-full'>
 
                         {
@@ -78,7 +72,7 @@ export default function stepFour () {
                                             <h1 className='flex justify-center items-center text-d-title-purple font-bold m-1'>{product[0].productName}</h1>
                                             {/* <p className='ml-auto font-bold text-d-dark-dark-purple'> {quantityProd ? `${quantityProd.quantity}/${maxQuantity}` : '??'}</p> */}
                                           </div>
-                                      }
+                                    }
                                       />
                                     // <div key={index}>
                                     //   <pre>{JSON.stringify(inventory, null, 2)}</pre>
@@ -87,15 +81,13 @@ export default function stepFour () {
                                     )
                                   })
                                   : null
-                              }
+                            }
                       </div>
                     </div>
 
                   )
                 })
-
-              }
-
+            }
             </div>
           </div>
           )}
