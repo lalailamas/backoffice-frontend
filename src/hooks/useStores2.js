@@ -20,7 +20,6 @@ const useGetStores2 = () => {
     fetchStores()
   }, [])
 
-  // custom hook returns value
   return { stores, error, loading }
 }
 
