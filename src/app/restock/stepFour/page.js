@@ -32,7 +32,7 @@ export default function stepFour () {
             <div className='px-4 md:px-6 lg:px-8'>
               {externalId && (
                 <div className='text-center mb-4 md:mb-8'>
-                  <h1 className='text-d-dark-dark-purple text-2x2 font-bold'>Confirma el inventario de {storeName}</h1>
+                  <h1 className='text-d-dark-dark-purple text-2x2 font-bold'>Vuelve a confirmar el inventario de {storeName} y asegúrate de que los precios correspondan al producto.</h1>
                 </div>
               )}
               {

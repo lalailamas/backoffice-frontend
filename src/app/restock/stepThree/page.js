@@ -7,6 +7,7 @@ import useGetReiteProd from '@/hooks/useGetReiteProd'
 // import DspLoader from '@/components/admin/common/loader'
 import AccordeonCard from '../acordeonCard'
 import DspLoader from '@/components/admin/common/loader'
+import useGetInventory from '@/hooks/useGetInventory'
 
 export default function page () {
   const searchParams = useSearchParams()
@@ -14,6 +15,7 @@ export default function page () {
   const externalId = searchParams.get('external_id')
   const layoutId = searchParams.get('layout_id')
   const storeName = searchParams.get('store_name')
+  const { inventory } = useGetInventory(externalId)
   const { layout } = useGetLayout(layoutId)
   const { products, loading } = useGetReiteProd()
 
@@ -31,7 +33,7 @@ export default function page () {
             <div className='px-4 md:px-6 lg:px-8'>
               {externalId && (
                 <div className='text-center mb-4 md:mb-8'>
-                  <h1 className='text-d-dark-dark-purple text-2x2 font-bold'>Confirma el inventario de {storeName}</h1>
+                  <h1 className='text-d-dark-dark-purple text-2x2 font-bold'>Añade o retira productos</h1>
                 </div>
               )}
               {
@@ -46,7 +48,7 @@ export default function page () {
                                 tray
                                   ? tray.columns.map((column, index) => {
                                     const product = products?.filter((product) => product.productId === column.productId)
-                                    // const quantityProd = inventory.products.find((prod) => prod.productId === column.productId)
+                                    const quantityProd = inventory.products.find((prod) => prod.productId === column.productId)
                                     const maxQuantity = column.maxQuantity
                                     console.log('aca tengo el product', product)
                                     // console.log('aca tengo el quantityProd', quantityProd ? quantityProd.quantity : 'No encontrado')
@@ -54,6 +56,7 @@ export default function page () {
                                       <AccordeonCard
                                         step={3}
                                         key={index}
+                                        initialQuantity={quantityProd ? quantityProd.quantity : 0}
                                         maxQuantity={maxQuantity}
                                         header={
                                           <div className=' w-full gap-3 items-center justify-center'>
@@ -67,6 +70,8 @@ export default function page () {
                                               />
                                             </figure>
                                             <h1 className='flex justify-center items-center text-d-title-purple font-bold m-1'>{product[0].productName}</h1>
+                                            <h1 className='flex justify-center items-center text-d-dark-purple font-bold m-1 text-xs'>max: {maxQuantity}u.</h1>
+
                                             {/* <p className='ml-auto font-bold text-d-dark-dark-purple'> {quantityProd ? `${quantityProd.quantity}/${maxQuantity}` : '??'}</p> */}
                                           </div>
                                       }
