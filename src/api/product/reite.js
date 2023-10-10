@@ -1,4 +1,4 @@
-import { getReiteData, getReiteDataById } from '@/utils/fetchData'
+import { getReiteData, getReiteDataById, getReiteProductsByStore } from '@/utils/fetchData'
 
 export const getAllReiteData = async () => {
   const response = await getReiteData('', 'product/list', 'multipart/form-data')
@@ -10,7 +10,7 @@ export const getReiteProdData = async (id) => {
   return response.data
 }
 
-export const getReiteDataByStore = async (storeId) => {
-  const response = await getReiteData(storeId, 'product/list', 'multipart/form-data')
+export const getReiteProdByStore = async (storeId) => {
+  const response = await getReiteProductsByStore(storeId, 'stores/', 'multipart/form-data')
   return response.data
 }
