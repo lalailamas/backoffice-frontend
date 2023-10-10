@@ -215,35 +215,34 @@ export default function Inventory () {
             Nuevo producto
           </button>
 
-          {currentWarehouse &&
-            <>
+          <>
 
-              <div type='button' className='btn btn-sm join-item rounded-full bg-d-soft-soft-purple text-d-dark-dark-purple'>
-                <div className='form-control'>
-                  <label className='label p-0'>
-                    <span className='label-text pr-4 text-d-dark-dark-purple'>Modo escaneo</span>
-                    <input type='checkbox' className='toggle toggle-sm toggle-primary' checked={scanMode} onChange={() => setScanMode(!scanMode)} />
-                  </label>
-                </div>
+            <div type='button' className='btn btn-sm join-item rounded-full bg-d-soft-soft-purple text-d-dark-dark-purple'>
+              <div className='form-control'>
+                <label className='label p-0'>
+                  <span className='label-text pr-4 text-d-dark-dark-purple'>Modo escaneo</span>
+                  <input type='checkbox' className='toggle toggle-sm toggle-primary' checked={scanMode} onChange={() => setScanMode(!scanMode)} />
+                </label>
               </div>
-              <div className='join'>
-                {/* eslint-disable-next-line */}
+            </div>
+            <div className='join'>
+              {/* eslint-disable-next-line */}
                 <button disabled={!scanMode} className='btn btn-sm join-item rounded-l-full' onClick={() => { if (true /* currentQuantity > 1 */) { setCurrentQuantity(currentQuantity - 1); scanElement.current.focus() } }}>-</button>
-                <input disabled={!scanMode} className='input input-sm input-bordered w-full md:w-16 bg-d-white rounded-l-full text-d-dark-dark-purple  text-center join-item' type='text' value={currentQuantity} />
-                <button disabled={!scanMode} className='btn  btn-sm join-item rounded-r-full' onClick={() => { setCurrentQuantity(currentQuantity + 1); scanElement.current.focus() }}>+</button>
+              <input disabled={!scanMode} className='input input-sm input-bordered w-full md:w-16 bg-d-white rounded-l-full text-d-dark-dark-purple  text-center join-item' type='text' value={currentQuantity} />
+              <button disabled={!scanMode} className='btn  btn-sm join-item rounded-r-full' onClick={() => { setCurrentQuantity(currentQuantity + 1); scanElement.current.focus() }}>+</button>
+            </div>
+            <form onSubmit={(e) => handleScan(e)}>
+              <div className='join  w-full'>
+                <input disabled={!scanMode} type='text' placeholder='EAN' name='ean' className='input input-sm input-bordered w-full bg-d-white join-item rounded-l-full text-d-dark-dark-purple' ref={scanElement} />
+                <button disabled={!scanMode} type='submit ' className='btn btn-sm join-item rounded-r-full bg-d-dark-dark-purple border-none text-d-white  hover:bg-d-soft-soft-purple hover:text-d-dark-dark-purple'>
+                  <svg viewBox='131 -131 512 512' xmlns='http://www.w3.org/2000/svg' fill='currentColor' strokeWidth={1} stroke='currentColor' className='w-6 h-6'>
+                    <path id='XMLID_11_' d='M131-57.7v365.5h56.7V-57.7H131z M228.7-57.7v365.5h48.8V-57.7H228.7z M293.3-57.7v365.5h32.3V-57.7H293.3z M358.6-57.7v365.5h32.3V-57.7H358.6z M431.9-57.7v365.5h56.7V-57.7H431.9z M529.6-57.7v365.5H554V-57.7H529.6z M594.2-57.7v365.5 H643V-57.7H594.2z' />
+                  </svg>
+                </button>
               </div>
-              <form onSubmit={(e) => handleScan(e)}>
-                <div className='join  w-full'>
-                  <input disabled={!scanMode} type='text' placeholder='EAN' name='ean' className='input input-sm input-bordered w-full bg-d-white join-item rounded-l-full text-d-dark-dark-purple' ref={scanElement} />
-                  <button disabled={!scanMode} type='submit ' className='btn btn-sm join-item rounded-r-full bg-d-dark-dark-purple border-none text-d-white  hover:bg-d-soft-soft-purple hover:text-d-dark-dark-purple'>
-                    <svg viewBox='131 -131 512 512' xmlns='http://www.w3.org/2000/svg' fill='currentColor' strokeWidth={1} stroke='currentColor' className='w-6 h-6'>
-                      <path id='XMLID_11_' d='M131-57.7v365.5h56.7V-57.7H131z M228.7-57.7v365.5h48.8V-57.7H228.7z M293.3-57.7v365.5h32.3V-57.7H293.3z M358.6-57.7v365.5h32.3V-57.7H358.6z M431.9-57.7v365.5h56.7V-57.7H431.9z M529.6-57.7v365.5H554V-57.7H529.6z M594.2-57.7v365.5 H643V-57.7H594.2z' />
-                    </svg>
-                  </button>
-                </div>
-              </form>
+            </form>
 
-            </>}
+          </>
 
           {currentEan !== '' &&
             <div className=' flex flex-row text-lg items-center pl-4'>
