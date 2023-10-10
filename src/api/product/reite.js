@@ -9,3 +9,8 @@ export const getReiteProdData = async (id) => {
   const response = await getReiteDataById(id, 'product', 'multipart/form-data')
   return response.data
 }
+
+export const getReiteDataByStore = async (storeId) => {
+  const response = await getReiteData(storeId, 'product/list', 'multipart/form-data')
+  return response.data
+}
