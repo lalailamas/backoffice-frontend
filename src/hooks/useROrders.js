@@ -1,13 +1,11 @@
-import { useState, useEffect } from 'react';
-import DspApi from '@/lib/api';
-
-
+import { useState, useEffect } from 'react'
+import { DspApi } from '@/utils/fetchData'
 
 const useGetROrders = (params, cachekey) => {
-  const [rorders, setROrders] = useState(null);
-  const [meta, setMeta] = useState(null);
-  const [error, setError] = useState('');
-  const [loading, setLoading] = useState(true);
+  const [rorders, setROrders] = useState(null)
+  const [meta, setMeta] = useState(null)
+  const [error, setError] = useState('')
+  const [loading, setLoading] = useState(true)
 
   const fetchData = () => {
     setLoading(true)
@@ -17,21 +15,18 @@ const useGetROrders = (params, cachekey) => {
         setMeta(response.data.meta)
       }
     ).catch((err) => {
-      setError(err);
+      setError(err)
     }).finally(() => {
-      setLoading(false);
-    });
+      setLoading(false)
+    })
   }
 
-
   useEffect(() => {
-    fetchData();
-  }, [params, cachekey]);
+    fetchData()
+  }, [params, cachekey])
 
   // custom hook returns value
-  return { rorders, meta, error, loading };
-
-
+  return { rorders, meta, error, loading }
 }
 
-export default useGetROrders;
+export default useGetROrders

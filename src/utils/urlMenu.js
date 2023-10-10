@@ -1,9 +1,11 @@
 export const menuItems = [
   {
-    label: 'Dashboard',
+    label: 'Inicio',
     icon: 'rotate-180',
     subMenuLinks: [
-      { label: 'Dashboard', href: '/dashboard' }
+      { label: 'Dashboard', href: '/dashboard' },
+      { label: 'Marketing', href: '/marketing' }
+
     ]
   },
   {

@@ -1,10 +1,9 @@
 'use client'
-import { Categories, Seasons } from '@/lib/constants'
 import { useEffect, useState } from 'react'
 
 export default function DeleteROrderModal (props) {
   const { rorder, showDeleteModal, toggleDeleteModal, confirm } = props
-  const [editROrder, setEditROrder] = useState({})
+  const [setEditROrder] = useState({})
 
   // const [ean,setEan] = useState('');
   // const [category,setCategory] = useState('');
@@ -15,20 +14,21 @@ export default function DeleteROrderModal (props) {
   // const [stock,setStock] = useState(0);
   // const [expirationDate,setExpirationDate] = useState(null);
 
-  const handleChange = (key, value) => {
-    console.log(editROrder)
-    setEditROrder((current) => {
-      current[key] = value
-      return current
-    })
-    // var clone = JSON.parse(JSON.stringify(editROrder));
-    // clone[key] = value;
-    // setEditROrder(clone);
-  }
+  // const handleChange = (key, value) => {
+  //   console.log(editROrder)
+  //   setEditROrder((current) => {
+  //     current[key] = value
+  //     return current
+  //   }
+  //   )
+  //   // var clone = JSON.parse(JSON.stringify(editROrder));
+  //   // clone[key] = value;
+  //   // setEditROrder(clone);
+  // }
 
-  const handleSave = () => {
-    save(editROrder)
-  }
+  // const handleSave = () => {
+  //   save(editROrder)
+  // }
 
   useEffect(
     () => {

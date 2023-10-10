@@ -6,7 +6,7 @@ import InsideLayout from '@/components/admin/layouts/inside'
 
 export default function EditUserForm () {
   const router = useRouter()
-  const { id } = router.query
+  // const { id } = router.query
   const { register, handleSubmit } = useForm()
 
   const onSubmit = (editedUserData) => {
@@ -19,7 +19,7 @@ export default function EditUserForm () {
       <InsideLayout />
       <h2>Editar Usuario</h2>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <input type='hidden' {...register('id')} value={id} />
+        {/* <input type='hidden' {...register('id')} value={id} /> */}
         <input
           type='text'
           {...register('fullname')}

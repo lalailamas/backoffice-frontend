@@ -22,10 +22,10 @@ import {
   TableBody
 } from '@tremor/react'
 import {
-  StatusOnlineIcon,
+  SignalIcon,
   ClockIcon
 
-} from '@heroicons/react/outline'
+} from '@heroicons/react/24/solid'
 
 import { chartdata, dataFormatter } from './fake'
 // import { useRouter } from 'next/navigation'
@@ -65,33 +65,31 @@ export default function MyComponent () {
                     <Card className='rounded-xl'>
                       <div className='text-center'>HUB Cenco
                         <br />
-
-                        <Badge size='lg' icon={StatusOnlineIcon} color='emerald' />
-
+                        <Badge size='lg' icon={SignalIcon} color='emerald' />
                       </div>
                     </Card>
                     <Card className='rounded-xl' decorationColor='neutral'>
                       <div className='text-center'>Dieciocho 715
                         <br />
-                        <Badge size='lg' icon={StatusOnlineIcon} color='red' />
+                        <Badge size='lg' icon={SignalIcon} color='red' />
                       </div>
                     </Card>
                     <Card className='rounded-xl'>
                       <div className='text-center'>Calle Nueva 120
                         <br />
-                        <Badge size='lg' icon={StatusOnlineIcon} color='yellow' />
+                        <Badge size='lg' icon={SignalIcon} color='yellow' />
                       </div>
                     </Card>
                     <Card className='rounded-xl'>
                       <div className='text-center'>PUC Lo Contador
                         <br />
-                        <Badge size='lg' icon={StatusOnlineIcon} color='emerald' />
+                        <Badge size='lg' icon={SignalIcon} color='emerald' />
                       </div>
                     </Card>
                     <Card className='rounded-xl'>
                       <div className='text-center'>PUC San Joaquín
                         <br />
-                        <Badge size='lg' icon={StatusOnlineIcon} color='emerald' />
+                        <Badge size='lg' icon={SignalIcon} color='emerald' />
                       </div>
                     </Card>
                   </Grid>

@@ -159,3 +159,62 @@ export const chartdata = [
 export const dataFormatter = (number) => {
   return '$ ' + Intl.NumberFormat('us').format(number).toString()
 }
+
+export const dataFormatter2 = (number) => `${Intl.NumberFormat('us').format(number).toString()}%`
+
+export const cities = [
+  {
+    name: 'New York',
+    sales: 9800
+  },
+  {
+    name: 'London',
+    sales: 4567
+  },
+  {
+    name: 'Hong Kong',
+    sales: 3908
+  },
+  {
+    name: 'San Francisco',
+    sales: 2400
+  },
+  {
+    name: 'Singapore',
+    sales: 1908
+  },
+  {
+    name: 'Zurich',
+    sales: 1398
+  }
+]
+
+export const chartdata2 = [
+  {
+    year: 1970,
+    'Export Growth Rate': 2.04,
+    'Import Growth Rate': 1.53
+  },
+  {
+    year: 1971,
+    'Export Growth Rate': 1.96,
+    'Import Growth Rate': 1.58
+  },
+  {
+    year: 1972,
+    'Export Growth Rate': 1.96,
+    'Import Growth Rate': 1.61
+  },
+  {
+    year: 1973,
+    'Export Growth Rate': 1.93,
+    'Import Growth Rate': 1.61
+  },
+  {
+    year: 1974,
+    'Export Growth Rate': 1.88,
+    'Import Growth Rate': 1.67
+  }
+]
+
+export const valueFormatter = (number) => `$ ${Intl.NumberFormat('us').format(number).toString()}`

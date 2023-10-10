@@ -32,6 +32,7 @@ module.exports = {
         'd-dark-gray': '#e8e8d8',
         'd-gray': '#e5e5e3',
         'd-white': '#ffffff',
+        'd-soft-white': '#FCFCFC',
         tremor: {
           brand: {
             faint: '#eff6ff', // blue-50
