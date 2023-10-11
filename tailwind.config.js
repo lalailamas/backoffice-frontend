@@ -28,11 +28,12 @@ module.exports = {
         'd-soft-purple': '#B9B8DC',
         'd-strong-green': '#ddff4c',
         'd-green': '#e7ff6f',
-        'd-soft-green': '#d8dcb0',
+        'd-soft-green': '#D4F8D3',
         'd-dark-gray': '#e8e8d8',
         'd-gray': '#e5e5e3',
         'd-white': '#ffffff',
         'd-soft-white': '#FCFCFC',
+        'd-neon-purple': '#7A36E6',
         tremor: {
           brand: {
             faint: '#eff6ff', // blue-50

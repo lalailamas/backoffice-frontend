@@ -168,16 +168,16 @@ export default function Inventory () {
     <>
       <InsideLayout />
       <div className='w-full p-8'>
-        <div className='flex flex-col md:flex-row mt-4 gap-y-4 md:gap-y-0 md:gap-x-4 mb-4'>
+        <div className='flex flex-col md:flex-row mt-4 gap-y-4 md:gap-y-0 md:gap-x-4 mb-4 min-[430px]:text-center '>
           <h2 className='text-d-dark-dark-purple text-2xl font-bold'>Productos</h2>
-          <select value={currentWarehouse} onChange={(e) => { setCurrentWarehouse(e.target.value) }} className='select select-sm select-bordered  rounded-full w-full md:max-w-xs'>
+          <select value={currentWarehouse} onChange={(e) => { setCurrentWarehouse(e.target.value) }} className='select select-sm select-bordered  rounded-full w-full md:max-w-xs min-[430px]:hidden md:block'>
             <option disabled value={0}>Bodega</option>
             {warehouses && warehouses.map(w =>
               <option key={w.id} value={w.id}>{w.name}</option>
             )}
 
           </select>
-          <div className='rounded-full text-d-dark-dark-purple py-1'>
+          <div className='rounded-full text-d-dark-dark-purple py-1 min-[430px]:hidden md:block'>
             <div className='form-control'>
               <label className='label p-0'>
                 <span className='label-text pr-4 text-d-dark-dark-purple'>Mostrar Entrenamiento</span>
@@ -186,7 +186,7 @@ export default function Inventory () {
             </div>
           </div>
 
-          <div className='rounded-full  text-d-dark-dark-purple py-1'>
+          <div className='rounded-full  text-d-dark-dark-purple py-1 min-[430px]:hidden md:block'>
             <div className='form-control'>
               <label className='label p-0'>
                 <span className='label-text pr-4 text-d-dark-dark-purple'>Mostrar Expiración</span>
@@ -196,10 +196,10 @@ export default function Inventory () {
           </div>
 
         </div>
-        <div className='divider' />
-        <div className='flex flex-col md:flex-row mt-4 gap-y-4 md:gap-y-0 md:gap-x-4 mb-4'>
+        <div className='divider min-[430px]:hidden md:block ' />
+        <div className='flex flex-col md:flex-row mt-4 gap-y-4 md:gap-y-0 md:gap-x-4 mb-4 min-[430px]:flex-row min-[430px]:mb-8 min-[430px]:gap-2'>
 
-          <div className='join  w-full md:max-w-xs'>
+          <div className='join w-full md:max-w-xs '>
             <SearchField type='text' placeholder='Búsqueda' name='search' className='input input-sm input-bordered w-full  bg-d-white join-item rounded-full text-d-dark-dark-purple' onChange={(v) => setSearchKey(v)} />
 
             <button type='button ' onClick={() => setSearchKey('')} className='btn btn-sm join-item rounded-r-full bg-d-dark-dark-purple border-none text-d-white  hover:bg-d-soft-soft-purple hover:text-d-dark-dark-purple'>
@@ -211,45 +211,40 @@ export default function Inventory () {
             </button>
           </div>
 
-          <button type='submit' onClick={() => handleNewProduct()} className='btn btn-sm join-item rounded-full bg-d-dark-dark-purple border-none text-d-white  hover:bg-d-soft-soft-purple hover:text-d-dark-dark-purple'>
-            Nuevo producto
+          <button type='submit' onClick={() => handleNewProduct()} className='btn btn-sm join-item rounded-full bg-d-dark-dark-purple border-none text-d-white  hover:bg-d-soft-soft-purple hover:text-d-dark-dark-purple max-[430px]:w-32 md:block'>
+            Crear Producto
           </button>
 
-          <>
-
-            <div type='button' className='btn btn-sm join-item rounded-full bg-d-soft-soft-purple text-d-dark-dark-purple'>
-              <div className='form-control'>
-                <label className='label p-0'>
-                  <span className='label-text pr-4 text-d-dark-dark-purple'>Modo escaneo</span>
-                  <input type='checkbox' className='toggle toggle-sm toggle-primary' checked={scanMode} onChange={() => setScanMode(!scanMode)} />
-                </label>
-              </div>
+          <div type='button' className='btn btn-sm join-item rounded-full bg-d-soft-soft-purple text-d-dark-dark-purple min-[430px]:hidden md:block'>
+            <div className='form-control'>
+              <label className='label p-0 mt-1'>
+                <span className='label-text  pr-4 text-d-dark-dark-purple'>Modo escaneo</span>
+                <input type='checkbox' className='toggle toggle-sm toggle-primary' checked={scanMode} onChange={() => setScanMode(!scanMode)} />
+              </label>
             </div>
-            <div className='join'>
-              {/* eslint-disable-next-line */}
-                <button disabled={!scanMode} className='btn btn-sm join-item rounded-l-full' onClick={() => { if (true /* currentQuantity > 1 */) { setCurrentQuantity(currentQuantity - 1); scanElement.current.focus() } }}>-</button>
-              <input disabled={!scanMode} className='input input-sm input-bordered w-full md:w-16 bg-d-white rounded-l-full text-d-dark-dark-purple  text-center join-item' type='text' value={currentQuantity} />
-              <button disabled={!scanMode} className='btn  btn-sm join-item rounded-r-full' onClick={() => { setCurrentQuantity(currentQuantity + 1); scanElement.current.focus() }}>+</button>
+          </div>
+          <div className='join min-[430px]:hidden md:block'>
+            <button disabled={!scanMode} className='btn btn-sm join-item rounded-l-full' onClick={() => { setCurrentQuantity(currentQuantity - 1); scanElement.current.focus() }}>-</button>
+            <input disabled={!scanMode} className='input input-sm input-bordered w-full md:w-16 bg-d-white rounded-l-full text-d-dark-dark-purple text-center join-item' type='text' value={currentQuantity} />
+            <button disabled={!scanMode} className='btn btn-sm join-item rounded-r-full' onClick={() => { setCurrentQuantity(currentQuantity + 1); scanElement.current.focus() }}>+</button>
+          </div>
+          <form onSubmit={(e) => handleScan(e)}>
+            <div className='join min-[430px]:hidden md:block'>
+              <input disabled={!scanMode} type='text' placeholder='EAN' name='ean' className='input input-sm input-bordered join-item bg-d-white rounded-l-full text-d-dark-dark-purple' ref={scanElement} />
+              <button disabled={!scanMode} type='submit' className='btn btn-sm join-item rounded-r-full bg-d-dark-dark-purple border-none text-d-white  hover:bg-d-soft-soft-purple hover:text-d-dark-dark-purple'>
+                <svg viewBox='131 -131 512 512' xmlns='http://www.w3.org/2000/svg' fill='currentColor' strokeWidth={1} stroke='currentColor' className='w-6 h-3'>
+                  <path id='XMLID_11_' d='M131-57.7v365.5h56.7V-57.7H131z M228.7-57.7v365.5h48.8V-57.7H228.7z M293.3-57.7v365.5h32.3V-57.7H293.3z M358.6-57.7v365.5h32.3V-57.7H358.6z M431.9-57.7v365.5h56.7V-57.7H431.9z M529.6-57.7v365.5H554V-57.7H529.6z M594.2-57.7v365.5 H643V-57.7H594.2z' />
+                </svg>
+              </button>
             </div>
-            <form onSubmit={(e) => handleScan(e)}>
-              <div className='join  w-full'>
-                <input disabled={!scanMode} type='text' placeholder='EAN' name='ean' className='input input-sm input-bordered w-full bg-d-white join-item rounded-l-full text-d-dark-dark-purple' ref={scanElement} />
-                <button disabled={!scanMode} type='submit ' className='btn btn-sm join-item rounded-r-full bg-d-dark-dark-purple border-none text-d-white  hover:bg-d-soft-soft-purple hover:text-d-dark-dark-purple'>
-                  <svg viewBox='131 -131 512 512' xmlns='http://www.w3.org/2000/svg' fill='currentColor' strokeWidth={1} stroke='currentColor' className='w-6 h-6'>
-                    <path id='XMLID_11_' d='M131-57.7v365.5h56.7V-57.7H131z M228.7-57.7v365.5h48.8V-57.7H228.7z M293.3-57.7v365.5h32.3V-57.7H293.3z M358.6-57.7v365.5h32.3V-57.7H358.6z M431.9-57.7v365.5h56.7V-57.7H431.9z M529.6-57.7v365.5H554V-57.7H529.6z M594.2-57.7v365.5 H643V-57.7H594.2z' />
-                  </svg>
-                </button>
-              </div>
-            </form>
-
-          </>
+          </form>
 
           {currentEan !== '' &&
             <div className=' flex flex-row text-lg items-center pl-4'>
               <strong>Último EAN escaneado: </strong> {currentEan}
             </div>}
         </div>
-        <div className='divider' />
+        <div className='divider max-[431px]:hidden' />
         <ProductsTable products={products} edit={handleEditProduct} showTraining={showTraining} showMachines={showMachines} showExpiration={showExpiration} warehouses={warehouses} />
         <div className='w-full flex flex-row mt-4' />
       </div>
@@ -259,11 +254,5 @@ export default function Inventory () {
 
     </>
 
-  )
-}
-
-Inventory.getLayout = function getLayout (page) {
-  return (
-    <InsideLayout>{page}</InsideLayout>
   )
 }
