@@ -7,7 +7,6 @@ import { useRouter } from 'next/router'
 import Link from 'next/link'
 import DspLoader from '@/components/admin/common/loader'
 import useGetStores from '@/hooks/useStores'
-import { useUserRole } from '@/hooks/useUserRole'
 
 export default function Inventory () {
   const router = useRouter()
@@ -16,7 +15,6 @@ export default function Inventory () {
   const { stores } = useGetStores(params, 0)
   const { warehouses } = useGetWarehouses(params, 0)
   const [currentROrder, setCurrentROrder] = useState(null)
-  const { checkUserRole } = useUserRole()
 
   const pad = (num, size) => {
     num = num.toString()
@@ -26,8 +24,6 @@ export default function Inventory () {
 
   useEffect(
     () => {
-      checkUserRole()
-
       if (router.isReady) {
         DspApi.getReplenishmentOrder(id).then((response) => {
           setCurrentROrder(response.data)

@@ -10,10 +10,8 @@ import EditROrderModal from '@/components/admin/modals/replenishment-orders/edit
 // import useGetWarehouses from '@/hooks/useWarehouses'
 import { SearchField } from '@/components/admin/common/search'
 import Datepicker from 'react-tailwindcss-datepicker'
-// import { useUserRole } from '@/hooks/useUserRole'
 
 export default function Inventory () {
-  // const { checkUserRole } = useUserRole()
   const [cachekey, setCachekey] = useState(0)
 
   const [setSearchKey] = useState('')

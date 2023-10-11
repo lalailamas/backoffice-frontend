@@ -1,6 +1,6 @@
 'use client'
 import InsideLayout from '@/components/admin/layouts/inside'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import {
   Card,
   Text,
@@ -30,22 +30,14 @@ import {
 import { chartdata, dataFormatter } from './fake'
 // import { useRouter } from 'next/navigation'
 // import DspLoader from '@/components/admin/common/loader'
-import { useUserRole } from '@/hooks/useUserRole'
 
 export default function MyComponent () {
   const [value, setValue] = useState('')
   const [month, setMonth] = useState('')
-  const { checkUserRole } = useUserRole()
 
   // const router = useRouter()
 
   // console.log(session, 'session DENTRO DEL MYCOMPONENT PERO FUERA DEL USEEFFECT')
-  useEffect(() => {
-    checkUserRole()
-    // console.log(session, 'session DENTRO DEL USEEFFECT de index')
-    // console.log('el useEffect se ejecutó')
-    // console.log(session.user.role, 'session.user.role DENTRO DEL USEEFFECT')
-  }, [])
 
   return (
     <div>
