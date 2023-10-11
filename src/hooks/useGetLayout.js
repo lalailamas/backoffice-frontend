@@ -2,6 +2,7 @@ import { getLayout } from '@/api/layout'
 import { useEffect, useState } from 'react'
 
 export default function useGetLayout (layoutId) {
+  console.log(layoutId, 'layoutId')
   const [state, setState] = useState({
     layout: [],
     loading: true,
