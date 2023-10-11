@@ -1,6 +1,6 @@
 'use client'
 import React, { useEffect, useState } from 'react'
-import { getStores } from '../../api/store'
+import { OpenStore, getStores } from '../../api/store'
 import InsideLayout from '@/components/admin/layouts/inside'
 // import StepTwo from './stepTwo'
 import { useRouter } from 'next/navigation'
@@ -13,7 +13,8 @@ function Restock () {
   const router = useRouter()
 
   const handleStoreChange = (id) => {
-    const store = stores.find((store) => store.id === parseInt(id, 10))
+    console.log('selected store id', id)
+    const store = stores.find((store) => store.storeId === id)
     console.log('selected store del handleStoreChange', store)
     setSelectedStore(store)
   }
@@ -26,6 +27,7 @@ function Restock () {
     const fetchStores = async () => {
       try {
         const response = await getStores()
+        console.log('response', response.data)
         setStores(response.data)
       } catch (error) {
         console.error('Error fetching stores:', error)
@@ -34,6 +36,15 @@ function Restock () {
 
     fetchStores()
   }, [])
+
+  const handleOpenStore = async (id) => {
+    console.log('id en el handleopenstore', id)
+    const openStore = await OpenStore(id)
+    console.log('openStore', openStore)
+    router.push(
+      'restock/stepTwo' + `?external_id=${selectedStore.storeId}&layout_id=${selectedStore.layoutId}&store_name=${selectedStore.name}&transactionId=${openStore.transactionId}`
+    )
+  }
 
   return (
     <div>
@@ -48,7 +59,7 @@ function Restock () {
           >
             <option value='0'>Select a store</option>
             {stores.map((store) => (
-              <option key={store.id} value={store.id}>
+              <option key={store.storeId} value={store.storeId}>
                 {store.name}
               </option>
             ))}
@@ -63,9 +74,7 @@ function Restock () {
               <button
                 type='button'
                 onClick={() => {
-                  router.push(
-                    'restock/stepTwo' + `?external_id=${selectedStore.external_id}&layout_id=${selectedStore.layout_id}&store_name=${selectedStore.name}`
-                  )
+                  handleOpenStore(selectedStore.storeId)
                 }}
                 className='inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-d-dark-dark-purple rounded-lg hover:bg-d-soft-soft-purple hover:text-d-dark-dark-purple focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800'
               >
