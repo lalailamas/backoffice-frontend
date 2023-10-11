@@ -5,7 +5,6 @@ import { useState, useEffect } from 'react'
 import InsideLayout from '@/components/admin/layouts/inside'
 import DatePicker from '@/components/admin/common/datepicker/double'
 import dayjs from 'dayjs'
-import { useUserRole } from '@/hooks/useUserRole'
 
 function Replacements () {
   const [restockData, setRestockData] = useState([])
@@ -13,10 +12,8 @@ function Replacements () {
     startDate: dayjs().subtract(1, 'month'),
     endDate: dayjs()
   })
-  const { checkUserRole } = useUserRole()
 
   useEffect(() => {
-    checkUserRole()
     if (dateRange.startDate !== null && dateRange.endDate !== null) {
       getRestockProducts(dateRange)
         .then((response) => {

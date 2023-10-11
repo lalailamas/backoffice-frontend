@@ -8,11 +8,8 @@ import useGetWarehouses from '@/hooks/useWarehouses'
 // import S from '@/lib/storage'
 import { SearchField } from '@/components/admin/common/search'
 import { findProductByEAN, getProduct, updateProductImage, updateProductStock, deleteProduct, createProduct, updateProduct } from '@/api/product'
-import { useUserRole } from '@/hooks/useUserRole'
 
 export default function Inventory () {
-  const { checkUserRole } = useUserRole()
-
   const [cachekey, setCachekey] = useState(0)
   const [searchKey, setSearchKey] = useState('')
   const [params, setParams] = useState({ limit: 10, page: 1, search: '' })
@@ -59,7 +56,6 @@ export default function Inventory () {
 
   useEffect(
     () => {
-      checkUserRole()
       if (scanMode === true) {
         setCurrentQuantity(1)
       }
