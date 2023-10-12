@@ -5,7 +5,7 @@ export default function useGetLayout (layoutId) {
   console.log(layoutId, 'layoutId')
   const [state, setState] = useState({
     layout: [],
-    loading: true,
+    layoutLoad: true,
     error: null
   })
   const fetchLayout = async (layoutId) => {
@@ -14,14 +14,14 @@ export default function useGetLayout (layoutId) {
       if (layoutResponse.data) {
         setState({
           layout: layoutResponse.data,
-          loading: false,
+          layoutLoad: false,
           error: null
         })
       }
     } catch (error) {
       setState({
         layout: [],
-        loading: false,
+        layoutLoad: false,
         error: error.message
       })
     }

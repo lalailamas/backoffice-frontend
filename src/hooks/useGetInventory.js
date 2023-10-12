@@ -7,7 +7,7 @@ export default function useGetInventory (storeId) {
   //   console.log(layoutId, 'layoutId')
   const [state, setState] = useState({
     inventory: [],
-    loading: true,
+    inventoryLoad: true,
     error: null
   })
   const fetchInventoryByStore = async (storeId) => {
@@ -18,14 +18,14 @@ export default function useGetInventory (storeId) {
       if (inventoryResponse.data) {
         setState({
           inventory: inventoryResponse.data,
-          loading: false,
+          inventoryLoad: false,
           error: null
         })
       }
     } catch (error) {
       setState({
         inventory: [],
-        loading: false,
+        inventoryLoad: false,
         error: error.message
       })
     }

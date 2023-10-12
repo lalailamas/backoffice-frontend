@@ -1,5 +1,5 @@
 'use client'
-import React from 'react'
+import React, { useState } from 'react'
 // import { getInventoryByStore } from '@/api/store'
 // import { getLayout } from '@/api/layout'
 import DspLoader from '@/components/admin/common/loader'
@@ -12,27 +12,42 @@ import useGetInventory from '@/hooks/useGetInventory'
 import useGetLayout from '@/hooks/useGetLayout'
 import useGetProdByStore from '@/hooks/useGetProdByStore'
 import useGetReiteProd from '@/hooks/useGetReiteProd'
-// import AccordeonCard from './acordeonCard'
 
 function StepTwo () {
   const searchParams = useSearchParams()
   const externalId = searchParams.get('external_id')
   const layoutId = searchParams.get('layout_id')
   const storeName = searchParams.get('store_name')
-  const { inventory } = useGetInventory(externalId)
-  const { layout } = useGetLayout(layoutId)
-  const { products, loading } = useGetReiteProd()
-  // const { products, loading } = useGetProdByStore(externalId)
-  // console.log('aca tengo el layout', layout)
+  const { inventory, inventoryLoad } = useGetInventory(externalId)
+  const { layout, layoutLoad } = useGetLayout(layoutId)
+  // const { products, loading } = useGetReiteProd()
+  const { products, loading } = useGetProdByStore(externalId)
+  const [tempInventory, setTempInventory] = useState({})
+  console.log('aca tengo el layout', layout)
   console.log('aca tengo el inventory', inventory)
   console.log('aca tengo el products', products)
 
   const router = useRouter()
 
+  const quantityChangeHandler = (productId, differential) => {
+    console.log('productId', productId)
+    console.log('differential', differential)
+    if (differential !== 0) {
+      setTempInventory({
+        ...tempInventory,
+        [productId]: differential
+
+      })
+    }
+  }
+
   return (
     <div>
-      {loading
-        ? <DspLoader />
+      {/* <div><pre>{JSON.stringify(inventory, null, 2)}</pre></div>
+      <div><pre>{JSON.stringify(layout, null, 2)}</pre></div> */}
+      <div><pre>{JSON.stringify(tempInventory, null, 2)}</pre></div>
+      {(loading || inventoryLoad || layoutLoad)
+        ? (<div><pre>{JSON.stringify(products, null, 2)}</pre><DspLoader /></div>)
         : (
           <div className='text-center'>
             <InsideLayout />
@@ -56,29 +71,33 @@ function StepTwo () {
                       const product = products?.filter((product) => product.productId === column.productId)
                       const quantityProd = inventory.products.find((prod) => prod.productId === column.productId)
                       const maxQuantity = column.maxQuantity
-                      // console.log(product, 'product')
+                      console.log(product, 'product')
                       return (
                         <AccordeonCard
+                          quantityChangeHandler={quantityChangeHandler}
                           step={2}
                           key={index}
+                          productId={column.productId}
                           initialQuantity={quantityProd ? quantityProd.quantity : 0}
                           maxQuantity={maxQuantity}
-                          header={
-                            <div className=' gap-3 items-center justify-center'>
-                              <figure className='flex justify-center'>
-                                <img
-                                  className='w-auto max-w-[50px] h-[50px]'
-                                  src={product[0].metadata.imageUrl}
-                                  width={120}
-                                  height={120}
-                                  alt='Product'
-                                />
-                              </figure>
-                              <h1 className='flex justify-center items-center text-d-title-purple font-bold m-1'>{product[0].productName}</h1>
-                            </div>
-                        }
+                          header={<div>
+                            {product[0] &&
+                              <div className=' gap-3 items-center justify-center'>
+                                <figure className='flex justify-center'>
+                                  <img
+                                    className='w-auto max-w-[50px] h-[50px]'
+                                    src={product[0].metadata?.imageUrl}
+                                    width={120}
+                                    height={120}
+                                    alt='Product'
+                                  />
+                                </figure>
+                                <h1 className='flex justify-center items-center text-d-title-purple font-bold m-1'>{product[0]?.productName}</h1>
+                              </div>}
+                            {!product[0] &&
+                              <div><pre clasName='w-full overflow-scroll text-[8px] text-left  '>{JSON.stringify(column.productId, null, 2)}</pre></div>}
+                                  </div>}
                         />
-
                       )
                     })
                     : null

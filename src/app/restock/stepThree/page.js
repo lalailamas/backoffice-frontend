@@ -8,6 +8,7 @@ import useGetReiteProd from '@/hooks/useGetReiteProd'
 import AccordeonCard from '../acordeonCard'
 import DspLoader from '@/components/admin/common/loader'
 import useGetInventory from '@/hooks/useGetInventory'
+// import useGetProdByStore from '@/hooks/useGetProdByStore'
 
 export default function page () {
   const searchParams = useSearchParams()
@@ -18,6 +19,7 @@ export default function page () {
   const { inventory } = useGetInventory(externalId)
   const { layout } = useGetLayout(layoutId)
   const { products, loading } = useGetReiteProd()
+  // const { products, loading } = useGetProdByStore(externalId)
 
   return (
     <div>
