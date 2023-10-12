@@ -2,7 +2,6 @@ import { getLayout } from '@/api/layout'
 import { useEffect, useState } from 'react'
 
 export default function useGetLayout (layoutId) {
-  console.log(layoutId, 'layoutId')
   const [state, setState] = useState({
     layout: [],
     layoutLoad: true,
@@ -27,7 +26,6 @@ export default function useGetLayout (layoutId) {
     }
   }
   useEffect(() => {
-    // console.log('this is el useEffect del useGetAll')
     if (layoutId) {
       fetchLayout(layoutId)
     }

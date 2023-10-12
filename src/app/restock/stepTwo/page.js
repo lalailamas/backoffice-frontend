@@ -1,17 +1,14 @@
 'use client'
 import React, { useState } from 'react'
-// import { getInventoryByStore } from '@/api/store'
-// import { getLayout } from '@/api/layout'
 import DspLoader from '@/components/admin/common/loader'
 import AccordeonCard from '../acordeonCard'
 import { useSearchParams, useRouter } from 'next/navigation'
 import StepLayout from '../stepLayout'
 import InsideLayout from '@/components/admin/layouts/inside'
-// import useGetReiteProd from '@/hooks/useGetReiteProd'
 import useGetInventory from '@/hooks/useGetInventory'
 import useGetLayout from '@/hooks/useGetLayout'
 import useGetProdByStore from '@/hooks/useGetProdByStore'
-import useGetReiteProd from '@/hooks/useGetReiteProd'
+// import useGetReiteProd from '@/hooks/useGetReiteProd'
 
 function StepTwo () {
   const searchParams = useSearchParams()
@@ -23,15 +20,15 @@ function StepTwo () {
   // const { products, loading } = useGetReiteProd()
   const { products, loading } = useGetProdByStore(externalId)
   const [tempInventory, setTempInventory] = useState({})
-  console.log('aca tengo el layout', layout)
-  console.log('aca tengo el inventory', inventory)
-  console.log('aca tengo el products', products)
+  // console.log('aca tengo el layout', layout)
+  // console.log('aca tengo el inventory', inventory)
+  // console.log('aca tengo el products', products)
 
   const router = useRouter()
 
   const quantityChangeHandler = (productId, differential) => {
-    console.log('productId', productId)
-    console.log('differential', differential)
+    // console.log('productId', productId)
+    // console.log('differential', differential)
     if (differential !== 0) {
       setTempInventory({
         ...tempInventory,
@@ -43,8 +40,6 @@ function StepTwo () {
 
   return (
     <div>
-      {/* <div><pre>{JSON.stringify(inventory, null, 2)}</pre></div>
-      <div><pre>{JSON.stringify(layout, null, 2)}</pre></div> */}
       <div><pre>{JSON.stringify(tempInventory, null, 2)}</pre></div>
       {(loading || inventoryLoad || layoutLoad)
         ? (<div><pre>{JSON.stringify(products, null, 2)}</pre><DspLoader /></div>)
@@ -71,7 +66,6 @@ function StepTwo () {
                       const product = products?.filter((product) => product.productId === column.productId)
                       const quantityProd = inventory.products.find((prod) => prod.productId === column.productId)
                       const maxQuantity = column.maxQuantity
-                      console.log(product, 'product')
                       return (
                         <AccordeonCard
                           quantityChangeHandler={quantityChangeHandler}
@@ -95,7 +89,7 @@ function StepTwo () {
                                 <h1 className='flex justify-center items-center text-d-title-purple font-bold m-1'>{product[0]?.productName}</h1>
                               </div>}
                             {!product[0] &&
-                              <div><pre clasName='w-full overflow-scroll text-[8px] text-left  '>{JSON.stringify(column.productId, null, 2)}</pre></div>}
+                              <div><pre className='w-full overflow-scroll text-[8px] text-left  '>{JSON.stringify(column.productId, null, 2)}</pre></div>}
                                   </div>}
                         />
                       )

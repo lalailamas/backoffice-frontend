@@ -8,7 +8,6 @@ export default function useGetReiteProd () {
     error: null
   })
   async function fetchAllReiteData () {
-    // console.log('entré al fetchAllReiteData', inventory)
     try {
       const productsResponse = await getAllReiteData()
       if (productsResponse.data) {
@@ -27,8 +26,6 @@ export default function useGetReiteProd () {
     }
   }
   useEffect(() => {
-    // console.log('this is el useEffect del useGetAll')
-
     fetchAllReiteData()
   }, [])
 
