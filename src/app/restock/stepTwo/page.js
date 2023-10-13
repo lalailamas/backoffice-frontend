@@ -8,6 +8,7 @@ import InsideLayout from '@/components/admin/layouts/inside'
 import useGetInventory from '@/hooks/useGetInventory'
 import useGetLayout from '@/hooks/useGetLayout'
 import useGetProdByStore from '@/hooks/useGetProdByStore'
+import { putRestockInventory, putRestockInventoy } from '@/api/restock'
 // import useGetReiteProd from '@/hooks/useGetReiteProd'
 
 function StepTwo () {
@@ -15,6 +16,7 @@ function StepTwo () {
   const externalId = searchParams.get('external_id')
   const layoutId = searchParams.get('layout_id')
   const storeName = searchParams.get('store_name')
+  const transactionId = searchParams.get('transactionId')
   const { inventory, inventoryLoad } = useGetInventory(externalId)
   const { layout, layoutLoad } = useGetLayout(layoutId)
   // const { products, loading } = useGetReiteProd()
@@ -26,21 +28,64 @@ function StepTwo () {
 
   const router = useRouter()
 
-  const quantityChangeHandler = (productId, differential) => {
+  const quantityChangeHandler = (index, productId, differential) => {
     // console.log('productId', productId)
     // console.log('differential', differential)
     if (differential !== 0) {
       setTempInventory({
         ...tempInventory,
-        [productId]: differential
+        [index]: {
+          [productId]: differential
+        }
 
       })
+    }
+  }
+  const setHandleStock = async () => {
+    const flatInventory = Object.values(tempInventory).reduce((acc, curr) => {
+      Object.entries(curr).forEach(([productId, quantity]) => {
+        acc[productId] = (acc[productId] || 0) + quantity
+      })
+      return acc
+    }, {})
+
+    const stockData = {
+      added: [],
+      removed: []
+    }
+
+    Object.entries(flatInventory).forEach(([productId, quantity]) => {
+      if (quantity > 0) {
+        stockData.added.push({
+          productId,
+          quantity
+        })
+      } else if (quantity < 0) {
+        stockData.removed.push({
+          productId,
+          quantity: Math.abs(quantity)
+        })
+      }
+    })
+    try {
+      console.log('stockData', stockData)
+      // const response = await putRestockInventory(externalId, stockData)
+      // if (response) {
+      //   console.log('response', response)
+      // router.push(
+      //   'stepThree' +
+      //     `?external_id=${externalId}&layout_id=${layoutId}&store_name=${storeName}&transactionId=${transactionId}`
+      // )
+      // }
+    } catch (error) {
+      // Handle error if the API call fails
+      console.error('Error in API call:', error)
     }
   }
 
   return (
     <div>
-      {/* <div><pre>{JSON.stringify(tempInventory, null, 2)}</pre></div> */}
+      <div><pre>{JSON.stringify(tempInventory, null, 2)}</pre></div>
       {(loading || inventoryLoad || layoutLoad)
         ? (<DspLoader />)
         : (
@@ -74,6 +119,7 @@ function StepTwo () {
                           quantityChangeHandler={quantityChangeHandler}
                           step={2}
                           key={index}
+                          index={index}
                           productId={column.productId}
                           initialQuantity={multipleOccurrences ? 0 : quantityProd ? quantityProd.quantity : 0}
                           maxQuantity={maxQuantity}
@@ -109,9 +155,7 @@ function StepTwo () {
             <button
               type='button'
               onClick={() => {
-                router.push(
-                  'stepThree' + `?external_id=${externalId}&layout_id=${layoutId}&store_name=${storeName}`
-                )
+                setHandleStock()
               }}
               className='inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-d-dark-dark-purple rounded-lg hover:bg-d-soft-soft-purple hover:text-d-dark-dark-purple focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800'
             >

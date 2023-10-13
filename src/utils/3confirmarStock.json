@@ -6,5 +6,8 @@
             "quantity": 3
         }
     ],
-    "removed": []
+    "removed": [        {
+        "productId": "DEV_4rVcpsro0NhhcsJ8bxCA",
+        "quantity": 3
+    }]
 }

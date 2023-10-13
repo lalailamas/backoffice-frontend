@@ -105,3 +105,7 @@ export const postReiteDataByStore = async (storeId, url, url2, contentType) => {
   return axios.post(urlApiReite + url + storeId + url2, { userClientId: '9kzL7vO1m8Ug35cAmD29JbvHkWH2', openStoreType: 'RESTOCK' },
     { headers: { 'content-type': contentType } })
 }
+
+export const putReiteInventoryData = async (storeId, url, url2, stockData, contentType) => {
+  return axios.put(urlApiReite + url + storeId + url2, stockData, { headers: { 'content-type': contentType } })
+}
