@@ -110,7 +110,8 @@ module.exports = {
       borderRadius: {
         'tremor-small': '0.375rem',
         'tremor-default': '0.5rem',
-        'tremor-full': '9999px'
+        'tremor-full': '9999px',
+        42: '42px'
       },
       fontSize: {
         'tremor-label': ['0.75rem'],
