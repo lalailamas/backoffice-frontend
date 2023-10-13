@@ -40,9 +40,9 @@ function StepTwo () {
 
   return (
     <div>
-      <div><pre>{JSON.stringify(tempInventory, null, 2)}</pre></div>
+      {/* <div><pre>{JSON.stringify(tempInventory, null, 2)}</pre></div> */}
       {(loading || inventoryLoad || layoutLoad)
-        ? (<div><pre>{JSON.stringify(products, null, 2)}</pre><DspLoader /></div>)
+        ? (<DspLoader />)
         : (
           <div className='text-center'>
             <InsideLayout />
@@ -66,13 +66,16 @@ function StepTwo () {
                       const product = products?.filter((product) => product.productId === column.productId)
                       const quantityProd = inventory.products.find((prod) => prod.productId === column.productId)
                       const maxQuantity = column.maxQuantity
+                      const multipleOccurrences = tray.columns.filter(
+                        (c) => c.productId === column.productId
+                      ).length > 1
                       return (
                         <AccordeonCard
                           quantityChangeHandler={quantityChangeHandler}
                           step={2}
                           key={index}
                           productId={column.productId}
-                          initialQuantity={quantityProd ? quantityProd.quantity : 0}
+                          initialQuantity={multipleOccurrences ? 0 : quantityProd ? quantityProd.quantity : 0}
                           maxQuantity={maxQuantity}
                           header={<div>
                             {product[0] &&
@@ -86,11 +89,11 @@ function StepTwo () {
                                     alt='Product'
                                   />
                                 </figure>
-                                <h1 className='flex justify-center items-center text-d-title-purple font-bold m-1'>{product[0]?.productName}</h1>
+                                <h1 className='flex justify-center items-center text-d-title-purple font-bold m-1'>{product[0]?.productName || 'product missing'}</h1>
                               </div>}
-                            {!product[0] &&
-                              <div><pre className='w-full overflow-scroll text-[8px] text-left  '>{JSON.stringify(column.productId, null, 2)}</pre></div>}
-                                  </div>}
+                            {/* {!product[0] &&
+                              <div><pre className='w-full text-left  '>{JSON.stringify(column.productId, null, 2)}</pre></div>} */}
+                                  </div>}//eslint-disable-line
                         />
                       )
                     })

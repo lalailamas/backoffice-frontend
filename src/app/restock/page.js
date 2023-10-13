@@ -26,6 +26,7 @@ function Restock () {
       try {
         const response = await getStores()
         setStores(response.data)
+        console.log('response', response.data)
       } catch (error) {
         console.error('Error fetching stores:', error)
       }
