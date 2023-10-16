@@ -46,9 +46,11 @@ function StepTwo () {
               {layout && layout.trays && layout.trays.map((tray, index) => {
                 return (
                   <div key={index} className='text-center border-b-2 border-gray-300 pb-5 mb-5 md:mb-8'>
-
-                    <h2 className='text-d-soft-purple text-2x2 font-bold pb-5 mb-5 md:mb-8'>Bandeja N°{index + 1}</h2>
-                    <div className='flex flex-col md:flex-row gap-4 items-center md:items-start'>
+                    <div className='bg-d-dark-dark-purple'>
+                      <h2 className='text-d-soft-purple text-d-title font-bold py-5 mb-5 md:mb-8'>BANDEJA {index + 1}</h2>
+                    </div>
+                    {/* <div className='flex flex-col md:flex-row gap-4 items-center md:items-start'> */}
+                    <div className='flex flex-row gap-2 items-center overflow-x-auto'>
 
                       {
                   tray
@@ -58,14 +60,16 @@ function StepTwo () {
                       const maxQuantity = column.maxQuantity
                       // console.log(product, 'product')
                       return (
+
                         <AccordeonCard
                           step={2}
                           key={index}
                           initialQuantity={quantityProd ? quantityProd.quantity : 0}
                           maxQuantity={maxQuantity}
                           header={
-                            <div className=' gap-3 items-center justify-center'>
-                              <figure className='flex justify-center'>
+
+                            <div className='flex flex-col items-center align-start'>
+                              <div className=''>
                                 <img
                                   className='w-auto max-w-[50px] h-[50px]'
                                   src={product[0].metadata.imageUrl}
@@ -73,17 +77,20 @@ function StepTwo () {
                                   height={120}
                                   alt='Product'
                                 />
-                              </figure>
-                              <h1 className='flex justify-center items-center text-d-title-purple font-bold m-1'>{product[0].productName}</h1>
+                              </div>
+                              <div className='flex justify-center'>
+                                <h1 className='flex justify-center items-center text-center text-d-title-purple font-bold m-1 w-full line-clamp-2'>{product[0].productName}</h1>
+                              </div>
                             </div>
+
                         }
                         />
-
                       )
                     })
                     : null
                 }
                     </div>
+
                   </div>
 
                 )

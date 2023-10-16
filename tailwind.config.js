@@ -21,11 +21,11 @@ module.exports = {
       colors: {
         // Tus colores personalizados
         'd-title-purple': '#6b648d',
-        'd-dark-dark-purple': '#462b99',
+        'd-dark-dark-purple': '#3D2585',
         'd-soft-soft-purple': '#d5d3fb',
         'd-dark-purple': '#504695',
         'd-purple': '#7e4bff',
-        'd-soft-purple': '#8c7be5',
+        'd-soft-purple': '#B9B8DC',
         'd-strong-green': '#ddff4c',
         'd-green': '#e7ff6f',
         'd-soft-green': '#d8dcb0',
@@ -117,7 +117,8 @@ module.exports = {
         'tremor-label': ['0.75rem'],
         'tremor-default': ['0.875rem', { lineHeight: '1.25rem' }],
         'tremor-title': ['1.125rem', { lineHeight: '1.75rem' }],
-        'tremor-metric': ['1.875rem', { lineHeight: '2.25rem' }]
+        'tremor-metric': ['1.875rem', { lineHeight: '2.25rem' }],
+        'd-title': ['2rem', { lineHeight: '2.18rem' }]
       }
     }
   },
