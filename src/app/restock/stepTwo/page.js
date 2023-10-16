@@ -8,7 +8,7 @@ import InsideLayout from '@/components/admin/layouts/inside'
 import useGetInventory from '@/hooks/useGetInventory'
 import useGetLayout from '@/hooks/useGetLayout'
 import useGetProdByStore from '@/hooks/useGetProdByStore'
-import { putRestockInventory, putRestockInventoy } from '@/api/restock'
+import { putRestockInventory } from '@/api/restock'
 // import useGetReiteProd from '@/hooks/useGetReiteProd'
 
 function StepTwo () {
@@ -86,7 +86,7 @@ function StepTwo () {
 
   return (
     <div>
-      <div><pre>{JSON.stringify(tempInventory, null, 2)}</pre></div>
+      {/* <div><pre>{JSON.stringify(tempInventory, null, 2)}</pre></div> */}
       {(loading || inventoryLoad || layoutLoad)
         ? (<DspLoader />)
         : (
