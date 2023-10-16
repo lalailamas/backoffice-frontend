@@ -12,6 +12,8 @@ import useGetProdByStore from '@/hooks/useGetProdByStore'
 import { OpenStore } from '@/api/store'
 import ConfirmationModal from './confirmationModal'
 import { useState } from 'react'
+import useGetStores2 from '@/hooks/useStores2'
+import useGetStoreData from '@/hooks/useGetStoreData'
 
 export default function stepFour () {
   const searchParams = useSearchParams()
@@ -19,15 +21,17 @@ export default function stepFour () {
   const externalId = searchParams.get('external_id')
   const layoutId = searchParams.get('layout_id')
   const storeName = searchParams.get('store_name')
-  const { inventory } = useGetInventory(externalId)
-  const { layout } = useGetLayout(layoutId)
+  // const { inventory } = useGetInventory(externalId)
+  const { store, loading: storeLoad } = useGetStoreData(externalId)
+  const { layout, layoutLoad } = useGetLayout(layoutId)
   // const { products, loading } = useGetReiteProd()
   const { products, loading } = useGetProdByStore(externalId)
   const [modalVisible, setModalVisible] = useState(false)
+  console.log(store, '--------------store en el stepFour-------------')
   const handleBackToStepTwo = async () => {
     const openStore = await OpenStore(externalId)
     router.push(
-      'restock/stepTwo' + `?external_id=${externalId}&layout_id=${layoutId}&store_name=${storeName}&transactionId=${openStore.transactionId}`
+      '/restock/stepTwo' + `?external_id=${externalId}&layout_id=${layoutId}&store_name=${storeName}&transactionId=${openStore.transactionId}`
     )
   }
   const handleConfirmationModal = () => {
@@ -41,7 +45,7 @@ export default function stepFour () {
 
   return (
     <div>
-      {loading
+      {(storeLoad || loading || layoutLoad)
         ? <DspLoader />
         : (
           <div>
@@ -67,8 +71,9 @@ export default function stepFour () {
                                 tray
                                   ? tray.columns.map((column, index) => {
                                     const product = products?.filter((product) => product.productId === column.productId)
-                                    const quantityProd = inventory.products.find((prod) => prod.productId === column.productId)
+                                    const quantityProd = store[0].products?.find((prod) => prod.productId === column.productId)
                                     const maxQuantity = column.maxQuantity
+                                    console.log(store.products, '--------------store.products-------------')
                                     // console.log('aca tengo el product', product)
                                     // console.log('aca tengo el quantityProd', quantityProd ? quantityProd.quantity : 'No encontrado')
                                     return (

@@ -77,8 +77,8 @@ export default function page () {
 
     try {
       const response = await patchRestockResult(transactionId, stockData)
-      console.log(response)
-      if (response.data.succesful) {
+      console.log(response, 'la response del patch')
+      if (response.data.successful) {
         router.push(
           'stepFour' + `?external_id=${externalId}&layout_id=${layoutId}&store_name=${storeName}&transactionId=${transactionId}`
         )
@@ -90,8 +90,6 @@ export default function page () {
 
   return (
     <div>
-      <div><pre>{JSON.stringify(tempRestocked, null, 2)}</pre></div>
-      <div><pre>{JSON.stringify(tempPurchased, null, 2)}</pre></div>
 
       {(loading || inventoryLoad || layoutLoad)
         ? <DspLoader />
