@@ -7,7 +7,7 @@ import useGetLayout from '@/hooks/useGetLayout'
 import AccordeonCard from '../acordeonCard'
 import DspLoader from '@/components/admin/common/loader'
 import useGetInventory from '@/hooks/useGetInventory'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import useGetProdByStore from '@/hooks/useGetProdByStore'
 import { patchRestockResult } from '@/api/restock'
 
@@ -78,13 +78,16 @@ export default function page () {
     try {
       const response = await patchRestockResult(transactionId, stockData)
       console.log(response)
+      if (response.data.succesful) {
+        router.push(
+          'stepFour' + `?external_id=${externalId}&layout_id=${layoutId}&store_name=${storeName}&transactionId=${transactionId}`
+        )
+      }
     } catch (error) {
       console.log(error)
     }
   }
-  // router.push(
-  //   'stepFour' + `?external_id=${externalId}&layout_id=${layoutId}&store_name=${storeName}&transactionId=${transactionId}`
-  // )
+
   return (
     <div>
       <div><pre>{JSON.stringify(tempRestocked, null, 2)}</pre></div>
