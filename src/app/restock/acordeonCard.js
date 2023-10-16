@@ -65,7 +65,7 @@ const AccordeonCard = ({
         ? (
 
           <div className='flex justify-center text-center items-center h-[120px] gap-3'>
-            <p class='text-center text-gray-800 mt-1'>${price}</p>
+            <p className='text-center text-gray-800 mt-1'>${price}</p>
             <p className='ml-auto font-bold text-d-dark-dark-purple'> {initialQuantity}/{maxQuantity}</p>
           </div>
 
