@@ -9,6 +9,7 @@ import DspLoader from '@/components/admin/common/loader'
 import useGetInventory from '@/hooks/useGetInventory'
 import { useEffect, useState } from 'react'
 import useGetProdByStore from '@/hooks/useGetProdByStore'
+import { patchRestockResult } from '@/api/restock'
 
 export default function page () {
   const searchParams = useSearchParams()
@@ -21,45 +22,9 @@ export default function page () {
   const { layout, layoutLoad } = useGetLayout(layoutId)
   // const { products, loading } = useGetReiteProd()
   const { products, loading } = useGetProdByStore(externalId)
-  // const [productState, setProductState] = useState({
-  //   purchased: [],
-  //   restocked: [],
-  //   alwaysUpdateInventory: true
-  // })
+
   const [tempPurchased, setTempPurchased] = useState({})
   const [tempRestocked, setTempRestocked] = useState({})
-  // useEffect(() => {
-  //   if (products && products.length > 0) {
-  //     const allProducts = products.map((product) => ({
-  //       productId: product.productId,
-  //       quantity: 0
-  //     }))
-
-  //     setProductState({
-  //       purchased: [...allProducts],
-  //       restocked: [...allProducts],
-  //       alwaysUpdateInventory: true
-  //     })
-  //   }
-  // }, [products])
-  // const updateProductQuantity = (productId, quantity, type) => {
-  //   console.log('productId', productId)
-  //   console.log('quantity', quantity)
-  //   console.log('type', type)
-  //   const updatedProductState = { ...productState }
-  //   const index = updatedProductState[type].findIndex(
-  //     (product) => product.productId === productId
-  //   )
-  //   if (index !== -1) {
-  //     updatedProductState[type][index].quantity += quantity
-  //   } else {
-  //     updatedProductState[type].push({
-  //       productId,
-  //       quantity
-  //     })
-  //   }
-  //   setProductState(updatedProductState)
-  // }
 
   const updateProductQuantity = (index, productId, quantity, type) => {
     if (type === 'purchased') {
@@ -109,7 +74,13 @@ export default function page () {
       })),
       alwaysUpdateInventory: true
     }
-    console.log(stockData, '-------stockData--------')
+
+    try {
+      const response = await patchRestockResult(transactionId, stockData)
+      console.log(response)
+    } catch (error) {
+      console.log(error)
+    }
   }
   // router.push(
   //   'stepFour' + `?external_id=${externalId}&layout_id=${layoutId}&store_name=${storeName}&transactionId=${transactionId}`

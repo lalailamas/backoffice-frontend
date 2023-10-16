@@ -73,10 +73,10 @@ function StepTwo () {
       const response = await putRestockInventory(externalId, stockData)
       if (response) {
         console.log('response', response)
-      // router.push(
-      //   'stepThree' +
-      //     `?external_id=${externalId}&layout_id=${layoutId}&store_name=${storeName}&transactionId=${transactionId}`
-      // )
+        router.push(
+          'stepThree' +
+          `?external_id=${externalId}&layout_id=${layoutId}&store_name=${storeName}&transactionId=${transactionId}`
+        )
       }
     } catch (error) {
       // Handle error if the API call fails
