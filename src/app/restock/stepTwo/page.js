@@ -68,8 +68,8 @@ function StepTwo () {
       }
     })
     try {
-      console.log('stockData', stockData)
-      console.log('externalId', externalId)
+      // console.log('stockData', stockData)
+      // console.log('externalId', externalId)
       const response = await putRestockInventory(externalId, stockData)
       if (response) {
         console.log('response', response)

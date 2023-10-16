@@ -1,11 +1,10 @@
 const { useState } = require('react')
 
 const AccordeonCard = ({
-  className,
   initialQuantity,
   maxQuantity,
   header,
-  price, step, productId, quantityChangeHandler, index
+  price, step, productId, quantityChangeHandler, index, updateProductQuantity, maxPurchasedQuantity
 }) => {
   const [quantity, setQuantity] = useState(initialQuantity || 0) // Estado local para la cantidad
   const [quantityPurchased, setQuantityPurchased] = useState(0) // Estado local para la cantidad
@@ -14,13 +13,16 @@ const AccordeonCard = ({
     // Lógica para aumentar la cantidad
     if (quantity < maxQuantity) {
       setQuantity(quantity + 1)
-      quantityChangeHandler(index, productId, ((quantity + 1) - initialQuantity))
+      if (step === 2) {
+        quantityChangeHandler(index, productId, ((quantity + 1) - initialQuantity))
+      } else { updateProductQuantity(index, productId, (quantity + 1), 'restocked') }
     }
   }
   const handleIncreasePurchased = () => {
     // Lógica para aumentar la cantidad
-    if (quantityPurchased < initialQuantity) {
+    if (quantityPurchased < maxPurchasedQuantity) {
       setQuantityPurchased(quantityPurchased + 1)
+      updateProductQuantity(index, productId, (quantityPurchased + 1), 'purchased')
     }
   }
 
@@ -28,13 +30,17 @@ const AccordeonCard = ({
     // Lógica para disminuir la cantidad
     if (quantity > 0) {
       setQuantity(quantity - 1)
-      quantityChangeHandler(index, productId, ((quantity - 1) - initialQuantity))
+      if (step === 2) {
+        quantityChangeHandler(index, productId, ((quantity - 1) - initialQuantity))
+      } else { updateProductQuantity(index, productId, (quantity - 1), 'restocked') }
     }
   }
+
   const handleDecreasePurchased = () => {
     // Lógica para disminuir la cantidad
     if (quantityPurchased > 0) {
       setQuantityPurchased(quantityPurchased - 1)
+      updateProductQuantity(index, productId, (quantityPurchased - 1), 'purchased')
     }
   }
 
@@ -79,7 +85,7 @@ const AccordeonCard = ({
           : (
             <div className='flex flex-col gap-4 h-[150px] items-center '>
               <div className='custom-number-input h-8 w-32'>
-                <label for='custom-input-number' className='w-full text-gray-500 text-xs font-light'>añadidos
+                <label htmlFor='custom-input-number' className='w-full text-gray-500 text-xs font-light'>añadidos
                 </label>
                 <div className='flex flex-row h-10 w-full rounded-lg relative bg-transparent mt-1'>
                   <button data-action='decrement' className=' bg-green-500/80 text-white hover:text-gray-700 hover:bg-green-500/30 h-full w-20 rounded-l cursor-pointer outline-none' onClick={handleDecrease}>
@@ -97,7 +103,7 @@ const AccordeonCard = ({
                 </div>
               </div>
               <div className='custom-number-input h-8 w-32 py-5'>
-                <label for='custom-input-number' className='w-full text-gray-500 text-xs font-light'>retirados
+                <label htmlFor='custom-input-number' className='w-full text-gray-500 text-xs font-light'>retirados
                 </label>
                 <div className='flex flex-row h-10 w-full rounded-lg relative bg-transparent mt-1'>
                   <button data-action='decrement' className=' bg-red-500/80 text-white hover:text-white hover:bg-red-500/30 h-full w-20 rounded-l cursor-pointer outline-none' onClick={handleDecreasePurchased}>

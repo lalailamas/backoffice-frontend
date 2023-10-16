@@ -3,12 +3,12 @@ import InsideLayout from '@/components/admin/layouts/inside'
 import StepLayout from '../stepLayout'
 import { useSearchParams, useRouter } from 'next/navigation'
 import useGetLayout from '@/hooks/useGetLayout'
-import useGetReiteProd from '@/hooks/useGetReiteProd'
-// import DspLoader from '@/components/admin/common/loader'
+// import useGetReiteProd from '@/hooks/useGetReiteProd'
 import AccordeonCard from '../acordeonCard'
 import DspLoader from '@/components/admin/common/loader'
 import useGetInventory from '@/hooks/useGetInventory'
-// import useGetProdByStore from '@/hooks/useGetProdByStore'
+import { useEffect, useState } from 'react'
+import useGetProdByStore from '@/hooks/useGetProdByStore'
 
 export default function page () {
   const searchParams = useSearchParams()
@@ -16,14 +16,110 @@ export default function page () {
   const externalId = searchParams.get('external_id')
   const layoutId = searchParams.get('layout_id')
   const storeName = searchParams.get('store_name')
-  const { inventory } = useGetInventory(externalId)
-  const { layout } = useGetLayout(layoutId)
-  const { products, loading } = useGetReiteProd()
-  // const { products, loading } = useGetProdByStore(externalId)
+  const transactionId = searchParams.get('transactionId')
+  const { inventory, inventoryLoad } = useGetInventory(externalId)
+  const { layout, layoutLoad } = useGetLayout(layoutId)
+  // const { products, loading } = useGetReiteProd()
+  const { products, loading } = useGetProdByStore(externalId)
+  // const [productState, setProductState] = useState({
+  //   purchased: [],
+  //   restocked: [],
+  //   alwaysUpdateInventory: true
+  // })
+  const [tempPurchased, setTempPurchased] = useState({})
+  const [tempRestocked, setTempRestocked] = useState({})
+  // useEffect(() => {
+  //   if (products && products.length > 0) {
+  //     const allProducts = products.map((product) => ({
+  //       productId: product.productId,
+  //       quantity: 0
+  //     }))
 
+  //     setProductState({
+  //       purchased: [...allProducts],
+  //       restocked: [...allProducts],
+  //       alwaysUpdateInventory: true
+  //     })
+  //   }
+  // }, [products])
+  // const updateProductQuantity = (productId, quantity, type) => {
+  //   console.log('productId', productId)
+  //   console.log('quantity', quantity)
+  //   console.log('type', type)
+  //   const updatedProductState = { ...productState }
+  //   const index = updatedProductState[type].findIndex(
+  //     (product) => product.productId === productId
+  //   )
+  //   if (index !== -1) {
+  //     updatedProductState[type][index].quantity += quantity
+  //   } else {
+  //     updatedProductState[type].push({
+  //       productId,
+  //       quantity
+  //     })
+  //   }
+  //   setProductState(updatedProductState)
+  // }
+
+  const updateProductQuantity = (index, productId, quantity, type) => {
+    if (type === 'purchased') {
+      setTempPurchased({
+        ...tempPurchased,
+        [index]: {
+          [productId]: quantity
+        }
+
+      })
+    } else {
+      setTempRestocked({
+        ...tempRestocked,
+        [index]: {
+          [productId]: quantity
+        }
+
+      })
+    }
+  }
+  const handleConfirmRestock = async () => {
+    const flatPurchased = Object.values(tempPurchased).reduce((acc, curr) => {
+      Object.entries(curr).forEach(([productId, quantity]) => {
+        acc[productId] = (acc[productId] || 0) + quantity
+      })
+      return acc
+    }, {})
+    const flatRestocked = Object.values(tempRestocked).reduce((acc, curr) => {
+      Object.entries(curr).forEach(([productId, quantity]) => {
+        acc[productId] = (acc[productId] || 0) + quantity
+      })
+      return acc
+    }, {})
+    const allProducts = products.map((product) => ({
+      productId: product.productId,
+      quantity: 0
+    })
+    )
+    const stockData = {
+      purchased: allProducts.map((product) => ({
+        productId: product.productId,
+        quantity: flatPurchased[product.productId] || 0
+      })),
+      restocked: allProducts.map((product) => ({
+        productId: product.productId,
+        quantity: flatRestocked[product.productId] || 0
+      })),
+      alwaysUpdateInventory: true
+    }
+    console.log(stockData, '-------stockData--------')
+  }
+  // router.push(
+  //   'stepFour' + `?external_id=${externalId}&layout_id=${layoutId}&store_name=${storeName}&transactionId=${transactionId}`
+  // )
   return (
     <div>
-      {loading
+      <div><pre>{JSON.stringify(tempRestocked, null, 2)}</pre></div>
+      <div><pre>{JSON.stringify(tempPurchased, null, 2)}</pre></div>
+
+      {(loading || inventoryLoad || layoutLoad)
         ? <DspLoader />
         : (
           <div>
@@ -52,13 +148,16 @@ export default function page () {
                                     const product = products?.filter((product) => product.productId === column.productId)
                                     const quantityProd = inventory.products.find((prod) => prod.productId === column.productId)
                                     const maxQuantity = column.maxQuantity
-                                    console.log('aca tengo el product', product)
+                                    // console.log('aca tengo el product', product)
                                     // console.log('aca tengo el quantityProd', quantityProd ? quantityProd.quantity : 'No encontrado')
                                     return (
                                       <AccordeonCard
                                         step={3}
                                         key={index}
-                                        initialQuantity={quantityProd ? quantityProd.quantity : 0}
+                                        index={index}
+                                        updateProductQuantity={updateProductQuantity}
+                                        productId={column.productId}
+                                        maxPurchasedQuantity={quantityProd ? quantityProd.quantity : 0}
                                         maxQuantity={maxQuantity}
                                         header={
                                           <div className=' w-full gap-3 items-center justify-center'>
@@ -97,9 +196,7 @@ export default function page () {
       <button
         type='button'
         onClick={() => {
-          router.push(
-            'stepFour' + `?external_id=${externalId}&layout_id=${layoutId}&store_name=${storeName}`
-          )
+          handleConfirmRestock()
         }}
         className='inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-d-dark-dark-purple rounded-lg hover:bg-d-soft-soft-purple hover:text-d-dark-dark-purple focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800'
       >
