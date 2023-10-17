@@ -86,7 +86,7 @@ function StepTwo () {
 
   return (
     <div>
-      {/* <div><pre>{JSON.stringify(tempInventory, null, 2)}</pre></div> */}
+      <div><pre>{JSON.stringify(tempInventory, null, 2)}</pre></div>
       {(loading || inventoryLoad || layoutLoad)
         ? (<DspLoader />)
         : (
@@ -123,6 +123,7 @@ function StepTwo () {
                           index={index}
                           productId={column.productId}
                           initialQuantity={multipleOccurrences ? 0 : quantityProd ? quantityProd.quantity : 0}
+                          occurrence={multipleOccurrences ? quantityProd?.quantity : false}
                           maxQuantity={maxQuantity}
                           header={<div>
                             {product[0] &&

@@ -4,7 +4,7 @@ const AccordeonCard = ({
   initialQuantity,
   maxQuantity,
   header,
-  price, step, productId, quantityChangeHandler, index, updateProductQuantity, maxPurchasedQuantity
+  price, step, productId, quantityChangeHandler, index, updateProductQuantity, maxPurchasedQuantity, occurrence
 }) => {
   const [quantity, setQuantity] = useState(initialQuantity || 0) // Estado local para la cantidad
   const [quantityPurchased, setQuantityPurchased] = useState(0) // Estado local para la cantidad
@@ -14,7 +14,11 @@ const AccordeonCard = ({
     if (quantity < maxQuantity) {
       setQuantity(quantity + 1)
       if (step === 2) {
-        quantityChangeHandler(index, productId, ((quantity + 1) - initialQuantity))
+        if (occurrence) {
+          quantityChangeHandler(index, productId, ((quantity + 1) - occurrence))
+        } else {
+          quantityChangeHandler(index, productId, ((quantity + 1) - initialQuantity))
+        }
       } else { updateProductQuantity(index, productId, (quantity + 1), 'restocked') }
     }
   }

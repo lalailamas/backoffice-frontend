@@ -75,6 +75,7 @@ export default function page () {
       }))
 
     }
+    console.log(stockData, 'el stock data')
 
     try {
       const response = await patchRestockResult(transactionId, stockData)
