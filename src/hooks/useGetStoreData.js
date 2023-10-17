@@ -10,7 +10,6 @@ function useGetStoreData (storeId) {
   const fetchStoreById = async () => {
     try {
       const storesResponse = await getStores()
-      console.log(storesResponse, '--------------storeResponse-------------')
       if (storesResponse) {
         const storeResponse = storesResponse.data.filter((store) => store.storeId === storeId)
         setState({

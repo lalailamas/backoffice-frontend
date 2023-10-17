@@ -64,6 +64,7 @@ export default function page () {
     })
     )
     const stockData = {
+      alwaysUpdateInventory: true,
       purchased: allProducts.map((product) => ({
         productId: product.productId,
         quantity: flatPurchased[product.productId] || 0
@@ -71,8 +72,8 @@ export default function page () {
       restocked: allProducts.map((product) => ({
         productId: product.productId,
         quantity: flatRestocked[product.productId] || 0
-      })),
-      alwaysUpdateInventory: true
+      }))
+
     }
 
     try {

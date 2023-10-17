@@ -4,7 +4,6 @@ import StepLayout from '../stepLayout'
 import { useSearchParams, useRouter } from 'next/navigation'
 import useGetLayout from '@/hooks/useGetLayout'
 // import useGetReiteProd from '@/hooks/useGetReiteProd'
-// import DspLoader from '@/components/admin/common/loader'
 import AccordeonCard from '../acordeonCard'
 import DspLoader from '@/components/admin/common/loader'
 import useGetInventory from '@/hooks/useGetInventory'
@@ -12,8 +11,8 @@ import useGetProdByStore from '@/hooks/useGetProdByStore'
 import { OpenStore } from '@/api/store'
 import ConfirmationModal from './confirmationModal'
 import { useState } from 'react'
-import useGetStores2 from '@/hooks/useStores2'
-import useGetStoreData from '@/hooks/useGetStoreData'
+// import useGetStores2 from '@/hooks/useStores2'
+// import useGetStoreData from '@/hooks/useGetStoreData'
 
 export default function stepFour () {
   const searchParams = useSearchParams()
@@ -21,13 +20,12 @@ export default function stepFour () {
   const externalId = searchParams.get('external_id')
   const layoutId = searchParams.get('layout_id')
   const storeName = searchParams.get('store_name')
-  // const { inventory } = useGetInventory(externalId)
-  const { store, loading: storeLoad } = useGetStoreData(externalId)
+  const { inventory, inventoryLoad } = useGetInventory(externalId)
+  // const { store, loading: storeLoad } = useGetStoreData(externalId)
   const { layout, layoutLoad } = useGetLayout(layoutId)
   // const { products, loading } = useGetReiteProd()
   const { products, loading } = useGetProdByStore(externalId)
   const [modalVisible, setModalVisible] = useState(false)
-  console.log(store, '--------------store en el stepFour-------------')
   const handleBackToStepTwo = async () => {
     const openStore = await OpenStore(externalId)
     router.push(
@@ -45,7 +43,7 @@ export default function stepFour () {
 
   return (
     <div>
-      {(storeLoad || loading || layoutLoad)
+      {(inventoryLoad || loading || layoutLoad)
         ? <DspLoader />
         : (
           <div>
@@ -71,9 +69,9 @@ export default function stepFour () {
                                 tray
                                   ? tray.columns.map((column, index) => {
                                     const product = products?.filter((product) => product.productId === column.productId)
-                                    const quantityProd = store[0].products?.find((prod) => prod.productId === column.productId)
+                                    const quantityProd = inventory.products?.find((prod) => prod.productId === column.productId)
                                     const maxQuantity = column.maxQuantity
-                                    console.log(store.products, '--------------store.products-------------')
+                                    // console.log(store.products, '--------------store.products-------------')
                                     // console.log('aca tengo el product', product)
                                     // console.log('aca tengo el quantityProd', quantityProd ? quantityProd.quantity : 'No encontrado')
                                     return (
@@ -124,9 +122,7 @@ export default function stepFour () {
         className='inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-d-dark-dark-purple rounded-lg hover:bg-d-soft-soft-purple hover:text-d-dark-dark-purple focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800'
       >
         Volver Atrás
-        <svg className='w-3.5 h-3.5 ml-2' aria-hidden='true' xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 14 10'>
-          <path stroke='currentColor' strokeLinecap='round' strokeLinejoin='round' strokeWidth='2' d='M1 5h12m0 0L9 1m4 4L9 9' />
-        </svg>
+
       </button>
       <button
         type='button'
@@ -136,9 +132,6 @@ export default function stepFour () {
         className='inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-d-dark-dark-purple rounded-lg hover:bg-d-soft-soft-purple hover:text-d-dark-dark-purple focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800'
       >
         Confirmar Operación
-        <svg className='w-3.5 h-3.5 ml-2' aria-hidden='true' xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 14 10'>
-          <path stroke='currentColor' strokeLinecap='round' strokeLinejoin='round' strokeWidth='2' d='M1 5h12m0 0L9 1m4 4L9 9' />
-        </svg>
       </button>
       {modalVisible && (
         <ConfirmationModal handleOperationConfirmation={handleOperationConfirmation} />
