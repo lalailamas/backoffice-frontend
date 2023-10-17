@@ -31,18 +31,20 @@ export default function page () {
               <StepLayout />
             </div>
             <div className='px-4 md:px-6 lg:px-8'>
-              {externalId && (
+              {/* {externalId && (
                 <div className='text-center mb-4 md:mb-8'>
                   <h1 className='text-d-dark-dark-purple text-2x2 font-bold'>Añade o retira productos</h1>
                 </div>
-              )}
+              )} */}
               {
                 layout && layout.trays && layout.trays.map((tray, index) => {
                   return (
                     <div key={index} className='text-center border-b-2 border-gray-300 pb-5 mb-5 md:mb-8'>
-
-                      <h2 className='text-d-soft-purple text-2x2 font-bold pb-5 mb-5 md:mb-8'>Bandeja N°{index + 1}</h2>
-                      <div className='flex flex-col md:flex-row gap-4 items-center md:items-start h-full w-full'>
+                      <div className='bg-d-dark-dark-purple'>
+                        <h2 className='text-d-soft-purple text-d-title font-bold py-5 mb-5 md:mb-8'>Bandeja {index + 1}</h2>
+                      </div>
+                      {/* <div className='flex flex-col md:flex-row gap-4 items-center md:items-start h-full w-full'> */}
+                      <div className='flex flex-row gap-2 items-center overflow-x-auto'>
 
                         {
                                 tray
@@ -83,6 +85,7 @@ export default function page () {
                               }
                       </div>
                     </div>
+                  // </div>
 
                   )
                 })
