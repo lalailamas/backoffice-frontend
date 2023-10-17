@@ -173,9 +173,9 @@ function StepTwo () {
         <ConfirmationModal
           handleConfirmationModal={handleConfirmationModal}
           handleOperationConfirmation={setHandleStock}
-          title='¿Estás seguro que quieres confirmar el stock?'
-          message={`Una vez confirmado el stock de ${storeName}, no podrás volver atrás. Si luego quieres hacer cambios, tendrás que contactar con el equipo de Despnsa 24/7`}
-          confirmButtonText='Confirmar stock'
+          title='¿Estás seguro que quieres confirmar el inventario?'
+          message={`Una vez confirmado el inventario de ${storeName} no podrás realizar cambios`}
+          confirmButtonText='Confirmar'
           cancelButtonText='Cancelar'
         />
       )}
