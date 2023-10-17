@@ -9,6 +9,7 @@ import useGetInventory from '@/hooks/useGetInventory'
 import useGetLayout from '@/hooks/useGetLayout'
 import useGetProdByStore from '@/hooks/useGetProdByStore'
 import { putRestockInventory } from '@/api/restock'
+import ConfirmationModal from '../confirmationModal'
 // import useGetReiteProd from '@/hooks/useGetReiteProd'
 
 function StepTwo () {
@@ -21,6 +22,7 @@ function StepTwo () {
   const { layout, layoutLoad } = useGetLayout(layoutId)
   const { products, loading } = useGetProdByStore(externalId)
   const [tempInventory, setTempInventory] = useState({})
+  const [modalVisible, setModalVisible] = useState(false)
 
   const router = useRouter()
 
@@ -73,6 +75,9 @@ function StepTwo () {
       // Handle error if the API call fails
       console.error('Error in API call:', error)
     }
+  }
+  const handleConfirmationModal = () => {
+    setModalVisible(!modalVisible)
   }
 
   return (
@@ -153,7 +158,7 @@ function StepTwo () {
             <button
               type='button'
               onClick={() => {
-                setHandleStock()
+                handleConfirmationModal()
               }}
               className='inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-d-dark-dark-purple rounded-lg hover:bg-d-soft-soft-purple hover:text-d-dark-dark-purple focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800'
             >
@@ -164,6 +169,16 @@ function StepTwo () {
             </button>
           </div>
           )}
+      {modalVisible && (
+        <ConfirmationModal
+          handleConfirmationModal={handleConfirmationModal}
+          handleOperationConfirmation={setHandleStock}
+          title='¿Estás seguro que quieres confirmar el stock?'
+          message={`Una vez confirmado el stock de ${storeName}, no podrás volver atrás. Si luego quieres hacer cambios, tendrás que contactar con el equipo de Despnsa 24/7`}
+          confirmButtonText='Confirmar stock'
+          cancelButtonText='Cancelar'
+        />
+      )}
     </div>
   )
 }
