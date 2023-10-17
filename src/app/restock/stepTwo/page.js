@@ -19,18 +19,12 @@ function StepTwo () {
   const transactionId = searchParams.get('transactionId')
   const { inventory, inventoryLoad } = useGetInventory(externalId)
   const { layout, layoutLoad } = useGetLayout(layoutId)
-  // const { products, loading } = useGetReiteProd()
   const { products, loading } = useGetProdByStore(externalId)
   const [tempInventory, setTempInventory] = useState({})
-  // console.log('aca tengo el layout', layout)
-  // console.log('aca tengo el inventory', inventory)
-  // console.log('aca tengo el products', products)
 
   const router = useRouter()
 
   const quantityChangeHandler = (index, productId, differential) => {
-    // console.log('productId', productId)
-    // console.log('differential', differential)
     if (differential !== 0) {
       setTempInventory({
         ...tempInventory,
@@ -68,11 +62,8 @@ function StepTwo () {
       }
     })
     try {
-      // console.log('stockData', stockData)
-      // console.log('externalId', externalId)
       const response = await putRestockInventory(externalId, stockData)
       if (response) {
-        // console.log('response', response)
         router.push(
           'stepThree' +
           `?external_id=${externalId}&layout_id=${layoutId}&store_name=${storeName}&transactionId=${transactionId}`
@@ -86,7 +77,6 @@ function StepTwo () {
 
   return (
     <div>
-      <div><pre>{JSON.stringify(tempInventory, null, 2)}</pre></div>
       {(loading || inventoryLoad || layoutLoad)
         ? (<DspLoader />)
         : (
@@ -139,8 +129,6 @@ function StepTwo () {
                                 </figure>
                                 <h1 className='flex justify-center items-center text-d-title-purple font-bold m-1'>{product[0]?.productName || 'product missing'}</h1>
                               </div>}
-                            {/* {!product[0] &&
-                              <div><pre className='w-full text-left  '>{JSON.stringify(column.productId, null, 2)}</pre></div>} */}
                                   </div>}//eslint-disable-line
                         />
                       )
