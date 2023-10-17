@@ -13,9 +13,7 @@ function Restock () {
   const router = useRouter()
 
   const handleStoreChange = (id) => {
-    console.log('selected store id', id)
     const store = stores.find((store) => store.storeId === id)
-    console.log('selected store del handleStoreChange', store)
     setSelectedStore(store)
   }
 
@@ -27,8 +25,8 @@ function Restock () {
     const fetchStores = async () => {
       try {
         const response = await getStores()
-        console.log('response', response.data)
         setStores(response.data)
+        // console.log('response', response.data)
       } catch (error) {
         console.error('Error fetching stores:', error)
       }
@@ -38,9 +36,7 @@ function Restock () {
   }, [])
 
   const handleOpenStore = async (id) => {
-    console.log('id en el handleopenstore', id)
     const openStore = await OpenStore(id)
-    console.log('openStore', openStore)
     router.push(
       'restock/stepTwo' + `?external_id=${selectedStore.storeId}&layout_id=${selectedStore.layoutId}&store_name=${selectedStore.name}&transactionId=${openStore.transactionId}`
     )

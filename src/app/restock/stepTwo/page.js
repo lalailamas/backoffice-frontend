@@ -1,38 +1,84 @@
 'use client'
-import React from 'react'
-// import { getInventoryByStore } from '@/api/store'
-// import { getLayout } from '@/api/layout'
+import React, { useState } from 'react'
 import DspLoader from '@/components/admin/common/loader'
 import AccordeonCard from '../acordeonCard'
 import { useSearchParams, useRouter } from 'next/navigation'
 import StepLayout from '../stepLayout'
 import InsideLayout from '@/components/admin/layouts/inside'
-// import useGetReiteProd from '@/hooks/useGetReiteProd'
 import useGetInventory from '@/hooks/useGetInventory'
 import useGetLayout from '@/hooks/useGetLayout'
 import useGetProdByStore from '@/hooks/useGetProdByStore'
-import useGetReiteProd from '@/hooks/useGetReiteProd'
-// import AccordeonCard from './acordeonCard'
+import { putRestockInventory } from '@/api/restock'
+// import useGetReiteProd from '@/hooks/useGetReiteProd'
 
 function StepTwo () {
   const searchParams = useSearchParams()
   const externalId = searchParams.get('external_id')
   const layoutId = searchParams.get('layout_id')
   const storeName = searchParams.get('store_name')
-  const { inventory } = useGetInventory(externalId)
-  const { layout } = useGetLayout(layoutId)
-  const { products, loading } = useGetReiteProd()
-  // const { products, loading } = useGetProdByStore(externalId)
-  // console.log('aca tengo el layout', layout)
-  console.log('aca tengo el inventory', inventory)
-  console.log('aca tengo el products', products)
+  const transactionId = searchParams.get('transactionId')
+  const { inventory, inventoryLoad } = useGetInventory(externalId)
+  const { layout, layoutLoad } = useGetLayout(layoutId)
+  const { products, loading } = useGetProdByStore(externalId)
+  const [tempInventory, setTempInventory] = useState({})
 
   const router = useRouter()
 
+  const quantityChangeHandler = (index, productId, differential) => {
+    if (differential !== 0) {
+      setTempInventory({
+        ...tempInventory,
+        [index]: {
+          [productId]: differential
+        }
+
+      })
+    }
+  }
+  const setHandleStock = async () => {
+    const flatInventory = Object.values(tempInventory).reduce((acc, curr) => {
+      Object.entries(curr).forEach(([productId, quantity]) => {
+        acc[productId] = (acc[productId] || 0) + quantity
+      })
+      return acc
+    }, {})
+
+    const stockData = {
+      added: [],
+      removed: []
+    }
+
+    Object.entries(flatInventory).forEach(([productId, quantity]) => {
+      if (quantity > 0) {
+        stockData.added.push({
+          productId,
+          quantity
+        })
+      } else if (quantity < 0) {
+        stockData.removed.push({
+          productId,
+          quantity: Math.abs(quantity)
+        })
+      }
+    })
+    try {
+      const response = await putRestockInventory(externalId, stockData)
+      if (response) {
+        router.push(
+          'stepThree' +
+          `?external_id=${externalId}&layout_id=${layoutId}&store_name=${storeName}&transactionId=${transactionId}`
+        )
+      }
+    } catch (error) {
+      // Handle error if the API call fails
+      console.error('Error in API call:', error)
+    }
+  }
+
   return (
     <div>
-      {loading
-        ? <DspLoader />
+      {(loading || inventoryLoad || layoutLoad)
+        ? (<DspLoader />)
         : (
           <div className='text-center'>
             <InsideLayout />
@@ -58,32 +104,39 @@ function StepTwo () {
                       const product = products?.filter((product) => product.productId === column.productId)
                       const quantityProd = inventory.products.find((prod) => prod.productId === column.productId)
                       const maxQuantity = column.maxQuantity
-                      // console.log(product, 'product')
+                      const multipleOccurrences = tray.columns.filter(
+                        (c) => c.productId === column.productId
+                      ).length > 1
                       return (
 
                         <AccordeonCard
+                          quantityChangeHandler={quantityChangeHandler}
                           step={2}
                           key={index}
-                          initialQuantity={quantityProd ? quantityProd.quantity : 0}
+                          index={index}
+                          productId={column.productId}
+                          initialQuantity={multipleOccurrences ? 0 : quantityProd ? quantityProd.quantity : 0}
+                          occurrence={multipleOccurrences ? quantityProd?.quantity : false}
                           maxQuantity={maxQuantity}
-                          header={
+                          header={<div>
+                            {product[0] &&
 
-                            <div className='flex flex-col items-center align-start'>
-                              <div className=''>
-                                <img
-                                  className='w-auto max-w-[50px] h-[50px]'
-                                  src={product[0].metadata.imageUrl}
-                                  width={120}
-                                  height={120}
-                                  alt='Product'
-                                />
-                              </div>
-                              <div className='flex justify-center'>
-                                <h1 className='flex justify-center items-center text-center text-d-title-purple font-bold m-1 w-full line-clamp-2'>{product[0].productName}</h1>
-                              </div>
-                            </div>
+                              <div className='flex flex-col items-center align-start'>
+                                <div className=''>
+                                  <img
+                                    className='w-auto max-w-[50px] h-[50px]'
+                                    src={product[0].metadata?.imageUrl}
+                                    width={120}
+                                    height={120}
+                                    alt='Product'
+                                  />
+                                </div>
+                                <div className='flex justify-center'>
+                                  <h1 className='flex justify-center items-center text-center text-d-title-purple font-bold m-1 w-full line-clamp-2'>{product[0]?.productName || 'product missing'}</h1>
+                                </div>
+                              </div>}
 
-                        }
+                                  </div>}//eslint-disable-line
                         />
                       )
                     })
@@ -100,9 +153,7 @@ function StepTwo () {
             <button
               type='button'
               onClick={() => {
-                router.push(
-                  'stepThree' + `?external_id=${externalId}&layout_id=${layoutId}&store_name=${storeName}`
-                )
+                setHandleStock()
               }}
               className='inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-d-dark-dark-purple rounded-lg hover:bg-d-soft-soft-purple hover:text-d-dark-dark-purple focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800'
             >

@@ -8,10 +8,8 @@ export default function useGetProdByStore (id) {
     error: null
   })
   async function fetchAllReiteData () {
-    console.log('entré al fetchAllReiteData', id)
     try {
       const productsResponse = await getReiteProdByStore(id)
-      console.log('la respuesta del coso', productsResponse.data)
       if (productsResponse.data) {
         setState({
           products: productsResponse.data,
@@ -28,8 +26,6 @@ export default function useGetProdByStore (id) {
     }
   }
   useEffect(() => {
-    // console.log('this is el useEffect del useGetAll')
-
     fetchAllReiteData()
   }, [])
 

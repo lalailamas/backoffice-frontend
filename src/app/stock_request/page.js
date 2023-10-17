@@ -1,6 +1,6 @@
 'use client'
 import React, { useEffect, useState } from 'react'
-import { getStores } from '../../api/store'
+import { getStockStores } from '../../api/store'
 import InsideLayout from '@/components/admin/layouts/inside'
 import { getStockRequest } from '../../api/stock'
 import StockRequestTable from '@/components/admin/tables/stock_request'
@@ -20,10 +20,10 @@ function StockRequest () {
   useEffect(() => {
     const fetchStores = async () => {
       try {
-        const response = await getStores()
+        const response = await getStockStores()
         setStores(response.data)
         if (response.data.length > 0) {
-          // console.log(response.data[0].external_id, 'response.data[0].external_id')
+          // console.log(response.data, 'response.data[0].external_id')
           handleStoreChange(response.data[0].external_id)
         }
       } catch (error) {
