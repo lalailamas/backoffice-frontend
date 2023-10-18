@@ -62,13 +62,20 @@ const AccordeonCard = ({
 
   return (
     <>
+      {/* STEP FOUR */}
       {step === 4
         ? (
+          <section className='w-[250px] h-[210px] flex flex-col items-center align-center gap-6 rounded shadow-lg'>
 
-          <div className='flex justify-center text-center items-center h-[120px] gap-3'>
-            <p className='text-center text-gray-800 mt-1'>${price}</p>
-            <p className='ml-auto font-bold text-d-dark-dark-purple'> {initialQuantity}/{maxQuantity}</p>
-          </div>
+            <span className='flex  items-center  h-full'>
+              {header}
+            </span>
+
+            <div className='flex justify-center text-center items-center h-[120px] gap-3'>
+              <p className='text-center text-gray-800 mt-1'>${price}</p>
+              <p className='ml-auto font-bold text-d-dark-dark-purple'> {initialQuantity}/{maxQuantity}</p>
+            </div>
+          </section>
 
           )
         : step === 2

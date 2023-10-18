@@ -62,7 +62,9 @@ export default function stepFour () {
                   return (
                     <div key={index} className='text-center border-b-2 border-gray-300 pb-5 mb-5 md:mb-8'>
 
-                      <h2 className='text-d-soft-purple text-2x2 font-bold pb-5 mb-5 md:mb-8'>Bandeja N°{index + 1}</h2>
+                      <div className='bg-d-dark-dark-purple'>
+                        <h2 className='text-d-soft-purple text-d-title font-bold py-5 mb-5 md:mb-8'>Bandeja {index + 1}</h2>
+                      </div>
                       <div className='flex flex-col md:flex-row gap-4 items-center md:items-start h-full w-full'>
 
                         {
@@ -92,7 +94,10 @@ export default function stepFour () {
                                                 alt='Product'
                                               />
                                             </figure>
-                                            <h1 className='flex justify-center items-center text-d-title-purple font-bold m-1'>{product[0].productName}</h1>
+
+                                            <h1 className='flex justify-center items-center text-center text-d-title-purple font-bold m-1 w-full line-clamp-2'>{product[0]?.productName}</h1>
+
+                                            {/* <h1 className='flex justify-center items-center text-d-title-purple font-bold m-1'>{product[0].productName}</h1> */}
                                             {/* <p className='ml-auto font-bold text-d-dark-dark-purple'> {quantityProd ? `${quantityProd.quantity}/${maxQuantity}` : '??'}</p> */}
                                           </div>
                                     }
