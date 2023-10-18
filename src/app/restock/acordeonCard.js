@@ -71,9 +71,9 @@ const AccordeonCard = ({
               {header}
             </span>
 
-            <div className='flex justify-center text-center items-center h-[120px] gap-3'>
-              <p className='text-center text-gray-800 mt-1'>${price}</p>
-              <p className='ml-auto font-bold text-d-dark-dark-purple'> {initialQuantity}/{maxQuantity}</p>
+            <div className='flex flex-col justify-center text-center items-center align-center h-[120px]'>
+              <p className='font-albert-sans text-center font-semibold text-gray-800'>${price}</p>
+              <p className='font-bold text-center text-d-dark-dark-purple'> {initialQuantity}/{maxQuantity}</p>
             </div>
           </section>
 
@@ -88,10 +88,10 @@ const AccordeonCard = ({
               <span className='flex  items-center  h-full'>
                 {header}
               </span>
-              <div className='flex flex-row'>
+              <div className='flex flex-row mb-6'>
                 {/* <div className='p-2 rounded shadow-lg gap-2 h-full overflow-hidden flex flex-row justify-end items-center'> */}
 
-                <button className='btn btn-sm join-item rounded-full' onClick={handleDecrease}>
+                <button className='btn-sm join-item hover:bg-d-soft-soft-purple rounded-full' onClick={handleDecrease}>
                   <svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none'>
                     <g clip-path='url(#clip0_1384_742)'>
                       <circle cx='12' cy='12' r='12' fill='#8480C0' />
@@ -105,8 +105,8 @@ const AccordeonCard = ({
                   </svg>
                 </button>
 
-                <p className='flex items-center justify-center font-bold text-d-dark-dark-purple'>{quantity}/{maxQuantity}</p>
-                <button className='btn btn-sm join-item rounded-full ' onClick={handleIncrease}>
+                <p className='flex items-center justify-center font-bold text-d-dark-dark-purple '>{quantity}/{maxQuantity}</p>
+                <button className='btn-sm join-item hover:bg-d-soft-soft-purple rounded-full' onClick={handleIncrease}>
                   <svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none'>
                     <g clip-path='url(#clip0_1384_744)'>
                       <circle cx='12' cy='12' r='12' fill='#7A36E6' />
@@ -140,7 +140,7 @@ const AccordeonCard = ({
                       <label for='custom-input-number' className='w-full text-gray-500 text-xs font-bold'>añadidos
                       </label>
                       <div className='flex flex-row w-full rounded-lg relative bg-transparent mt-1'>
-                        <button data-action='decrement' className='btn btn-sm join-item rounded-full' onClick={handleDecrease}>
+                        <button data-action='decrement' className='btn-sm join-item rounded-full hover:bg-d-soft-soft-purple' onClick={handleDecrease}>
                           {/* BOTON (-) EN AÑADIDOS */}
                           <svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none'>
                             <g clip-path='url(#clip0_1384_742)'>
@@ -160,7 +160,7 @@ const AccordeonCard = ({
                       // onChange={handleInputChange}
                           max={maxQuantity}
                         />
-                        <button data-action='increment' className='btn btn-sm join-item rounded-full' onClick={handleIncrease}>
+                        <button data-action='increment' className='btn-sm join-item rounded-full hover:bg-d-soft-soft-purple' onClick={handleIncrease}>
                           {/* BOTON (+) EN AÑADIDOS */}
                           <svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none'>
                             <g clip-path='url(#clip0_1384_744)'>
@@ -180,7 +180,7 @@ const AccordeonCard = ({
                       <label for='custom-input-number' className='w-full text-gray-500 text-xs font-bold'>retirados
                       </label>
                       <div className='flex flex-row h-10 w-full rounded-lg relative bg-transparent mt-1'>
-                        <button data-action='decrement' className='btn btn-sm join-item rounded-full' onClick={handleDecreasePurchased}>
+                        <button data-action='decrement' className='btn-sm join-item rounded-full hover:bg-d-soft-soft-purple' onClick={handleDecreasePurchased}>
                           {/* BOTON (-) EN RETIRADOS */}
                           <svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none'>
                             <g clip-path='url(#clip0_1384_742)'>
@@ -200,7 +200,7 @@ const AccordeonCard = ({
                       // onChange={handleInputChange}
                           max={maxQuantity}
                         />
-                        <button data-action='increment' className='btn btn-sm join-item rounded-full' onClick={handleIncreasePurchased}>
+                        <button data-action='increment' className='btn-sm join-item rounded-full hover:bg-d-soft-soft-purple' onClick={handleIncreasePurchased}>
                           {/* BOTON (+) EN RETIRADOS */}
                           <svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none'>
                             <g clip-path='url(#clip0_1384_744)'>

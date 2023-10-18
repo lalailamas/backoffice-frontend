@@ -8,7 +8,7 @@ import AccordeonCard from '../acordeonCard'
 import DspLoader from '@/components/admin/common/loader'
 import useGetInventory from '@/hooks/useGetInventory'
 import useGetProdByStore from '@/hooks/useGetProdByStore'
-import { OpenStore } from '@/api/store'
+// import { OpenStore } from '@/api/store'
 import ConfirmationModal from '../confirmationModal'
 import { useState } from 'react'
 // import useGetStores2 from '@/hooks/useStores2'
@@ -26,12 +26,12 @@ export default function stepFour () {
   // const { products, loading } = useGetReiteProd()
   const { products, loading } = useGetProdByStore(externalId)
   const [modalVisible, setModalVisible] = useState(false)
-  const handleBackToStepTwo = async () => {
-    const openStore = await OpenStore(externalId)
-    router.push(
-      '/restock/stepTwo' + `?external_id=${externalId}&layout_id=${layoutId}&store_name=${storeName}&transactionId=${openStore.transactionId}`
-    )
-  }
+  // const handleBackToStepTwo = async () => {
+  //   const openStore = await OpenStore(externalId)
+  //   router.push(
+  //     '/restock/stepTwo' + `?external_id=${externalId}&layout_id=${layoutId}&store_name=${storeName}&transactionId=${openStore.transactionId}`
+  //   )
+  // }
   const handleConfirmationModal = () => {
     setModalVisible(!modalVisible)
   }
@@ -73,15 +73,16 @@ export default function stepFour () {
                                     const product = products?.filter((product) => product.productId === column.productId)
                                     const quantityProd = inventory.products?.find((prod) => prod.productId === column.productId)
                                     const maxQuantity = column.maxQuantity
-                                    // console.log(store.products, '--------------store.products-------------')
-                                    // console.log('aca tengo el product', product)
-                                    // console.log('aca tengo el quantityProd', quantityProd ? quantityProd.quantity : 'No encontrado')
                                     return (
                                       <AccordeonCard
                                         step={4}
                                         key={index}
                                         initialQuantity={quantityProd ? quantityProd.quantity : 0}
-                                        price={product[0].prices[externalId] ? product[0].prices[externalId] : null}
+                                        price={
+                                          product[0].prices[externalId]
+                                            ? (product[0].prices[externalId].toFixed(0)).replace(/\B(?=(\d{3})+(?!\d))/g, '.')
+                                            : null
+                                        }
                                         maxQuantity={maxQuantity}
                                         header={
                                           <div className=' w-full gap-3 items-center justify-center'>
@@ -129,15 +130,17 @@ export default function stepFour () {
         Volver Atrás
 
       </button> */}
-      <button
-        type='button'
-        onClick={() => {
-          handleConfirmationModal()
-        }}
-        className='inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-d-dark-dark-purple rounded-lg hover:bg-d-soft-soft-purple hover:text-d-dark-dark-purple focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800'
-      >
-        Confirmar Operación
-      </button>
+      <div className='flex justify-center pb-10'>
+        <button
+          type='button'
+          onClick={() => {
+            handleConfirmationModal()
+          }}
+          className='inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-d-dark-dark-purple rounded-lg hover:bg-d-soft-soft-purple hover:text-d-dark-dark-purple focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800'
+        >
+          Confirmar Operación
+        </button>
+      </div>
       {modalVisible && (
         <ConfirmationModal
           handleConfirmationModal={handleConfirmationModal}
