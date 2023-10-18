@@ -9,7 +9,7 @@ import DspLoader from '@/components/admin/common/loader'
 import useGetInventory from '@/hooks/useGetInventory'
 import useGetProdByStore from '@/hooks/useGetProdByStore'
 import { OpenStore } from '@/api/store'
-import ConfirmationModal from './confirmationModal'
+import ConfirmationModal from '../confirmationModal'
 import { useState } from 'react'
 // import useGetStores2 from '@/hooks/useStores2'
 // import useGetStoreData from '@/hooks/useGetStoreData'
@@ -119,7 +119,7 @@ export default function stepFour () {
             </div>
           </div>
           )}
-      <button
+      {/* <button
         type='button'
         onClick={() => {
           handleBackToStepTwo()
@@ -128,7 +128,7 @@ export default function stepFour () {
       >
         Volver Atrás
 
-      </button>
+      </button> */}
       <button
         type='button'
         onClick={() => {
@@ -139,7 +139,14 @@ export default function stepFour () {
         Confirmar Operación
       </button>
       {modalVisible && (
-        <ConfirmationModal handleOperationConfirmation={handleOperationConfirmation} />
+        <ConfirmationModal
+          handleConfirmationModal={handleConfirmationModal}
+          handleOperationConfirmation={handleOperationConfirmation}
+          title='La reposición ha sido confirmada'
+          message='¡Muchas gracias! ya puedes cerrar la página.'
+          confirmButtonText='Cerrar'
+          cancelButtonText='Cancelar'
+        />
       )}
 
     </div>
