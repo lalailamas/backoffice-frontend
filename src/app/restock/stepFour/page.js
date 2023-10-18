@@ -55,6 +55,7 @@ export default function stepFour () {
               {externalId && (
                 <div className='text-center mb-4 md:mb-8'>
                   <h1 className='text-d-dark-dark-purple text-2x2 font-bold'>Vuelve a confirmar el inventario de {storeName} y asegúrate de que los precios correspondan al producto.</h1>
+                  <p className='text-red-500 text-2x2 font-bold'>Aviso: los productos que aparecen en más de una columna han sido concentrados en una sola para facilitar el control de las cantidades</p>
                 </div>
               )}
               {
@@ -75,14 +76,10 @@ export default function stepFour () {
                                     const quantityProd = inventory.products?.find((prod) => prod.productId === column.productId)
                                     const maxQuantity = column.maxQuantity
                                     if (product) {
-                                      console.log(productAggregationMap)
-                                      // Initialize or update aggregated values
                                       if (!productAggregationMap.has(product[0].productId)) {
                                         productAggregationMap.set(product[0].productId, {
                                           quantity: quantityProd ? quantityProd.quantity : 0,
-                                          maxQuantity,
-                                          prices: product[0].prices,
-                                          metadata: product[0].metadata
+                                          maxQuantity
                                         })
                                       } else {
                                         const aggregatedValues = productAggregationMap.get(product[0].productId)
@@ -96,7 +93,6 @@ export default function stepFour () {
                             }
                         {Array.from(productAggregationMap).map(([productId, aggregatedValues], index) => {
                           const product = products?.find((p) => p.productId === productId)
-                          console.log(product, '---------------------------product')
 
                           return (
                             <AccordeonCard
