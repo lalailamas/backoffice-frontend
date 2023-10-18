@@ -137,7 +137,7 @@ const AccordeonCard = ({
                   </span>
                   <div className='h-full flex flex-col items-center gap-8'>
                     <div className='custom-number-input h-8 w-32'>
-                      <label for='custom-input-number' className='w-full text-gray-500 text-xs font-bold'>añadidos
+                      <label for='custom-input-number' className='w-full text-green-500 text-xs font-bold'>añadidos
                       </label>
                       <div className='flex flex-row w-full rounded-lg relative bg-transparent mt-1'>
                         <button data-action='decrement' className='btn-sm join-item rounded-full hover:bg-d-soft-soft-purple' onClick={handleDecrease}>
@@ -177,7 +177,7 @@ const AccordeonCard = ({
                       </div>
                     </div>
                     <div className='custom-number-input h-8 w-32'>
-                      <label for='custom-input-number' className='w-full text-gray-500 text-xs font-bold'>retirados
+                      <label for='custom-input-number' className='w-full text-red-500 text-xs font-bold'>retirados
                       </label>
                       <div className='flex flex-row h-10 w-full rounded-lg relative bg-transparent mt-1'>
                         <button data-action='decrement' className='btn-sm join-item rounded-full hover:bg-d-soft-soft-purple' onClick={handleDecreasePurchased}>

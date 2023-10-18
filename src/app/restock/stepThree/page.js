@@ -77,7 +77,6 @@ export default function page () {
       }))
 
     }
-    console.log(stockData, 'el stock data')
 
     try {
       const response = await patchRestockResult(transactionId, stockData)
@@ -150,7 +149,7 @@ export default function page () {
                                               />
                                             </figure>
                                             <h1 className='flex justify-center items-center text-d-title-purple font-bold m-1'>{product[0].productName}</h1>
-                                            <h1 className='flex justify-center items-center text-d-dark-purple font-bold m-1 text-xs'>max: {maxQuantity}u.</h1>
+                                            <h1 className='flex justify-center items-center text-black-500 font-bold m-1 text-xs'>Max: {maxQuantity}u.</h1>
 
                                             {/* <p className='ml-auto font-bold text-d-dark-dark-purple'> {quantityProd ? `${quantityProd.quantity}/${maxQuantity}` : '??'}</p> */}
                                           </div>

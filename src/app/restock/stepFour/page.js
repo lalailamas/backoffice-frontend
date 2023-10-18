@@ -8,7 +8,7 @@ import AccordeonCard from '../acordeonCard'
 import DspLoader from '@/components/admin/common/loader'
 import useGetInventory from '@/hooks/useGetInventory'
 import useGetProdByStore from '@/hooks/useGetProdByStore'
-// import { OpenStore } from '@/api/store'
+import { OpenStore } from '@/api/store'
 import ConfirmationModal from '../confirmationModal'
 import { useState } from 'react'
 // import useGetStores2 from '@/hooks/useStores2'
@@ -26,12 +26,12 @@ export default function stepFour () {
   // const { products, loading } = useGetReiteProd()
   const { products, loading } = useGetProdByStore(externalId)
   const [modalVisible, setModalVisible] = useState(false)
-  // const handleBackToStepTwo = async () => {
-  //   const openStore = await OpenStore(externalId)
-  //   router.push(
-  //     '/restock/stepTwo' + `?external_id=${externalId}&layout_id=${layoutId}&store_name=${storeName}&transactionId=${openStore.transactionId}`
-  //   )
-  // }
+  const handleBackToStepTwo = async () => {
+    const openStore = await OpenStore(externalId)
+    router.push(
+      '/restock/stepTwo' + `?external_id=${externalId}&layout_id=${layoutId}&store_name=${storeName}&transactionId=${openStore.transactionId}`
+    )
+  }
   const handleConfirmationModal = () => {
     setModalVisible(!modalVisible)
   }
@@ -59,6 +59,7 @@ export default function stepFour () {
               )}
               {
                 layout && layout.trays && layout.trays.map((tray, index) => {
+                  const productAggregationMap = new Map()
                   return (
                     <div key={index} className='text-center border-b-2 border-gray-300 pb-5 mb-5 md:mb-8'>
 
@@ -73,54 +74,73 @@ export default function stepFour () {
                                     const product = products?.filter((product) => product.productId === column.productId)
                                     const quantityProd = inventory.products?.find((prod) => prod.productId === column.productId)
                                     const maxQuantity = column.maxQuantity
-                                    return (
-                                      <AccordeonCard
-                                        step={4}
-                                        key={index}
-                                        initialQuantity={quantityProd ? quantityProd.quantity : 0}
-                                        price={
-                                          product[0].prices[externalId]
-                                            ? (product[0].prices[externalId].toFixed(0)).replace(/\B(?=(\d{3})+(?!\d))/g, '.')
-                                            : null
-                                        }
-                                        maxQuantity={maxQuantity}
-                                        header={
-                                          <div className=' w-full gap-3 items-center justify-center'>
-                                            <figure className='flex justify-center'>
-                                              <img
-                                                className='w-auto max-w-[50px] h-[50px]'
-                                                src={product[0].metadata.imageUrl}
-                                                width={120}
-                                                height={120}
-                                                alt='Product'
-                                              />
-                                            </figure>
-
-                                            <h1 className='flex justify-center items-center text-center text-d-title-purple font-bold m-1 w-full line-clamp-2'>{product[0]?.productName}</h1>
-
-                                            {/* <h1 className='flex justify-center items-center text-d-title-purple font-bold m-1'>{product[0].productName}</h1> */}
-                                            {/* <p className='ml-auto font-bold text-d-dark-dark-purple'> {quantityProd ? `${quantityProd.quantity}/${maxQuantity}` : '??'}</p> */}
-                                          </div>
+                                    if (product) {
+                                      console.log(productAggregationMap)
+                                      // Initialize or update aggregated values
+                                      if (!productAggregationMap.has(product[0].productId)) {
+                                        productAggregationMap.set(product[0].productId, {
+                                          quantity: quantityProd ? quantityProd.quantity : 0,
+                                          maxQuantity,
+                                          prices: product[0].prices,
+                                          metadata: product[0].metadata
+                                        })
+                                      } else {
+                                        const aggregatedValues = productAggregationMap.get(product[0].productId)
+                                        aggregatedValues.quantity = quantityProd ? quantityProd.quantity : 0
+                                        aggregatedValues.maxQuantity += maxQuantity
+                                      }
                                     }
-                                      />
-                                    // <div key={index}>
-                                    //   <pre>{JSON.stringify(inventory, null, 2)}</pre>
-                                    // </div>
-
-                                    )
+                                    return null
                                   })
                                   : null
                             }
+                        {Array.from(productAggregationMap).map(([productId, aggregatedValues], index) => {
+                          const product = products?.find((p) => p.productId === productId)
+                          console.log(product, '---------------------------product')
+
+                          return (
+                            <AccordeonCard
+                              step={4}
+                              key={index}
+                              initialQuantity={aggregatedValues.quantity}
+                              price={
+                                    product?.prices[externalId]
+                                      ? (product.prices[externalId].toFixed(0)).replace(/\B(?=(\d{3})+(?!\d))/g, '.')
+                                      : null
+                                    }
+                              maxQuantity={aggregatedValues.maxQuantity}
+                              header={
+                                <div className=' w-full gap-3 items-center justify-center'>
+                                  <figure className='flex justify-center'>
+                                    <img
+                                      className='w-auto max-w-[50px] h-[50px]'
+                                      src={product?.metadata.imageUrl}
+                                      width={120}
+                                      height={120}
+                                      alt='Product'
+                                    />
+                                  </figure>
+
+                                  <h1 className='flex justify-center items-center text-center text-d-title-purple font-bold m-1 w-full line-clamp-2'>{product?.productName}</h1>
+
+                                  {/* <h1 className='flex justify-center items-center text-d-title-purple font-bold m-1'>{product[0].productName}</h1> */}
+                                  {/* <p className='ml-auto font-bold text-d-dark-dark-purple'> {quantityProd ? `${quantityProd.quantity}/${maxQuantity}` : '??'}</p> */}
+                                </div>
+                                    }
+                            />
+                          )
+                        })}
                       </div>
                     </div>
 
                   )
                 })
-            }
+              }
+
             </div>
           </div>
           )}
-      {/* <button
+      <button
         type='button'
         onClick={() => {
           handleBackToStepTwo()
@@ -129,7 +149,7 @@ export default function stepFour () {
       >
         Volver Atrás
 
-      </button> */}
+      </button>
       <div className='flex justify-center pb-10'>
         <button
           type='button'
