@@ -85,8 +85,12 @@ function Restock () {
               <ConfirmationModal
                 handleConfirmationModal={handleConfirmationModal}
                 handleOperationConfirmation={handleOpenStore}
-                title='¿Estás seguro que quieres abrir la máquina?'
-                message='Una vez abierta la máquina, no podrás volver atrás'
+                title='¿Estás seguro que quieres abrir esta máquina?'
+                message={(
+                  <p>
+                    Verifica que <strong>{selectedStore.name}</strong> sea la correcta antes de proceder
+                  </p>
+                )}
                 confirmButtonText='Abrir máquina'
                 cancelButtonText='Cancelar'
               />

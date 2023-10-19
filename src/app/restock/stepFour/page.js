@@ -26,15 +26,23 @@ export default function stepFour () {
   // const { products, loading } = useGetReiteProd()
   const { products, loading } = useGetProdByStore(externalId)
   const [modalVisible, setModalVisible] = useState(false)
+  const [backModalVisible, setBackModalVisible] = useState(false)
+
   const handleBackToStepTwo = async () => {
+    setBackModalVisible(true)
+  }
+
+  const confirmBackToStepTwo = async () => {
     const openStore = await OpenStore(externalId)
     router.push(
-      '/restock/stepTwo' + `?external_id=${externalId}&layout_id=${layoutId}&store_name=${storeName}&transactionId=${openStore.transactionId}`
+      '/restock/stepTwo' +
+        `?external_id=${externalId}&layout_id=${layoutId}&store_name=${storeName}&transactionId=${openStore.transactionId}`
     )
   }
   const handleConfirmationModal = () => {
     setModalVisible(!modalVisible)
   }
+
   const handleOperationConfirmation = async () => {
     router.push(
       '/restock'
@@ -136,38 +144,49 @@ export default function stepFour () {
             </div>
           </div>
           )}
-      <button
-        type='button'
-        onClick={() => {
-          handleBackToStepTwo()
-        }}
-        className='inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-d-dark-dark-purple rounded-lg hover:bg-d-soft-soft-purple hover:text-d-dark-dark-purple focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800'
-      >
-        Volver Atrás
+      <div className='flex gap-5 justify-center pb-10'>
+        <p
+          type='button'
+          onClick={() => {
+            handleBackToStepTwo()
+          }}
+          className='underline text-black rounded-lg text-sm focus:ring-4 focus:outline-none pt-2'
+        >
+          Volver Atrás
 
-      </button>
-      <div className='flex justify-center pb-10'>
+        </p>
+
         <button
           type='button'
           onClick={() => {
             handleConfirmationModal()
           }}
-          className='inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-d-dark-dark-purple rounded-lg hover:bg-d-soft-soft-purple hover:text-d-dark-dark-purple focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800'
+          className='items-center px-3 py-2 text-sm font-medium text-center text-white bg-d-dark-dark-purple rounded-lg hover:bg-d-soft-soft-purple hover:text-d-dark-dark-purple focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800'
         >
           Confirmar Operación
         </button>
       </div>
+
       {modalVisible && (
         <ConfirmationModal
           handleConfirmationModal={handleConfirmationModal}
           handleOperationConfirmation={handleOperationConfirmation}
           title='La reposición ha sido confirmada'
-          message='¡Muchas gracias! ya puedes cerrar la página.'
+          message='¡Muchas gracias! ya puedes cerrar la página'
           confirmButtonText='Cerrar'
           cancelButtonText='Cancelar'
         />
       )}
-
+      {backModalVisible && (
+        <ConfirmationModal
+          handleOperationConfirmation={confirmBackToStepTwo}
+          handleConfirmationModal={() => setBackModalVisible(false)}
+          title='¿Seguro que deseas volver atrás?'
+          message='Ten en cuenta que al hacerlo, deberás repetir todo el proceso desde el principio'
+          confirmButtonText='Volver Atrás'
+          cancelButtonText='Cancelar'
+        />
+      )}
     </div>
   )
 }

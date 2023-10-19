@@ -190,8 +190,8 @@ export default function page () {
         <ConfirmationModal
           handleConfirmationModal={handleConfirmationModal}
           handleOperationConfirmation={handleConfirmRestock}
-          title='¿Confirmar Restock?'
-          message={`Una vez confirmado el inventario de ${storeName} no podrás realizar cambios`}
+          title='¿Confirmas que los datos de reposición son correctos?'
+          message='Recuerda que una vez confirmados, no podrás realizar cambios'
           confirmButtonText='Confirmar'
           cancelButtonText='Cancelar'
         />

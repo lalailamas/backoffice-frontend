@@ -16,20 +16,12 @@ function ConfirmationModal ({ handleOperationConfirmation, title, message, confi
             className='inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full sm:p-6'
             role='dialog' aria-modal='true' aria-labelledby='modal-headline'
           >
-            <div className='hidden sm:block absolute top-0 right-0 pt-4 pr-4'>
-              <button type='button' data-behavior='cancel' className='bg-white rounded-md text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500'>
-                <span className='sr-only'>Cancel</span>
-                <svg className='h-6 w-6' xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='currentColor' aria-hidden='true'>
-                  <path strokeLinecap='round' strokeLinejoin='round' strokeWidth='2' d='M6 18L18 6M6 6l12 12' />
-                </svg>
-              </button>
-            </div>
             <div className='sm:flex sm:items-start'>
               <div
-                className='mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-blue-100 sm:mx-0 sm:h-10 sm:w-10'
+                className='mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-d-soft-soft-purple sm:mx-0 sm:h-10 sm:w-10'
               >
                 <svg
-                  className='h-6 w-6 text-blue-600' xmlns='http://www.w3.org/2000/svg' fill='none'
+                  className='h-6 w-6 text-d-dark-dark-purple' xmlns='http://www.w3.org/2000/svg' fill='none'
                   viewBox='0 0 24 24' stroke='currentColor' aria-hidden='true'
                 >
                   <path
@@ -50,7 +42,7 @@ function ConfirmationModal ({ handleOperationConfirmation, title, message, confi
               </div>
             </div>
             <div className='mt-5 sm:mt-4 sm:flex sm:flex-row-reverse'>
-              <button type='button' className='w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:ml-3 sm:w-auto sm:text-sm' onClick={handleOperationConfirmation}>
+              <button type='button' className='w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-d-dark-dark-purple font-medium hover:bg-d-soft-soft-purple hover:text-d-dark-dark-purple text-white sm:ml-3 sm:w-auto sm:text-sm' onClick={handleOperationConfirmation}>
                 {confirmButtonText}
               </button>
               <button type='button' data-behavior='cancel' class='mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:mt-0 sm:w-auto sm:text-sm' onClick={handleConfirmationModal}>
