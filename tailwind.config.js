@@ -21,7 +21,7 @@ module.exports = {
       colors: {
         // Tus colores personalizados
         'd-title-purple': '#6b648d',
-        'd-dark-dark-purple': '#3D2585',
+        'd-dark-dark-purple': '#2F2744',
         'd-soft-soft-purple': '#d5d3fb',
         'd-dark-purple': '#504695',
         'd-purple': '#7e4bff',
@@ -33,6 +33,7 @@ module.exports = {
         'd-gray': '#e5e5e3',
         'd-white': '#ffffff',
         'd-soft-white': '#FCFCFC',
+        'd-neon-purple': '#7A36E6',
         tremor: {
           brand: {
             faint: '#eff6ff', // blue-50
