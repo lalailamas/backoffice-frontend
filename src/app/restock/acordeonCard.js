@@ -156,7 +156,7 @@ const AccordeonCard = ({
                         </button>
                         <input
                           readOnly
-                          className='outline-none focus:outline-none text-center w-full d-soft-white font-semibold text-md md:text-basecursor-default flex items-center text-black' name='custom-input-number' value={quantity}
+                          className='outline-none focus:outline-none text-center w-full font-semibold text-md md:text-basecursor-default flex items-center text-black' name='custom-input-number' value={quantity}
                       // onChange={handleInputChange}
                           max={maxQuantity}
                         />
@@ -196,7 +196,7 @@ const AccordeonCard = ({
                         </button>
                         <input
                           readOnly
-                          className='outline-none focus:outline-none text-center w-full bg-d-soft-white font-semibold text-md flex items-center text-black' name='custom-input-number' value={quantityPurchased}
+                          className='outline-none focus:outline-none text-center w-full font-semibold text-md flex items-center text-black' name='custom-input-number' value={quantityPurchased}
                       // onChange={handleInputChange}
                           max={maxQuantity}
                         />

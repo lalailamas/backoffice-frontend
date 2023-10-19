@@ -155,26 +155,31 @@ function StepTwo () {
               })}
 
             </div>
-            <button
-              type='button'
-              onClick={() => {
-                handleConfirmationModal()
-              }}
-              className='inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-d-dark-dark-purple rounded-lg hover:bg-d-soft-soft-purple hover:text-d-dark-dark-purple focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800'
-            >
-              Confirmar Stock
-              <svg className='w-3.5 h-3.5 ml-2' aria-hidden='true' xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 14 10'>
-                <path stroke='currentColor' strokeLinecap='round' strokeLinejoin='round' strokeWidth='2' d='M1 5h12m0 0L9 1m4 4L9 9' />
-              </svg>
-            </button>
+            <div className='pb-10'>
+              <button
+                type='button'
+                onClick={() => {
+                  handleConfirmationModal()
+                }}
+                className='inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-d-dark-dark-purple rounded-lg hover:bg-d-soft-soft-purple hover:text-d-dark-dark-purple focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800'
+              >
+                Confirmar Stock
+                <svg className='w-3.5 h-3.5 ml-2' aria-hidden='true' xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 14 10'>
+                  <path stroke='currentColor' strokeLinecap='round' strokeLinejoin='round' strokeWidth='2' d='M1 5h12m0 0L9 1m4 4L9 9' />
+                </svg>
+              </button>
+            </div>
           </div>
+
           )}
       {modalVisible && (
         <ConfirmationModal
           handleConfirmationModal={handleConfirmationModal}
           handleOperationConfirmation={setHandleStock}
-          title='¿Estás seguro que quieres confirmar el inventario?'
-          message={`Una vez confirmado el inventario de ${storeName} no podrás realizar cambios`}
+          title='¿Deseas confirmar el inventario?'
+          message={(
+            <p>Una vez confirmado el inventario de <strong>{storeName}</strong> no podrás realizar cambios</p>
+          )}
           confirmButtonText='Confirmar'
           cancelButtonText='Cancelar'
         />
