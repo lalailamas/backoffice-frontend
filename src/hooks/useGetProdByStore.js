@@ -1,7 +1,7 @@
-import { getAllReiteData } from '@/api/product/reite'
+import { getReiteProdByStore } from '@/api/product/reite'
 import { useEffect, useState } from 'react'
 
-export default function useGetReiteProd () {
+export default function useGetProdByStore (id) {
   const [state, setState] = useState({
     products: [],
     loading: true,
@@ -9,7 +9,7 @@ export default function useGetReiteProd () {
   })
   async function fetchAllReiteData () {
     try {
-      const productsResponse = await getAllReiteData()
+      const productsResponse = await getReiteProdByStore(id)
       if (productsResponse.data) {
         setState({
           products: productsResponse.data,

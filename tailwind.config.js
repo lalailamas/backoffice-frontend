@@ -111,13 +111,15 @@ module.exports = {
       borderRadius: {
         'tremor-small': '0.375rem',
         'tremor-default': '0.5rem',
-        'tremor-full': '9999px'
+        'tremor-full': '9999px',
+        42: '42px'
       },
       fontSize: {
         'tremor-label': ['0.75rem'],
         'tremor-default': ['0.875rem', { lineHeight: '1.25rem' }],
         'tremor-title': ['1.125rem', { lineHeight: '1.75rem' }],
-        'tremor-metric': ['1.875rem', { lineHeight: '2.25rem' }]
+        'tremor-metric': ['1.875rem', { lineHeight: '2.25rem' }],
+        'd-title': ['2rem', { lineHeight: '2.18rem' }]
       }
     }
   },

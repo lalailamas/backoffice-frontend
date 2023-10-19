@@ -1,25 +1,22 @@
 'use client'
 import React, { useEffect, useState } from 'react'
-import { getStores } from '../../api/store'
+import { OpenStore, getStores } from '../../api/store'
 import InsideLayout from '@/components/admin/layouts/inside'
 // import StepTwo from './stepTwo'
 import { useRouter } from 'next/navigation'
 import StepLayout from './stepLayout'
+import ConfirmationModal from './confirmationModal'
 
 function Restock () {
   const [stores, setStores] = useState([])
   const [selectedStore, setSelectedStore] = useState(null)
-  const [currentStep, setCurrentStep] = useState(1)
+  const [modalVisible, setModalVisible] = useState(false)
+
   const router = useRouter()
 
   const handleStoreChange = (id) => {
-    const store = stores.find((store) => store.id === parseInt(id, 10))
-    console.log('selected store del handleStoreChange', store)
+    const store = stores.find((store) => store.storeId === id)
     setSelectedStore(store)
-  }
-
-  const goToStep = (step) => {
-    setCurrentStep(step)
   }
 
   useEffect(() => {
@@ -27,6 +24,7 @@ function Restock () {
       try {
         const response = await getStores()
         setStores(response.data)
+        // console.log('response', response.data)
       } catch (error) {
         console.error('Error fetching stores:', error)
       }
@@ -35,20 +33,30 @@ function Restock () {
     fetchStores()
   }, [])
 
+  const handleOpenStore = async () => {
+    const openStore = await OpenStore(selectedStore.storeId)
+    router.push(
+      'restock/stepTwo' + `?external_id=${selectedStore.storeId}&layout_id=${selectedStore.layoutId}&store_name=${selectedStore.name}&transactionId=${openStore.transactionId}`
+    )
+  }
+  const handleConfirmationModal = () => {
+    setModalVisible(!modalVisible)
+  }
+
   return (
     <div>
       <InsideLayout />
       <div className='text-center pt-8'>
         <StepLayout />
 
-        <div className={currentStep === 1 ? 'flex-col m-4 p-4' : 'hidden'}>
+        <div className='flex-col m-4 p-4'>
           <select
             onChange={(e) => handleStoreChange(e.target.value)}
             className='select select-sm select-bordered rounded-full w-full md:max-w-xs'
           >
             <option value='0'>Select a store</option>
             {stores.map((store) => (
-              <option key={store.id} value={store.id}>
+              <option key={store.storeId} value={store.storeId}>
                 {store.name}
               </option>
             ))}
@@ -63,9 +71,7 @@ function Restock () {
               <button
                 type='button'
                 onClick={() => {
-                  router.push(
-                    'restock/stepTwo' + `?external_id=${selectedStore.external_id}&layout_id=${selectedStore.layout_id}&store_name=${selectedStore.name}`
-                  )
+                  handleConfirmationModal()
                 }}
                 className='inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-d-dark-dark-purple rounded-lg hover:bg-d-soft-soft-purple hover:text-d-dark-dark-purple focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800'
               >
@@ -75,29 +81,20 @@ function Restock () {
                 </svg>
               </button>
             </div>
+            {modalVisible && (
+              <ConfirmationModal
+                handleConfirmationModal={handleConfirmationModal}
+                handleOperationConfirmation={handleOpenStore}
+                title='¿Estás seguro que quieres abrir la máquina?'
+                message='Una vez abierta la máquina, no podrás volver atrás'
+                confirmButtonText='Abrir máquina'
+                cancelButtonText='Cancelar'
+              />
+            )}
 
           </div>
         </div>
 
-        <div className={currentStep === 2 ? 'flex-col text-center' : 'hidden'}>
-          <div className='flex space-x-20 justify-around'>
-
-            <button
-              type='button'
-              onClick={() => goToStep(1)}
-              className='btn btn-sm join-item rounded-full bg-d-dark-dark-purple border-none text-d-white hover:bg-d-soft-soft-purple hover:text-d-dark-dark-purple'
-            >
-              Atrás
-            </button>
-            <button
-              type='button'
-              onClick={() => goToStep(3)}
-              className='btn btn-sm join-item rounded-full bg-d-dark-dark-purple border-none text-d-white hover:bg-d-soft-soft-purple hover:text-d-dark-dark-purple'
-            >
-              Siguiente
-            </button>
-          </div>
-        </div>
       </div>
     </div>
   )

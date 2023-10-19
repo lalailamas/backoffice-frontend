@@ -3,11 +3,16 @@ import InsideLayout from '@/components/admin/layouts/inside'
 import StepLayout from '../stepLayout'
 import { useSearchParams, useRouter } from 'next/navigation'
 import useGetLayout from '@/hooks/useGetLayout'
-import useGetReiteProd from '@/hooks/useGetReiteProd'
-// import DspLoader from '@/components/admin/common/loader'
+// import useGetReiteProd from '@/hooks/useGetReiteProd'
 import AccordeonCard from '../acordeonCard'
 import DspLoader from '@/components/admin/common/loader'
 import useGetInventory from '@/hooks/useGetInventory'
+import useGetProdByStore from '@/hooks/useGetProdByStore'
+import { OpenStore } from '@/api/store'
+import ConfirmationModal from '../confirmationModal'
+import { useState } from 'react'
+// import useGetStores2 from '@/hooks/useStores2'
+// import useGetStoreData from '@/hooks/useGetStoreData'
 
 export default function stepFour () {
   const searchParams = useSearchParams()
@@ -15,13 +20,30 @@ export default function stepFour () {
   const externalId = searchParams.get('external_id')
   const layoutId = searchParams.get('layout_id')
   const storeName = searchParams.get('store_name')
-  const { inventory } = useGetInventory(externalId)
-  const { layout } = useGetLayout(layoutId)
-  const { products, loading } = useGetReiteProd()
+  const { inventory, inventoryLoad } = useGetInventory(externalId)
+  // const { store, loading: storeLoad } = useGetStoreData(externalId)
+  const { layout, layoutLoad } = useGetLayout(layoutId)
+  // const { products, loading } = useGetReiteProd()
+  const { products, loading } = useGetProdByStore(externalId)
+  const [modalVisible, setModalVisible] = useState(false)
+  const handleBackToStepTwo = async () => {
+    const openStore = await OpenStore(externalId)
+    router.push(
+      '/restock/stepTwo' + `?external_id=${externalId}&layout_id=${layoutId}&store_name=${storeName}&transactionId=${openStore.transactionId}`
+    )
+  }
+  const handleConfirmationModal = () => {
+    setModalVisible(!modalVisible)
+  }
+  const handleOperationConfirmation = async () => {
+    router.push(
+      '/restock'
+    )
+  }
 
   return (
     <div>
-      {loading
+      {(inventoryLoad || loading || layoutLoad)
         ? <DspLoader />
         : (
           <div>
@@ -33,78 +55,119 @@ export default function stepFour () {
               {externalId && (
                 <div className='text-center mb-4 md:mb-8'>
                   <h1 className='text-d-dark-dark-purple text-2x2 font-bold'>Vuelve a confirmar el inventario de {storeName} y asegúrate de que los precios correspondan al producto.</h1>
+                  <p className='text-red-500 text-2x2 font-bold'>Aviso: los productos que aparecen en más de una columna han sido concentrados en una sola para facilitar el control de las cantidades</p>
                 </div>
               )}
               {
                 layout && layout.trays && layout.trays.map((tray, index) => {
+                  const productAggregationMap = new Map()
                   return (
                     <div key={index} className='text-center border-b-2 border-gray-300 pb-5 mb-5 md:mb-8'>
 
-                      <h2 className='text-d-soft-purple text-2x2 font-bold pb-5 mb-5 md:mb-8'>Bandeja N°{index + 1}</h2>
+                      <div className='bg-d-dark-dark-purple'>
+                        <h2 className='text-d-soft-purple text-d-title font-bold py-5 mb-5 md:mb-8'>Bandeja {index + 1}</h2>
+                      </div>
                       <div className='flex flex-col md:flex-row gap-4 items-center md:items-start h-full w-full'>
 
                         {
                                 tray
                                   ? tray.columns.map((column, index) => {
                                     const product = products?.filter((product) => product.productId === column.productId)
-                                    const quantityProd = inventory.products.find((prod) => prod.productId === column.productId)
+                                    const quantityProd = inventory.products?.find((prod) => prod.productId === column.productId)
                                     const maxQuantity = column.maxQuantity
-                                    console.log('aca tengo el product', product)
-                                    // console.log('aca tengo el quantityProd', quantityProd ? quantityProd.quantity : 'No encontrado')
-                                    return (
-                                      <AccordeonCard
-                                        step={4}
-                                        key={index}
-                                        initialQuantity={quantityProd ? quantityProd.quantity : 0}
-                                        price={product[0].prices[externalId] ? product[0].prices[externalId] : null}
-                                        maxQuantity={maxQuantity}
-                                        header={
-                                          <div className=' w-full gap-3 items-center justify-center'>
-                                            <figure className='flex justify-center'>
-                                              <img
-                                                className='w-auto max-w-[50px] h-[50px]'
-                                                src={product[0].metadata.imageUrl}
-                                                width={120}
-                                                height={120}
-                                                alt='Product'
-                                              />
-                                            </figure>
-                                            <h1 className='flex justify-center items-center text-d-title-purple font-bold m-1'>{product[0].productName}</h1>
-                                            {/* <p className='ml-auto font-bold text-d-dark-dark-purple'> {quantityProd ? `${quantityProd.quantity}/${maxQuantity}` : '??'}</p> */}
-                                          </div>
+                                    if (product) {
+                                      if (!productAggregationMap.has(product[0].productId)) {
+                                        productAggregationMap.set(product[0].productId, {
+                                          quantity: quantityProd ? quantityProd.quantity : 0,
+                                          maxQuantity
+                                        })
+                                      } else {
+                                        const aggregatedValues = productAggregationMap.get(product[0].productId)
+                                        aggregatedValues.quantity = quantityProd ? quantityProd.quantity : 0
+                                        aggregatedValues.maxQuantity += maxQuantity
+                                      }
                                     }
-                                      />
-                                    // <div key={index}>
-                                    //   <pre>{JSON.stringify(inventory, null, 2)}</pre>
-                                    // </div>
-
-                                    )
+                                    return null
                                   })
                                   : null
                             }
+                        {Array.from(productAggregationMap).map(([productId, aggregatedValues], index) => {
+                          const product = products?.find((p) => p.productId === productId)
+
+                          return (
+                            <AccordeonCard
+                              step={4}
+                              key={index}
+                              initialQuantity={aggregatedValues.quantity}
+                              price={
+                                    product?.prices[externalId]
+                                      ? (product.prices[externalId].toFixed(0)).replace(/\B(?=(\d{3})+(?!\d))/g, '.')
+                                      : null
+                                    }
+                              maxQuantity={aggregatedValues.maxQuantity}
+                              header={
+                                <div className=' w-full gap-3 items-center justify-center'>
+                                  <figure className='flex justify-center'>
+                                    <img
+                                      className='w-auto max-w-[50px] h-[50px]'
+                                      src={product?.metadata.imageUrl}
+                                      width={120}
+                                      height={120}
+                                      alt='Product'
+                                    />
+                                  </figure>
+
+                                  <h1 className='flex justify-center items-center text-center text-d-title-purple font-bold m-1 w-full line-clamp-2'>{product?.productName}</h1>
+
+                                  {/* <h1 className='flex justify-center items-center text-d-title-purple font-bold m-1'>{product[0].productName}</h1> */}
+                                  {/* <p className='ml-auto font-bold text-d-dark-dark-purple'> {quantityProd ? `${quantityProd.quantity}/${maxQuantity}` : '??'}</p> */}
+                                </div>
+                                    }
+                            />
+                          )
+                        })}
                       </div>
                     </div>
 
                   )
                 })
-            }
+              }
+
             </div>
           </div>
           )}
       <button
         type='button'
         onClick={() => {
-          router.push(
-            '/restock'
-          )
+          handleBackToStepTwo()
         }}
         className='inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-d-dark-dark-purple rounded-lg hover:bg-d-soft-soft-purple hover:text-d-dark-dark-purple focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800'
       >
-        Confirmar Operación
-        <svg className='w-3.5 h-3.5 ml-2' aria-hidden='true' xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 14 10'>
-          <path stroke='currentColor' strokeLinecap='round' strokeLinejoin='round' strokeWidth='2' d='M1 5h12m0 0L9 1m4 4L9 9' />
-        </svg>
+        Volver Atrás
+
       </button>
+      <div className='flex justify-center pb-10'>
+        <button
+          type='button'
+          onClick={() => {
+            handleConfirmationModal()
+          }}
+          className='inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-d-dark-dark-purple rounded-lg hover:bg-d-soft-soft-purple hover:text-d-dark-dark-purple focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800'
+        >
+          Confirmar Operación
+        </button>
+      </div>
+      {modalVisible && (
+        <ConfirmationModal
+          handleConfirmationModal={handleConfirmationModal}
+          handleOperationConfirmation={handleOperationConfirmation}
+          title='La reposición ha sido confirmada'
+          message='¡Muchas gracias! ya puedes cerrar la página.'
+          confirmButtonText='Cerrar'
+          cancelButtonText='Cancelar'
+        />
+      )}
+
     </div>
   )
 }
