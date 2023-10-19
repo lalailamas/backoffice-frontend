@@ -1,0 +1,207 @@
+{
+    "purchased": [
+        {
+            "productId": "DEV_44xLxt61vQmEpWJR2692",
+            "quantity": 0
+        },
+        {
+            "productId": "DEV_CNV_001",
+            "quantity": 0
+        },
+        {
+            "productId": "DEV_CNV_002",
+            "quantity": 0
+        },
+        {
+            "productId": "DEV_CNV_003",
+            "quantity": 0
+        },
+        {
+            "productId": "DEV_CNV_005",
+            "quantity": 0
+        },
+        {
+            "productId": "DEV_CNV_008",
+            "quantity": 0
+        },
+        {
+            "productId": "DEV_CNV_014",
+            "quantity": 0
+        },
+        {
+            "productId": "DEV_CNV_016",
+            "quantity": 0
+        },
+        {
+            "productId": "DEV_CNV_024",
+            "quantity": 0
+        },
+        {
+            "productId": "DEV_CNV_026",
+            "quantity": 0
+        },
+        {
+            "productId": "DEV_CNV_035",
+            "quantity": 0
+        },
+        {
+            "productId": "DEV_CNV_036",
+            "quantity": 0
+        },
+        {
+            "productId": "DEV_CNV_047",
+            "quantity": 0
+        },
+        {
+            "productId": "DEV_CNV_048",
+            "quantity": 0
+        },
+        {
+            "productId": "DEV_CNV_049",
+            "quantity": 0
+        },
+        {
+            "productId": "DEV_CNV_057",
+            "quantity": 0
+        },
+        {
+            "productId": "DEV_CNV_059",
+            "quantity": 0
+        },
+        {
+            "productId": "DEV_CQuVvCtEUruFNaeaZlFM",
+            "quantity": 0
+        },
+        {
+            "productId": "DEV_DSe5XkFNEYUNvpVlB00h",
+            "quantity": 0
+        },
+        {
+            "productId": "DEV_I2VfA73cDLb8du61Mp5J",
+            "quantity": 0
+        },
+        {
+            "productId": "DEV_ZZsLzBWKrrKsnyhWlwIg",
+            "quantity": 0
+        },
+        {
+            "productId": "DEV_dZDTZdbLmfPyoY3YkaW9",
+            "quantity": 0
+        },
+        {
+            "productId": "DEV_dptdUIpWKBvkn5bKoSTK",
+            "quantity": 0
+        },
+        {
+            "productId": "DEV_guSA793uJKES8zID61m9",
+            "quantity": 0
+        },
+        {
+            "productId": "DEV_s7AiFcoNhV30z7mxzJOK",
+            "quantity": 0
+        }
+    ],
+    "restocked": [
+        {
+            "productId": "DEV_44xLxt61vQmEpWJR2692",
+            "quantity": 0
+        },
+        {
+            "productId": "DEV_CNV_001",
+            "quantity": 0
+        },
+        {
+            "productId": "DEV_CNV_002",
+            "quantity": 0
+        },
+        {
+            "productId": "DEV_CNV_003",
+            "quantity": 0
+        },
+        {
+            "productId": "DEV_CNV_005",
+            "quantity": 0
+        },
+        {
+            "productId": "DEV_CNV_008",
+            "quantity": 0
+        },
+        {
+            "productId": "DEV_CNV_014",
+            "quantity": 0
+        },
+        {
+            "productId": "DEV_CNV_016",
+            "quantity": 0
+        },
+        {
+            "productId": "DEV_CNV_024",
+            "quantity": 0
+        },
+        {
+            "productId": "DEV_CNV_026",
+            "quantity": 0
+        },
+        {
+            "productId": "DEV_CNV_035",
+            "quantity": 0
+        },
+        {
+            "productId": "DEV_CNV_036",
+            "quantity": 0
+        },
+        {
+            "productId": "DEV_CNV_047",
+            "quantity": 0
+        },
+        {
+            "productId": "DEV_CNV_048",
+            "quantity": 0
+        },
+        {
+            "productId": "DEV_CNV_049",
+            "quantity": 0
+        },
+        {
+            "productId": "DEV_CNV_057",
+            "quantity": 0
+        },
+        {
+            "productId": "DEV_CNV_059",
+            "quantity": 0
+        },
+        {
+            "productId": "DEV_CQuVvCtEUruFNaeaZlFM",
+            "quantity": 0
+        },
+        {
+            "productId": "DEV_DSe5XkFNEYUNvpVlB00h",
+            "quantity": 0
+        },
+        {
+            "productId": "DEV_I2VfA73cDLb8du61Mp5J",
+            "quantity": 0
+        },
+        {
+            "productId": "DEV_ZZsLzBWKrrKsnyhWlwIg",
+            "quantity": 0
+        },
+        {
+            "productId": "DEV_dZDTZdbLmfPyoY3YkaW9",
+            "quantity": 0
+        },
+        {
+            "productId": "DEV_dptdUIpWKBvkn5bKoSTK",
+            "quantity": 0
+        },
+        {
+            "productId": "DEV_guSA793uJKES8zID61m9",
+            "quantity": 0
+        },
+        {
+            "productId": "DEV_s7AiFcoNhV30z7mxzJOK",
+            "quantity": 0
+        }
+    ],
+    "alwaysUpdateInventory": true
+}

@@ -1,17 +1,17 @@
 import { useState, useEffect } from 'react'
-import { listWarehouses } from '@/api/warehouse'
+import { DspApi } from '@/utils/fetchData'
 
-const useGetWarehouses = (params, cachekey) => {
-  const [warehouses, setWarehouses] = useState(null)
+const useGetStores = (params, cachekey) => {
+  const [stores, setStores] = useState(null)
   const [meta, setMeta] = useState(null)
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(true)
 
   const fetchData = () => {
     setLoading(true)
-    listWarehouses(params.limit, params.page).then(
+    DspApi.listStores(params.limit, params.page, params.search).then(
       (response) => {
-        setWarehouses(response.data.data)
+        setStores(response.data.data)
         setMeta(response.data.meta)
       }
     ).catch((err) => {
@@ -26,7 +26,7 @@ const useGetWarehouses = (params, cachekey) => {
   }, [params, cachekey])
 
   // custom hook returns value
-  return { warehouses, meta, error, loading }
+  return { stores, meta, error, loading }
 }
 
-export default useGetWarehouses
+export default useGetStores

@@ -25,7 +25,7 @@ yarn-debug.log*
 yarn-error.log*
 
 # local env files
-.env*.local
+#.env*.local
 
 # vercel
 .vercel
@@ -36,3 +36,6 @@ next-env.d.ts
 
 # env PROD
 .env.production
+
+# package-lock.json
+package-lock.json
