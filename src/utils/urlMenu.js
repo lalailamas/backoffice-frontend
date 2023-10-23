@@ -33,6 +33,13 @@ export const menuItems = [
     ]
   },
   {
+    label: 'Clientes',
+    icon: 'rotate-180',
+    subMenuLinks: [
+      { label: 'Listado', href: '/client/table-client' }
+    ]
+  },
+  {
     label: 'Usuarios',
     icon: 'rotate-180',
     subMenuLinks: [
