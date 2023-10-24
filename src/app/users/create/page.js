@@ -22,7 +22,7 @@ function CreateUserForm () {
   const onSubmit = handleSubmit((data) => {
     createUser(data)
       .then((response) => {
-        setSuccessMessage(response, 'Usuario creado exitosamente')
+        setSuccessMessage('Usuario creado exitosamente')
         setTimeout(() => {
           router.push('/users')
         }, 2000)
