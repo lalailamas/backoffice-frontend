@@ -41,10 +41,11 @@ function TableClient () {
     <>
       <InsideLayout />
       <div className=''>
-        <div className='join w-full md:max-w-xs mt-5 ml-5 '>
+        <h1 className=' mt-10 text-d-dark-dark-purple text-2xl font-bold text-center max-[431px]:hidden'>Clientes</h1>
+        <div className='join w-full md:max-w-xs mt-5 ml-5 max-[431px]:hidden'>
 
           <SearchField
-            type='text' placeholder='Búsqueda' name='search' className='input input-sm input-bordered bg-d-white join-item rounded-full text-d-dark-dark-purple'
+            type='text' placeholder='Búsqueda' name='search' className='input input-sm input-bordered bg-d-white join-item rounded-full text-d-dark-dark-purple '
             onChange={(v) => setSearchKey(v)}
           />
 
@@ -64,6 +65,8 @@ function TableClient () {
                   <th>Correo electrónico</th>
                   <th>Teléfono</th>
                   <th>Fecha Creación</th>
+                  <th />
+
                 </tr>
               </thead>
               <tbody>
@@ -76,6 +79,13 @@ function TableClient () {
                       <td>{item.email}</td>
                       <td>{item.phone?.areaCode} {item.phone?.number || 'Sin información'}</td>
                       <td>{date.toLocaleString()} </td>
+                      <div className='flex justify-center'>
+                        <button className='mt-2'>
+                          <Link href={`/client/table-client/details?clientId=${item.id}`}>
+                            <span className='hover:underline'>Ver más</span>
+                          </Link>
+                        </button>
+                      </div>
                     </tr>
                   )
                 })}
@@ -86,10 +96,25 @@ function TableClient () {
           )}
 
         </div>
-        <div className='md:hidden'>
+        {/* MOBILE */}
+        <h1 className='mb-10 text-d-dark-dark-purple text-2xl font-bold text-center md:hidden'>Clientes</h1>
+        <div className='md:hidden join w-full m-2 mb-5'>
+          <SearchField
+            type='text' placeholder='Búsqueda' name='search' className='input input-sm input-bordered bg-d-white join-item rounded-full text-d-dark-dark-purple '
+            onChange={(v) => setSearchKey(v)}
+          />
+
+          <button type='button ' onClick={() => setSearchKey('')} className='btn btn-sm join-item rounded-r-full  bg-d-dark-dark-purple border-none text-d-white  hover:bg-d-soft-soft-purple hover:text-d-dark-dark-purple'>
+            <svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' strokeWidth={1.5} stroke='currentColor' className='w-6 h-6'>
+              <path strokeLinecap='round' strokeLinejoin='round' d='M6 18L18 6M6 6l12 12' />
+            </svg>
+          </button>
+        </div>
+
+        <div className='md:hidden m-2'>
           {clients.map((item) => (
 
-            <div key={item} className='pb-2'>
+            <div key={item.id} className='pb-2'>
 
               <div className='flex justify-between w-full md:hidden bg-d-soft-purple p-2 rounded-md'>
                 <div className=''>
@@ -120,6 +145,7 @@ function TableClient () {
                   </svg>
 
                 </button>
+
               </div>
               {/* Detalles colapsables */}
               {expandedRows.includes(item) && (
@@ -139,7 +165,7 @@ function TableClient () {
                   </div>
                   <div className='flex justify-center'>
                     <button className='btn mt-5'>
-                      <Link href={`/client/table-client/${item.id}`}>
+                      <Link href={`/client/table-client/details?clientId=${item.id}`}>
                         <span className='hover:underline'>Ver más</span>
                       </Link>
                     </button>
