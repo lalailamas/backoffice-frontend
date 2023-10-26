@@ -25,8 +25,7 @@ function StepTwo () {
   // const [tempInventory, setTempInventory] = useState({})
   const [occInventory, setOccInventory] = useState({})
   const [modalVisible, setModalVisible] = useState(false)
-  const { flattenedLayout, flattenLoading } = useFlattenLayout(layoutId)
-  console.log('flattenedLayout', flattenedLayout)
+  const { flattenedLayout } = useFlattenLayout(layoutId)
 
   const router = useRouter()
 
@@ -117,11 +116,7 @@ function StepTwo () {
 
   return (
     <div>
-      <div className='flex flex-row'>
 
-        {/* <div><pre>{JSON.stringify(tempInventory, null, 2)}</pre></div> */}
-        <div><pre>{JSON.stringify(occInventory, null, 2)}</pre></div>
-      </div>
       {(loading || inventoryLoad || layoutLoad)
         ? (<DspLoader />)
         : (

@@ -35,12 +35,8 @@ export default function useFlattenLayout (layoutId) {
   })
 
   const fetchLayout = async (layoutId) => {
-    // console.log('fetchLayout id', layoutId)
     try {
-      // Aquí deberías llamar a tu función o API para obtener el diseño
-      // Reemplaza 'getLayout' con tu función/API real
       const layoutResponse = await getLayout(layoutId)
-      //   console.log('fetchLayout layoutResponse', layoutResponse)
 
       if (layoutResponse.data) {
         const flattenedLayout = flattenLayoutData(layoutResponse.data)
