@@ -35,6 +35,7 @@ function Restock () {
 
   const handleOpenStore = async () => {
     const openStore = await OpenStore(selectedStore.storeId)
+    console.log('Step 1: openStore response', openStore)
     router.push(
       'restock/stepTwo' + `?external_id=${selectedStore.storeId}&layout_id=${selectedStore.layoutId}&store_name=${selectedStore.name}&transactionId=${openStore.transactionId}`
     )
