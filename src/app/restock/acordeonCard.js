@@ -87,7 +87,10 @@ const AccordeonCard = ({
         : step === 2
           ? (
             // <div className='w-[250px] h-[210px]'>
-            <section className='w-[250px] h-[210px] flex flex-col items-center align-center gap-6 rounded shadow-lg'>
+            <section className='w-[250px] h-[210px] flex flex-col items-center align-center gap-6 rounded shadow-lg relative'>
+              <span className='flex items-top h-full text-xs absolute top-0 right-0 p-2 text-d-dark-dark-purple '>
+                {maxQuantity}
+              </span>
 
               {/* <div className='p-2 rounded shadow-lg gap-2 h-full overflow-hidden flex flex-col justify-end items-center'> */}
 

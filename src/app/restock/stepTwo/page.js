@@ -22,7 +22,6 @@ function StepTwo () {
   const { inventory, inventoryLoad } = useGetInventory(externalId)
   const { layout, layoutLoad } = useGetLayout(layoutId)
   const { products, loading } = useGetProdByStore(externalId)
-  // const [tempInventory, setTempInventory] = useState({})
   const [occInventory, setOccInventory] = useState({})
   const [modalVisible, setModalVisible] = useState(false)
   const { flattenedLayout } = useFlattenLayout(layoutId)
@@ -30,7 +29,6 @@ function StepTwo () {
   const router = useRouter()
 
   const quantityChangeHandler = (index, productId, differential, occurrence) => {
-    console.log(occurrence, 'occurrence')
     if (occurrence !== false) {
       setOccInventory({
         ...occInventory,
