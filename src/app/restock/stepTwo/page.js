@@ -1,5 +1,5 @@
 'use client'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import DspLoader from '@/components/admin/common/loader'
 import AccordeonCard from '../acordeonCard'
 import { useSearchParams, useRouter } from 'next/navigation'
@@ -52,24 +52,31 @@ function StepTwo () {
   }
   const mergeOccurrence = async (data) => {
     const mergedOccurrenceQuantity = {}
-
-    Object.entries(data).forEach(([productId, quantity]) => {
-      mergedOccurrenceQuantity[productId] = quantity
-
-      if (flattenedLayout.includes(productId)) {
-        const inventoryProd = inventory.products.find(prod => prod.productId === productId)
-        if (inventoryProd) {
-          mergedOccurrenceQuantity[productId] = quantity - inventoryProd.quantity
-        }
-      }
+    if (Object.keys(data).length === 0) {
       flattenedLayout.forEach(productId => {
         const inventoryProd = inventory.products.find(prod => prod.productId === productId)
-        if (!(productId in data)) {
-          mergedOccurrenceQuantity[productId] = (parseInt(inventoryProd.quantity) * -1)
+        if (inventoryProd) {
+          mergedOccurrenceQuantity[productId] = parseInt(inventoryProd.quantity) * -1
         }
       })
-    })
+    } else {
+      Object.entries(data).forEach(([productId, quantity]) => {
+        mergedOccurrenceQuantity[productId] = quantity
 
+        if (flattenedLayout.includes(productId)) {
+          const inventoryProd = inventory.products.find(prod => prod.productId === productId)
+          if (inventoryProd) {
+            mergedOccurrenceQuantity[productId] = quantity - inventoryProd.quantity
+          }
+        }
+        flattenedLayout.forEach(productId => {
+          const inventoryProd = inventory.products.find(prod => prod.productId === productId)
+          if (!(productId in data)) {
+            mergedOccurrenceQuantity[productId] = (parseInt(inventoryProd.quantity) * -1)
+          }
+        })
+      })
+    }
     return mergedOccurrenceQuantity
   }
   const setHandleStock = async () => {
@@ -94,6 +101,7 @@ function StepTwo () {
         })
       }
     })
+
     try {
       console.log('Step 2: stockData to Confirm Inventory', stockData)
       const response = await putRestockInventory(externalId, stockData)
