@@ -180,7 +180,9 @@ function StepTwo () {
                                 </div>
                                 <div className='flex justify-center'>
                                   <h1 className='flex justify-center items-center text-center text-d-title-purple font-bold m-1 w-full line-clamp-2'>{product[0]?.productName || 'product missing'}</h1>
+
                                 </div>
+                                <h1 className='flex justify-center items-center text-black-500 font-bold m-1 text-xs'>(Máximo: {maxQuantity} unidades)</h1>
                               </div>}
 
                                   </div>}//eslint-disable-line
