@@ -35,6 +35,7 @@ function Restock () {
 
   const handleOpenStore = async () => {
     const openStore = await OpenStore(selectedStore.storeId)
+    console.log('Step 1: openStore response', openStore)
     router.push(
       'restock/stepTwo' + `?external_id=${selectedStore.storeId}&layout_id=${selectedStore.layoutId}&store_name=${selectedStore.name}&transactionId=${openStore.transactionId}`
     )
@@ -87,9 +88,9 @@ function Restock () {
                 handleOperationConfirmation={handleOpenStore}
                 title='¿Estás seguro que quieres abrir esta máquina?'
                 message={(
-                  <p>
+                  <span>
                     Verifica que <strong>{selectedStore.name}</strong> sea la correcta antes de proceder
-                  </p>
+                  </span>
                 )}
                 confirmButtonText='Abrir máquina'
                 cancelButtonText='Cancelar'

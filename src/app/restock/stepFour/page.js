@@ -28,9 +28,9 @@ export default function stepFour () {
   const [modalVisible, setModalVisible] = useState(false)
   const [backModalVisible, setBackModalVisible] = useState(false)
 
-  const handleBackToStepTwo = async () => {
-    setBackModalVisible(true)
-  }
+  // const handleBackToStepTwo = async () => {
+  //   setBackModalVisible(true)
+  // }
 
   const confirmBackToStepTwo = async () => {
     const openStore = await OpenStore(externalId)
@@ -145,7 +145,7 @@ export default function stepFour () {
           </div>
           )}
       <div className='flex gap-5 justify-center pb-10'>
-        <p
+        {/* <p
           type='button'
           onClick={() => {
             handleBackToStepTwo()
@@ -154,7 +154,7 @@ export default function stepFour () {
         >
           Volver Atrás
 
-        </p>
+        </p> */}
 
         <button
           type='button'

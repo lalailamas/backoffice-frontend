@@ -2,7 +2,7 @@ import Datepicker from 'react-tailwindcss-datepicker'
 
 function DatePicker ({ startDate, endDate, handleDateChange }) {
   return (
-    <div id='datepicker'>
+    <div className='w-full border'>
       <Datepicker
         primaryColor='purple'
         placeholder='Escoge rango de fechas'
