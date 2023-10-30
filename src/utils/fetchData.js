@@ -38,11 +38,15 @@ export const deleteData = (id, url, contentType) => {
   return axios.delete(urlApi + url, { data: { id }, headers: { 'content-type': contentType } })
 }
 
-export const getReiteData = (id, url, contentType) => {
+export const getReiteData = (id, url, contentType, active) => {
   if (id !== '') {
     return axios.get(urlApiReite + url + `?storeId=${id}`, { headers: { 'content-type': contentType } })
   } else {
-    return axios.get(urlApiReite + url, { headers: { 'content-type': contentType } })
+    if (active !== '') {
+      return axios.get(urlApiReite + url + '?active=true', { headers: { 'content-type': contentType } })
+    } else {
+      return axios.get(urlApiReite + url, { headers: { 'content-type': contentType } })
+    }
   }
 }
 export const getReiteDataById = (id, url, contentType) => {
