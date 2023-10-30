@@ -1,59 +1,87 @@
 'use client'
 import InsideLayout from '@/components/admin/layouts/inside'
-import { SearchField } from '@/components/admin/common/search'
+// import { SearchField } from '@/components/admin/common/search'
 import { getListClients } from '@/api/client'
 import { useEffect, useState } from 'react'
+import dayjs from 'dayjs'
+import DatePicker from '@/components/admin/common/datepicker/double'
 import Link from 'next/link'
+import DspLoader from '@/components/admin/common/loader'
 
 function TableClient () {
-  const [searchKey, setSearchKey] = useState('')
+  // const [searchParams, setSearchParams] = useState('')
+  // const [startDate, setStartDate] = useState(null)
+  // const [endDate, setEndDate] = useState(null)
   const [clients, setClients] = useState([])
-  const [params, setParams] = useState({ search: '' })
   const [expandedRows, setExpandedRows] = useState([])
-
   let date
 
+  const [dateRange, setDateRange] = useState({
+    startDate: dayjs('2022-01-01'),
+    endDate: dayjs()
+  })
+
+  // // Modifica la función handleSearchChange para manejar búsqueda por texto
+  // const handleSearchChange = (value) => {
+  //   setSearchParams(value)
+  // }
+
+  // // Agrega una función para manejar el cambio en el rango de fechas
+  // const handleDateChange = (newStartDate, newEndDate) => {
+  //   setStartDate(newStartDate)
+  //   setEndDate(newEndDate)
+  // }
+
+  const handleDateChange = (newDateRange) => {
+    setDateRange(newDateRange)
+  }
+
   useEffect(() => {
-    console.log('useEffect(params) - params.search:', params.search)
-    getListClients(params.search)
+    if (dateRange.startDate !== null && dateRange.endDate !== null) {
+      getListClients(dateRange)
+        .then((response) => {
+          setClients(response.data)
+        })
+        .catch((error) => {
+          console.error('Error fetching restock data:', error)
+        })
+    }
+  },
+  [dateRange])
 
-      .then((response) => {
-        console.log('API response:', response)
-        setClients(response.data.data)
-      })
-      .catch((error) => {
-        console.error('Error fetching clients:', error)
-      })
-  }, [params])
-
-  //   useEffect(() => {
-  //     const clone = { ...params, search: searchKey }
-  //     setParams(clone)
-  //   }, [searchKey])
-
-  useEffect(() => {
-    console.log('useEffect(searchKey) - searchKey:', searchKey)
-    const clone = { ...params, search: searchKey }
-    setParams(clone)
-  }, [searchKey])
-
+  if (!getListClients) {
+    return (
+      <div>
+        <DspLoader />
+      </div>
+    )
+  }
   return (
     <>
       <InsideLayout />
       <div className=''>
-        <h1 className=' mt-10 text-d-dark-dark-purple text-2xl font-bold text-center max-[431px]:hidden'>Clientes</h1>
-        <div className='join w-full md:max-w-xs mt-5 ml-5 max-[431px]:hidden'>
+        <h1 className=' mt-10 text-d-dark-dark-purple text-2xl font-bold text-center'>Clientes</h1>
+        <div className='flex'>
+          {/* <div className='join w-full md:max-w-xs ml-5 mt-2 max-[431px]:hidden'> */}
 
-          <SearchField
-            type='text' placeholder='Búsqueda' name='search' className='input input-sm input-bordered bg-d-white join-item rounded-full text-d-dark-dark-purple '
-            onChange={(v) => setSearchKey(v)}
-          />
+          {/* <SearchField
+              type='text' placeholder='Búsqueda' name='search' className='input input-sm input-bordered bg-d-white join-item rounded-full text-d-dark-dark-purple '
+              onChange={(v) => handleSearchChange(v)}
+            />
 
-          <button type='button ' onClick={() => setSearchKey('')} className='btn btn-sm join-item rounded-r-full  bg-d-dark-dark-purple border-none text-d-white  hover:bg-d-soft-soft-purple hover:text-d-dark-dark-purple'>
-            <svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' strokeWidth={1.5} stroke='currentColor' className='w-6 h-6'>
-              <path strokeLinecap='round' strokeLinejoin='round' d='M6 18L18 6M6 6l12 12' />
-            </svg>
-          </button>
+            <button type='button ' onClick={() => handleSearchChange('')} className='btn btn-sm join-item rounded-r-full  bg-d-dark-dark-purple border-none text-d-white  hover:bg-d-soft-soft-purple hover:text-d-dark-dark-purple'>
+              <svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' strokeWidth={1.5} stroke='currentColor' className='w-6 h-6'>
+                <path strokeLinecap='round' strokeLinejoin='round' d='M6 18L18 6M6 6l12 12' />
+              </svg>
+            </button> */}
+          {/* </div> */}
+          <div className='p-4 w-full'>
+            <DatePicker
+              startDate={dateRange.startDate}
+              endDate={dateRange.endDate}
+              handleDateChange={handleDateChange}
+            />
+          </div>
         </div>
         <div className='overflow-x-auto p-4'>
           {clients && (
@@ -79,13 +107,13 @@ function TableClient () {
                       <td>{item.email}</td>
                       <td>{item.phone?.areaCode} {item.phone?.number || 'Sin información'}</td>
                       <td>{date.toLocaleString()} </td>
-                      <div className='flex justify-center'>
+                      <td className='flex justify-center'>
                         <button className='mt-2'>
                           <Link href={`/client/table-client/details?clientId=${item.id}`}>
                             <span className='hover:underline'>Ver más</span>
                           </Link>
                         </button>
-                      </div>
+                      </td>
                     </tr>
                   )
                 })}
@@ -97,22 +125,23 @@ function TableClient () {
 
         </div>
         {/* MOBILE */}
-        <h1 className='mb-10 text-d-dark-dark-purple text-2xl font-bold text-center md:hidden'>Clientes</h1>
-        <div className='md:hidden join w-full m-2 mb-5'>
-          <SearchField
-            type='text' placeholder='Búsqueda' name='search' className='input input-sm input-bordered bg-d-white join-item rounded-full text-d-dark-dark-purple '
-            onChange={(v) => setSearchKey(v)}
-          />
+        {/* <h1 className='mb-10 text-d-dark-dark-purple text-2xl font-bold text-center md:hidden'>Clientes</h1> */}
+        {/* <div className='md:hidden join w-full m-2 mb-5'> */}
 
-          <button type='button ' onClick={() => setSearchKey('')} className='btn btn-sm join-item rounded-r-full  bg-d-dark-dark-purple border-none text-d-white  hover:bg-d-soft-soft-purple hover:text-d-dark-dark-purple'>
+        {/* <SearchField
+            type='text' placeholder='Búsqueda' name='search' className='input input-sm input-bordered bg-d-white join-item rounded-full text-d-dark-dark-purple '
+            onChange={(v) => handleSearchChange(v)}
+          /> */}
+        {/*
+          <button type='button ' onClick={() => handleSearchChange('')} className='btn btn-sm join-item rounded-r-full  bg-d-dark-dark-purple border-none text-d-white  hover:bg-d-soft-soft-purple hover:text-d-dark-dark-purple'>
             <svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' strokeWidth={1.5} stroke='currentColor' className='w-6 h-6'>
               <path strokeLinecap='round' strokeLinejoin='round' d='M6 18L18 6M6 6l12 12' />
             </svg>
-          </button>
-        </div>
+          </button> */}
+        {/* </div> */}
 
         <div className='md:hidden m-2'>
-          {clients.map((item) => (
+          {clients && clients.map((item) => (
 
             <div key={item.id} className='pb-2'>
 
