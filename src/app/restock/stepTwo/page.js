@@ -10,6 +10,7 @@ import useGetLayout from '@/hooks/useGetLayout'
 import useGetProdByStore from '@/hooks/useGetProdByStore'
 import { putRestockInventory } from '@/api/restock'
 import ConfirmationModal from '../confirmationModal'
+import useFlattenLayout from '@/hooks/useFlattenLayout'
 // import useGetReiteProd from '@/hooks/useGetReiteProd'
 
 function StepTwo () {
@@ -21,36 +22,71 @@ function StepTwo () {
   const { inventory, inventoryLoad } = useGetInventory(externalId)
   const { layout, layoutLoad } = useGetLayout(layoutId)
   const { products, loading } = useGetProdByStore(externalId)
-  const [tempInventory, setTempInventory] = useState({})
+  const [occInventory, setOccInventory] = useState({})
   const [modalVisible, setModalVisible] = useState(false)
+  const { flattenedLayout } = useFlattenLayout(layoutId)
 
   const router = useRouter()
 
-  const quantityChangeHandler = (index, productId, differential) => {
-    if (differential !== 0) {
-      setTempInventory({
-        ...tempInventory,
+  const quantityChangeHandler = (index, productId, differential, occurrence) => {
+    if (occurrence !== false) {
+      setOccInventory({
+        ...occInventory,
         [index]: {
           [productId]: differential
         }
-
       })
     }
   }
-  const setHandleStock = async () => {
-    const flatInventory = Object.values(tempInventory).reduce((acc, curr) => {
+  const flattenData = (data) => {
+    const flatData = Object.values(data).reduce((acc, curr) => {
       Object.entries(curr).forEach(([productId, quantity]) => {
         acc[productId] = (acc[productId] || 0) + quantity
       })
       return acc
     }, {})
 
+    return flatData
+  }
+  const mergeOccurrence = async (data) => {
+    const mergedOccurrenceQuantity = {}
+    if (Object.keys(data).length === 0) {
+      flattenedLayout.forEach(productId => {
+        const inventoryProd = inventory.products.find(prod => prod.productId === productId)
+        if (inventoryProd) {
+          mergedOccurrenceQuantity[productId] = parseInt(inventoryProd.quantity) * -1
+        }
+      })
+    } else {
+      Object.entries(data).forEach(([productId, quantity]) => {
+        mergedOccurrenceQuantity[productId] = quantity
+
+        if (flattenedLayout.includes(productId)) {
+          const inventoryProd = inventory.products.find(prod => prod.productId === productId)
+          if (inventoryProd) {
+            mergedOccurrenceQuantity[productId] = quantity - inventoryProd.quantity
+          }
+        }
+        flattenedLayout.forEach(productId => {
+          const inventoryProd = inventory.products.find(prod => prod.productId === productId)
+          if (!(productId in data)) {
+            mergedOccurrenceQuantity[productId] = (parseInt(inventoryProd.quantity) * -1)
+          }
+        })
+      })
+    }
+    return mergedOccurrenceQuantity
+  }
+  const setHandleStock = async () => {
+    const flatOccInventory = await flattenData(occInventory)
+    const mergedOccurrence = await mergeOccurrence(flatOccInventory)
+
     const stockData = {
       added: [],
       removed: []
     }
 
-    Object.entries(flatInventory).forEach(([productId, quantity]) => {
+    Object.entries(mergedOccurrence).forEach(([productId, quantity]) => {
       if (quantity > 0) {
         stockData.added.push({
           productId,
@@ -63,8 +99,11 @@ function StepTwo () {
         })
       }
     })
+
     try {
+      console.log('Step 2: stockData to Confirm Inventory', stockData)
       const response = await putRestockInventory(externalId, stockData)
+      console.log('Step 2: inventory response', response)
       if (response) {
         router.push(
           'stepThree' +
@@ -76,12 +115,14 @@ function StepTwo () {
       console.error('Error in API call:', error)
     }
   }
+
   const handleConfirmationModal = () => {
     setModalVisible(!modalVisible)
   }
 
   return (
     <div>
+
       {(loading || inventoryLoad || layoutLoad)
         ? (<DspLoader />)
         : (
@@ -112,13 +153,14 @@ function StepTwo () {
                       const multipleOccurrences = tray.columns.filter(
                         (c) => c.productId === column.productId
                       ).length > 1
+
                       return (
 
                         <AccordeonCard
                           quantityChangeHandler={quantityChangeHandler}
                           step={2}
                           key={index}
-                          index={index}
+                          index={column.productId + index}
                           productId={column.productId}
                           initialQuantity={multipleOccurrences ? 0 : quantityProd ? quantityProd.quantity : 0}
                           occurrence={multipleOccurrences ? quantityProd?.quantity : false}
@@ -138,7 +180,9 @@ function StepTwo () {
                                 </div>
                                 <div className='flex justify-center'>
                                   <h1 className='flex justify-center items-center text-center text-d-title-purple font-bold m-1 w-full line-clamp-2'>{product[0]?.productName || 'product missing'}</h1>
+
                                 </div>
+                                <h1 className='flex justify-center items-center text-black-500 font-bold m-1 text-xs'>(Máximo: {maxQuantity} unidades)</h1>
                               </div>}
 
                                   </div>}//eslint-disable-line
@@ -178,7 +222,7 @@ function StepTwo () {
           handleOperationConfirmation={setHandleStock}
           title='¿Deseas confirmar el inventario?'
           message={(
-            <p>Una vez confirmado el inventario de <strong>{storeName}</strong> no podrás realizar cambios</p>
+            <a>Una vez confirmado el inventario de <strong>{storeName}</strong> no podrás realizar cambios</a>
           )}
           confirmButtonText='Confirmar'
           cancelButtonText='Cancelar'
