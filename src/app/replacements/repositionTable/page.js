@@ -1,11 +1,14 @@
 /* eslint-disable multiline-ternary */
 'use client'
+
+import DspLoader from '@/components/admin/common/loader'
+
 export default function RepositionTable ({ data }) {
   if (!data || data.length === 0) {
     return (
-      <div className='h-screen'>
-        <p className='text-center'>No hay datos disponibles</p>
-      </div>
+
+      <DspLoader />
+
     )
   }
 
