@@ -22,7 +22,7 @@ function Restock () {
   useEffect(() => {
     const fetchStores = async () => {
       try {
-        const response = await getStores()
+        const response = await getStores('active')
         setStores(response.data)
         // console.log('response', response.data)
       } catch (error) {
