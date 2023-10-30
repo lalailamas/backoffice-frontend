@@ -88,9 +88,9 @@ function Restock () {
                 handleOperationConfirmation={handleOpenStore}
                 title='¿Estás seguro que quieres abrir esta máquina?'
                 message={(
-                  <p>
+                  <span>
                     Verifica que <strong>{selectedStore.name}</strong> sea la correcta antes de proceder
-                  </p>
+                  </span>
                 )}
                 confirmButtonText='Abrir máquina'
                 cancelButtonText='Cancelar'
