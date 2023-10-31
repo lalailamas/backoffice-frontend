@@ -35,7 +35,7 @@ function Replacements () {
 
       <InsideLayout />
       <h2 className='text-d-dark-dark-purple text-2xl font-bold text-center p-4 '>Reposiciones históricas</h2>
-      <div className='z-50 p-8 w-full'>
+      <div className='absolute w-full px-10 mt-4'>
         <DatePicker
           startDate={dateRange.startDate}
           endDate={dateRange.endDate}
@@ -43,7 +43,7 @@ function Replacements () {
         />
       </div>
 
-      <div className='px-8 mb-11 overflow-auto'>
+      <div className='overflow-x-auto p-10 mt-8'>
         <RepositionTable data={restockData} />
       </div>
 
