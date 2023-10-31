@@ -40,6 +40,7 @@ function TableClient () {
     if (dateRange.startDate !== null && dateRange.endDate !== null) {
       getListClients(dateRange)
         .then((response) => {
+          console.log(response)
           setClients(response.data)
         })
         .catch((error) => {
@@ -75,7 +76,7 @@ function TableClient () {
               </svg>
             </button> */}
           {/* </div> */}
-          <div className='p-4 w-full'>
+          <div className='absolute w-full px-10 mt-4'>
             <DatePicker
               startDate={dateRange.startDate}
               endDate={dateRange.endDate}
@@ -83,7 +84,7 @@ function TableClient () {
             />
           </div>
         </div>
-        <div className='overflow-x-auto p-4'>
+        <div className='overflow-x-auto p-10 mt-8'>
           {clients && (
             <table className='table  text-d-dark-dark-purple table-zebra max-[431px]:hidden'>
               <thead>
