@@ -10,9 +10,11 @@ const Stock = () => {
   useEffect(() => {
     getActualStock()
       .then((response) => {
+        console.log(response, 'stock actual')
         setStock(response.data)
       })
       .catch((error) => {
+        console.log('entre al error')
         console.error('Error fetching actual stock data:', error)
       })
   }, [])
