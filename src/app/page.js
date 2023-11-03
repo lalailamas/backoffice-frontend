@@ -5,6 +5,7 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { signIn, useSession } from 'next-auth/react'
+import { hotjar } from 'react-hotjar'
 
 // const inter = Inter({ subsets: ['latin'] })
 
@@ -15,6 +16,8 @@ export default function Home () {
   const [loginError, setLoginError] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
   const router = useRouter()
+  const HJID = 3721483
+  const HJSV = 6
 
   const performLogin = async () => {
     setLoginError(false)
@@ -31,6 +34,7 @@ export default function Home () {
   }
 
   useEffect(() => {
+    hotjar.initialize(HJID, HJSV)
     if (session !== null && session !== undefined) {
       // console.log(session, 'session del useEffect')
       if (session.user.role === 'admin') router.push('/dashboard')
