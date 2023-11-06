@@ -34,6 +34,7 @@ export default function Home () {
   }
 
   useEffect(() => {
+    console.log('UseEffect------')
     hotjar.initialize(HJID, HJSV)
     if (session !== null && session !== undefined) {
       // console.log(session, 'session del useEffect')
