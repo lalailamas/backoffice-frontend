@@ -34,8 +34,11 @@ export default function Home () {
   }
 
   useEffect(() => {
-    console.log('UseEffect------')
+    console.log('hotjar init')
     hotjar.initialize(HJID, HJSV)
+  }, [])
+
+  useEffect(() => {
     if (session !== null && session !== undefined) {
       // console.log(session, 'session del useEffect')
       if (session.user.role === 'admin') router.push('/dashboard')
