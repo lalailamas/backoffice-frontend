@@ -5,35 +5,27 @@ import { useSearchParams } from 'next/navigation'
 import React from 'react'
 import OperationTable from './operationTable'
 import InsideLayout from '@/components/admin/layouts/inside'
-import { Badge, Card, Grid, Metric, Text } from '@tremor/react'
-import { ClockIcon } from '@heroicons/react/24/solid'
+import { Card, Grid, Metric, Text } from '@tremor/react'
 import Image from 'next/image'
-import sticker from '@/utils/images/Sticker_764715.png'
 import store from '@/utils/images/store.jpg'
 
 function page () {
   const searchParams = useSearchParams()
   const id = searchParams.get('id')
   const externalTransactionId = searchParams.get('external_transactionId')
-  // console.log('id', id)
-  // console.log('external_transaction_id', externalTransactionId)
+
   const { OperationStock, loading } = getTransactionsById(id, externalTransactionId)
-  // console.log('OperationStock', OperationStock)
-  // console.log(error, 'error')
+
   function formatTimeDifference (start, end) {
     const startTime = new Date(start)
     const endTime = new Date(end)
-    console.log('startTime', startTime)
-    console.log('endTime', endTime)
 
-    // Verificar si las fechas son inválidas
     if (isNaN(startTime) || isNaN(endTime)) {
       return '00:00:00'
     }
 
     const timeDifference = endTime.getTime() - startTime.getTime()
 
-    // Verificar si la diferencia es negativa o cero
     if (timeDifference <= 0) {
       return '00:00:00'
     }

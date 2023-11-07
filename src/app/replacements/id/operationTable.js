@@ -1,7 +1,6 @@
 import React from 'react'
 
 function OperationTable ({ data }) {
-  console.log(data, 'data------------------')
   return (
     <>
       <div className='overflow-x-auto'>
