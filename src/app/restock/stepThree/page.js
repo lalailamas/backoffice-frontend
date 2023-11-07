@@ -97,8 +97,8 @@ export default function page () {
 
   return (
     <div>
-      <div><pre>{JSON.stringify(tempRestocked, null, 2)}</pre></div>
-      <div><pre>{JSON.stringify(tempPurchased, null, 2)}</pre></div>
+      {/* <div><pre>{JSON.stringify(tempRestocked, null, 2)}</pre></div> */}
+      {/* <div><pre>{JSON.stringify(tempPurchased, null, 2)}</pre></div> */}
 
       {(loading || inventoryLoad || layoutLoad)
         ? <DspLoader />
