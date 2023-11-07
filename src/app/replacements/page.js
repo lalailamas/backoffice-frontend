@@ -1,6 +1,6 @@
 'use client'
 import RepositionTable from './repositionTable/page'
-import { getRestockProducts } from '@/api/restock'
+import { getRestockProducts, getStockOperation } from '@/api/restock'
 import { useState, useEffect } from 'react'
 import InsideLayout from '@/components/admin/layouts/inside'
 import DatePicker from '@/components/admin/common/datepicker/double'
@@ -15,7 +15,7 @@ function Replacements () {
 
   useEffect(() => {
     if (dateRange.startDate !== null && dateRange.endDate !== null) {
-      getRestockProducts(dateRange)
+      getStockOperation(dateRange)
         .then((response) => {
           setRestockData(response.data)
         })
@@ -42,6 +42,7 @@ function Replacements () {
           handleDateChange={handleDateChange}
         />
       </div>
+      {/* <div><pre>{JSON.stringify(restockData, null, 2)}</pre></div> */}
 
       <div className='overflow-x-auto p-10 mt-8'>
         <RepositionTable data={restockData} />

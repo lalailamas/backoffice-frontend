@@ -1,58 +1,60 @@
-/* eslint-disable multiline-ternary */
-'use client'
 import React from 'react'
-import DspLoader from '@/components/admin/common/loader'
-import Link from 'next/link'
-import { usePathname } from 'next/navigation'
 
-export default function RepositionTable ({ data }) {
-  const pathname = usePathname()
-  if (!data || data.length === 0) {
-    return <DspLoader />
-  }
-
+function OperationTable ({ data }) {
+  console.log(data, 'data------------------')
   return (
     <>
       <div className='overflow-x-auto'>
-        {data.length > 0 ? (
-          <table className='table text-d-dark-dark-purple table-zebra w-full max-[431px]:hidden'>
-            <thead>
-              <tr className='bg-d-dark-dark-purple text-d-white'>
-                <th />
-                <th>Transaction Id</th>
-                <th>Store ID</th>
-                <th>Comienzo</th>
-                <th>Finalización</th>
-                <th>Detalle</th>
-              </tr>
-            </thead>
-
-            <tbody>
-              {data.map((item) => (
-                <tr key={item.external_transaction_id}>
-                  <td />
-                  <td>{item.external_transaction_id}</td>
-
-                  <td>{item.store_id}</td>
-                  <td>{item.start_timestamp}</td>
-                  <td>{item.end_timestamp}</td>
-                  <td><Link href={`${pathname}/id?id=${item.id}&external_transactionId=${item.external_transaction_id}`}>ver más</Link></td>
+        {data
+          ? (
+            <table className='table text-d-dark-dark-purple table-zebra w-full max-[431px]:hidden'>
+              <thead>
+                <tr className='bg-d-dark-dark-purple text-d-white'>
+                  <th />
+                  <th>Product ID</th>
+                  <th>Nombre</th>
+                  <th>Imagen</th>
+                  <th>Stock antes</th>
+                  <th>Stock después</th>
+                  <th>Agregados</th>
+                  <th>Retirados</th>
 
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        ) : (
-          <div className=''>
-            <p className='text-center'>No hay datos disponibles</p>
-          </div>
-        )}
+              </thead>
+
+              <tbody>
+                {data.products.map((item) => (
+                  <tr key={item.productId}>
+                    <td />
+                    <td>{item.productId}</td>
+                    <td>{item.productName}</td>
+                    <td>
+                      <img src={item.img} alt={item.productName} className='w-16 h-16 object-cover mb-2' />
+                    </td>
+                    <td>{item.stockBefore}</td>
+                    <td>{item.stockAfter}</td>
+
+                    {/* Asegúrate de que data.results sea un objeto antes de intentar acceder a sus propiedades */}
+                    <td>{data.results?.restocked?.find((restockedItem) => restockedItem.productId === item.productId)?.quantity || 0}</td>
+                    <td>{data.results?.purchased?.find((purchasedItem) => purchasedItem.productId === item.productId)?.quantity || 0}</td>
+                  </tr>
+                ))}
+
+              </tbody>
+            </table>
+            )
+          : (
+            <div className=''>
+              <p className='text-center'>No hay datos disponibles</p>
+            </div>
+            )}
       </div>
     </>
   )
 }
 
-// [
+export default OperationTable
+
 // {
 //   "id": 12,
 //   "external_transaction_id": "179a1ea6-2e9e-40dc-a247-e3cbc9e60074",
@@ -114,4 +116,3 @@ export default function RepositionTable ({ data }) {
 //     "before": []
 //   }
 // }
-// ]
