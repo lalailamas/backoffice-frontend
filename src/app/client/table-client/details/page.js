@@ -10,6 +10,7 @@ import Link from 'next/link'
 import TabsComponent from '@/components/admin/common/tabs'
 import CreditCardDisplay from './creditcard'
 import TransactionList from './transactions'
+import Image from 'next/image'
 
 function DetailsClient () {
   const searchParams = useSearchParams()
@@ -57,7 +58,7 @@ function DetailsClient () {
       active: true,
       content: (
         <div className='flex flex-col gap-4'>
-          <h2 className='font-semibold mb-3 underline'>Datos personales</h2>
+          {/* <h2 className='font-semibold mb-3 underline'>Datos personales</h2> */}
 
           <div className='flex-1'>
             <h2 className='font-semibold'>Nombre</h2>
@@ -83,7 +84,7 @@ function DetailsClient () {
       content: (
         <div className=''>
           <div className='flex-1'>
-            <h2 className='font-semibold mb-5 underline'>Métodos de pago</h2>
+            {/* <h2 className='font-semibold mb-5 underline'>Métodos de pago</h2> */}
 
             <ul className='grid grid-cols-1 gap-4 overflow-x-auto'>
               {payments.map((payment, index) => (
@@ -128,7 +129,15 @@ function DetailsClient () {
                       </div>
                     )}
                     {payment.type === 'balance' && (
-                      <div>
+                      <div className='relative'>
+                        {/* <div className='absolute bottom-35 right-0 p-4'> */}
+                        <img
+                          style={{ position: 'absolute', right: 0, top: -50 }}
+                          src='/img/wallet.svg'
+                          width={100}
+                          height={60}
+                        />
+                        {/* </div> */}
                         <h2 className='font-semibold'>Saldo</h2>
                         <span>
                           {payment.currentBalance !== undefined
