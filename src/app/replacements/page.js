@@ -1,6 +1,6 @@
 'use client'
 import RepositionTable from './repositionTable/page'
-import { getRestockProducts, getStockOperation } from '@/api/restock'
+import { getStockOperation } from '@/api/restock'
 import { useState, useEffect } from 'react'
 import InsideLayout from '@/components/admin/layouts/inside'
 import DatePicker from '@/components/admin/common/datepicker/double'
