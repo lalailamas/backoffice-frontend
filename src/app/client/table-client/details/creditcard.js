@@ -1,3 +1,4 @@
+/* eslint-disable multiline-ternary */
 import React from 'react'
 
 const cardImages = {
@@ -29,24 +30,35 @@ function CreditCardDisplay () {
     expiredYear: '25'
   }
 
-  const creditCardImage = 'mastercard'
+  const creditCardImage = 'visa'
+  //   const defaultCardImage = '/img/default-card.svg'
+
+  // Verifica si la tarjeta seleccionada está en cardImages, de lo contrario, usa la imagen por defecto
+  //   const cardImage = cardImages[creditCardImage] || defaultCardImage
+
+  const cardImage = cardImages[creditCardImage]
 
   return (
     <div className='m-4'>
       <div className='credit-card w-full sm:w-auto mx-auto rounded-xl bg-white'>
         <header className='flex flex-col justify-center items-center'>
           <div className='bg-d-gray shadow-xl rounded-2xl h-[200px] w-[300px]'>
-            <div className=''>
-              <CreditCard cardType={creditCardImage} imageUrl={cardImages[creditCardImage]} />
-              <div className='front bg-transparent text-sm  text-black'>
-                <p className='number mt-5 ml-5 sm:text-xl'>{cardData.cardNumber}</p>
-                <p className='ml-5 mt-3'>{cardData.cardholder}</p>
-                <div className='flex justify-end mr-5'>
-                  <div className=''>
-                    <span>{cardData.expiredMonth}</span>
-                    {cardData.expiredMonth && <span>/</span>}
-                    <span>{cardData.expiredYear}</span>
-                  </div>
+            <div>
+              {cardImage ? ( // Verifica si cardImage existe
+                <CreditCard cardType={creditCardImage} imageUrl={cardImage} />
+              ) : (
+                // Si cardImage no existe, muestra un texto en su lugar
+                <div className='text-left px-4 py-4'>Nombre banco</div>
+              )}
+            </div>
+            <div className='front bg-transparent text-sm  text-black'>
+              <p className='number mt-5 ml-5 sm:text-xl'>{cardData.cardNumber}</p>
+              <p className='ml-5 mt-3'>{cardData.cardholder}</p>
+              <div className='flex justify-end mr-5'>
+                <div className=''>
+                  <span>{cardData.expiredMonth}</span>
+                  {cardData.expiredMonth && <span>/</span>}
+                  <span>{cardData.expiredYear}</span>
                 </div>
               </div>
             </div>

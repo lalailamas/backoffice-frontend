@@ -10,7 +10,7 @@ import Link from 'next/link'
 import TabsComponent from '@/components/admin/common/tabs'
 import CreditCardDisplay from './creditcard'
 import TransactionList from './transactions'
-import Image from 'next/image'
+// import Image from 'next/image'
 
 function DetailsClient () {
   const searchParams = useSearchParams()
@@ -197,12 +197,18 @@ function DetailsClient () {
       <div className='flex justify-center'>
         <div className='mt-4 p-4 m-2 border rounded-xl shadow-lg '>
           <h1 className='mb-10 text-d-dark-dark-purple text-2xl font-bold text-center'>Información Cliente</h1>
-          <TabsComponent tabs={tabs} />
           <button className='mt-8'>
             <Link href='/client/table-client'>
-              <span className='items-center px-3 py-2 text-sm font-medium text-center text-white bg-d-dark-dark-purple rounded-lg hover:bg-d-soft-soft-purple hover:text-d-dark-dark-purple mt-8'>Atrás</span>
+              <div className='flex flex-row text-d-gray'>
+                <svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke-width='1.5' stroke='currentColor' class='w-6 h-6'>
+                  <path stroke-linecap='round' stroke-linejoin='round' d='M15.75 19.5L8.25 12l7.5-7.5' />
+                </svg>
+                <span className='text-sm'>Volver</span>
+              </div>
             </Link>
           </button>
+          <TabsComponent tabs={tabs} />
+
         </div>
       </div>
     </>
