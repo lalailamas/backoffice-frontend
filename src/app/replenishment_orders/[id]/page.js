@@ -46,7 +46,7 @@ export default function Inventory () {
 
       <div className='w-full p-8'>
 
-        <div class='text-sm breadcrumbs'>
+        <div className='text-sm breadcrumbs'>
           <ul>
             <li><Link href='/admin/replenishment-orders'>Órdenes de reabastecimiento</Link></li>
             <li>{currentROrder.name}</li>
