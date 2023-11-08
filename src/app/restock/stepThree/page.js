@@ -135,7 +135,7 @@ export default function page () {
                                       <AccordeonCard
                                         step={3}
                                         key={index}
-                                        index={index}
+                                        index={column.productId + index}
                                         updateProductQuantity={updateProductQuantity}
                                         productId={column.productId}
                                         maxPurchasedQuantity={quantityProd ? quantityProd.quantity : 0}
