@@ -199,11 +199,11 @@ function DetailsClient () {
           <h1 className='mb-10 text-d-dark-dark-purple text-2xl font-bold text-center'>Información Cliente</h1>
           <button className='mt-8'>
             <Link href='/client/table-client'>
-              <div className='flex flex-row text-d-gray'>
+              <div className='flex flex-row text-d-gray border-none  hover:text-d-purple'>
                 <svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' strokeWidth='1.5' stroke='currentColor' className='w-6 h-6'>
                   <path strokeLinecap='round' strokeLinejoin='round' d='M15.75 19.5L8.25 12l7.5-7.5' />
                 </svg>
-                <span className='text-sm'>Volver</span>
+                <span className='text-sm '>Volver</span>
               </div>
             </Link>
           </button>
