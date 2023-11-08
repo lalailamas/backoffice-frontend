@@ -80,13 +80,13 @@ export default function page () {
 
     try {
       console.log('Step 3: stockData to Confirm PATCH RESULT', stockData)
-      // const response = await patchRestockResult(transactionId, stockData)
-      // console.log('Step 3: response PATCH RESULT', response)
-      // if (response.data.successful) {
-      //   router.push(
-      //     'stepFour' + `?external_id=${externalId}&layout_id=${layoutId}&store_name=${storeName}&transactionId=${transactionId}`
-      //   )
-      // }
+      const response = await patchRestockResult(transactionId, stockData)
+      console.log('Step 3: response PATCH RESULT', response)
+      if (response.data.successful) {
+        router.push(
+          'stepFour' + `?external_id=${externalId}&layout_id=${layoutId}&store_name=${storeName}&transactionId=${transactionId}`
+        )
+      }
     } catch (error) {
       console.log(error)
     }
@@ -97,8 +97,8 @@ export default function page () {
 
   return (
     <div>
-      <div><pre>{JSON.stringify(tempRestocked, null, 2)}</pre></div>
-      <div><pre>{JSON.stringify(tempPurchased, null, 2)}</pre></div>
+      {/* <div><pre>{JSON.stringify(tempRestocked, null, 2)}</pre></div> */}
+      {/* <div><pre>{JSON.stringify(tempPurchased, null, 2)}</pre></div> */}
 
       {(loading || inventoryLoad || layoutLoad)
         ? <DspLoader />

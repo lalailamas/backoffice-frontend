@@ -122,7 +122,7 @@ function StepTwo () {
 
   return (
     <div>
-      <div><pre>{JSON.stringify(occInventory, null, 2)}</pre></div>
+      {/* <div><pre>{JSON.stringify(occInventory, null, 2)}</pre></div> */}
       {(loading || inventoryLoad || layoutLoad)
         ? (<DspLoader />)
         : (
