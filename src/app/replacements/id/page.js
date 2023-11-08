@@ -54,11 +54,11 @@ function page () {
                   </Card>
                   <Card className='text-center'>
                     <Text>Productos Repuestos</Text>
-                    <Metric>{OperationStock[0].results.purchased.length}</Metric>
+                    <Metric>{OperationStock[0].results.purchased?.length || 0}</Metric>
                   </Card>
                   <Card className='text-center'>
                     <Text>Productos Retirados</Text>
-                    <Metric>{OperationStock[0].results.restocked.length}</Metric>
+                    <Metric>{OperationStock[0].results.restocked?.length || 0}</Metric>
                   </Card>
 
                 </Grid>
