@@ -11,21 +11,20 @@ const AccordeonCard = ({
 
   const handleIncrease = () => {
     // Lógica para aumentar la cantidad
-    if (quantity) {
-      setQuantity(quantity + 1)
-      if (step === 2) {
-        if (occurrence !== false) {
-          // console.log('occurrence', occurrence)
-          quantityChangeHandler(index, productId, ((quantity + 1)), occurrence)
-        } else {
-          quantityChangeHandler(index, productId, ((quantity + 1) - initialQuantity))
-        }
-      } else { updateProductQuantity(index, productId, (quantity + 1), 'restocked') }
-    }
+
+    setQuantity(quantity + 1)
+    if (step === 2) {
+      if (occurrence !== false) {
+        // console.log('occurrence', occurrence)
+        quantityChangeHandler(index, productId, ((quantity + 1)), occurrence)
+      } else {
+        quantityChangeHandler(index, productId, ((quantity + 1) - initialQuantity))
+      }
+    } else { updateProductQuantity(index, productId, (quantity + 1), 'restocked') }
   }
   const handleIncreasePurchased = () => {
     // Lógica para aumentar la cantidad
-    if (quantityPurchased) {
+    if (quantityPurchased < maxPurchasedQuantity) {
       setQuantityPurchased(quantityPurchased + 1)
       updateProductQuantity(index, productId, (quantityPurchased + 1), 'purchased')
     }
