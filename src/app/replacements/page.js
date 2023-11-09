@@ -17,6 +17,7 @@ function Replacements () {
     if (dateRange.startDate !== null && dateRange.endDate !== null) {
       getStockOperation(dateRange)
         .then((response) => {
+          console.log(response.data)
           setRestockData(response.data)
         })
         .catch((error) => {

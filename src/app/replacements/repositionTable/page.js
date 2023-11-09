@@ -34,8 +34,8 @@ export default function RepositionTable ({ data }) {
                   <td>{item.external_transaction_id}</td>
 
                   <td>{item.store_id}</td>
-                  <td>{item.start_timestamp}</td>
-                  <td>{item.end_timestamp}</td>
+                  <td>{formatLocalDate(item.start_timestamp)}</td>
+                  <td>{formatLocalDate(item.end_timestamp)}</td>
                   <td><Link href={`${pathname}/id?id=${item.id}&external_transactionId=${item.external_transaction_id}`}>ver más</Link></td>
 
                 </tr>
@@ -52,6 +52,29 @@ export default function RepositionTable ({ data }) {
   )
 }
 
+function formatLocalDate (utcFechaString) {
+  if (!utcFechaString) return 'no date'
+  // Crear un objeto Date desde la cadena de fecha UTC
+  const fechaUtc = new Date(utcFechaString)
+
+  // Obtener opciones de formato para la zona horaria local
+  const opcionesDeFormato = {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    fractionalSecondDigits: 3,
+    timeZoneName: 'short'
+  }
+
+  // Formatear la fecha en el formato de la zona horaria local
+  const formatoLocal = new Intl.DateTimeFormat(undefined, opcionesDeFormato)
+  const fechaFormateada = formatoLocal.format(fechaUtc)
+
+  return fechaFormateada
+}
 // [
 // {
 //   "id": 12,
