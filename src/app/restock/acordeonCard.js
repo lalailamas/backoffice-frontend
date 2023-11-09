@@ -11,7 +11,7 @@ const AccordeonCard = ({
 
   const handleIncrease = () => {
     // Lógica para aumentar la cantidad
-    if (quantity < maxQuantity) {
+    if (quantity) {
       setQuantity(quantity + 1)
       if (step === 2) {
         if (occurrence !== false) {
@@ -25,7 +25,7 @@ const AccordeonCard = ({
   }
   const handleIncreasePurchased = () => {
     // Lógica para aumentar la cantidad
-    if (quantityPurchased < maxPurchasedQuantity) {
+    if (quantityPurchased) {
       setQuantityPurchased(quantityPurchased + 1)
       updateProductQuantity(index, productId, (quantityPurchased + 1), 'purchased')
     }
