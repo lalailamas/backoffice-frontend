@@ -9,7 +9,7 @@ import DspLoader from '@/components/admin/common/loader'
 import useGetInventory from '@/hooks/useGetInventory'
 import { useState } from 'react'
 import useGetProdByStore from '@/hooks/useGetProdByStore'
-import { patchRestockResult } from '@/api/restock'
+import { putRestockResult } from '@/api/restock'
 import ConfirmationModal from '../confirmationModal'
 
 export default function page () {
@@ -18,6 +18,7 @@ export default function page () {
   const externalId = searchParams.get('external_id')
   const layoutId = searchParams.get('layout_id')
   const storeName = searchParams.get('store_name')
+  const externalTransactionId = searchParams.get('externalTransactionId')
   const transactionId = searchParams.get('transactionId')
   const { inventory, inventoryLoad } = useGetInventory(externalId)
   const { layout, layoutLoad } = useGetLayout(layoutId)
@@ -66,7 +67,6 @@ export default function page () {
     })
     )
     const stockData = {
-      alwaysUpdateInventory: true,
       purchased: allProducts.map((product) => ({
         productId: product.productId,
         quantity: flatPurchased[product.productId] || 0
@@ -80,11 +80,11 @@ export default function page () {
 
     try {
       console.log('Step 3: stockData to Confirm PATCH RESULT', stockData)
-      const response = await patchRestockResult(transactionId, stockData)
+      const response = await putRestockResult(externalId, transactionId, externalTransactionId, stockData)
       console.log('Step 3: response PATCH RESULT', response)
       if (response.data.successful) {
         router.push(
-          'stepFour' + `?external_id=${externalId}&layout_id=${layoutId}&store_name=${storeName}&transactionId=${transactionId}`
+          'stepFour' + `?external_id=${externalId}&layout_id=${layoutId}&store_name=${storeName}&externalTransactionId=${externalTransactionId}&transactionId=${transactionId}`
         )
       }
     } catch (error) {
