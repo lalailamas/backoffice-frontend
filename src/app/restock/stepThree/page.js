@@ -74,13 +74,16 @@ export default function page () {
       restocked: allProducts.map((product) => ({
         productId: product.productId,
         quantity: flatRestocked[product.productId] || 0
-      }))
+      })),
+      store_id: externalId,
+      comments: 'basta por favor',
+      transaction_id: parseInt(transactionId)
 
     }
 
     try {
       console.log('Step 3: stockData to Confirm PATCH RESULT', stockData)
-      const response = await putRestockResult(externalId, transactionId, externalTransactionId, stockData)
+      const response = await putRestockResult(externalTransactionId, stockData)
       console.log('Step 3: response PATCH RESULT', response)
       if (response.data.successful) {
         router.push(
