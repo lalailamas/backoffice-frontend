@@ -7,6 +7,10 @@ const urlApiReite = process.env.NEXT_PUBLIC_DSP_API_BASE + 'reite/'
 export const postData = (credentials, url, contentType) => {
   return axios.post(urlApi + url, credentials, { headers: { 'content-type': contentType } })
 }
+export const postDataByStore = async (storeId, url, contentType) => {
+  return axios.post(urlApi + url, { userClientId: '9kzL7vO1m8Ug35cAmD29JbvHkWH2', openStoreType: 'RESTOCK', store_id: storeId },
+    { headers: { 'content-type': contentType } })
+}
 export const getDataByQuery = (url, contentType, query) => {
   return axios.get(urlApi + url + query, { headers: { 'content-type': contentType } })
 }
@@ -110,8 +114,8 @@ export const DspApi = {
 export const getReiteDataByStore = async (storeId, url, url2, contentType) => {
   return axios.get(urlApiReite + url + storeId + url2, { headers: { 'content-type': contentType } })
 }
-export const postReiteDataByStore = async (storeId, url, url2, contentType) => {
-  return axios.post(urlApiReite + url + storeId + url2, { userClientId: '9kzL7vO1m8Ug35cAmD29JbvHkWH2', openStoreType: 'RESTOCK' },
+export const postReiteDataByStore = async (storeId, url, contentType) => {
+  return axios.post(urlApiReite + url, { userClientId: '9kzL7vO1m8Ug35cAmD29JbvHkWH2', openStoreType: 'RESTOCK', store_id: storeId },
     { headers: { 'content-type': contentType } })
 }
 
