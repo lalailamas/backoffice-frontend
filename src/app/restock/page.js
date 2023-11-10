@@ -6,13 +6,14 @@ import InsideLayout from '@/components/admin/layouts/inside'
 import { useRouter } from 'next/navigation'
 import StepLayout from './stepLayout'
 import ConfirmationModal from './confirmationModal'
-// import CameraModal from './cameraModal'
+import CameraModal from './cameraModal'
 
 function Restock () {
   const [stores, setStores] = useState([])
   const [selectedStore, setSelectedStore] = useState(null)
   const [modalVisible, setModalVisible] = useState(false)
-  // const [modalCameraVisible, setModalCameraVisible] = useState(false)
+  const [modalCameraVisible, setModalCameraVisible] = useState(false)
+  const [snapshot, setSnapshot] = useState(null)
 
   const router = useRouter()
 
@@ -45,9 +46,15 @@ function Restock () {
   const handleConfirmationModal = () => {
     setModalVisible(!modalVisible)
   }
-  // const handleCameraModal = () => {
-  //   setModalCameraVisible(!modalCameraVisible)
-  // }
+  const handleCameraModal = () => {
+    setModalCameraVisible(!modalCameraVisible)
+  }
+  const takeSnapshot = async (img) => {
+    console.log('entré al takeSnapshot')
+    setSnapshot(img)
+    handleCameraModal()
+    handleConfirmationModal()
+  }
 
   return (
     <div>
@@ -77,7 +84,8 @@ function Restock () {
               <button
                 type='button'
                 onClick={() => {
-                  handleOpenStore(selectedStore.storeId)
+                  // handleOpenStore(selectedStore.storeId)
+                  handleCameraModal()
                 }}
                 className='inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-d-dark-dark-purple rounded-lg hover:bg-d-soft-soft-purple hover:text-d-dark-dark-purple focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800'
               >
@@ -101,11 +109,11 @@ function Restock () {
                 cancelButtonText='Cancelar'
               />
             )}
-            {/* {modalCameraVisible && (
+            {modalCameraVisible && (
               <CameraModal
                 handleConfirmationModal={handleConfirmationModal}
                 handleOperationConfirmation={handleCameraModal}
-                title='¿Estás seguro que quieres abrir esta máquina?'
+                title='Necesitamos que tomes una foto de la tienda antes de abrirla'
                 message={(
                   <span>
                     Toma una foto de la tienda antes de abrirla
@@ -113,8 +121,9 @@ function Restock () {
                 )}
                 confirmButtonText='Tomar Foto'
                 cancelButtonText='Cancelar'
+                takeSnapshot={takeSnapshot}
               />
-            )} */}
+            )}
 
           </div>
         </div>
