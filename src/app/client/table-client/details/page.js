@@ -183,29 +183,43 @@ function DetailsClient () {
             </div>
             <div className='overflow-auto'>
               <table>
-                {transactions.map((transactions, index) => (
-                  <tbody key={index} className='bg-white  p-4 rounded-lg shadow-md'>
-                    <tr className='relative transform scale-100 text-xs py-8 border-b-2 border-d-gray cursor-default'>
-                      <td className='pl-2 pr-3 whitespace-no-wrap'>
-                        <div className='text-gray-400'>Fecha</div>
-                        <div>{new Date(transactions.timestamp * 1000).toLocaleDateString()}</div>
-                      </td>
-                      <div className='leading-10 pt-4'><a className='text-d-neon-purple text-xs hover:underline' href='#'>{transactions.id}</a></div>
+                <tbody>
+                  {transactions.map((transaction, index) => (
+                    <tr key={index} className='bg-white p-4 rounded-lg shadow-md border-b-2 border-d-gray'>
+                      <td className='text-gray-400 py-2 px-2 text-xs w-full'>
+                        <div className='flex gap-24'>
 
-                      <td className='pr-1 py-2 whitespace-no-wrap'>
-                        <div className='leading-5 font-medium'>Monto {transactions.amount.toLocaleString('es-CL', {
-                          style: 'currency',
-                          currency: 'CLP'
-                        })}
+                          <span className='font-bold'> Fecha: {new Date(transaction.timestamp * 1000).toLocaleDateString()}</span>
+                          <a className='text-d-neon-purple text-xs hover:underline' href='#'>{transaction.id}</a>
                         </div>
-                        <div>Método de pago: {transactions.paymentMethod}</div>
-                        <div className='leading-5 text-gray-800'>Tienda: {getStoreName(transactions.storeId)}</div>
-                      </td>
-                    </tr>
 
-                  </tbody>
-                ))}
+                        <div className='leading-10 grid text-black py-4'>
+                          <div className='text-xs grid grid-cols-2'>
+                            Monto
+                            <span>
+                              {transaction.amount.toLocaleString('es-CL', {
+                                style: 'currency',
+                                currency: 'CLP'
+                              })}
+                            </span>
+                          </div>
+                          <div className='text-xs grid grid-cols-2'>
+                            Método de pago
+                            <span>{transaction.paymentMethod} </span>
+                          </div>
+                          <div className='text-xs grid grid-cols-2'>
+                            Tienda
+                            <span>{getStoreName(transaction.storeId)}</span>
+                          </div>
+                        </div>
+                      </td>
+                      <td className='' />
+
+                    </tr>
+                  ))}
+                </tbody>
               </table>
+
             </div>
           </div>
         </div>
