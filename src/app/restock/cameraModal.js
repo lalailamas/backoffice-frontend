@@ -1,3 +1,4 @@
+'use client'
 import React, { useState } from 'react'
 // import Webcam from 'react-webcam'
 // import { Camera } from 'react-camera-pro'
@@ -15,6 +16,7 @@ function CameraModal ({
 }) {
   const [image, setImage] = useState(null)
   const [showcamera, setShowCamera] = useState(true)
+  const [selectedFile, setSelectedFile] = useState(null)
 
   const handleTakePhoto = (dataUri) => {
     // Callback cuando se toma una foto
@@ -28,6 +30,19 @@ function CameraModal ({
   const sendTakenPhoto = () => {
     takeSnapshot(image)
     handleConfirmationModal()
+  }
+  const handleFileInputChange = (e) => {
+    const file = e.target.files[0]
+    if (file) {
+      const reader = new FileReader() //eslint-disable-line
+      reader.onloadend = () => {
+        setImage(reader.result)
+        setShowCamera(false)
+        setSelectedFile(file)
+        console.log(reader.result, 'reader.result')
+      }
+      reader.readAsDataURL(file)
+    }
   }
 
   return (
@@ -80,6 +95,7 @@ function CameraModal ({
               <div className={`${!showcamera ? 'mt-5 mb-5' : 'hidden'}`}>
                 <img src={image} alt='Taken photo' />
                 <button type='button' className='w-full mb-5 inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-d-dark-dark-purple font-medium hover:bg-d-soft-soft-purple hover:text-d-dark-dark-purple text-white sm:ml-3 sm:w-auto sm:text-sm' onClick={handleRetakePhoto}>Tomar Otra Foto</button>
+                <input type='file' accept='image/*' onChange={handleFileInputChange} />
                 <button type='button' className='w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-d-dark-dark-purple font-medium hover:bg-d-soft-soft-purple hover:text-d-dark-dark-purple text-white sm:ml-3 sm:w-auto sm:text-sm' onClick={sendTakenPhoto}>
                   {confirmButtonText}
                 </button>
