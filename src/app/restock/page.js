@@ -119,7 +119,7 @@ function Restock () {
                     Toma una foto de la tienda antes de abrirla
                   </span>
                 )}
-                confirmButtonText='Tomar Foto'
+                confirmButtonText='Siguiente'
                 cancelButtonText='Cancelar'
                 takeSnapshot={takeSnapshot}
               />

@@ -1,30 +1,35 @@
-import React, { useRef, useState } from 'react'
-import Webcam from 'react-webcam'
+import React, { useState } from 'react'
+// import Webcam from 'react-webcam'
 // import { Camera } from 'react-camera-pro'
+import { Camera } from 'react-html5-camera-photo'
+import 'react-html5-camera-photo/build/css/index.css'
 
-function CameraModal ({ title, message, confirmButtonText, cancelButtonText, handleOperationConfirmation, handleConfirmationModal, takeSnapshot }) {
-  const webcamRef = useRef(null)
-  const [facingMode, setFacingMode] = useState('user') // 'user' para cámara frontal, 'environment' para cámara trasera
-
-  const switchCamera = () => {
-    setFacingMode((prevFacingMode) =>
-      prevFacingMode === 'user' ? 'environment' : 'user'
-    )
-  }
+function CameraModal ({
+  title,
+  message,
+  confirmButtonText,
+  cancelButtonText,
+  handleOperationConfirmation,
+  handleConfirmationModal,
+  takeSnapshot
+}) {
   const [image, setImage] = useState(null)
   const [showcamera, setShowCamera] = useState(true)
-  const handleCapture = async () => {
-    const imageSrc = await webcamRef.current.getScreenshot()
-    setImage(imageSrc)
-    setShowCamera(false)
-    // if (imageSrc) {
-    //   takeSnapshot(imageSrc)
-    //   console.log('Imagen convertida a formato JPEG:', imageSrc)
-    // }
 
-    // Enviar la imagen al servidor (jpegImageSrc)
-    // Aquí puedes usar fetch u otra lógica para enviar la imagen al servidor
+  const handleTakePhoto = (dataUri) => {
+    // Callback cuando se toma una foto
+    setImage(dataUri)
+    setShowCamera(false)
   }
+  const handleRetakePhoto = () => {
+    setImage(null)
+    setShowCamera(true)
+  }
+  const sendTakenPhoto = () => {
+    takeSnapshot(image)
+    handleConfirmationModal()
+  }
+
   return (
     <div>
       <div id='YOUR_ID' className='fixed z-50 inset-0 overflow-y-auto'>
@@ -67,31 +72,22 @@ function CameraModal ({ title, message, confirmButtonText, cancelButtonText, han
             </div>
             <div className='mt-5'>
               <div className={`${showcamera ? 'mt-5' : 'hidden'}`}>
-
-                <Webcam
-                  ref={webcamRef}
-                  height={1600}
-                  width={400}
-                  mirrored={facingMode === 'user'}
-                  facingMode={facingMode}
+                <Camera
+                  onTakePhoto={(dataUri) => { handleTakePhoto(dataUri) }}
+                  idealFacingMode='environment'
                 />
               </div>
-              <div className={`${!showcamera ? 'mt-5' : 'hidden'}`}>
+              <div className={`${!showcamera ? 'mt-5 mb-5' : 'hidden'}`}>
                 <img src={image} alt='Taken photo' />
-
+                <button type='button' className='w-full mb-5 inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-d-dark-dark-purple font-medium hover:bg-d-soft-soft-purple hover:text-d-dark-dark-purple text-white sm:ml-3 sm:w-auto sm:text-sm' onClick={handleRetakePhoto}>Tomar Otra Foto</button>
+                <button type='button' className='w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-d-dark-dark-purple font-medium hover:bg-d-soft-soft-purple hover:text-d-dark-dark-purple text-white sm:ml-3 sm:w-auto sm:text-sm' onClick={sendTakenPhoto}>
+                  {confirmButtonText}
+                </button>
               </div>
-            </div>
-            <div className='mt-5'>
-              <button onClick={switchCamera}>Cambiar Cámara</button>
-              <button type='button' className='w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-d-dark-dark-purple font-medium hover:bg-d-soft-soft-purple hover:text-d-dark-dark-purple text-white sm:ml-3 sm:w-auto sm:text-sm' onClick={handleCapture}>
-                Tomar Foto
-              </button>
             </div>
 
             <div className='mt-5 sm:mt-4 sm:flex sm:flex-row-reverse'>
-              <button type='button' className='w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-d-dark-dark-purple font-medium hover:bg-d-soft-soft-purple hover:text-d-dark-dark-purple text-white sm:ml-3 sm:w-auto sm:text-sm' onClick={handleOperationConfirmation}>
-                {confirmButtonText}
-              </button>
+
               <button type='button' databehavior='cancel' className='mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:mt-0 sm:w-auto sm:text-sm' onClick={handleOperationConfirmation}>
                 {cancelButtonText}
               </button>
