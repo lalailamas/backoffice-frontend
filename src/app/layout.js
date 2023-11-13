@@ -13,12 +13,6 @@ export default function RootLayout ({ children }) {
             {children}
 
           </div>
-
-          {/* <div className='z-10 drawer-side'>
-            <label htmlFor='dsp-drawer' className='drawer-overlay' />
-            <Sidebar />
-
-          </div> */}
         </SessionAuthProvider>
       </body>
     </html>
