@@ -1,7 +1,6 @@
 /* eslint-disable multiline-ternary */
 'use client'
 import InsideLayout from '@/components/admin/layouts/inside'
-// import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { getDetailsClient } from '@/api/client'
@@ -9,20 +8,26 @@ import DspLoader from '@/components/admin/common/loader'
 import Link from 'next/link'
 import TabsComponent from '@/components/admin/common/tabs'
 import CreditCardDisplay from './creditcard'
-import TransactionList from './transactions'
-// import Image from 'next/image'
+import useGetStores2 from '@/hooks/useStores2'
 
 function DetailsClient () {
   const searchParams = useSearchParams()
-  // console.log(searchParams, 'search Params')
   const id = searchParams.get('clientId')
-  // console.log(id, 'id cliente')
+  const { stores } = useGetStores2()
   const [clientData, setClientData] = useState(null)
-  // const router = useRouter()
+
+  const getStoreName = (storeId) => {
+    if (stores) {
+      for (const store of stores) {
+        if (store.storeId === storeId) {
+          return store.name
+        }
+      }
+    }
+  }
 
   useEffect(() => {
     if (id) {
-      // console.log(id, 'id dentro el useEffect')
       getDetailsClient(id)
         .then((response) => {
           console.log(response.data.data, 'respuesta get')
@@ -43,13 +48,7 @@ function DetailsClient () {
     )
   }
 
-  const { name, email, phone, payments } = clientData
-
-  // const handleCardClick = (payment) => {
-  //   // Esta es la función que manejará el clic en el ícono de la tarjeta
-  //   // Puedes realizar una acción específica aquí, como mostrar más detalles de la tarjeta, abrir un modal, etc.
-  //   console.log('Tarjeta clicada:', payment)
-  // }
+  const { name, email, phone, payments, transactions } = clientData
 
   const tabs = [
     {
@@ -59,7 +58,6 @@ function DetailsClient () {
       content: (
         <div className='flex flex-col gap-4'>
           {/* <h2 className='font-semibold mb-3 underline'>Datos personales</h2> */}
-
           <div className='flex-1'>
             <h2 className='font-semibold'>Nombre</h2>
             <span>{name}</span>
@@ -85,7 +83,6 @@ function DetailsClient () {
         <div className=''>
           <div className='flex-1'>
             {/* <h2 className='font-semibold mb-5 underline'>Métodos de pago</h2> */}
-
             <ul className='grid grid-cols-1 gap-4 overflow-x-auto'>
               {payments.map((payment, index) => (
                 <li key={index} className='bg-white border p-4 rounded-lg shadow-md'>
@@ -107,12 +104,6 @@ function DetailsClient () {
                       <div className=''>
                         <h2 className='font-semibold'>Tipo</h2>
                         <span>{payment.cardType}</span>
-                        {/* <FontAwesomeIcon
-                          icon={faCreditCard}
-                          size='3x'
-                          onClick={() => handleCardClick(payment)} // Agrega una función para la interacción
-                          className='cursor-pointer'
-                        /> */}
                         <CreditCardDisplay />
                       </div>
                     )}
@@ -184,10 +175,55 @@ function DetailsClient () {
       name: 'Transacciones',
       active: false,
       content: (
-        <div>
-          <TransactionList />
 
+        <div className=''>
+          <div className=' flex flex-col'>
+            <div className='text-sm font-bold px-2 pb-2'>
+              Historial
+            </div>
+            <div className='overflow-auto'>
+              <table>
+                <tbody>
+                  {transactions.map((transaction, index) => (
+                    <tr key={index} className='bg-white p-4 rounded-lg shadow-md border-b-2 border-d-gray'>
+                      <td className='text-gray-400 py-2 px-2 text-xs w-full'>
+                        <div className='flex gap-24'>
+
+                          <span className='font-bold'> Fecha: {new Date(transaction.timestamp * 1000).toLocaleDateString()}</span>
+                          <a className='text-d-neon-purple text-xs hover:underline' href='#'>{transaction.id}</a>
+                        </div>
+
+                        <div className='leading-10 grid text-black py-4'>
+                          <div className='text-xs grid grid-cols-2'>
+                            Monto
+                            <span>
+                              {transaction.amount.toLocaleString('es-CL', {
+                                style: 'currency',
+                                currency: 'CLP'
+                              })}
+                            </span>
+                          </div>
+                          <div className='text-xs grid grid-cols-2'>
+                            Método de pago
+                            <span>{transaction.paymentMethod} </span>
+                          </div>
+                          <div className='text-xs grid grid-cols-2'>
+                            Tienda
+                            <span>{getStoreName(transaction.storeId)}</span>
+                          </div>
+                        </div>
+                      </td>
+                      <td className='' />
+
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+
+            </div>
+          </div>
         </div>
+
       )
     }
   ]

@@ -73,7 +73,7 @@ export default function stepFour () {
                     <div key={index} className='text-center border-b-2 border-gray-300 pb-5 mb-5 md:mb-8'>
 
                       <div className='bg-d-dark-dark-purple'>
-                        <h2 className='text-d-soft-purple text-d-title font-bold py-5 mb-5 md:mb-8'>Bandeja {index + 1}</h2>
+                        <h2 className='text-d-soft-purple text-medium font-bold py-2 mb-2 md:mb-8'>Bandeja {index + 1}</h2>
                       </div>
                       <div className='flex flex-col md:flex-row gap-4 items-center md:items-start h-full w-full'>
 
