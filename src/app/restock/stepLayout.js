@@ -6,11 +6,11 @@ function StepLayout () {
   const pathname = usePathname()
 
   return (
-    <div>
+    <div className=''>
       <div className=''>
         <h2 className='text-d-dark-dark-purple text-2xl font-bold'>Restock</h2>
       </div>
-      <ul className='steps p-8'>
+      <ul className='steps p-8 text-xs'>
         <li className={`step ${pathname === '/restock' ? 'step-primary' : ''}`}>Elige la tienda</li>
         <li className={`step ${pathname === '/restock/stepTwo' ? 'step-primary' : ''}`}>Confirma inventario</li>
         <li className={`step ${pathname === '/restock/stepThree' ? 'step-primary' : ''}`}>Agrega o quita productos</li>
