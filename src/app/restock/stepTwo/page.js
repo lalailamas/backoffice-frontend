@@ -8,7 +8,7 @@ import InsideLayout from '@/components/admin/layouts/inside'
 import useGetInventory from '@/hooks/useGetInventory'
 import useGetLayout from '@/hooks/useGetLayout'
 import useGetProdByStore from '@/hooks/useGetProdByStore'
-import { putRestockInventory } from '@/api/restock'
+import { postRestockInventory } from '@/api/restock'
 import ConfirmationModal from '../confirmationModal'
 import useFlattenLayout from '@/hooks/useFlattenLayout'
 // import useGetReiteProd from '@/hooks/useGetReiteProd'
@@ -18,6 +18,7 @@ function StepTwo () {
   const externalId = searchParams.get('external_id')
   const layoutId = searchParams.get('layout_id')
   const storeName = searchParams.get('store_name')
+  const externalTransactionId = searchParams.get('externalTransactionId')
   const transactionId = searchParams.get('transactionId')
   const { inventory, inventoryLoad } = useGetInventory(externalId)
   const { layout, layoutLoad } = useGetLayout(layoutId)
@@ -102,12 +103,12 @@ function StepTwo () {
 
     try {
       console.log('Step 2: stockData to Confirm Inventory', stockData)
-      const response = await putRestockInventory(externalId, stockData)
+      const response = await postRestockInventory(externalId, transactionId, stockData)
       console.log('Step 2: inventory response', response)
       if (response) {
         router.push(
           'stepThree' +
-          `?external_id=${externalId}&layout_id=${layoutId}&store_name=${storeName}&transactionId=${transactionId}`
+          `?external_id=${externalId}&layout_id=${layoutId}&store_name=${storeName}&externalTransactionId=${externalTransactionId}&transactionId=${transactionId}`
         )
       }
     } catch (error) {
