@@ -7,7 +7,7 @@ import OperationTable from './operationTable'
 import InsideLayout from '@/components/admin/layouts/inside'
 import { Card, Grid, Metric, Text } from '@tremor/react'
 import Image from 'next/image'
-import store from '@/utils/images/store.jpg'
+// const store = 'https://despnsa247-public-files.s3.amazonaws.com/gabinete1.jpg'
 
 function page () {
   const searchParams = useSearchParams()
@@ -54,11 +54,11 @@ function page () {
                   </Card>
                   <Card className='text-center'>
                     <Text>Productos Repuestos</Text>
-                    <Metric>{OperationStock[0].results.purchased?.length || 0}</Metric>
+                    <Metric>{OperationStock[0].results.restocked?.length || 0}</Metric>
                   </Card>
                   <Card className='text-center'>
                     <Text>Productos Retirados</Text>
-                    <Metric>{OperationStock[0].results.restocked?.length || 0}</Metric>
+                    <Metric>{OperationStock[0].results.purchased?.length || 0}</Metric>
                   </Card>
 
                 </Grid>
@@ -69,13 +69,25 @@ function page () {
                 <Card className='text-center'>
                   <Text>Imagen antes de abrir tienda</Text>
 
-                  <Image src={store} alt='store' className=' w-96 m-2' />
+                  <Image
+                    src='https://despnsa247-public-files.s3.amazonaws.com/gabinete1.jpg'
+                    alt='store'
+                    className='w-96 m-2'
+                    width={1300} // Establece el ancho deseado
+                    height={500}
+                  />
                 </Card>
 
                 <Card className='text-center'>
                   <Text>Imagen luego de cerrar tienda</Text>
 
-                  <Image src={store} alt='store' className=' w-96 m-2' />
+                  <Image
+                    src='https://despnsa247-public-files.s3.amazonaws.com/gabinete1.jpg'
+                    alt='store'
+                    className='w-96 m-2'
+                    width={1300} // Establece el ancho deseado
+                    height={500}
+                  />
                 </Card>
 
               </div>
