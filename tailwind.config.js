@@ -7,8 +7,9 @@ module.exports = {
     './src/components/**/*.{js,ts,jsx,tsx,mdx}',
     './src/app/**/*.{js,ts,jsx,tsx,mdx}',
     './node_modules/react-tailwindcss-datepicker/dist/index.esm.js',
-    './src/**/*.{js,ts,jsx,tsx}',
-    './node_modules/@tremor/**/*.{js,ts,jsx,tsx}'
+    './src/**/*.{html,js,ts,jsx,tsx}',
+    './node_modules/@tremor/**/*.{js,ts,jsx,tsx}',
+    './node_modules/tw-elements/dist/js/**/*.js'
   ],
 
   theme: {
@@ -155,6 +156,7 @@ module.exports = {
   plugins: [
     require('@headlessui/tailwindcss'),
     require('daisyui'),
-    require('@headlessui/tailwindcss')
+    require('@headlessui/tailwindcss'),
+    [require('tw-elements/dist/plugin.cjs')]
   ]
 }
