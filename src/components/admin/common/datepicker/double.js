@@ -2,27 +2,15 @@ import Datepicker from 'react-tailwindcss-datepicker'
 import dayjs from 'dayjs'
 
 function DatePicker ({ startDate, endDate, handleDateChange }) {
-  // Lógica para traer información del año pasado
-  // const getLastYearDates = () => {
-  //   const currentDate = new Date()
-  //   const currentYear = currentDate.getFullYear()
-
-  //   const startDateLastYear = `01-01-${currentYear - 1}`
-  //   console.log(startDateLastYear, 'inicio año pasado')
-  //   const endDateLastYear = `31-12-${currentYear - 1}`
-  //   console.log(endDateLastYear, 'final año pasado')
-
-  //   return { startDate: startDateLastYear, endDate: endDateLastYear }
-  // }
   const getLastYearDates = () => {
-    // const currentYear = dayjs().year()
-    const lastYearStartDate = dayjs().subtract(1, 'year').startOf('year').format('DD-MM-YYYY')
-    console.log(lastYearStartDate, 'inicio año pasado')
-    const lastYearEndDate = dayjs().subtract(1, 'year').endOf('year').format('DD-MM-YYYY')
-    console.log(lastYearEndDate, 'fin año pasado')
+    const lastYearStartDate = dayjs().subtract(1, 'year').startOf('year').format('YYYY-MM-DD')
+    const lastYearEndDate = dayjs().subtract(1, 'year').endOf('year').format('YYYY-MM-DD')
 
     return { startDate: lastYearStartDate, endDate: lastYearEndDate }
   }
+
+  const { startDate: startDateLastYear, endDate: endDateLastYear } = getLastYearDates()
+
   return (
     <div className='w-full border'>
       <Datepicker
@@ -42,11 +30,10 @@ function DatePicker ({ startDate, endDate, handleDateChange }) {
             pastMonth: 'Mes pasado',
             pastYear: {
               text: 'Año pasado',
-              period: getLastYearDates()
-              // period: {
-              //   start: getLastYearDates().startDate,
-              //   end: getLastYearDates().endDate
-              // }
+              period: {
+                start: startDateLastYear,
+                end: endDateLastYear
+              }
             }
           },
           displayFormat: 'DD/MM/YYYY',
@@ -56,7 +43,6 @@ function DatePicker ({ startDate, endDate, handleDateChange }) {
         }}
       />
     </div>
-
   )
 }
 
