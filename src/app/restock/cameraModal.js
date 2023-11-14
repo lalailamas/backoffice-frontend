@@ -20,6 +20,11 @@ function CameraModal ({
   const [selectedFile, setSelectedFile] = useState(null)
   const isFullscreen = false
   const cameraRef = React.useRef()
+  const handleShowBack = () => {
+    setShowInput(false)
+    setShowCamera(false)
+    setImage('')
+  }
 
   const handleTakePhoto = (dataUri) => {
     // Callback cuando se toma una foto
@@ -28,6 +33,7 @@ function CameraModal ({
   }
   const handleShowCamera = () => {
     setShowCamera(!showcamera)
+    setImage('')
   }
   const handleShowInputFile = () => {
     setShowCamera(false)
@@ -61,6 +67,12 @@ function CameraModal ({
         console.log(reader.result, 'reader.result')
       }
       reader.readAsDataURL(file)
+    }
+  }
+  const SendSnapshot = (image) => {
+    return () => {
+      takeSnapshot(image)
+      handleConfirmationModal()
     }
   }
 
@@ -161,7 +173,7 @@ function CameraModal ({
                         )
                       : (
                         <div className='relative'>
-                          <button className='absolute top-2 right-2 z-10' onClick={handleShowCamera}>
+                          <button className='absolute top-2 right-2 z-10' onClick={handleShowBack}>
                             {/* Puedes personalizar el botón de cerrar según tus necesidades */}
                             <span className='text-2xl font-bold text-grey -700'>X</span>
                           </button>
@@ -171,11 +183,22 @@ function CameraModal ({
                         </div>
                         )}
             </div>
+            <div>
+              <button
+                type='button'
+                databehavior='submit'
+                className={`${image ? ' mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:mt-0 sm:w-auto sm:text-sm' : 'hidden'}`}
+                onClick={SendSnapshot(image)}
+              >
+                Subir Foto
+              </button>
+            </div>
 
             <div className='mt-5 sm:mt-4 sm:flex sm:flex-row-reverse'>
               <button type='button' databehavior='cancel' className='mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:mt-0 sm:w-auto sm:text-sm' onClick={handleOperationConfirmation}>
                 {cancelButtonText}
               </button>
+
             </div>
           </div>
         </div>
