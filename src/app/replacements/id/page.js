@@ -115,7 +115,7 @@ function page () {
                 </Grid>
                 <Grid numItems={1} numItemsSm={1} numItemsLg={1} className='gap-2 mt-2'>
                   <Card className='text-center'>
-                    <Text className='text-center'>Comentarios</Text>
+                    <Text className='text-center font-bold'>Comentarios</Text>
                     <Text>{OperationStock[0].comments || 'sin comentarios'}</Text>
 
                   </Card>
