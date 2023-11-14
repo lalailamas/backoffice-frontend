@@ -160,7 +160,15 @@ function CameraModal ({
                         </div>
                         )
                       : (
-                        <input type='file' accept='image/*' onChange={handleFileInputChange} />
+                        <div className='relative'>
+                          <button className='absolute top-2 right-2 z-10' onClick={handleShowCamera}>
+                            {/* Puedes personalizar el botón de cerrar según tus necesidades */}
+                            <span className='text-2xl font-bold text-grey -700'>X</span>
+                          </button>
+                          <div className='p-3'>
+                            <input type='file' accept='image/*' onChange={handleFileInputChange} />
+                          </div>
+                        </div>
                         )}
             </div>
 
