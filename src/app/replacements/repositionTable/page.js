@@ -37,8 +37,15 @@ export default function RepositionTable ({ data, stores }) {
     return store.name
   }
   function cutDate (date) {
-    const dateCut = date.slice(0, 10)
-    return dateCut
+    if (!date) return 'no date'
+
+    // Obtener las partes de la fecha (año, mes, día)
+    const [year, month, day] = date.slice(0, 10).split('-')
+
+    // Formatear la fecha en el formato DD-MM-YYYY
+    const formattedDate = `${day}-${month}-${year}`
+
+    return formattedDate
   }
   function countProducts (restocked) {
     let count = 0
@@ -56,8 +63,8 @@ export default function RepositionTable ({ data, stores }) {
             <thead>
               <tr className='bg-d-dark-dark-purple text-d-white'>
                 <th />
-                <th>Transaction Id</th>
-                <th>Store ID</th>
+                <th>ID de Transacción</th>
+                <th>Tienda</th>
                 <th>Fecha</th>
                 <th>Duración</th>
                 <th>Productos Repuestos</th>
