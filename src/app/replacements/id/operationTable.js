@@ -1,6 +1,20 @@
 import React from 'react'
 
 function OperationTable ({ data }) {
+  function stockDifference (stockBefore, stockAfter) {
+    return stockAfter - stockBefore
+  }
+  const stockColorDifference = (stockBefore, stockAfter) => {
+    const difference = stockAfter - stockBefore
+
+    if (difference > 0) {
+      return 'text-green-500'
+    } else if (difference < 0) {
+      return 'text-red-500'
+    } else {
+      return 'zero'
+    }
+  }
   return (
     <>
       <div className='overflow-x-auto'>
@@ -10,11 +24,12 @@ function OperationTable ({ data }) {
               <thead>
                 <tr className='bg-d-dark-dark-purple text-d-white'>
                   <th />
-                  <th>Product ID</th>
+                  <th>ID</th>
                   <th>Nombre</th>
                   <th>Imagen</th>
-                  <th>Stock antes</th>
-                  <th>Stock después</th>
+                  <th>Stock BO</th>
+                  <th>Stock Físico</th>
+                  <th>Diferencia Stock</th>
                   <th>Agregados</th>
                   <th>Retirados</th>
 
@@ -32,7 +47,7 @@ function OperationTable ({ data }) {
                     </td>
                     <td>{item.stockBefore}</td>
                     <td>{item.stockAfter}</td>
-
+                    <td className={stockColorDifference(item.stockBefore, item.stockAfter)}>{stockDifference(item.stockBefore, item.stockAfter)}</td>
                     {/* Asegúrate de que data.results sea un objeto antes de intentar acceder a sus propiedades */}
                     <td>{data.results?.restocked?.find((restockedItem) => restockedItem.productId === item.productId)?.quantity || 0}</td>
                     <td>{data.results?.purchased?.find((purchasedItem) => purchasedItem.productId === item.productId)?.quantity || 0}</td>
