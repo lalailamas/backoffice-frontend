@@ -7,9 +7,31 @@ const urlApiReite = process.env.NEXT_PUBLIC_DSP_API_BASE + 'reite/'
 export const postData = (credentials, url, contentType) => {
   return axios.post(urlApi + url, credentials, { headers: { 'content-type': contentType } })
 }
-export const postDataByStore = async (storeId, url, contentType) => {
-  return axios.post(urlApi + url, { userClientId: '9kzL7vO1m8Ug35cAmD29JbvHkWH2', openStoreType: 'RESTOCK', store_id: storeId },
-    { headers: { 'content-type': contentType } })
+export const postDataByStore = async (storeId, snapshot, url, contentType) => {
+  const formData = new FormData()
+
+  // Adjunta los datos adicionales al objeto FormData
+  formData.append('userClientId', '9kzL7vO1m8Ug35cAmD29JbvHkWH2')
+  formData.append('openStoreType', 'RESTOCK')
+  formData.append('store_id', storeId)
+  const snapshotBlob = base64toBlob(snapshot, 'image/png')
+  const fileName = `image_${Date.now()}.png`
+  formData.append('image', snapshotBlob, fileName)
+  try {
+    const response = await axios.post(urlApi + url, formData, {
+      headers: {
+        'content-type': contentType
+      }
+    })
+
+    // Devuelve la respuesta del servidor
+    console.log(response.data, 'response de postDataByStore')
+    return response.data
+  } catch (error) {
+    // Maneja los errores aquí
+    console.error(error)
+    throw error // Puedes manejar el error según tus necesidades
+  }
 }
 export const getDataByQuery = (url, contentType, query) => {
   return axios.get(urlApi + url + query, { headers: { 'content-type': contentType } })
@@ -124,4 +146,13 @@ export const putReiteInventoryData = async (storeId, url, url2, stockData, conte
 }
 export const patchReiteInventoryData = async (transactionId, url, url2, stockData, contentType) => {
   return axios.patch(urlApiReite + url + transactionId + url2, stockData, { headers: { 'content-type': contentType } })
+}
+
+function base64toBlob (base64, type) {
+  const binary = atob(base64)
+  const array = []
+  for (let i = 0; i < binary.length; i++) {
+    array.push(binary.charCodeAt(i))
+  }
+  return new Blob([new Uint8Array(array)], { type })
 }

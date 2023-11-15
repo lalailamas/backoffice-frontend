@@ -18,7 +18,6 @@ function CameraModal ({
   const [showcamera, setShowCamera] = useState(false)
   const [showInput, setShowInput] = useState(false)
   const [selectedFile, setSelectedFile] = useState(null)
-  const isFullscreen = false
   const cameraRef = React.useRef()
   const handleShowBack = () => {
     setShowInput(false)

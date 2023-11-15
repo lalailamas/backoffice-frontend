@@ -37,11 +37,18 @@ function Restock () {
   }, [])
 
   const handleOpenStore = async () => {
-    const openStore = await OpenStore(selectedStore.storeId)
-    // console.log('Step 1: openStore response', openStore)
-    router.push(
-      'restock/stepTwo' + `?external_id=${selectedStore.storeId}&layout_id=${selectedStore.layoutId}&store_name=${selectedStore.name}&externalTransactionId=${openStore.external_transaction_id}&transactionId=${openStore.transaction_id}`
-    )
+    const openStore = await OpenStore(selectedStore.storeId, snapshot)
+    console.log('Step 1: openStore response', openStore)
+
+    // Verifica si openStore no es undefined antes de acceder a sus propiedades
+    if (openStore) {
+      router.push(
+        'restock/stepTwo' + `?external_id=${selectedStore.storeId}&layout_id=${selectedStore.layoutId}&store_name=${selectedStore.name}&externalTransactionId=${openStore.external_transaction_id}&transactionId=${openStore.transaction_id}`
+      )
+    } else {
+      console.error('OpenStore returned undefined')
+    // Maneja el error según tus necesidades
+    }
   }
   const handleConfirmationModal = () => {
     setModalVisible(!modalVisible)
@@ -50,8 +57,9 @@ function Restock () {
     setModalCameraVisible(!modalCameraVisible)
   }
   const takeSnapshot = async (img) => {
-    console.log('entré al takeSnapshot')
-    setSnapshot(img)
+    const base64Content = img.split(';base64,').pop()
+
+    setSnapshot(base64Content)
     handleCameraModal()
     handleConfirmationModal()
   }
