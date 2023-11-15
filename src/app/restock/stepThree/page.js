@@ -9,7 +9,7 @@ import DspLoader from '@/components/admin/common/loader'
 import useGetInventory from '@/hooks/useGetInventory'
 import { useState } from 'react'
 import useGetProdByStore from '@/hooks/useGetProdByStore'
-import { patchRestockResult } from '@/api/restock'
+import { putRestockResult } from '@/api/restock'
 import ConfirmationModal from '../confirmationModal'
 
 export default function page () {
@@ -18,11 +18,13 @@ export default function page () {
   const externalId = searchParams.get('external_id')
   const layoutId = searchParams.get('layout_id')
   const storeName = searchParams.get('store_name')
+  const externalTransactionId = searchParams.get('externalTransactionId')
   const transactionId = searchParams.get('transactionId')
   const { inventory, inventoryLoad } = useGetInventory(externalId)
   const { layout, layoutLoad } = useGetLayout(layoutId)
   // const { products, loading } = useGetReiteProd()
   const { products, loading } = useGetProdByStore(externalId)
+  // const [comments, setComments] = useState('Sin comentarios')
 
   const [tempPurchased, setTempPurchased] = useState({})
   const [tempRestocked, setTempRestocked] = useState({})
@@ -66,7 +68,6 @@ export default function page () {
     })
     )
     const stockData = {
-      alwaysUpdateInventory: true,
       purchased: allProducts.map((product) => ({
         productId: product.productId,
         quantity: flatPurchased[product.productId] || 0
@@ -74,17 +75,20 @@ export default function page () {
       restocked: allProducts.map((product) => ({
         productId: product.productId,
         quantity: flatRestocked[product.productId] || 0
-      }))
+      })),
+      store_id: externalId,
+      comments: 'Sin comentarios',
+      transaction_id: parseInt(transactionId)
 
     }
 
     try {
       console.log('Step 3: stockData to Confirm PATCH RESULT', stockData)
-      const response = await patchRestockResult(transactionId, stockData)
+      const response = await putRestockResult(externalTransactionId, stockData)
       console.log('Step 3: response PATCH RESULT', response)
       if (response.data.successful) {
         router.push(
-          'stepFour' + `?external_id=${externalId}&layout_id=${layoutId}&store_name=${storeName}&transactionId=${transactionId}`
+          'stepFour' + `?external_id=${externalId}&layout_id=${layoutId}&store_name=${storeName}&externalTransactionId=${externalTransactionId}&transactionId=${transactionId}`
         )
       }
     } catch (error) {
@@ -97,6 +101,8 @@ export default function page () {
 
   return (
     <div>
+      {/* <div><pre>{JSON.stringify(tempRestocked, null, 2)}</pre></div> */}
+      {/* <div><pre>{JSON.stringify(tempPurchased, null, 2)}</pre></div> */}
 
       {(loading || inventoryLoad || layoutLoad)
         ? <DspLoader />
@@ -118,7 +124,7 @@ export default function page () {
                   return (
                     <div key={index} className='text-center border-b-2 border-gray-300 pb-5 mb-5 md:mb-8'>
                       <div className='bg-d-dark-dark-purple'>
-                        <h2 className='text-d-soft-purple text-d-title font-bold py-5 mb-5 md:mb-8'>Bandeja {index + 1}</h2>
+                        <h2 className='text-d-soft-purple text-medium font-bold py-2 mb-2 md:mb-8'>Bandeja {index + 1}</h2>
                       </div>
                       {/* <div className='flex flex-col md:flex-row gap-4 items-center md:items-start h-full w-full'> */}
                       <div className='flex flex-row gap-2 items-center overflow-x-auto'>
@@ -133,7 +139,7 @@ export default function page () {
                                       <AccordeonCard
                                         step={3}
                                         key={index}
-                                        index={index}
+                                        index={column.productId + index}
                                         updateProductQuantity={updateProductQuantity}
                                         productId={column.productId}
                                         maxPurchasedQuantity={quantityProd ? quantityProd.quantity : 0}

@@ -7,6 +7,13 @@ const urlApiReite = process.env.NEXT_PUBLIC_DSP_API_BASE + 'reite/'
 export const postData = (credentials, url, contentType) => {
   return axios.post(urlApi + url, credentials, { headers: { 'content-type': contentType } })
 }
+export const postDataByStore = async (storeId, url, contentType) => {
+  return axios.post(urlApi + url, { userClientId: '9kzL7vO1m8Ug35cAmD29JbvHkWH2', openStoreType: 'RESTOCK', store_id: storeId },
+    { headers: { 'content-type': contentType } })
+}
+export const getDataByQuery = (url, contentType, query) => {
+  return axios.get(urlApi + url + query, { headers: { 'content-type': contentType } })
+}
 
 export const getData = (order, limit, page, search, ean, id, url, contentType) => {
   if (search !== '') {
@@ -21,7 +28,13 @@ export const getData = (order, limit, page, search, ean, id, url, contentType) =
     return axios.get(urlApi + url + `?limit=${limit}&page=${page}`, { headers: { 'content-type': contentType } })
   }
 }
+export const getStockRequestData = (id, url, contentType) => {
+  return axios.get(urlApi + url + `${id}`, { headers: { 'content-type': contentType } })
+}
 
+export const getLimitTimeStampData = (url, contentType, limit, startDate, endDate) => {
+  return axios.get(urlApi + url + '?' + `limit=${limit}` + `&startTimestamp=${startDate}` + `&endTimestamp=${endDate}`, { headers: { 'content-type': contentType } })
+}
 export const getTimeStampData = (url, contentType, startDate, endDate) => {
   return axios.get(urlApiReite + url + `?startTimestamp=${startDate}` + `&endTimestamp=${endDate}`, { headers: { 'content-type': contentType } })
 }
@@ -38,30 +51,23 @@ export const deleteData = (id, url, contentType) => {
   return axios.delete(urlApi + url, { data: { id }, headers: { 'content-type': contentType } })
 }
 
-export const getReiteData = (id, url, contentType) => {
+export const getReiteData = (id, url, contentType, active) => {
   if (id !== '') {
     return axios.get(urlApiReite + url + `?storeId=${id}`, { headers: { 'content-type': contentType } })
   } else {
-    return axios.get(urlApiReite + url, { headers: { 'content-type': contentType } })
+    if (active !== '') {
+      return axios.get(urlApiReite + url + '?active=true', { headers: { 'content-type': contentType } })
+    } else {
+      return axios.get(urlApiReite + url, { headers: { 'content-type': contentType } })
+    }
   }
 }
 export const getReiteDataById = (id, url, contentType) => {
   return axios.get(urlApiReite + url + `/${id}`, { headers: { 'content-type': contentType } })
 }
 
-// export const getDataStock = (url, contentType, search) => {
-//   if (search !== '') {
-//     return axios.get(urlApiReite + url, `?search=${search}`, { headers: { 'content-type': contentType } })
-//   } else {
-//     return axios.get(urlApiReite + url, { headers: { 'content-type': contentType } })
-//   }
-// }
 export const getDataStock = (url, contentType) => {
   return axios.get(urlApiReite + url, { headers: { 'content-type': contentType } })
-}
-
-export const getStockRequestData = (id, url, contentType) => {
-  return axios.get(urlApi + url + `${id}`, { headers: { 'content-type': contentType } })
 }
 
 export const DspApi = {
@@ -108,8 +114,8 @@ export const DspApi = {
 export const getReiteDataByStore = async (storeId, url, url2, contentType) => {
   return axios.get(urlApiReite + url + storeId + url2, { headers: { 'content-type': contentType } })
 }
-export const postReiteDataByStore = async (storeId, url, url2, contentType) => {
-  return axios.post(urlApiReite + url + storeId + url2, { userClientId: '9kzL7vO1m8Ug35cAmD29JbvHkWH2', openStoreType: 'RESTOCK' },
+export const postReiteDataByStore = async (storeId, url, contentType) => {
+  return axios.post(urlApiReite + url, { userClientId: '9kzL7vO1m8Ug35cAmD29JbvHkWH2', openStoreType: 'RESTOCK', store_id: storeId },
     { headers: { 'content-type': contentType } })
 }
 

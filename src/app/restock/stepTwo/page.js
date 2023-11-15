@@ -8,7 +8,7 @@ import InsideLayout from '@/components/admin/layouts/inside'
 import useGetInventory from '@/hooks/useGetInventory'
 import useGetLayout from '@/hooks/useGetLayout'
 import useGetProdByStore from '@/hooks/useGetProdByStore'
-import { putRestockInventory } from '@/api/restock'
+import { postRestockInventory } from '@/api/restock'
 import ConfirmationModal from '../confirmationModal'
 import useFlattenLayout from '@/hooks/useFlattenLayout'
 // import useGetReiteProd from '@/hooks/useGetReiteProd'
@@ -18,6 +18,7 @@ function StepTwo () {
   const externalId = searchParams.get('external_id')
   const layoutId = searchParams.get('layout_id')
   const storeName = searchParams.get('store_name')
+  const externalTransactionId = searchParams.get('externalTransactionId')
   const transactionId = searchParams.get('transactionId')
   const { inventory, inventoryLoad } = useGetInventory(externalId)
   const { layout, layoutLoad } = useGetLayout(layoutId)
@@ -102,12 +103,12 @@ function StepTwo () {
 
     try {
       console.log('Step 2: stockData to Confirm Inventory', stockData)
-      const response = await putRestockInventory(externalId, stockData)
+      const response = await postRestockInventory(externalId, transactionId, stockData)
       console.log('Step 2: inventory response', response)
       if (response) {
         router.push(
           'stepThree' +
-          `?external_id=${externalId}&layout_id=${layoutId}&store_name=${storeName}&transactionId=${transactionId}`
+          `?external_id=${externalId}&layout_id=${layoutId}&store_name=${storeName}&externalTransactionId=${externalTransactionId}&transactionId=${transactionId}`
         )
       }
     } catch (error) {
@@ -122,7 +123,7 @@ function StepTwo () {
 
   return (
     <div>
-
+      {/* <div><pre>{JSON.stringify(occInventory, null, 2)}</pre></div> */}
       {(loading || inventoryLoad || layoutLoad)
         ? (<DspLoader />)
         : (
@@ -139,7 +140,7 @@ function StepTwo () {
                 return (
                   <div key={index} className='text-center border-b-2 border-gray-300 pb-5 mb-5 md:mb-8'>
                     <div className='bg-d-dark-dark-purple'>
-                      <h2 className='text-d-soft-purple text-d-title font-bold py-5 mb-5 md:mb-8'>BANDEJA {index + 1}</h2>
+                      <h2 className='text-d-soft-purple text-medium font-bold py-2 mb-2 md:mb-8'>BANDEJA {index + 1}</h2>
                     </div>
                     {/* <div className='flex flex-col md:flex-row gap-4 items-center md:items-start'> */}
                     <div className='flex flex-row gap-2 items-center overflow-x-auto'>

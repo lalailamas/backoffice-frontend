@@ -160,24 +160,24 @@ export default function MyComponent () {
                   <Card className='gap-3'>
                     <Grid numItems={1} numItemsSm={3} numItemsLg={3} className='gap-2'>
 
-                      <Card className=''>
-                        <Text>Venta mes</Text>
-                        <Metric>$ 1.705.000</Metric>
+                      <Card className='flex flex-col justify-end'>
+                        <Text>Venta mes actual</Text>
+                        <Metric className='mt-auto'>$1.705.000</Metric>
                       </Card>
                       <Card className=''>
-                        <Text>vs Meta mes</Text>
-                        <Metric>$ 1.914.715</Metric>
+                        <Text>vs Meta mes en curso</Text>
                         <BadgeDelta deltaType='moderateIncrease' isIncreasePositive size='xs'>
                           +12.3%
                         </BadgeDelta>
+                        <Metric>$1.914.715</Metric>
 
                       </Card>
                       <Card className=''>
                         <Text>vs Meta mes anterior</Text>
-                        <Metric>$ 2.122.725</Metric>
                         <BadgeDelta deltaType='moderateDecrease' isincreasenegative='true' size='xs'>
                           -24.5%
                         </BadgeDelta>
+                        <Metric>$2.122.725</Metric>
 
                       </Card>
                     </Grid>
@@ -185,26 +185,26 @@ export default function MyComponent () {
 
                   <Card className='mt-2'>
                     <Grid numItems={1} numItemsSm={3} numItemsLg={3} className='gap-2'>
-                      <Card>
+                      <Card className='flex flex-col justify-end'>
                         <Text>Venta acumuladas</Text>
-                        <Metric>KPI 1</Metric>
+                        <Metric className='mt-auto'>KPI 1</Metric>
                       </Card>
-                      <Card>
+                      <Card className='flex flex-col justify-end'>
                         <Text>vs meta año</Text>
-                        <Metric>KPI 2</Metric>
+                        <Metric className='mt-auto'>KPI 2</Metric>
                       </Card>
 
                     </Grid>
                   </Card>
                   <Card className='mt-2'>
                     <Grid numItems={1} numItemsSm={3} numItemsLg={3} className='gap-2'>
-                      <Card>
+                      <Card className='flex flex-col justify-end'>
                         <Text>Ticket promedio</Text>
-                        <Metric>KPI 1</Metric>
+                        <Metric className='mt-auto'>KPI 1</Metric>
                       </Card>
-                      <Card>
+                      <Card className='flex flex-col justify-end'>
                         <Text>vs meta mes</Text>
-                        <Metric>KPI 2</Metric>
+                        <Metric className='mt-auto'>KPI 2</Metric>
                       </Card>
                       <Card>
                         <Text>vs meta mes anterior</Text>
@@ -245,23 +245,23 @@ export default function MyComponent () {
 
                 <Col numColSpan={1} numColSpanLg={1} className=''>
 
-                  <Card className=''>
+                  <Card>
                     <Grid numItems={1} numItemsSm={3} numItemsLg={3} className='gap-2'>
 
-                      <Card className=''>
-                        <Text># DE REPOSICIONES</Text>
-                        <Metric>15</Metric>
+                      <Card className='flex flex-col justify-end'>
+                        <Text className=''>REPOSICIONES</Text>
+                        <Metric className='mt-auto'>15</Metric>
                       </Card>
-                      <Card className=''>
-                        <Text># PRODUCTOS MERMADOS</Text>
-                        <Metric>28</Metric>
+                      <Card className='flex flex-col justify-end'>
+                        <Text>PRODUCTOS MERMADOS</Text>
+                        <Metric className='mt-auto'>28</Metric>
                       </Card>
-                      <Card className=''>
+                      <Card className='flex flex-col justify-end'>
                         <Text>vs mes anterior</Text>
                         <BadgeDelta deltaType='moderateDecrease' isIncreasePositive size='xs'>
                           -23.2%
                         </BadgeDelta>
-                        <Metric>(35)</Metric>
+                        <Metric>35</Metric>
 
                       </Card>
                     </Grid>
@@ -270,17 +270,17 @@ export default function MyComponent () {
                   <Card className='mt-2'>
                     <Grid numItems={1} numItemsSm={3} numItemsLg={3} className='gap-2'>
 
-                      <Card className=''>
+                      <Card className='flex flex-col justify-end'>
                         <Text># DE RETIROS</Text>
-                        <Metric>12</Metric>
+                        <Metric className='mt-auto'>12</Metric>
                       </Card>
-                      <Card className=''>
+                      <Card className='flex flex-col justify-end'>
                         <Text>Retiros por merma</Text>
-                        <Metric>8</Metric>
+                        <Metric className='mt-auto'>8</Metric>
                       </Card>
-                      <Card className=''>
+                      <Card className='flex flex-col justify-end'>
                         <Text>Retiros por cambio</Text>
-                        <Metric>4</Metric>
+                        <Metric className='mt-auto'>4</Metric>
 
                       </Card>
                     </Grid>
@@ -293,9 +293,9 @@ export default function MyComponent () {
                         <Text>TIEMPO PROMEDIO REPOSICIÓN</Text>
                         <Metric>7.22 min</Metric>
                       </Card>
-                      <div className='flex justify-center m-10'>
-                        <Badge icon={ClockIcon} size='xl' className='hidden sm:block' />
-                      </div>
+
+                      <ClockIcon className='relative hidden sm:block' />
+
                       <Card className=''>
                         <Text>TIEMPO PROMEDIO TRANSACCIÓN</Text>
                         <Metric>6,43 seg</Metric>
@@ -306,121 +306,123 @@ export default function MyComponent () {
 
                   <Card className='mt-2'>
                     <Title className='text-center mb-4'>Transacciones Mes</Title>
-                    <Grid numItems={1} numItemsSm={4} numItemsLg={4} className='gap-2'>
+                    <Grid numItems={4} numItemsSm={4} numItemsLg={4} className='gap-1 text-center flex flex-col sm:flex-row'>
 
-                      <Card className=''>
-                        <Text>TIEMPO PROMEDIO REPOSICIÓN</Text>
-                        <Metric>325</Metric>
+                      <Card className='flex flex-col flex-grow mb-2 lg:w-1/4'>
+                        <Text className=''>TIEMPO PROMEDIO REPOSICIÓN</Text>
+                        <Metric className='mt-auto'>5'</Metric>
                       </Card>
-                      <Card className=''>
+
+                      <Card className='flex flex-col flex-grow mb-2 lg:w-1/4'>
                         <Text>vs meta mes</Text>
                         <BadgeDelta deltaType='moderateDecrease' isIncreasePositive size='xs'>
                           -5.4%
                         </BadgeDelta>
-                        <Metric>(336 TRX)</Metric>
+                        <Metric className='mt-auto'>336 TRX</Metric>
                       </Card>
 
-                      <Card className=''>
+                      <Card className='flex flex-col flex-grow mb-2 lg:w-1/4'>
                         <Text>vs mes anterior</Text>
                         <BadgeDelta deltaType='moderateIncrease' isIncreasePositive size='xs'>
-                          +9,8%
+                          +9.8%
                         </BadgeDelta>
-                        <Metric>(304 TRX)</Metric>
+                        <Metric className='mt-auto'>304 TRX</Metric>
                       </Card>
 
-                      <Card className=''>
+                      <Card className='flex flex-col flex-grow mb-2 lg:w-1/4'>
                         <Text>TRX POR USUARIO</Text>
-                        <Metric>2,1</Metric>
+                        <Metric className='mt-auto'>2.1</Metric>
                       </Card>
 
                     </Grid>
                   </Card>
-                  <Card className='mt-2 hidden sm:block h-fit'>
-                    <Title className='text-center mb-10'>Clientes</Title>
-                    <img src='/persona.png' className='mt-6 w-36 absolute hidden sm:block' />
-                    <div className='flex flex-col sm:flex-row w-auto h-auto justify-end'>
-                      <div className='flex sm:flex-col gap-11 mt-20 mr-2'>
-                        <Text className='mb-10'>Total</Text>
-
-                        <div className='mr-2'>
-                          <Text className=''>vs MA</Text>
-                        </div>
-
-                        <Text className='mt-6 ml-2'>vs</Text>
-                      </div>
-                      <div className='flex justify-end'>
-                        <Grid numItems={9} numItemsSm={1} numItemsLg={3} className='gap-2 w-96 text-center'>
-
-                          <Col numColSpan={1} numColSpanLg={1}>
-                            <Text className='mb-2'>CLIENTES REGISTRADOS</Text>
-                            <Card className=''>
-                              <Metric>0</Metric>
-                            </Card>
-                          </Col>
-
-                          <Col>
-                            <Text className='mb-2'>CLIENTES ACTIVOS</Text>
-                            <Card className=''>
-                              <Metric>0</Metric>
-                            </Card>
-                          </Col>
-
-                          <Col>
-                            <Text className='mb-2'>% DE TASA ACTIVOS</Text>
-                            <Card className=''>
-                              <Metric>0</Metric>
-                            </Card>
-                          </Col>
-
-                          <Card className=''>
-                            <Metric>0</Metric>
-                            <BadgeDelta deltaType='moderateIncrease' isincreasenegative='true' size='xs'>
-                              0%
-                            </BadgeDelta>
-                          </Card>
-                          <Card className=''>
-                            <Metric>0</Metric>
-                            <BadgeDelta deltaType='moderateIncrease' isincreasenegative='true' size='xs'>
-                              0%
-                            </BadgeDelta>
-                          </Card>
-
-                          <Card className=''>
-                            <Metric>0</Metric>
-                            <BadgeDelta deltaType='moderateIncrease' isincreasenegative='true' size='xs'>
-                              0%
-                            </BadgeDelta>
-                          </Card>
-
-                          <Card className=''>
-                            <Metric>0</Metric>
-                            <BadgeDelta deltaType='moderateIncrease' isincreasenegative='true' size='xs'>
-                              0%
-                            </BadgeDelta>
-                          </Card>
-
-                          <Card className=''>
-                            <Metric>0</Metric>
-                            <BadgeDelta deltaType='moderateIncrease' isincreasenegative='true' size='xs'>
-                              0%
-                            </BadgeDelta>
-                          </Card>
-
-                          <Card className=''>
-                            <Metric>0</Metric>
-                            <BadgeDelta deltaType='moderateIncrease' isincreasenegative='true' size='xs'>
-                              0%
-                            </BadgeDelta>
-                          </Card>
-
-                        </Grid>
-                      </div>
-                    </div>
-                  </Card>
 
                 </Col>
               </Grid>
+              <Card className='mt-2 hidden sm:block'>
+                <Title className='text-center mb-10'>Clientes</Title>
 
+                <img src='/persona.png' className='mt-6 w-36 absolute hidden sm:block' />
+
+                <div className='flex flex-col sm:flex-row ml-56'>
+                  <div className='flex sm:flex-col gap-11 mt-20 mr-2'>
+                    <Text className='mb-10'>Total</Text>
+
+                    <div className='mr-2'>
+                      <Text className=''>vs MA</Text>
+                    </div>
+
+                    <Text className='mt-6 ml-2'>vs</Text>
+                  </div>
+                  <div className='flex justify-end '>
+                    <Grid numItems={9} numItemsSm={1} numItemsLg={3} className='gap-2 w-96 text-center'>
+
+                      <Col numColSpan={1} numColSpanLg={1}>
+                        <Text className='mb-2'>CLIENTES REGISTRADOS</Text>
+                        <Card className=''>
+                          <Metric>0</Metric>
+                        </Card>
+                      </Col>
+
+                      <Col>
+                        <Text className='mb-2 mt-5'>CLIENTES ACTIVOS</Text>
+                        <Card className=''>
+                          <Metric>0</Metric>
+                        </Card>
+                      </Col>
+
+                      <Col>
+                        <Text className='mb-2'>% DE TASA ACTIVOS</Text>
+                        <Card className=''>
+                          <Metric>0</Metric>
+                        </Card>
+                      </Col>
+
+                      <Card className=''>
+                        <Metric>0</Metric>
+                        <BadgeDelta deltaType='moderateIncrease' isincreasenegative='true' size='xs'>
+                          0%
+                        </BadgeDelta>
+                      </Card>
+                      <Card className=''>
+                        <Metric>0</Metric>
+                        <BadgeDelta deltaType='moderateIncrease' isincreasenegative='true' size='xs'>
+                          0%
+                        </BadgeDelta>
+                      </Card>
+
+                      <Card className=''>
+                        <Metric>0</Metric>
+                        <BadgeDelta deltaType='moderateIncrease' isincreasenegative='true' size='xs'>
+                          0%
+                        </BadgeDelta>
+                      </Card>
+
+                      <Card className=''>
+                        <Metric>0</Metric>
+                        <BadgeDelta deltaType='moderateIncrease' isincreasenegative='true' size='xs'>
+                          0%
+                        </BadgeDelta>
+                      </Card>
+
+                      <Card className=''>
+                        <Metric>0</Metric>
+                        <BadgeDelta deltaType='moderateIncrease' isincreasenegative='true' size='xs'>
+                          0%
+                        </BadgeDelta>
+                      </Card>
+
+                      <Card className=''>
+                        <Metric>0</Metric>
+                        <BadgeDelta deltaType='moderateIncrease' isincreasenegative='true' size='xs'>
+                          0%
+                        </BadgeDelta>
+                      </Card>
+
+                    </Grid>
+                  </div>
+                </div>
+              </Card>
             </TabPanel>
           </TabPanels>
         </TabGroup>

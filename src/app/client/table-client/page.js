@@ -9,9 +9,6 @@ import Link from 'next/link'
 import DspLoader from '@/components/admin/common/loader'
 
 function TableClient () {
-  // const [searchParams, setSearchParams] = useState('')
-  // const [startDate, setStartDate] = useState(null)
-  // const [endDate, setEndDate] = useState(null)
   const [clients, setClients] = useState([])
   const [expandedRows, setExpandedRows] = useState([])
   let date
@@ -21,17 +18,6 @@ function TableClient () {
     endDate: dayjs()
   })
 
-  // // Modifica la función handleSearchChange para manejar búsqueda por texto
-  // const handleSearchChange = (value) => {
-  //   setSearchParams(value)
-  // }
-
-  // // Agrega una función para manejar el cambio en el rango de fechas
-  // const handleDateChange = (newStartDate, newEndDate) => {
-  //   setStartDate(newStartDate)
-  //   setEndDate(newEndDate)
-  // }
-
   const handleDateChange = (newDateRange) => {
     setDateRange(newDateRange)
   }
@@ -40,6 +26,7 @@ function TableClient () {
     if (dateRange.startDate !== null && dateRange.endDate !== null) {
       getListClients(dateRange)
         .then((response) => {
+          console.log(response)
           setClients(response.data)
         })
         .catch((error) => {
@@ -75,7 +62,7 @@ function TableClient () {
               </svg>
             </button> */}
           {/* </div> */}
-          <div className='p-4 w-full'>
+          <div className='absolute w-full px-10 mt-4'>
             <DatePicker
               startDate={dateRange.startDate}
               endDate={dateRange.endDate}
@@ -83,7 +70,7 @@ function TableClient () {
             />
           </div>
         </div>
-        <div className='overflow-x-auto p-4'>
+        <div className='overflow-x-auto p-10 mt-8'>
           {clients && (
             <table className='table  text-d-dark-dark-purple table-zebra max-[431px]:hidden'>
               <thead>

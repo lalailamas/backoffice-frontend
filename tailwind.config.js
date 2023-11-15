@@ -7,8 +7,9 @@ module.exports = {
     './src/components/**/*.{js,ts,jsx,tsx,mdx}',
     './src/app/**/*.{js,ts,jsx,tsx,mdx}',
     './node_modules/react-tailwindcss-datepicker/dist/index.esm.js',
-    './src/**/*.{js,ts,jsx,tsx}',
-    './node_modules/@tremor/**/*.{js,ts,jsx,tsx}'
+    './src/**/*.{html,js,ts,jsx,tsx}',
+    './node_modules/@tremor/**/*.{js,ts,jsx,tsx}',
+    './node_modules/tw-elements/dist/js/**/*.js'
   ],
 
   theme: {
@@ -118,7 +119,7 @@ module.exports = {
         'tremor-label': ['0.75rem'],
         'tremor-default': ['0.875rem', { lineHeight: '1.25rem' }],
         'tremor-title': ['1.125rem', { lineHeight: '1.75rem' }],
-        'tremor-metric': ['1.875rem', { lineHeight: '2.25rem' }],
+        'tremor-metric': ['1.125rem', { lineHeight: '2rem' }],
         'd-title': ['2rem', { lineHeight: '2.18rem' }]
       }
     }
@@ -155,6 +156,7 @@ module.exports = {
   plugins: [
     require('@headlessui/tailwindcss'),
     require('daisyui'),
-    require('@headlessui/tailwindcss')
+    require('@headlessui/tailwindcss'),
+    [require('tw-elements/dist/plugin.cjs')]
   ]
 }

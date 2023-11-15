@@ -11,17 +11,16 @@ const AccordeonCard = ({
 
   const handleIncrease = () => {
     // Lógica para aumentar la cantidad
-    if (quantity < maxQuantity) {
-      setQuantity(quantity + 1)
-      if (step === 2) {
-        if (occurrence !== false) {
-          // console.log('occurrence', occurrence)
-          quantityChangeHandler(index, productId, ((quantity + 1)), occurrence)
-        } else {
-          quantityChangeHandler(index, productId, ((quantity + 1) - initialQuantity))
-        }
-      } else { updateProductQuantity(index, productId, (quantity + 1), 'restocked') }
-    }
+
+    setQuantity(quantity + 1)
+    if (step === 2) {
+      if (occurrence !== false) {
+        // console.log('occurrence', occurrence)
+        quantityChangeHandler(index, productId, ((quantity + 1)), occurrence)
+      } else {
+        quantityChangeHandler(index, productId, ((quantity + 1) - initialQuantity))
+      }
+    } else { updateProductQuantity(index, productId, (quantity + 1), 'restocked') }
   }
   const handleIncreasePurchased = () => {
     // Lógica para aumentar la cantidad
@@ -87,7 +86,7 @@ const AccordeonCard = ({
         : step === 2
           ? (
             // <div className='w-[250px] h-[210px]'>
-            <section className='w-[250px] h-[210px] flex flex-col items-center align-center gap-6 rounded shadow-lg'>
+            <section className='w-[250px] h-[300px] flex flex-col items-center align-center gap-6 rounded shadow-lg'>
               {/* <div className='p-2 rounded shadow-lg gap-2 h-full overflow-hidden flex flex-col justify-end items-center'> */}
 
               <span className='flex  items-center  h-full'>
@@ -134,7 +133,7 @@ const AccordeonCard = ({
 
           : (
               {/* STEP THREE */},
-                <section className='w-[250px] h-[350px] flex flex-col items-center align-center gap-6 rounded shadow-lg'>
+                <section className='w-[250px] h-[400px] flex flex-col items-center align-center gap-6 rounded shadow-lg'>
                   {/* <div className='p-2 rounded shadow-lg gap-2 w-full h-full'> */}
                   {/* <div className='flex flex-col gap-8 items-center justify-end '> */}
                   <span className='flex  items-center  h-full'>
