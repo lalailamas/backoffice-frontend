@@ -11,6 +11,7 @@ import useGetProdByStore from '@/hooks/useGetProdByStore'
 import { OpenStore } from '@/api/store'
 import ConfirmationModal from '../confirmationModal'
 import { useState } from 'react'
+import CameraModal from '../cameraModal'
 // import useGetStores2 from '@/hooks/useStores2'
 // import useGetStoreData from '@/hooks/useGetStoreData'
 
@@ -26,7 +27,8 @@ export default function stepFour () {
   // const { products, loading } = useGetReiteProd()
   const { products, loading } = useGetProdByStore(externalId)
   const [modalVisible, setModalVisible] = useState(false)
-  const [backModalVisible, setBackModalVisible] = useState(false)
+  const [modalCameraVisible, setModalCameraVisible] = useState(false)
+  const [snapshot, setSnapshot] = useState(null)
 
   // const handleBackToStepTwo = async () => {
   //   setBackModalVisible(true)
@@ -47,6 +49,16 @@ export default function stepFour () {
     router.push(
       '/restock'
     )
+  }
+  const handleCameraModal = () => {
+    setModalCameraVisible(!modalCameraVisible)
+  }
+  const takeSnapshot = async (img) => {
+    const base64Content = img.split(';base64,').pop()
+
+    setSnapshot(base64Content)
+    handleCameraModal()
+    handleConfirmationModal()
   }
 
   return (
@@ -145,21 +157,11 @@ export default function stepFour () {
           </div>
           )}
       <div className='flex gap-5 justify-center pb-10'>
-        {/* <p
-          type='button'
-          onClick={() => {
-            handleBackToStepTwo()
-          }}
-          className='underline text-black rounded-lg text-sm focus:ring-4 focus:outline-none pt-2'
-        >
-          Volver Atrás
-
-        </p> */}
 
         <button
           type='button'
           onClick={() => {
-            handleConfirmationModal()
+            handleCameraModal()
           }}
           className='items-center px-3 py-2 text-sm font-medium text-center text-white bg-d-dark-dark-purple rounded-lg hover:bg-d-soft-soft-purple hover:text-d-dark-dark-purple focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800'
         >
@@ -177,16 +179,22 @@ export default function stepFour () {
           cancelButtonText='Cancelar'
         />
       )}
-      {backModalVisible && (
-        <ConfirmationModal
-          handleOperationConfirmation={confirmBackToStepTwo}
-          handleConfirmationModal={() => setBackModalVisible(false)}
-          title='¿Seguro que deseas volver atrás?'
-          message='Ten en cuenta que al hacerlo, deberás repetir todo el proceso desde el principio'
-          confirmButtonText='Volver Atrás'
+      {modalCameraVisible && (
+        <CameraModal
+          handleConfirmationModal={handleConfirmationModal}
+          handleOperationConfirmation={handleCameraModal}
+          title='Necesitamos que tomes una foto de la tienda antes de abrirla'
+          message={(
+            <span>
+              Toma una foto de la tienda antes de abrirla
+            </span>
+                )}
+          confirmButtonText='Siguiente'
           cancelButtonText='Cancelar'
+          takeSnapshot={takeSnapshot}
         />
       )}
+
     </div>
   )
 }
