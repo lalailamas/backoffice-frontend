@@ -119,8 +119,8 @@ export const postReiteDataByStore = async (storeId, url, contentType) => {
     { headers: { 'content-type': contentType } })
 }
 
-export const putReiteInventoryData = async (storeId, url, url2, stockData, contentType) => {
-  return axios.put(urlApiReite + url + storeId + url2, stockData, { headers: { 'content-type': contentType } })
+export const putReiteInventoryData = async (url, stockData, contentType) => {
+  return axios.put(urlApiReite + url, stockData, { headers: { 'content-type': contentType } })
 }
 export const patchReiteInventoryData = async (transactionId, url, url2, stockData, contentType) => {
   return axios.patch(urlApiReite + url + transactionId + url2, stockData, { headers: { 'content-type': contentType } })

@@ -11,6 +11,7 @@ export default function useGetProdByStore (id) {
     try {
       const productsResponse = await getReiteProdByStore(id)
       if (productsResponse.data) {
+        console.log(productsResponse.data, 'respuesta productos')
         setState({
           products: productsResponse.data,
           loading: false,
