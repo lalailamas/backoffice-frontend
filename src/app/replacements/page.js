@@ -5,9 +5,11 @@ import { useState, useEffect } from 'react'
 import InsideLayout from '@/components/admin/layouts/inside'
 import DatePicker from '@/components/admin/common/datepicker/double'
 import dayjs from 'dayjs'
+import useGetStores2 from '@/hooks/useStores2'
 
 function Replacements () {
   const [restockData, setRestockData] = useState([])
+  const { stores } = useGetStores2()
   const [dateRange, setDateRange] = useState({
     startDate: dayjs().subtract(1, 'month'),
     endDate: dayjs()
@@ -46,7 +48,7 @@ function Replacements () {
       {/* <div><pre>{JSON.stringify(restockData, null, 2)}</pre></div> */}
 
       <div className='overflow-x-auto p-10 mt-8'>
-        <RepositionTable data={restockData} />
+        <RepositionTable data={restockData} stores={stores} />
       </div>
 
     </>

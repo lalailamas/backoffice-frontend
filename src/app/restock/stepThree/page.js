@@ -24,6 +24,7 @@ export default function page () {
   const { layout, layoutLoad } = useGetLayout(layoutId)
   // const { products, loading } = useGetReiteProd()
   const { products, loading } = useGetProdByStore(externalId)
+  // const [comments, setComments] = useState('Sin comentarios')
 
   const [tempPurchased, setTempPurchased] = useState({})
   const [tempRestocked, setTempRestocked] = useState({})
@@ -76,7 +77,7 @@ export default function page () {
         quantity: flatRestocked[product.productId] || 0
       })),
       store_id: externalId,
-      comments: 'basta por favor',
+      comments: 'Sin comentarios',
       transaction_id: parseInt(transactionId)
 
     }

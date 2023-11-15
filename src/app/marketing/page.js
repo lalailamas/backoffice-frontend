@@ -1,5 +1,5 @@
 'use client'
-// import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import InsideLayout from '@/components/admin/layouts/inside'
 import DatePicker from '@/components/admin/common/datepicker/double'
 import useGetStores2 from '@/hooks/useStores2'
@@ -13,7 +13,7 @@ import { chartdata, dataFormatter, valueFormatter, cities, chartdata2, dataForma
 function Marketing () {
   const { stores, error } = useGetStores2()
 
-  //   const [selectedStores, setSelectedStores] = useState([])
+  const [selectedStores, setSelectedStores] = useState([])
   //   const [selectedStoreId, setSelectedStoreId] = useState(null)
 
   //   useEffect(() => {
@@ -31,14 +31,14 @@ function Marketing () {
   }
 
   // Manejar cambios en la selección del select
-  //   const handleStoreChange = (e) => {
-  //     const storeId = e.target.value
-  //     if (selectedStores.includes(storeId)) {
-  //       setSelectedStores(selectedStores.filter((id) => id !== storeId))
-  //     } else {
-  //       setSelectedStores([...selectedStores, storeId])
-  //     }
-  //   }
+  const handleStoreChange = (e) => {
+    const storeId = e.target.value
+    if (storeId && selectedStores.includes(storeId)) {
+      setSelectedStores(selectedStores.filter((id) => id !== storeId))
+    } else {
+      setSelectedStores([...selectedStores, storeId])
+    }
+  }
 
   return (
     <div className='h-screen'>
@@ -47,17 +47,23 @@ function Marketing () {
       <main className='p-12'>
         <Title>Dashboard Marketing </Title>
         <div className='flex flex-row p-4'>
-          <MultiSelect className='w-80' placeholderSearch placeholder='Tiendas'>
+          <MultiSelect
+            className='w-80'
+            placeholderSearch='Buscar'
+            placeholder='Tiendas'
+            value={selectedStores}
+            onValueChange={(selectedItems) => setSelectedStores(selectedItems)}
+          >
             {stores && stores.map((store) => (
-              <MultiSelectItem key={store.id} value={store.id}>
+              <MultiSelectItem key={store.id} value={store.id} onChange={handleStoreChange}>
                 {store.name}
               </MultiSelectItem>
             ))}
 
           </MultiSelect>
-
-          <DatePicker />
-
+          <div className='ml-2'>
+            <DatePicker />
+          </div>
         </div>
         <Grid numItems={1} numItemsSm={1} numItemsMd={1} numItemsLg={2} className='gap-2 mt-3'>
           <Card className='text-center h-96 mb-2'>
@@ -194,8 +200,8 @@ function Marketing () {
 
           <Card className=''>
             <Text>Rating Usuarios</Text>
-            <div className='flex flex-row gap-2 mt-5'>
-              <div className='flex flex-col lg:flex-row items-center mt-5'>
+            <div className='flex flex-row gap-1 mt-5'>
+              <div className='flex flex-col items-center mt-5 lg:flex-row '>
                 <svg
                   xmlns='http://www.w3.org/2000/svg'
                   fill='none'
