@@ -146,6 +146,8 @@ function CameraModal ({
                         onCameraStop={() => {
                           handleCameraStop()
                         }}
+                        idealFacingMode='environment'
+                        isFullscreen
                       />
                     </div>
                     )
