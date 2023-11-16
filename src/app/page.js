@@ -60,7 +60,7 @@ export default function Home () {
 
   return (
     <>
-      {(loading && previousLoading)
+      {(loading || previousLoading)
         ? (
           <DspLoader />
           )
