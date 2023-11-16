@@ -74,12 +74,6 @@ function CameraModal ({
     takeSnapshot(image)
     handleConfirmationModal()
   }
-  const SendSnapshot = () => {
-    return () => {
-      takeSnapshot(image)
-      handleConfirmationModal()
-    }
-  }
 
   return (
     <div>
