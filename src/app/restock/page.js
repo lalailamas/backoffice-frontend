@@ -37,17 +37,22 @@ function Restock () {
   }, [])
 
   const handleOpenStore = async () => {
-    const openStore = await OpenStore(selectedStore.storeId, snapshot)
-    console.log('Step 1: openStore response', openStore)
-
-    // Verifica si openStore no es undefined antes de acceder a sus propiedades
-    if (openStore) {
-      router.push(
-        'restock/stepTwo' + `?external_id=${selectedStore.storeId}&layout_id=${selectedStore.layoutId}&store_name=${selectedStore.name}&externalTransactionId=${openStore.external_transaction_id}&transactionId=${openStore.transaction_id}`
-      )
+    if (selectedStore.layoutId === null) {
+      console.error('No layoutId')
+      throw new Error('No layoutId')
     } else {
-      console.error('OpenStore returned undefined')
-    // Maneja el error según tus necesidades
+      const openStore = await OpenStore(selectedStore.storeId, snapshot)
+      console.log('Step 1: openStore response', openStore)
+
+      // Verifica si openStore no es undefined antes de acceder a sus propiedades
+      if (openStore) {
+        router.push(
+          'restock/stepTwo' + `?external_id=${selectedStore.storeId}&layout_id=${selectedStore.layoutId}&store_name=${selectedStore.name}&externalTransactionId=${openStore.external_transaction_id}&transactionId=${openStore.transaction_id}`
+        )
+      } else {
+        console.error('OpenStore returned undefined')
+        // Maneja el error según tus necesidades
+      }
     }
   }
   const handleConfirmationModal = () => {
@@ -71,6 +76,8 @@ function Restock () {
         <StepLayout />
 
         <div className='flex-col m-4 p-4'>
+          {/* <div><pre>{JSON.stringify(selectedStore, null, 2)}</pre></div> */}
+
           <select
             onChange={(e) => handleStoreChange(e.target.value)}
             className='select select-sm select-bordered rounded-full w-full md:max-w-xs'

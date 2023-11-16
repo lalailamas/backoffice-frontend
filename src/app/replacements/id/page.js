@@ -140,7 +140,7 @@ function page () {
                   <Text>Imagen luego de cerrar tienda</Text>
 
                   <Image
-                    src='https://despnsa247-public-files.s3.amazonaws.com/gabinete1.jpg'
+                    src={OperationStock[0].end_image_url}
                     alt='store'
                     className='w-96 m-2'
                     width={1300} // Establece el ancho deseado

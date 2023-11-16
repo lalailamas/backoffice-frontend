@@ -26,6 +26,26 @@ export const putImageData = async (snapshot, url, contentType) => {
     throw error
   }
 }
+export const putImageUpdate = async (snapshot, url, contentType, comment) => {
+  const formData = new FormData()
+  formData.append('comments', comment)
+  const snapshotBlob = base64toBlob(snapshot, 'image/png')
+  const fileName = `image_${Date.now()}.png`
+  formData.append('image', snapshotBlob, fileName)
+  try {
+    const response = await axios.put(urlApi + url, formData, {
+      headers: {
+        'content-type': contentType
+      }
+    })
+
+    console.log(response.data, 'response de putImageUpdate')
+    return response.data
+  } catch (error) {
+    console.error(error)
+    throw error
+  }
+}
 export const postDataByStore = async (storeId, snapshot, url, contentType) => {
   const formData = new FormData()
 
