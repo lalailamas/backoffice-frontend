@@ -11,12 +11,13 @@ import DspLoader from '@/components/admin/common/loader'
 // const inter = Inter({ subsets: ['latin'] })
 
 export default function Home () {
-  const { data: session } = useSession()
+  const { data: session, status } = useSession()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [loginError, setLoginError] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
   const [loading, setLoading] = useState(false)
+  const [previousLoading, setPreviousLoading] = useState(true)
   const router = useRouter()
   const HJID = 3721483
   const HJSV = 6
@@ -42,16 +43,24 @@ export default function Home () {
   }, [])
 
   useEffect(() => {
+    console.log(status, 'status del useEffect')
+    if (status === 'loading') {
+      console.log('entré al if loading')
+      setPreviousLoading(true)
+    } else if (status === 'unauthenticated') { setPreviousLoading(false) }
     if (session !== null && session !== undefined) {
       // console.log(session, 'session del useEffect')
       if (session.user.role === 'admin') router.push('/dashboard')
       if (session.user.role === 'restock') router.push('/restock')
     }
-  }, [session])
+  }, [session, status])
+  if (previousLoading) {
+    return <DspLoader />
+  }
 
   return (
     <>
-      {loading
+      {(loading && previousLoading)
         ? (
           <DspLoader />
           )
