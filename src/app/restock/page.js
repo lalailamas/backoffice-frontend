@@ -6,13 +6,14 @@ import InsideLayout from '@/components/admin/layouts/inside'
 import { useRouter } from 'next/navigation'
 import StepLayout from './stepLayout'
 import ConfirmationModal from './confirmationModal'
-// import CameraModal from './cameraModal'
+import CameraModal from './cameraModal'
 
 function Restock () {
   const [stores, setStores] = useState([])
   const [selectedStore, setSelectedStore] = useState(null)
   const [modalVisible, setModalVisible] = useState(false)
-  // const [modalCameraVisible, setModalCameraVisible] = useState(false)
+  const [modalCameraVisible, setModalCameraVisible] = useState(false)
+  const [snapshot, setSnapshot] = useState(null)
 
   const router = useRouter()
 
@@ -36,18 +37,37 @@ function Restock () {
   }, [])
 
   const handleOpenStore = async () => {
-    const openStore = await OpenStore(selectedStore.storeId)
-    // console.log('Step 1: openStore response', openStore)
-    router.push(
-      'restock/stepTwo' + `?external_id=${selectedStore.storeId}&layout_id=${selectedStore.layoutId}&store_name=${selectedStore.name}&externalTransactionId=${openStore.external_transaction_id}&transactionId=${openStore.transaction_id}`
-    )
+    if (selectedStore.layoutId === null) {
+      console.error('No layoutId')
+      throw new Error('No layoutId')
+    } else {
+      const openStore = await OpenStore(selectedStore.storeId, snapshot)
+      console.log('Step 1: openStore response', openStore)
+
+      // Verifica si openStore no es undefined antes de acceder a sus propiedades
+      if (openStore) {
+        router.push(
+          'restock/stepTwo' + `?external_id=${selectedStore.storeId}&layout_id=${selectedStore.layoutId}&store_name=${selectedStore.name}&externalTransactionId=${openStore.external_transaction_id}&transactionId=${openStore.transaction_id}`
+        )
+      } else {
+        console.error('OpenStore returned undefined')
+        // Maneja el error según tus necesidades
+      }
+    }
   }
   const handleConfirmationModal = () => {
     setModalVisible(!modalVisible)
   }
-  // const handleCameraModal = () => {
-  //   setModalCameraVisible(!modalCameraVisible)
-  // }
+  const handleCameraModal = () => {
+    setModalCameraVisible(!modalCameraVisible)
+  }
+  const takeSnapshot = async (img) => {
+    const base64Content = img.split(';base64,').pop()
+
+    setSnapshot(base64Content)
+    handleCameraModal()
+    handleConfirmationModal()
+  }
 
   return (
     <div>
@@ -56,6 +76,8 @@ function Restock () {
         <StepLayout />
 
         <div className='flex-col m-4 p-4'>
+          {/* <div><pre>{JSON.stringify(selectedStore, null, 2)}</pre></div> */}
+
           <select
             onChange={(e) => handleStoreChange(e.target.value)}
             className='select select-sm select-bordered rounded-full w-full md:max-w-xs'
@@ -77,7 +99,8 @@ function Restock () {
               <button
                 type='button'
                 onClick={() => {
-                  handleOpenStore(selectedStore.storeId)
+                  // handleOpenStore(selectedStore.storeId)
+                  handleCameraModal()
                 }}
                 className='inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-d-dark-dark-purple rounded-lg hover:bg-d-soft-soft-purple hover:text-d-dark-dark-purple focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800'
               >
@@ -101,20 +124,21 @@ function Restock () {
                 cancelButtonText='Cancelar'
               />
             )}
-            {/* {modalCameraVisible && (
+            {modalCameraVisible && (
               <CameraModal
                 handleConfirmationModal={handleConfirmationModal}
                 handleOperationConfirmation={handleCameraModal}
-                title='¿Estás seguro que quieres abrir esta máquina?'
+                title='Necesitamos que tomes una foto de la tienda antes de abrirla'
                 message={(
                   <span>
                     Toma una foto de la tienda antes de abrirla
                   </span>
                 )}
-                confirmButtonText='Tomar Foto'
+                confirmButtonText='Siguiente'
                 cancelButtonText='Cancelar'
+                takeSnapshot={takeSnapshot}
               />
-            )} */}
+            )}
 
           </div>
         </div>
