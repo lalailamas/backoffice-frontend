@@ -8,9 +8,10 @@ import AccordeonCard from '../acordeonCard'
 import DspLoader from '@/components/admin/common/loader'
 import useGetInventory from '@/hooks/useGetInventory'
 import useGetProdByStore from '@/hooks/useGetProdByStore'
-import { OpenStore } from '@/api/store'
 import ConfirmationModal from '../confirmationModal'
 import { useState } from 'react'
+import CameraModal from './cameraModal'
+import { putStockImageUpdate } from '@/api/stock'
 // import useGetStores2 from '@/hooks/useStores2'
 // import useGetStoreData from '@/hooks/useGetStoreData'
 
@@ -20,33 +21,50 @@ export default function stepFour () {
   const externalId = searchParams.get('external_id')
   const layoutId = searchParams.get('layout_id')
   const storeName = searchParams.get('store_name')
+  const transactionId = searchParams.get('transactionId')
   const { inventory, inventoryLoad } = useGetInventory(externalId)
   // const { store, loading: storeLoad } = useGetStoreData(externalId)
   const { layout, layoutLoad } = useGetLayout(layoutId)
   // const { products, loading } = useGetReiteProd()
   const { products, loading } = useGetProdByStore(externalId)
   const [modalVisible, setModalVisible] = useState(false)
-  const [backModalVisible, setBackModalVisible] = useState(false)
+  const [modalCameraVisible, setModalCameraVisible] = useState(false)
+  const [snapshot, setSnapshot] = useState(null)
+  const [comment, setComment] = useState('Sin comentarios')
 
-  // const handleBackToStepTwo = async () => {
-  //   setBackModalVisible(true)
-  // }
-
-  const confirmBackToStepTwo = async () => {
-    const openStore = await OpenStore(externalId)
-    router.push(
-      '/restock/stepTwo' +
-        `?external_id=${externalId}&layout_id=${layoutId}&store_name=${storeName}&transactionId=${openStore.transactionId}`
-    )
+  const handleComment = async (comment) => {
+    setComment(comment)
   }
+
   const handleConfirmationModal = () => {
     setModalVisible(!modalVisible)
   }
 
   const handleOperationConfirmation = async () => {
+    await updateRestock()
+
     router.push(
       '/restock'
     )
+  }
+  const handleCameraModal = () => {
+    setModalCameraVisible(!modalCameraVisible)
+  }
+  const takeSnapshot = async (img) => {
+    const base64Content = img.split(';base64,').pop()
+
+    setSnapshot(base64Content)
+    handleCameraModal()
+    handleConfirmationModal()
+  }
+
+  const updateRestock = async () => {
+    try {
+      const response = await putStockImageUpdate(transactionId, snapshot, comment)
+      console.log(response)
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   return (
@@ -145,21 +163,11 @@ export default function stepFour () {
           </div>
           )}
       <div className='flex gap-5 justify-center pb-10'>
-        {/* <p
-          type='button'
-          onClick={() => {
-            handleBackToStepTwo()
-          }}
-          className='underline text-black rounded-lg text-sm focus:ring-4 focus:outline-none pt-2'
-        >
-          Volver Atrás
-
-        </p> */}
 
         <button
           type='button'
           onClick={() => {
-            handleConfirmationModal()
+            handleCameraModal()
           }}
           className='items-center px-3 py-2 text-sm font-medium text-center text-white bg-d-dark-dark-purple rounded-lg hover:bg-d-soft-soft-purple hover:text-d-dark-dark-purple focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800'
         >
@@ -177,16 +185,24 @@ export default function stepFour () {
           cancelButtonText='Cancelar'
         />
       )}
-      {backModalVisible && (
-        <ConfirmationModal
-          handleOperationConfirmation={confirmBackToStepTwo}
-          handleConfirmationModal={() => setBackModalVisible(false)}
-          title='¿Seguro que deseas volver atrás?'
-          message='Ten en cuenta que al hacerlo, deberás repetir todo el proceso desde el principio'
-          confirmButtonText='Volver Atrás'
+      {modalCameraVisible && (
+        <CameraModal
+          step={4}
+          handleConfirmationModal={handleConfirmationModal}
+          handleOperationConfirmation={handleCameraModal}
+          title='Necesitamos que tomes una foto de la tienda para confirmar la reposición'
+          message={(
+            <span>
+              Toma una foto de la tienda luego de cerrarla
+            </span>
+                )}
+          confirmButtonText='Siguiente'
           cancelButtonText='Cancelar'
+          takeSnapshot={takeSnapshot}
+          handleComment={handleComment}
         />
       )}
+
     </div>
   )
 }

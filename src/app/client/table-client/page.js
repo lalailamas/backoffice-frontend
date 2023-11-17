@@ -9,9 +9,6 @@ import Link from 'next/link'
 import DspLoader from '@/components/admin/common/loader'
 
 function TableClient () {
-  // const [searchParams, setSearchParams] = useState('')
-  // const [startDate, setStartDate] = useState(null)
-  // const [endDate, setEndDate] = useState(null)
   const [clients, setClients] = useState([])
   const [expandedRows, setExpandedRows] = useState([])
   let date
@@ -20,17 +17,6 @@ function TableClient () {
     startDate: dayjs('2022-01-01'),
     endDate: dayjs()
   })
-
-  // // Modifica la función handleSearchChange para manejar búsqueda por texto
-  // const handleSearchChange = (value) => {
-  //   setSearchParams(value)
-  // }
-
-  // // Agrega una función para manejar el cambio en el rango de fechas
-  // const handleDateChange = (newStartDate, newEndDate) => {
-  //   setStartDate(newStartDate)
-  //   setEndDate(newEndDate)
-  // }
 
   const handleDateChange = (newDateRange) => {
     setDateRange(newDateRange)
