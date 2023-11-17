@@ -46,6 +46,7 @@ function Restock () {
 
       // Verifica si openStore no es undefined antes de acceder a sus propiedades
       if (openStore) {
+        setSnapshot(null)
         router.push(
           'restock/stepTwo' + `?external_id=${selectedStore.storeId}&layout_id=${selectedStore.layoutId}&store_name=${selectedStore.name}&externalTransactionId=${openStore.external_transaction_id}&transactionId=${openStore.transaction_id}`
         )
