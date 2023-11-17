@@ -1,6 +1,6 @@
 'use client'
 import InsideLayout from '@/components/admin/layouts/inside'
-import React, { useEffect, useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import useGetStores2 from '@/hooks/useStores2'
 import { getReiteProdByStore } from '@/api/product/reite'
 import DspLoader from '@/components/admin/common/loader'
@@ -15,6 +15,7 @@ function StockAdjustment () {
   const [inventory, setInventory] = useState([])
   const [modalVisible, setModalVisible] = useState(false)
   // const [quantity, setQuantity] = useState([])
+  const [newQuantity, setNewQuantity] = useState(null)
   const [selectedProduct, setSelectedProduct] = useState(null)
   // const router = useRouter()
 
@@ -22,10 +23,10 @@ function StockAdjustment () {
     setSelectedStore(e)
   }
   const handleProductsInventory = async (storeId) => {
-    // console.log(storeId, 'store ID')
     try {
       const products = await getReiteProdByStore(storeId)
       const store = stores.find((store) => store.storeId === storeId)
+      setNewQuantity(null)
       setProducts(products)
       setInventory(store.products)
     } catch (error) {
@@ -40,22 +41,29 @@ function StockAdjustment () {
     setSelectedProduct({ product, quantityProd, metadata })
     setModalVisible(true)
   }
+
   const handleOperationConfirmation = async () => {
     setModalVisible(false)
   }
 
+  const updateProductQuantity = (productId, newQuantity) => {
+    setNewQuantity((prevQuantity) => ({
+      ...prevQuantity,
+      [productId]: newQuantity
+    }))
+    console.log(newQuantity, 'nueva cantidad')
+    console.log(productId, 'product ID en actualizacion')
+  }
   useEffect(() => {
-    // Verifica si hay una tienda seleccionada
-    if (selectedStore) {
-      // console.log('entré')
-      // console.log(selectedStore, 'selectedStore')
-    }
+
   }, [selectedStore])
 
   return (
     <div>
       <InsideLayout />
       <div>
+        <div><pre>{JSON.stringify(newQuantity, null, 2)}</pre></div>
+
         <div className='p-5 pt-10 flex flex-row items-center justify-center'>
           <select
             className='select select-sm select-bordered rounded-full w-full md:max-w-xs '
@@ -111,7 +119,14 @@ function StockAdjustment () {
                       </td>
                       <td className='py-2 px-4 border'>{product.productName}</td>
                       <td className='py-2 px-4 border'>
-                        {quantityProd ? `${quantityProd.quantity}` : 'Quantity not available'}
+                        {
+                          newQuantity && newQuantity[product.productId]
+                            ? `${newQuantity[product.productId]}`
+                            : quantityProd && quantityProd.quantity
+                              ? `${quantityProd.quantity}`
+                              : 0
+                        }
+
                       </td>
 
                       <td className='py-2 px-4 border'>
@@ -120,8 +135,8 @@ function StockAdjustment () {
                             handleEditProduct(product, quantityProd, metadata)
                           }}
                         >
-                          <svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke-width='1.5' stroke='currentColor' className='w-6 h-6'>
-                            <path stroke-linecap='round' stroke-linejoin='round' d='M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10' />
+                          <svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' strokeWidth='1.5' stroke='currentColor' className='w-6 h-6'>
+                            <path strokeLinecap='round' strokeLinejoin='round' d='M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10' />
                           </svg>
 
                         </button>
@@ -143,10 +158,14 @@ function StockAdjustment () {
             cancelButtonText='Cancelar'
             showQuantityControls
             initialQuantity={selectedProduct.quantityProd.quantity}
+            productId={selectedProduct.product.productId}
+            storeId={selectedStore}
+            updateQuantity={handleOperationConfirmation}
+            updateProductQuantity={updateProductQuantity}
+
           />
 
         )}
-        {/* <div><pre>{JSON.stringify(selectedProduct, null, 2)}</pre></div> */}
         {/* <div><pre>{JSON.stringify(inventory, null, 2)}</pre></div> */}
       </div>
     </div>

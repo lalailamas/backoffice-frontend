@@ -1,7 +1,40 @@
 import React, { useState, useEffect } from 'react'
+import { putStockInventory } from '@/api/stock'
 
-function QuantityModal ({ handleOperationConfirmation, title, message, confirmButtonText, cancelButtonText, handleConfirmationModal, showQuantityControls = false, initialQuantity }) {
+function QuantityModal ({ handleOperationConfirmation, title, message, confirmButtonText, cancelButtonText, handleConfirmationModal, showQuantityControls = false, initialQuantity, productId, storeId, updateProductQuantity }) {
   const [quantity, setQuantity] = useState(0)
+
+  const quantityChangeHandler = async () => {
+    const stockData = {
+      added: [],
+      removed: []
+    }
+    const quantityDifference = quantity - initialQuantity
+    if (quantityDifference > 0) {
+      stockData.added.push({
+        productId,
+        quantity: quantityDifference
+      })
+    }
+    if (quantityDifference < 0) {
+      stockData.removed.push({
+        productId,
+        quantity: Math.abs(quantityDifference)
+      })
+    }
+    try {
+      console.log(stockData, 'stockData')
+      const response = await putStockInventory(storeId, stockData)
+      if (response) {
+        setQuantity(quantity)
+        handleConfirmationModal()
+        updateProductQuantity(productId, quantity)
+      }
+      console.log(response, 'respuesta put')
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   useEffect(() => {
     if (initialQuantity !== undefined) {
@@ -77,7 +110,7 @@ function QuantityModal ({ handleOperationConfirmation, title, message, confirmBu
               </div>
             )}
             <div className='mt-5 sm:mt-4 sm:flex sm:flex-row-reverse'>
-              <button type='button' className='w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-d-dark-dark-purple font-medium hover:bg-d-soft-soft-purple hover:text-d-dark-dark-purple text-white sm:ml-3 sm:w-auto sm:text-sm' onClick={handleOperationConfirmation}>
+              <button type='button' className='w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-d-dark-dark-purple font-medium hover:bg-d-soft-soft-purple hover:text-d-dark-dark-purple text-white sm:ml-3 sm:w-auto sm:text-sm' onClick={quantityChangeHandler}>
                 {confirmButtonText}
               </button>
               <button type='button' databehavior='cancel' className='mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:mt-0 sm:w-auto sm:text-sm' onClick={handleConfirmationModal}>
@@ -94,3 +127,19 @@ function QuantityModal ({ handleOperationConfirmation, title, message, confirmBu
 }
 
 export default QuantityModal
+
+// /api/reite/stores/DEV_CNV_002/inventory
+// {
+//     "added": [
+//         {
+//             "productId": "DEV_CNV_004",
+//             "quantity": 1
+//         }
+//     ],
+//     "removed": [
+//         {
+//             "productId": "DEV_CNV_007",
+//             "quantity": 1
+//         }
+//     ]
+// }
