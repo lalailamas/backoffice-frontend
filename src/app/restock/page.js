@@ -2,11 +2,11 @@
 import React, { useEffect, useState } from 'react'
 import { OpenStore, getStores } from '../../api/store'
 import InsideLayout from '@/components/admin/layouts/inside'
-// import StepTwo from './stepTwo'
 import { useRouter } from 'next/navigation'
 import StepLayout from './stepLayout'
 import ConfirmationModal from './confirmationModal'
 import CameraModal from './cameraModal'
+import { swallError } from '@/utils/sweetAlerts'
 
 function Restock () {
   const [stores, setStores] = useState([])
@@ -29,7 +29,8 @@ function Restock () {
         setStores(response.data)
         // console.log('response', response.data)
       } catch (error) {
-        console.error('Error fetching stores:', error)
+        swallError('Error fetching stores:', false)
+        // console.error('Error fetching stores:', error)
       }
     }
 
@@ -38,22 +39,20 @@ function Restock () {
 
   const handleOpenStore = async () => {
     if (selectedStore.layoutId === null) {
-      console.error('No layoutId')
-      throw new Error('No layoutId')
-    } else {
-      const openStore = await OpenStore(selectedStore.storeId, snapshot)
-      console.log('Step 1: openStore response', openStore)
-
-      // Verifica si openStore no es undefined antes de acceder a sus propiedades
+      swallError('Hubo un error con la tienda, contacta al administrador', false)
+      return
+    }
+    try {
+      const openStore = await OpenStore(selectedStore.storeId)
+      // console.log('Step 1: openStore response', openStore)
       if (openStore) {
-        setSnapshot(null)
+        swallError('Abriendo tienda', true)
         router.push(
           'restock/stepTwo' + `?external_id=${selectedStore.storeId}&layout_id=${selectedStore.layoutId}&store_name=${selectedStore.name}&externalTransactionId=${openStore.external_transaction_id}&transactionId=${openStore.transaction_id}`
         )
-      } else {
-        console.error('OpenStore returned undefined')
-        // Maneja el error según tus necesidades
       }
+    } catch {
+      swallError('Error opening store:', false)
     }
   }
   const handleConfirmationModal = () => {
