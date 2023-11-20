@@ -23,7 +23,6 @@ function StockRequest () {
         const response = await getStockStores()
         setStores(response.data)
         if (response.data.length > 0) {
-          // console.log(response.data, 'response.data[0].external_id')
           handleStoreChange(response.data[0].external_id)
         }
       } catch (error) {

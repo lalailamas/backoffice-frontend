@@ -5,8 +5,7 @@ import useGetStores2 from '@/hooks/useStores2'
 import { getReiteProdByStore } from '@/api/product/reite'
 import DspLoader from '@/components/admin/common/loader'
 import QuantityModal from '../restock/quantityModal'
-// import { useRouter } from 'next/navigation'
-// import DspLoader from '@/components/admin/common/loader'
+import { getInventoryByStore } from '@/api/store'
 
 function StockAdjustment () {
   const { stores } = useGetStores2()
@@ -14,25 +13,30 @@ function StockAdjustment () {
   const [products, setProducts] = useState([])
   const [inventory, setInventory] = useState([])
   const [modalVisible, setModalVisible] = useState(false)
-  // const [quantity, setQuantity] = useState([])
   const [newQuantity, setNewQuantity] = useState(null)
   const [selectedProduct, setSelectedProduct] = useState(null)
-  // const router = useRouter()
 
   const handleStoreChange = (e) => {
+    setProducts([])
     setSelectedStore(e)
   }
-  const handleProductsInventory = async (storeId) => {
-    try {
-      const products = await getReiteProdByStore(storeId)
-      const store = stores.find((store) => store.storeId === storeId)
-      setNewQuantity(null)
-      setProducts(products)
-      setInventory(store.products)
-    } catch (error) {
-      console.log(error)
+
+  useEffect(() => {
+    const updateProductsInventory = async () => {
+      if (selectedStore) {
+        try {
+          const products = await getReiteProdByStore(selectedStore)
+          const store = await getInventoryByStore(selectedStore)
+          setNewQuantity(null)
+          setProducts(products)
+          setInventory(store.data.products)
+        } catch (error) {
+          console.log(error)
+        }
+      }
     }
-  }
+    updateProductsInventory()
+  }, [selectedStore, stores])
 
   const handleConfirmationModal = () => {
     setModalVisible(!modalVisible)
@@ -51,19 +55,12 @@ function StockAdjustment () {
       ...prevQuantity,
       [productId]: newQuantity
     }))
-    console.log(newQuantity, 'nueva cantidad')
-    console.log(productId, 'product ID en actualizacion')
   }
-  useEffect(() => {
-
-  }, [selectedStore])
 
   return (
     <div>
       <InsideLayout />
       <div>
-        <div><pre>{JSON.stringify(newQuantity, null, 2)}</pre></div>
-
         <div className='p-5 pt-10 flex flex-row items-center justify-center'>
           <select
             className='select select-sm select-bordered rounded-full w-full md:max-w-xs '
@@ -80,21 +77,7 @@ function StockAdjustment () {
 
         </div>
       </div>
-      <div className={`${selectedStore ? 'flex flex-row items-center justify-center' : 'hidden'}`}>
-        <button
-          type='button'
-          onClick={() => {
-            handleProductsInventory(selectedStore)
-          }}
-          className='inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-d-dark-dark-purple rounded-lg hover:bg-d-soft-soft-purple hover:text-d-dark-dark-purple focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800'
-        >
-          Mostrar stock de la tienda
-          <svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' strokeWidth={1.5} stroke='currentColor' className='w-6 h-6'>
-            <path strokeLinecap='round' strokeLinejoin='round' d='M19.5 8.25l-7.5 7.5-7.5-7.5' />
-          </svg>
-
-        </button>
-      </div>
+      <div className={`${selectedStore ? 'flex flex-row items-center justify-center' : 'hidden'}`} />
       <div className='p-8'>
         {!products.data
           ? (<DspLoader />)
@@ -166,6 +149,7 @@ function StockAdjustment () {
           />
 
         )}
+        {/* <div><pre>{JSON.stringify(newQuantity, null, 2)}</pre></div> */}
         {/* <div><pre>{JSON.stringify(inventory, null, 2)}</pre></div> */}
       </div>
     </div>
