@@ -1,6 +1,5 @@
 'use client'
 import InsideLayout from '@/components/admin/layouts/inside'
-// import { SearchField } from '@/components/admin/common/search'
 import { getListClients } from '@/api/client'
 import { useEffect, useState } from 'react'
 import dayjs from 'dayjs'
@@ -11,6 +10,7 @@ import DspLoader from '@/components/admin/common/loader'
 function TableClient () {
   const [clients, setClients] = useState([])
   const [expandedRows, setExpandedRows] = useState([])
+  const [searchTerm, setSearchTerm] = useState('')
   let date
 
   const [dateRange, setDateRange] = useState({
@@ -24,18 +24,23 @@ function TableClient () {
 
   useEffect(() => {
     if (dateRange.startDate !== null && dateRange.endDate !== null) {
-      getListClients(dateRange)
+      getListClients(dateRange, searchTerm)
         .then((response) => {
-          console.log(response)
-          setClients(response.data)
+          setClients(response)
         })
         .catch((error) => {
           console.error('Error fetching restock data:', error)
         })
     }
-  },
-  [dateRange])
+  }, [dateRange, searchTerm])
 
+  const handleSearchChange = (value) => {
+    setSearchTerm(value)
+  }
+
+  const clearSearch = () => {
+    setSearchTerm('')
+  }
   if (!getListClients) {
     return (
       <div>
@@ -47,22 +52,30 @@ function TableClient () {
     <>
       <InsideLayout />
       <div className=''>
-        <h1 className=' mt-10 text-d-dark-dark-purple text-2xl font-bold text-center'>Clientes</h1>
-        <div className='flex'>
-          {/* <div className='join w-full md:max-w-xs ml-5 mt-2 max-[431px]:hidden'> */}
-
-          {/* <SearchField
-              type='text' placeholder='Búsqueda' name='search' className='input input-sm input-bordered bg-d-white join-item rounded-full text-d-dark-dark-purple '
-              onChange={(v) => handleSearchChange(v)}
+        <h1 className=' my-10 text-d-dark-dark-purple text-2xl font-bold text-center'>Clientes</h1>
+        <div className='flex items-center gap-4 px-8 mt-4 max-[431px]:flex-col'>
+          <div className='join'>
+            <input
+              type='text'
+              placeholder='Búsqueda'
+              name='search'
+              className='input input-sm input-bordered bg-d-white join-item rounded-full text-d-dark-dark-purple '
+              onChange={(e) => handleSearchChange(e.target.value)}
+              value={searchTerm}
             />
 
-            <button type='button ' onClick={() => handleSearchChange('')} className='btn btn-sm join-item rounded-r-full  bg-d-dark-dark-purple border-none text-d-white  hover:bg-d-soft-soft-purple hover:text-d-dark-dark-purple'>
+            <button
+              type='button'
+              onClick={clearSearch}
+              className='btn btn-sm join-item rounded-r-full bg-d-dark-dark-purple border-none text-d-white hover:bg-d-soft-soft-purple hover:text-d-dark-dark-purple'
+            >
               <svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' strokeWidth={1.5} stroke='currentColor' className='w-6 h-6'>
                 <path strokeLinecap='round' strokeLinejoin='round' d='M6 18L18 6M6 6l12 12' />
               </svg>
-            </button> */}
-          {/* </div> */}
-          <div className='absolute w-full px-10 mt-4'>
+            </button>
+          </div>
+
+          <div className='w-[300px]'>
             <DatePicker
               startDate={dateRange.startDate}
               endDate={dateRange.endDate}
@@ -70,7 +83,8 @@ function TableClient () {
             />
           </div>
         </div>
-        <div className='overflow-x-auto p-10 mt-8'>
+
+        <div className='overflow-x-auto p-5'>
           {clients && (
             <table className='table  text-d-dark-dark-purple table-zebra max-[431px]:hidden'>
               <thead>
