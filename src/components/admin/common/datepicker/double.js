@@ -14,6 +14,7 @@ function DatePicker ({ startDate, endDate, handleDateChange }) {
   return (
     <div className='w-full border'>
       <Datepicker
+        readOnly
         primaryColor='purple'
         placeholder='Escoge rango de fechas'
         separator='-'
