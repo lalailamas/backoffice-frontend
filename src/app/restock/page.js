@@ -38,13 +38,17 @@ function Restock () {
   }, [])
 
   const handleOpenStore = async () => {
+    console.log('snapshot pero del handleOpenStore', snapshot)
+    console.log('LAYOUT', selectedStore.layoutId)
+
     if (selectedStore.layoutId === null) {
       swallError('Hubo un error con la tienda, contacta al administrador', false)
       return
     }
     try {
-      const openStore = await OpenStore(selectedStore.storeId)
-      // console.log('Step 1: openStore response', openStore)
+      console.log('entré al try/catch')
+      const openStore = await OpenStore(selectedStore.storeId, snapshot)
+      console.log('Step 1: openStore response', openStore)
       if (openStore) {
         swallError('Abriendo tienda', true)
         router.push(
@@ -62,6 +66,7 @@ function Restock () {
     setModalCameraVisible(!modalCameraVisible)
   }
   const takeSnapshot = async (img) => {
+    console.log('+----------------------img', img)
     const base64Content = img.split(';base64,').pop()
 
     setSnapshot(base64Content)
