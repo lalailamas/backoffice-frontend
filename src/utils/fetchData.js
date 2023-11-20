@@ -29,9 +29,11 @@ export const putImageData = async (snapshot, url, contentType) => {
 export const putImageUpdate = async (snapshot, url, contentType, comment) => {
   const formData = new FormData()
   formData.append('comments', comment)
-  const snapshotBlob = base64toBlob(snapshot, 'image/png')
-  const fileName = `image_${Date.now()}.png`
-  formData.append('image', snapshotBlob, fileName)
+  if (snapshot !== null) {
+    const snapshotBlob = base64toBlob(snapshot, 'image/png')
+    const fileName = `image_${Date.now()}.png`
+    formData.append('image', snapshotBlob, fileName)
+  }
   try {
     const response = await axios.put(urlApi + url, formData, {
       headers: {
@@ -53,9 +55,11 @@ export const postDataByStore = async (storeId, snapshot, url, contentType) => {
   formData.append('userClientId', '9kzL7vO1m8Ug35cAmD29JbvHkWH2')
   formData.append('openStoreType', 'RESTOCK')
   formData.append('store_id', storeId)
-  const snapshotBlob = base64toBlob(snapshot, 'image/png')
-  const fileName = `image_${Date.now()}.png`
-  formData.append('image', snapshotBlob, fileName)
+  if (snapshot !== null) {
+    const snapshotBlob = base64toBlob(snapshot, 'image/png')
+    const fileName = `image_${Date.now()}.png`
+    formData.append('image', snapshotBlob, fileName)
+  }
   try {
     const response = await axios.post(urlApi + url, formData, {
       headers: {
