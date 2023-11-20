@@ -2,26 +2,33 @@ import { getToken } from 'next-auth/jwt'
 import { NextResponse } from 'next/server'
 
 export default async function middleware (req, res, next) {
+  console.log(req.nextUrl.pathname, 'req.nextUrl.pathname')
   const session = await getToken({ req, secret: process.env.NEXTAUTH_SECRET })
 
-  if (!session) {
-    // const requestedPage = req.nextUrl.pathname
+  const redirectTo = (path) => {
     const url = req.nextUrl.clone()
-    url.pathname = '/'
-    // url.search = `p=${requestedPage}`
-
+    url.pathname = path
     return NextResponse.redirect(url)
   }
-  const adminRequiredPages = ['/inventory', '/tasks', '/users', '/dashboard', '/marketing', '/replenishment_orders', '/replacements', '/users/**']
+
+  if (!session) {
+    return redirectTo('/')
+  }
+
+  const adminRequiredPages = [
+    '/inventory',
+    '/tasks',
+    '/users',
+    '/dashboard',
+    '/marketing',
+    '/replenishment_orders',
+    '/replacements',
+    '/users/**'
+  ]
   const isAdminPage = adminRequiredPages.some((page) => req.nextUrl.pathname.startsWith(page))
 
   if (isAdminPage && session.role !== 'admin') {
-    // const requestedPage = req.nextUrl.pathname
-    const url = req.nextUrl.clone()
-    url.pathname = '/restock'
-    // url.search = `p=${requestedPage}`
-
-    return NextResponse.redirect(url)
+    return redirectTo('/restock')
   }
 
   return NextResponse.next()

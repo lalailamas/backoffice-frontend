@@ -13,7 +13,6 @@ export default function RootLayout ({ children }) {
             {children}
 
           </div>
-
         </SessionAuthProvider>
       </body>
     </html>
