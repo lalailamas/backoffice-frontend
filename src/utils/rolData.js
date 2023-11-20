@@ -7,7 +7,8 @@ export const accessData = [
       'Reposiciones',
       'Tiendas',
       'Usuarios',
-      'Tareas'
+      'Tareas',
+      'Ajuste de stock'
     ]
   },
   {
