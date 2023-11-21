@@ -50,6 +50,14 @@ function DetailsClient () {
 
   const { name, email, phone, payments, transactions } = clientData
 
+  const getTotalTransactions = () => {
+    const totalTransactions = transactions.length
+    const totalAmountSpent = transactions.reduce((acc, transaction) => acc + transaction.amount, 0)
+    return { totalTransactions, totalAmountSpent }
+  }
+
+  const { totalTransactions, totalAmountSpent } = getTotalTransactions()
+
   const tabs = [
     {
       id: 'tabs-home',
@@ -180,7 +188,18 @@ function DetailsClient () {
           <div className=' flex flex-col'>
             <div className='text-sm font-bold px-2 pb-2'>
               Historial
+              <div className='shadow-sm mt-2 bg-d-soft-soft-purple rounded p-2'>
+                <div className='text-xs grid grid-cols-2'>
+                  <span className='font-semibold'>Total de Transacciones:</span>
+                  <span>{totalTransactions}</span>
+                </div>
+                <div className='text-xs grid grid-cols-2'>
+                  <span className='font-semibold'>Monto Total Gastado:</span>
+                  <span>{totalAmountSpent.toLocaleString('es-CL', { style: 'currency', currency: 'CLP' })}</span>
+                </div>
+              </div>
             </div>
+            <div className='flex flex-col' />
             <div className='overflow-auto'>
               <table>
                 <tbody>
@@ -222,6 +241,7 @@ function DetailsClient () {
 
             </div>
           </div>
+
         </div>
 
       )
