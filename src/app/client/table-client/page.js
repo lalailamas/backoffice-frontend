@@ -48,6 +48,31 @@ function TableClient () {
       </div>
     )
   }
+
+  function formatTimestampToDate (timestamp) {
+    // Convert the timestamp to milliseconds by multiplying it by 1000
+    const milliseconds = timestamp * 1000
+
+    // Create a Date object from the converted timestamp
+    const date = new Date(milliseconds)
+
+    // Get formatting options for date and time
+    const formatOptions = {
+      // weekday: 'long',
+      day: 'numeric',
+      month: 'short',
+      year: 'numeric'
+      // hour: 'numeric',
+      // minute: 'numeric'
+    }
+
+    // Format the date in the desired format
+    const dateFormatter = new Intl.DateTimeFormat('es-ES', formatOptions)
+    const formattedDate = dateFormatter.format(date)
+
+    return formattedDate
+  }
+
   return (
     <>
       <InsideLayout />
@@ -101,13 +126,16 @@ function TableClient () {
               <tbody>
                 {clients.map((item) => {
                   date = new Date(item.creation.timestamp * 1000)
+                  console.log(date, 'fecha')
+                  console.log(item.creation.timestamp, 'desde reite')
                   return (
                     <tr key={item.id}>
                       <td />
                       <td>{item.name}</td>
                       <td>{item.email}</td>
                       <td>{item.phone?.areaCode} {item.phone?.number || 'Sin información'}</td>
-                      <td>{date.toLocaleString()} </td>
+                      {/* <td>{date.toLocaleString()} </td> */}
+                      <td>{formatTimestampToDate(item.creation.timestamp)}</td>
                       <td className='flex justify-center'>
                         <button className='mt-2'>
                           <Link href={`/client/table-client/details?clientId=${item.id}`}>
