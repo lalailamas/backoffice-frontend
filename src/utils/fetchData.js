@@ -7,9 +7,71 @@ const urlApiReite = process.env.NEXT_PUBLIC_DSP_API_BASE + 'reite/'
 export const postData = (credentials, url, contentType) => {
   return axios.post(urlApi + url, credentials, { headers: { 'content-type': contentType } })
 }
-export const postDataByStore = async (storeId, url, contentType) => {
-  return axios.post(urlApi + url, { userClientId: '9kzL7vO1m8Ug35cAmD29JbvHkWH2', openStoreType: 'RESTOCK', store_id: storeId },
-    { headers: { 'content-type': contentType } })
+export const putImageData = async (snapshot, url, contentType) => {
+  const formData = new FormData()
+  const snapshotBlob = base64toBlob(snapshot, 'image/png')
+  const fileName = `image_${Date.now()}.png`
+  formData.append('image', snapshotBlob, fileName)
+  try {
+    const response = await axios.put(urlApi + url, formData, {
+      headers: {
+        'content-type': contentType
+      }
+    })
+
+    console.log(response.data, 'response de postDataByStore')
+    return response.data
+  } catch (error) {
+    console.error(error)
+    throw error
+  }
+}
+export const putImageUpdate = async (snapshot, url, contentType, comment) => {
+  const formData = new FormData()
+  formData.append('comments', comment)
+  if (snapshot !== null) {
+    const snapshotBlob = base64toBlob(snapshot, 'image/png')
+    const fileName = `image_${Date.now()}.png`
+    formData.append('image', snapshotBlob, fileName)
+  }
+  try {
+    const response = await axios.put(urlApi + url, formData, {
+      headers: {
+        'content-type': contentType
+      }
+    })
+
+    console.log(response.data, 'response de putImageUpdate')
+    return response.data
+  } catch (error) {
+    console.error(error)
+    throw error
+  }
+}
+export const postDataByStore = async (storeId, snapshot, url, contentType) => {
+  const formData = new FormData()
+
+  // Adjunta los datos adicionales al objeto FormData
+  formData.append('userClientId', '9kzL7vO1m8Ug35cAmD29JbvHkWH2')
+  formData.append('openStoreType', 'RESTOCK')
+  formData.append('store_id', storeId)
+  if (snapshot !== null) {
+    const snapshotBlob = base64toBlob(snapshot, 'image/png')
+    const fileName = `image_${Date.now()}.png`
+    formData.append('image', snapshotBlob, fileName)
+  }
+  try {
+    const response = await axios.post(urlApi + url, formData, {
+      headers: {
+        'content-type': contentType
+      }
+    })
+    console.log(response.data, 'response de postDataByStore')
+    return response.data
+  } catch (error) {
+    console.error(error)
+    throw error
+  }
 }
 export const getDataByQuery = (url, contentType, query) => {
   return axios.get(urlApi + url + query, { headers: { 'content-type': contentType } })
@@ -119,9 +181,18 @@ export const postReiteDataByStore = async (storeId, url, contentType) => {
     { headers: { 'content-type': contentType } })
 }
 
-export const putReiteInventoryData = async (storeId, url, url2, stockData, contentType) => {
-  return axios.put(urlApiReite + url + storeId + url2, stockData, { headers: { 'content-type': contentType } })
+export const putReiteInventoryData = async (url, stockData, contentType) => {
+  return axios.put(urlApiReite + url, stockData, { headers: { 'content-type': contentType } })
 }
 export const patchReiteInventoryData = async (transactionId, url, url2, stockData, contentType) => {
   return axios.patch(urlApiReite + url + transactionId + url2, stockData, { headers: { 'content-type': contentType } })
+}
+
+function base64toBlob (base64, type) {
+  const binary = atob(base64)
+  const array = []
+  for (let i = 0; i < binary.length; i++) {
+    array.push(binary.charCodeAt(i))
+  }
+  return new Blob([new Uint8Array(array)], { type })
 }

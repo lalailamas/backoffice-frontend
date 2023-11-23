@@ -4,15 +4,18 @@ import React, { useState } from 'react'
 // import { Camera } from 'react-camera-pro'
 import { Camera } from 'react-html5-camera-photo'
 import 'react-html5-camera-photo/build/css/index.css'
+import Comments from './comments'
 
 function CameraModal ({
+  step,
   title,
   message,
   confirmButtonText,
   cancelButtonText,
   handleOperationConfirmation,
   handleConfirmationModal,
-  takeSnapshot
+  takeSnapshot,
+  handleComment
 }) {
   const [image, setImage] = useState('')
   const [showcamera, setShowCamera] = useState(false)
@@ -66,23 +69,22 @@ function CameraModal ({
       reader.readAsDataURL(file)
     }
   }
-  const SendSnapshot = (image) => {
-    return () => {
-      takeSnapshot(image)
-      handleConfirmationModal()
-    }
-  }
-  const handleNext = () => {
-    return () => {
-      handleConfirmationModal()
-      handleOperationConfirmation()
-    }
+  const SendSnapshotComment = (comment) => {
+    handleComment(comment)
+    takeSnapshot(image)
+    handleConfirmationModal()
   }
 
   return (
     <div>
       <div id='YOUR_ID' className='fixed z-50 inset-0 overflow-y-auto'>
         <div className='flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0'>
+          <div className='fixed inset-0 transition-opacity' aria-hidden='true'>
+            <div className='absolute inset-0 bg-gray-500 opacity-75' />
+          </div>
+
+          <span className='hidden sm:inline-block sm:align-middle sm:h-screen' aria-hidden='true'>&#8203;</span>
+
           <div
             className='inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full sm:p-6'
             role='dialog' aria-modal='true' aria-labelledby='modal-headline'
@@ -188,26 +190,16 @@ function CameraModal ({
                         </div>
                         )}
             </div>
-            <div>
-              <button
-                type='button'
-                databehavior='submit'
-                className={`${image ? ' mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:mt-0 sm:w-auto sm:text-sm' : 'hidden'}`}
-                onClick={SendSnapshot(image)}
-              >
-                Subir Foto
-              </button>
+            <div className={`${image && step === 4 ? '' : 'hidden'}`}>
+              {(
+                step === 4
+                  ? (<Comments SendSnapshotComment={SendSnapshotComment} />)
+                  : null
+              )}
+
             </div>
 
-            <div className='mt-5 sm:mt-4 sm:flex sm:flex-row-reverse'>
-              <button
-                type='button'
-                databehavior='submit'
-                className='mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:mt-0 sm:w-auto sm:text-sm'
-                onClick={handleNext()}
-              >
-                Siguiente
-              </button>
+            <div className='mt-5 sm:mt-4 sm:flex justify-start sm:flex-row-reverse justify-start'>
               <button type='button' databehavior='cancel' className='mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:mt-0 sm:w-auto sm:text-sm' onClick={handleOperationConfirmation}>
                 {cancelButtonText}
               </button>

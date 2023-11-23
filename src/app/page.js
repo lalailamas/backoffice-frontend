@@ -2,7 +2,7 @@
 /* eslint-disable camelcase */
 // import Image from 'next/image'
 // import { Inter } from 'next/font/google'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, Suspense } from 'react'
 import { useRouter } from 'next/navigation'
 import { signIn, useSession } from 'next-auth/react'
 import { hotjar } from 'react-hotjar'
@@ -11,17 +11,19 @@ import DspLoader from '@/components/admin/common/loader'
 // const inter = Inter({ subsets: ['latin'] })
 
 export default function Home () {
-  const { data: session } = useSession()
+  const { data: session, status } = useSession()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [loginError, setLoginError] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
   const [loading, setLoading] = useState(false)
+  const [previousLoading, setPreviousLoading] = useState(false)
   const router = useRouter()
   const HJID = 3721483
   const HJSV = 6
 
   const performLogin = async () => {
+    setLoading(true)
     setLoginError(false)
     setLoading(true)
 
@@ -30,10 +32,7 @@ export default function Home () {
       password,
       redirect: false
     }, { callbackUrl: '' })
-    // console.log(result, 'SOY EL RESULTADO')
-    // console.log(session, 'SOY EL SESSION')
     if (result?.error) { setLoginError(true); setLoading(false) }
-    // router.push('/inventory')
   }
 
   useEffect(() => {
@@ -42,19 +41,25 @@ export default function Home () {
   }, [])
 
   useEffect(() => {
+    console.log(status, 'status del useEffect')
+    if (status === 'loading') {
+      console.log('entré al if loading')
+      setPreviousLoading(true)
+    } else if (status === 'unauthenticated') { setPreviousLoading(false) }
     if (session !== null && session !== undefined) {
       // console.log(session, 'session del useEffect')
       if (session.user.role === 'admin') router.push('/dashboard')
       if (session.user.role === 'restock') router.push('/restock')
     }
-  }, [session])
+  }, [session, status])
+  if (previousLoading) {
+    return <DspLoader />
+  }
 
   return (
-    <>
+    <Suspense fallback={<DspLoader />}>
       {loading
-        ? (
-          <DspLoader />
-          )
+        ? (<DspLoader />)
         : (
           <div className="flex flex-col justify-center p-10 md:flex-row bg-[url('/img/bg-new.svg')] bg-cover bg-center bg-no-repeat h-screen">
             <div className=' md:rounded-t-none md:w-1/2 bg-transparent flex justify-center   md:p-0 md:items-center '>
@@ -79,12 +84,11 @@ export default function Home () {
                     <input value={password} onChange={(e) => setPassword(e.target.value)} type={showPassword ? 'text' : 'password'} placeholder='122344842-K' className='input input-bordered w-full bg-d-white rounded-l-2xl join-item text-d-dark-dark-purple' />
                     <div className='rounded-2xl join-item'>
                       <button className='btn join-item bg-d-dark-dark-purple border-none text-d-white hover:bg-d-soft-soft-purple hover:text-d-dark-dark-purple' onClick={() => setShowPassword(!showPassword)}>
-                        {!showPassword && (
+                        {!showPassword &&
                           <svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' strokeWidth={1.5} stroke='currentColor' className='w-6 h-6'>
                             <path strokeLinecap='round' strokeLinejoin='round' d='M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z' />
                             <path strokeLinecap='round' strokeLinejoin='round' d='M15 12a3 3 0 11-6 0 3 3 0 016 0z' />
-                          </svg>
-                        )}
+                          </svg>}
                         {showPassword &&
                           <svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' strokeWidth={1.5} stroke='currentColor' className='w-6 h-6'>
                             <path strokeLinecap='round' strokeLinejoin='round' d='M3.98 8.223A10.477 10.477 0 001.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395' />
@@ -107,6 +111,7 @@ export default function Home () {
 
           </div>
           )}
-    </>
+    </Suspense>
+
   )
 }

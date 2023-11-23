@@ -2,17 +2,18 @@
 import React, { useEffect, useState } from 'react'
 import { OpenStore, getStores } from '../../api/store'
 import InsideLayout from '@/components/admin/layouts/inside'
-// import StepTwo from './stepTwo'
 import { useRouter } from 'next/navigation'
 import StepLayout from './stepLayout'
 import ConfirmationModal from './confirmationModal'
-// import CameraModal from './cameraModal'
+import CameraModal from './cameraModal'
+import { swallError } from '@/utils/sweetAlerts'
 
 function Restock () {
   const [stores, setStores] = useState([])
   const [selectedStore, setSelectedStore] = useState(null)
   const [modalVisible, setModalVisible] = useState(false)
-  // const [modalCameraVisible, setModalCameraVisible] = useState(false)
+  const [modalCameraVisible, setModalCameraVisible] = useState(false)
+  const [snapshot, setSnapshot] = useState(null)
 
   const router = useRouter()
 
@@ -28,7 +29,8 @@ function Restock () {
         setStores(response.data)
         // console.log('response', response.data)
       } catch (error) {
-        console.error('Error fetching stores:', error)
+        swallError('Error fetching stores:', false)
+        // console.error('Error fetching stores:', error)
       }
     }
 
@@ -36,18 +38,41 @@ function Restock () {
   }, [])
 
   const handleOpenStore = async () => {
-    const openStore = await OpenStore(selectedStore.storeId)
-    // console.log('Step 1: openStore response', openStore)
-    router.push(
-      'restock/stepTwo' + `?external_id=${selectedStore.storeId}&layout_id=${selectedStore.layoutId}&store_name=${selectedStore.name}&externalTransactionId=${openStore.external_transaction_id}&transactionId=${openStore.transaction_id}`
-    )
+    console.log('snapshot pero del handleOpenStore', snapshot)
+    console.log('LAYOUT', selectedStore.layoutId)
+
+    if (selectedStore.layoutId === null) {
+      swallError('Hubo un error con la tienda, contacta al administrador', false)
+      return
+    }
+    try {
+      console.log('entré al try/catch')
+      const openStore = await OpenStore(selectedStore.storeId, snapshot)
+      console.log('Step 1: openStore response', openStore)
+      if (openStore) {
+        swallError('Abriendo tienda', true)
+        router.push(
+          'restock/stepTwo' + `?external_id=${selectedStore.storeId}&layout_id=${selectedStore.layoutId}&store_name=${selectedStore.name}&externalTransactionId=${openStore.external_transaction_id}&transactionId=${openStore.transaction_id}`
+        )
+      }
+    } catch {
+      swallError('Error opening store:', false)
+    }
   }
   const handleConfirmationModal = () => {
     setModalVisible(!modalVisible)
   }
-  // const handleCameraModal = () => {
-  //   setModalCameraVisible(!modalCameraVisible)
-  // }
+  const handleCameraModal = () => {
+    setModalCameraVisible(!modalCameraVisible)
+  }
+  const takeSnapshot = async (img) => {
+    console.log('+----------------------img', img)
+    const base64Content = img.split(';base64,').pop()
+
+    setSnapshot(base64Content)
+    handleCameraModal()
+    handleConfirmationModal()
+  }
 
   return (
     <div>
@@ -56,6 +81,8 @@ function Restock () {
         <StepLayout />
 
         <div className='flex-col m-4 p-4'>
+          {/* <div><pre>{JSON.stringify(selectedStore, null, 2)}</pre></div> */}
+
           <select
             onChange={(e) => handleStoreChange(e.target.value)}
             className='select select-sm select-bordered rounded-full w-full md:max-w-xs'
@@ -77,7 +104,8 @@ function Restock () {
               <button
                 type='button'
                 onClick={() => {
-                  handleOpenStore(selectedStore.storeId)
+                  // handleOpenStore(selectedStore.storeId)
+                  handleCameraModal()
                 }}
                 className='inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-d-dark-dark-purple rounded-lg hover:bg-d-soft-soft-purple hover:text-d-dark-dark-purple focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800'
               >
@@ -101,20 +129,21 @@ function Restock () {
                 cancelButtonText='Cancelar'
               />
             )}
-            {/* {modalCameraVisible && (
+            {modalCameraVisible && (
               <CameraModal
                 handleConfirmationModal={handleConfirmationModal}
                 handleOperationConfirmation={handleCameraModal}
-                title='¿Estás seguro que quieres abrir esta máquina?'
+                title='Necesitamos que tomes una foto de la tienda antes de abrirla'
                 message={(
                   <span>
                     Toma una foto de la tienda antes de abrirla
                   </span>
                 )}
-                confirmButtonText='Tomar Foto'
+                confirmButtonText='Siguiente'
                 cancelButtonText='Cancelar'
+                takeSnapshot={takeSnapshot}
               />
-            )} */}
+            )}
 
           </div>
         </div>

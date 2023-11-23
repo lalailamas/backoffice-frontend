@@ -29,7 +29,8 @@ export const menuItems = [
     icon: 'rotate-180',
     subMenuLinks: [
       { label: 'Stock actual productos', href: '/stock' },
-      { label: 'Stock por maquina', href: '/stock_request' }
+      { label: 'Stock por máquina', href: '/stock_request' },
+      { label: 'Ajuste de stock', href: '/stock_adjustment' }
     ]
   },
   {

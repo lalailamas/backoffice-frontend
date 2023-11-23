@@ -1,6 +1,6 @@
 'use client'
 import React, { useEffect, useState } from 'react'
-import { getStockStores } from '../../api/store'
+import { getStores } from '../../api/store'
 import InsideLayout from '@/components/admin/layouts/inside'
 import { getStockRequest } from '../../api/stock'
 import StockRequestTable from '@/components/admin/tables/stock_request'
@@ -11,7 +11,7 @@ function StockRequest () {
   const [data, setData] = useState([])
 
   const handleStoreChange = async (id) => {
-    console.log(id, 'id')
+    // console.log(id, 'id')
     setData([])
     const response = await getStockRequest(id)
     setData(response.data)
@@ -20,11 +20,12 @@ function StockRequest () {
   useEffect(() => {
     const fetchStores = async () => {
       try {
-        const response = await getStockStores()
+        const response = await getStores()
         setStores(response.data)
+        console.log(response.data, 'response')
         if (response.data.length > 0) {
-          // console.log(response.data, 'response.data[0].external_id')
-          handleStoreChange(response.data[0].external_id)
+          console.log(response.data[0].storeId, 'response[0].storeId')
+          handleStoreChange(response.data[0].storeId)
         }
       } catch (error) {
         console.error('Error fetching stores:', error)
@@ -46,7 +47,7 @@ function StockRequest () {
             className='select select-sm select-bordered rounded-full w-full md:max-w-xs'
           >
             {stores.map((store) => (
-              <option key={store.id} value={store.external_id}>
+              <option key={store.storeId} value={store.storeId}>
                 {store.name}
               </option>
             ))}
