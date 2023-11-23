@@ -21,22 +21,16 @@ const CreditCard = ({ cardType, imageUrl }) => {
   )
 }
 
-function CreditCardDisplay () {
-  // Datos hardcodeados para la tarjeta de crédito
+function CreditCardDisplay ({ cardholder, cardNumber, expiredMonth, expiredYear, cardType }) {
   const cardData = {
-    cardholder: 'Beyoncé Knowles',
-    cardNumber: '**** **** **** 3456',
-    expiredMonth: '12',
-    expiredYear: '25'
+    cardholder,
+    cardNumber: `**** **** **** ${cardNumber}`,
+    expiredMonth,
+    expiredYear
   }
 
-  const creditCardImage = 'visa'
-  //   const defaultCardImage = '/img/default-card.svg'
-
-  // Verifica si la tarjeta seleccionada está en cardImages, de lo contrario, usa la imagen por defecto
-  //   const cardImage = cardImages[creditCardImage] || defaultCardImage
-
-  const cardImage = cardImages[creditCardImage]
+  const creditCardImage = cardType || '/img/default-card.svg'
+  const cardImage = cardImages[creditCardImage] || '/img/default-card.svg'
 
   return (
     <div className='m-4'>

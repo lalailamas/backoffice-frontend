@@ -110,7 +110,13 @@ function DetailsClient () {
                       <div className=''>
                         <h2 className='font-semibold'>Tipo</h2>
                         <span>{payment.cardType}</span>
-                        <CreditCardDisplay />
+                        <CreditCardDisplay
+                          cardholder={payment.cardHolderName}
+                          cardNumber={payment.lastFourDigits}
+                          expiredMonth={payment.expirationDate.split('/')[0]}
+                          expiredYear={payment.expirationDate.split('/')[1]}
+                          cardType={payment.cardName.toLowerCase()}
+                        />
                       </div>
                     )}
                     {payment.type === 'card' && (
