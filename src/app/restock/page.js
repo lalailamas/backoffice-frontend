@@ -7,6 +7,7 @@ import StepLayout from './stepLayout'
 import ConfirmationModal from './confirmationModal'
 import CameraModal from './cameraModal'
 import { swallError } from '@/utils/sweetAlerts'
+import DspLoader from '@/components/admin/common/loader'
 
 function Restock () {
   const [stores, setStores] = useState([])
@@ -14,6 +15,7 @@ function Restock () {
   const [modalVisible, setModalVisible] = useState(false)
   const [modalCameraVisible, setModalCameraVisible] = useState(false)
   const [snapshot, setSnapshot] = useState(null)
+  const [loaderVisible, setLoaderVisible] = useState(false)
 
   const router = useRouter()
 
@@ -47,6 +49,7 @@ function Restock () {
     }
     try {
       console.log('entré al try/catch')
+      setLoaderVisible(true)
       const openStore = await OpenStore(selectedStore.storeId, snapshot)
       console.log('Step 1: openStore response', openStore)
       if (openStore) {
@@ -56,6 +59,7 @@ function Restock () {
         )
       }
     } catch {
+      setLoaderVisible(false)
       swallError('Error opening store:', false)
     }
   }
@@ -72,6 +76,9 @@ function Restock () {
     setSnapshot(base64Content)
     handleCameraModal()
     handleConfirmationModal()
+  }
+  if (loaderVisible) {
+    return <DspLoader />
   }
 
   return (
