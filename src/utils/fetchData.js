@@ -100,7 +100,13 @@ export const getLimitTimeStampData = (url, contentType, limit, startDate, endDat
 export const getTimeStampData = (url, contentType, startDate, endDate) => {
   return axios.get(urlApiReite + url + `?startTimestamp=${startDate}` + `&endTimestamp=${endDate}`, { headers: { 'content-type': contentType } })
 }
-// api/reite/restock?startTimestamp=2022-03-30&endTimestamp=2023-08-30
+
+export const getSearchTimeStampData = (url, contentType, startDate, endDate, searchTerm) => {
+  return axios.get(urlApiReite + url + `?startTimestamp=${startDate}` + `&endTimestamp=${endDate}` + `&searchTerm=${searchTerm}`, { headers: { 'content-type': contentType } })
+}
+
+// api/reite/clients/list?startTimestamp=2022-03-30&endTimestamp=2023-08-30&searchTerm=Caro
+
 export const putData = (data, url, contentType) => {
   if (data !== '') {
     return axios.put(urlApi + url, data, { headers: { 'content-type': contentType } })

@@ -9,12 +9,18 @@ import Link from 'next/link'
 import TabsComponent from '@/components/admin/common/tabs'
 import CreditCardDisplay from './creditcard'
 import useGetStores2 from '@/hooks/useStores2'
+import SimpleModal from '@/app/restock/simpleModal'
 
 function DetailsClient () {
   const searchParams = useSearchParams()
   const id = searchParams.get('clientId')
   const { stores } = useGetStores2()
   const [clientData, setClientData] = useState(null)
+  const [modalVisible, setModalVisible] = useState(false)
+
+  const handleConfirmationModal = () => {
+    setModalVisible(!modalVisible)
+  }
 
   const getStoreName = (storeId) => {
     if (stores) {
@@ -48,7 +54,7 @@ function DetailsClient () {
     )
   }
 
-  const { name, email, phone, payments, transactions } = clientData
+  const { name, email, phone, stats, payments, transactions } = clientData
 
   const tabs = [
     {
@@ -104,7 +110,13 @@ function DetailsClient () {
                       <div className=''>
                         <h2 className='font-semibold'>Tipo</h2>
                         <span>{payment.cardType}</span>
-                        <CreditCardDisplay />
+                        <CreditCardDisplay
+                          cardholder={payment.cardHolderName}
+                          cardNumber={payment.lastFourDigits}
+                          expiredMonth={payment.expirationDate.split('/')[0]}
+                          expiredYear={payment.expirationDate.split('/')[1]}
+                          cardType={payment.cardName.toLowerCase()}
+                        />
                       </div>
                     )}
                     {payment.type === 'card' && (
@@ -175,55 +187,120 @@ function DetailsClient () {
       name: 'Transacciones',
       active: false,
       content: (
-
         <div className=''>
-          <div className=' flex flex-col'>
-            <div className='text-sm font-bold px-2 pb-2'>
-              Historial
+          <div className='flex flex-col '>
+            <h1 className='text-center text-sm font-semibold mb-4'>Resumen General</h1>
+            <div className='flex flex-wrap justify-between mb-4'>
+              <article className='rounded-lg overflow-hidden shadow transform transition-all w-full sm:w-1/3'>
+                <div className='text-center m-5'>
+                  <p className='text-2xl font-bold text-black'>{stats.transactions}</p>
+                  <h3 className='text-sm leading-6 font-medium text-gray-400'>Transacciones</h3>
+                </div>
+              </article>
+              <article className='rounded-lg overflow-hidden shadow transform transition-all w-full sm:w-1/3 '>
+                <div className='text-center m-5'>
+                  <p className='text-2xl font-bold text-black'>{stats.openings}</p>
+                  <h3 className='text-sm leading-6 font-medium text-gray-400'>Aperturas</h3>
+                </div>
+              </article>
+              <article className='rounded-lg overflow-hidden shadow transform transition-all w-full sm:w-1/3'>
+                <div className='text-center m-5'>
+                  <p className='text-2xl font-bold text-black'>{stats.spent.toLocaleString('es-CL', { style: 'currency', currency: 'CLP' })}</p>
+                  <h3 className='text-sm leading-6 font-medium text-gray-400'>Gastado</h3>
+                </div>
+              </article>
             </div>
-            <div className='overflow-auto'>
-              <table>
-                <tbody>
-                  {transactions.map((transaction, index) => (
-                    <tr key={index} className='bg-white p-4 rounded-lg shadow-md border-b-2 border-d-gray'>
-                      <td className='text-gray-400 py-2 px-2 text-xs w-full'>
-                        <div className='flex gap-24'>
 
-                          <span className='font-bold'> Fecha: {new Date(transaction.timestamp * 1000).toLocaleDateString()}</span>
-                          <a className='text-d-neon-purple text-xs hover:underline' href='#'>{transaction.id}</a>
-                        </div>
-
-                        <div className='leading-10 grid text-black py-4'>
-                          <div className='text-xs grid grid-cols-2'>
-                            Monto
-                            <span>
-                              {transaction.amount.toLocaleString('es-CL', {
-                                style: 'currency',
-                                currency: 'CLP'
-                              })}
-                            </span>
-                          </div>
-                          <div className='text-xs grid grid-cols-2'>
-                            Método de pago
-                            <span>{transaction.paymentMethod} </span>
-                          </div>
-                          <div className='text-xs grid grid-cols-2'>
-                            Tienda
-                            <span>{getStoreName(transaction.storeId)}</span>
-                          </div>
-                        </div>
-                      </td>
-                      <td className='' />
-
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-
-            </div>
           </div>
-        </div>
+          <h1 className='text-sm font-bold px-2 pb-2'>
+            Historial
+          </h1>
 
+          <div className='overflow-auto'>
+            <table className=' '>
+              <tbody>
+                {transactions.map((transaction, index) => (
+                  <tr key={index} className='bg-white p-4 rounded-lg shadow-md border-b-2 border-d-gray'>
+                    <td className='text-gray-400 py-2 px-2 text-xs w-full'>
+                      <div className='flex flex-wrap justify-between'>
+                        <div>
+                          <span className='font-bold mr-2'> Fecha:</span>
+                          <span>{new Date(transaction.timestamp * 1000).toLocaleDateString()}</span>
+                        </div>
+                        <div className=''>
+                          <a
+                            className='text-d-neon-purple text-xs hover:underline' href='#' onClick={() => {
+                              handleConfirmationModal()
+                            }}
+                          >{transaction.id}
+                          </a>
+                        </div>
+                        {modalVisible && (
+                          <SimpleModal
+                            handleConfirmationModal={handleConfirmationModal}
+                            title='Comprobante de compra'
+                            message={
+                              <div>
+                                <div className='text-xs grid grid-cols-2'>
+                                  <span>ID</span>
+                                  <span>{transaction.id}</span>
+                                </div>
+                                <div className='text-xs grid grid-cols-2'>
+                                  <span>Método de pago</span>
+                                  <span>{transaction.paymentMethod}</span>
+                                </div>
+                                <div className='text-xs grid grid-cols-2'>
+                                  <span>Productos</span>
+                                  <div>
+                                    {transaction.products.map((product, index) => (
+                                      <div key={index}>{product.name}</div>
+                                    ))}
+                                  </div>
+                                </div>
+                                <div className='text-xs grid grid-cols-2'>
+                                  Monto
+                                  <span>
+                                    {transaction.amount.toLocaleString('es-CL', {
+                                      style: 'currency',
+                                      currency: 'CLP'
+                                    })}
+                                  </span>
+                                </div>
+                                <div className='text-xs grid grid-cols-2'>
+                                  <span>Estado</span>
+                                  <span>{transaction.status}</span>
+                                </div>
+                              </div>
+                              }
+                            cancelButtonText='Cancelar'
+                          />
+                        )}
+                      </div>
+                      <div className='leading-10 grid text-black py-2'>
+                        <div className='text-xs grid grid-cols-2'>
+                          Tienda
+                          <span>{getStoreName(transaction.storeId)}</span>
+                        </div>
+                        <div className='text-xs grid grid-cols-2'>
+                          Monto
+                          <span>
+                            {transaction.amount.toLocaleString('es-CL', {
+                              style: 'currency',
+                              currency: 'CLP'
+                            })}
+                          </span>
+                        </div>
+                      </div>
+                    </td>
+                    <td />
+
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+        </div>
       )
     }
   ]
@@ -243,8 +320,9 @@ function DetailsClient () {
               </div>
             </Link>
           </button>
-          <TabsComponent tabs={tabs} />
-
+          <div className=''>
+            <TabsComponent tabs={tabs} />
+          </div>
         </div>
       </div>
     </>
