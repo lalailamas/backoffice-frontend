@@ -17,7 +17,7 @@ export default function Home () {
   const [loginError, setLoginError] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
   const [loading, setLoading] = useState(false)
-  const [previousLoading, setPreviousLoading] = useState(false)
+  const [previousLoading, setPreviousLoading] = useState(true)
   const router = useRouter()
   const HJID = 3721483
   const HJSV = 6
