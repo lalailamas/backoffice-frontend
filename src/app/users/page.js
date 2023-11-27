@@ -2,9 +2,8 @@
 import React, { useEffect, useState } from 'react'
 import InsideLayout from '@/components/admin/layouts/inside'
 import Link from 'next/link'
-import { listUsers } from '../../api/user'
+import { listUsers, downloadExcel } from '../../api/user'
 import UsersTable from './list'
-import ExcelJS from 'exceljs'
 import FileSaver from 'file-saver'
 
 function Users () {
@@ -25,23 +24,14 @@ function Users () {
       return
     }
 
-    const workbook = new ExcelJS.Workbook()
-    const worksheet = workbook.addWorksheet('Usuarios')
-
-    // Agregar encabezados
-    worksheet.addRow(['ID', 'Nombre', 'Rol'])
-
-    // Agregar datos de usuarios
-    users.forEach((user) => {
-      worksheet.addRow([user.id, user.fullname, user.role])
-    })
-
-    const buffer = await workbook.xlsx.writeBuffer()
-    const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' })
-
-    FileSaver.saveAs(blob, 'usuarios.xlsx')
+    try {
+      const response = await downloadExcel()
+      const blob = new Blob([response.data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' })
+      FileSaver.saveAs(blob, 'usuarios.xlsx')
+    } catch (error) {
+      console.error('Error al descargar el archivo Excel:', error)
+    }
   }
-
   return (
     <>
       <InsideLayout />

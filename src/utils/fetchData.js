@@ -138,6 +138,16 @@ export const getDataStock = (url, contentType) => {
   return axios.get(urlApiReite + url, { headers: { 'content-type': contentType } })
 }
 
+export const getDataForExcel = (relativeUrl) => {
+  const config = {
+    responseType: 'arraybuffer'
+  }
+
+  const fullUrl = urlApi + relativeUrl
+
+  return axios.get(fullUrl, config)
+}
+
 export const DspApi = {
 
   listReplenishmentOrders: (limit, page, search) => {
