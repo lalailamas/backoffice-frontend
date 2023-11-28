@@ -76,6 +76,9 @@ export const postDataByStore = async (storeId, snapshot, url, contentType) => {
 export const getDataByQuery = (url, contentType, query) => {
   return axios.get(urlApi + url + query, { headers: { 'content-type': contentType } })
 }
+export const getDataOnly = (url, contentType) => {
+  return axios.get(urlApi + url, { headers: { 'content-type': contentType } })
+}
 
 export const getData = (order, limit, page, search, ean, id, url, contentType) => {
   if (search !== '') {
@@ -89,10 +92,6 @@ export const getData = (order, limit, page, search, ean, id, url, contentType) =
   } else {
     return axios.get(urlApi + url + `?limit=${limit}&page=${page}`, { headers: { 'content-type': contentType } })
   }
-}
-export const getDownloadData = (url, contentType) => {
-  console.log('you keep calling me')
-  return axios.get(urlApi + url, { headers: { 'content-type': contentType } })
 }
 export const getStockRequestData = (id, url, contentType) => {
   return axios.get(urlApi + url + `${id}`, { headers: { 'content-type': contentType } })

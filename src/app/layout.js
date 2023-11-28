@@ -8,7 +8,7 @@ export default function RootLayout ({ children }) {
     <html lang='es'>
       <body data-theme='light' className='bg-d-white'>
         <SessionAuthProvider>
-          <div className='drawer-content overflow-x-auto bg-d-white'>
+          <div className='drawer-content bg-d-white'>
 
             {children}
 
