@@ -2,12 +2,11 @@
 import InsideLayout from '@/components/admin/layouts/inside'
 import React, { useEffect, useState } from 'react'
 import FileSaver from 'file-saver'
-import { downloadShopList, downloadStoresStock, getShopList } from '@/api/stock'
+import { downloadShopList, getShopList } from '@/api/stock'
 import useGetStores2 from '@/hooks/useStores2'
 import { MultiSelect, MultiSelectItem } from '@tremor/react'
 import ShopListTable from './shopListTable'
 import DspLoader from '@/components/admin/common/loader'
-import { set } from 'date-fns'
 import { swallError } from '@/utils/sweetAlerts'
 
 function shopList () {
