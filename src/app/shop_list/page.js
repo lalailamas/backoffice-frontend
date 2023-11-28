@@ -7,7 +7,7 @@ import useGetStores2 from '@/hooks/useStores2'
 import { MultiSelect, MultiSelectItem } from '@tremor/react'
 import ShopListTable from './shopListTable'
 import DspLoader from '@/components/admin/common/loader'
-import { swallError } from '@/utils/sweetAlerts'
+import { swallError, Toast } from '@/utils/sweetAlerts'
 
 function shopList () {
   const [ids, setIds] = useState([])
@@ -20,6 +20,7 @@ function shopList () {
   }
 
   const handleExcelDownload = async () => {
+    Toast('Descargando archivo', 'aguarda unos segundos', 2000)
     try {
       const response = await downloadShopList(ids)
 

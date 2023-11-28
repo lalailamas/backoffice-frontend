@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react'
 import FileSaver from 'file-saver'
 import { downloadStoresStock, getRepositionByStore } from '@/api/stock'
 import RequestedStockTable from './requestedStockTable'
-import { swallError } from '@/utils/sweetAlerts'
+import { swallError, Toast } from '@/utils/sweetAlerts'
 import DspLoader from '@/components/admin/common/loader'
 
 function requestedByStore () {
@@ -12,6 +12,8 @@ function requestedByStore () {
   const [loading, setLoading] = useState(false)
 
   const handleExcelDownload = async () => {
+    Toast('Descargando archivo', 'aguarda unos segundos', 4000)
+
     try {
       const response = await downloadStoresStock()
       console.log(response, 'response')
