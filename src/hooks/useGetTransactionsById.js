@@ -10,7 +10,7 @@ export default function getTransactionsById (id, externalTransactionId) {
   async function fetchOperationData () {
     try {
       const operationResponse = await getStockOperationById(id, externalTransactionId)
-      console.log('operationResponse', operationResponse)
+      // console.log('operationResponse', operationResponse)
       if (operationResponse.data) {
         setState({
           OperationStock: operationResponse.data,
