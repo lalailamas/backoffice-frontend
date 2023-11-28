@@ -76,6 +76,9 @@ export const postDataByStore = async (storeId, snapshot, url, contentType) => {
 export const getDataByQuery = (url, contentType, query) => {
   return axios.get(urlApi + url + query, { headers: { 'content-type': contentType } })
 }
+export const getDataOnly = (url, contentType) => {
+  return axios.get(urlApi + url, { headers: { 'content-type': contentType } })
+}
 
 export const getData = (order, limit, page, search, ean, id, url, contentType) => {
   if (search !== '') {
@@ -136,6 +139,16 @@ export const getReiteDataById = (id, url, contentType) => {
 
 export const getDataStock = (url, contentType) => {
   return axios.get(urlApiReite + url, { headers: { 'content-type': contentType } })
+}
+
+export const getDataForExcel = (relativeUrl) => {
+  const config = {
+    responseType: 'arraybuffer'
+  }
+
+  const fullUrl = urlApi + relativeUrl
+
+  return axios.get(fullUrl, config)
 }
 
 export const DspApi = {
