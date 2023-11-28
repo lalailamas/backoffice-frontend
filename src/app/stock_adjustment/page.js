@@ -61,8 +61,11 @@ function StockAdjustment () {
   }
 
   return (
-    <div>
+    <div className='h-screen'>
       <InsideLayout />
+      <div className='flex justify-center text-center p-5'>
+        <h2 className='text-d-dark-dark-purple text-2xl font-bold'>Modifica el Inventario</h2>
+      </div>
       <div>
         <div className='p-5 pt-10 flex flex-row items-center justify-center'>
           <select
