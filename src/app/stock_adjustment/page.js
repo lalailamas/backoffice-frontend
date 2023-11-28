@@ -15,6 +15,7 @@ function StockAdjustment () {
   const [modalVisible, setModalVisible] = useState(false)
   const [newQuantity, setNewQuantity] = useState(null)
   const [selectedProduct, setSelectedProduct] = useState(null)
+  const [loader, setLoader] = useState(false)
 
   const handleStoreChange = (e) => {
     setProducts([])
@@ -24,12 +25,14 @@ function StockAdjustment () {
   useEffect(() => {
     const updateProductsInventory = async () => {
       if (selectedStore) {
+        setLoader(true)
         try {
           const products = await getReiteProdByStore(selectedStore)
           const store = await getInventoryByStore(selectedStore)
           setNewQuantity(null)
           setProducts(products)
           setInventory(store.data.products)
+          setLoader(false)
         } catch (error) {
           console.log(error)
         }
@@ -79,9 +82,9 @@ function StockAdjustment () {
       </div>
       <div className={`${selectedStore ? 'flex flex-row items-center justify-center' : 'hidden'}`} />
       <div className='p-8'>
-        {!products.data
-          ? (<DspLoader />)
-          : (
+        {loader
+          ? <DspLoader />
+          : products.data && (
             <table className='table text-d-dark-dark-purple table-zebra mt-8 p-8'>
               <thead>
                 <tr className='bg-d-dark-dark-purple text-d-white'>
@@ -129,7 +132,7 @@ function StockAdjustment () {
                 })}
               </tbody>
             </table>
-            )}
+          )}
 
         {modalVisible && selectedProduct && (
           <QuantityModal
