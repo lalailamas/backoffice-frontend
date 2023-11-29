@@ -1,13 +1,12 @@
 'use client'
 import InsideLayout from '@/components/admin/layouts/inside'
-import { getListClients } from '@/api/client'
+import { getListClients, downloadClientsExcel } from '@/api/client'
 import { useEffect, useState } from 'react'
 import dayjs from 'dayjs'
 import DatePicker from '@/components/admin/common/datepicker/double'
 import Link from 'next/link'
 import DspLoader from '@/components/admin/common/loader'
 import FileSaver from 'file-saver'
-import { downloadExcel } from '@/api/user'
 
 function TableClient () {
   const [clients, setClients] = useState([])
@@ -75,23 +74,9 @@ function TableClient () {
 
   const handleExcelDownload = async () => {
     try {
-      const queryParams = new URLSearchParams()
-
-      if (dateRange.startDate && dayjs.isDayjs(dateRange.startDate)) {
-        queryParams.append('startTimestamp', dateRange.startDate.format('YYYY-MM-DD'))
-      }
-
-      if (dateRange.endDate && dayjs.isDayjs(dateRange.endDate)) {
-        queryParams.append('endTimestamp', dateRange.endDate.format('YYYY-MM-DD'))
-      }
-      if (searchTerm) {
-        queryParams.append('searchTerm', searchTerm)
-      }
-
-      const queryString = queryParams.toString()
-
-      const response = await downloadExcel(`reite/clients/list/download?${queryString}`)
+      const response = await downloadClientsExcel(dateRange, searchTerm)
       console.log(response, 'respuesta')
+
       const blob = new Blob([response.data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' })
       FileSaver.saveAs(blob, 'clientes.xlsx')
     } catch (error) {
@@ -160,8 +145,8 @@ function TableClient () {
               <tbody>
                 {clients.map((item) => {
                   date = new Date(item.creation.timestamp * 1000)
-                  console.log(date, 'fecha')
-                  console.log(item.creation.timestamp, 'desde reite')
+                  // console.log(date, 'fecha')
+                  // console.log(item.creation.timestamp, 'desde reite')
                   return (
                     <tr key={item.id}>
                       <td />

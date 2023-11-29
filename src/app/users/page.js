@@ -25,7 +25,7 @@ function Users () {
     }
 
     try {
-      const response = await downloadExcel('app-user/download/excel')
+      const response = await downloadExcel()
       const blob = new Blob([response.data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' })
       FileSaver.saveAs(blob, 'usuarios.xlsx')
     } catch (error) {
