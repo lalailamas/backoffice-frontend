@@ -30,7 +30,10 @@ export const menuItems = [
     subMenuLinks: [
       { label: 'Stock actual productos', href: '/stock' },
       { label: 'Stock por máquina', href: '/stock_request' },
-      { label: 'Ajuste de stock', href: '/stock_adjustment' }
+      { label: 'Ajuste de stock', href: '/stock_adjustment' },
+      { label: 'Lista de compras', href: '/shop_list' },
+      { label: 'Lista de faltantes', href: '/stock_stores_requested' }
+
     ]
   },
   {

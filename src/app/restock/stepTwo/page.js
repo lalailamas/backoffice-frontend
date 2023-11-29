@@ -11,6 +11,8 @@ import useGetProdByStore from '@/hooks/useGetProdByStore'
 import { postRestockInventory } from '@/api/restock'
 import ConfirmationModal from '../confirmationModal'
 import useFlattenLayout from '@/hooks/useFlattenLayout'
+import { swallError } from '@/utils/sweetAlerts'
+
 // import useGetReiteProd from '@/hooks/useGetReiteProd'
 
 function StepTwo () {
@@ -25,6 +27,7 @@ function StepTwo () {
   const { products, loading } = useGetProdByStore(externalId)
   const [occInventory, setOccInventory] = useState({})
   const [modalVisible, setModalVisible] = useState(false)
+  const [loaderVisible, setLoaderVisible] = useState(false)
   const { flattenedLayout } = useFlattenLayout(layoutId)
 
   const router = useRouter()
@@ -103,9 +106,11 @@ function StepTwo () {
 
     try {
       console.log('Step 2: stockData to Confirm Inventory', stockData)
+      setLoaderVisible(true)
       const response = await postRestockInventory(externalId, transactionId, stockData)
       console.log('Step 2: inventory response', response)
-      if (response) {
+      if (response.status === 200) {
+        swallError('Stock confirmado', true)
         router.push(
           'stepThree' +
           `?external_id=${externalId}&layout_id=${layoutId}&store_name=${storeName}&externalTransactionId=${externalTransactionId}&transactionId=${transactionId}`
@@ -114,11 +119,15 @@ function StepTwo () {
     } catch (error) {
       // Handle error if the API call fails
       console.error('Error in API call:', error)
+      swallError('Ocurrió un error, lo sentimos mucho', false)
     }
   }
 
   const handleConfirmationModal = () => {
     setModalVisible(!modalVisible)
+  }
+  if (loaderVisible) {
+    return <DspLoader />
   }
 
   return (
