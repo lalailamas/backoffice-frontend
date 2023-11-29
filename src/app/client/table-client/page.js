@@ -6,11 +6,14 @@ import dayjs from 'dayjs'
 import DatePicker from '@/components/admin/common/datepicker/double'
 import Link from 'next/link'
 import DspLoader from '@/components/admin/common/loader'
+import FileSaver from 'file-saver'
+import { downloadExcel } from '@/api/user'
 
 function TableClient () {
   const [clients, setClients] = useState([])
   const [expandedRows, setExpandedRows] = useState([])
   const [searchTerm, setSearchTerm] = useState('')
+
   let date
 
   const [dateRange, setDateRange] = useState({
@@ -49,14 +52,12 @@ function TableClient () {
     )
   }
 
+  // Format timestamp
   function formatTimestampToDate (timestamp) {
-    // Convert the timestamp to milliseconds by multiplying it by 1000
     const milliseconds = timestamp * 1000
 
-    // Create a Date object from the converted timestamp
     const date = new Date(milliseconds)
 
-    // Get formatting options for date and time
     const formatOptions = {
       // weekday: 'long',
       day: 'numeric',
@@ -66,11 +67,36 @@ function TableClient () {
       // minute: 'numeric'
     }
 
-    // Format the date in the desired format
     const dateFormatter = new Intl.DateTimeFormat('es-ES', formatOptions)
     const formattedDate = dateFormatter.format(date)
 
     return formattedDate
+  }
+
+  const handleExcelDownload = async () => {
+    try {
+      const queryParams = new URLSearchParams()
+
+      if (dateRange.startDate && dayjs.isDayjs(dateRange.startDate)) {
+        queryParams.append('startTimestamp', dateRange.startDate.format('YYYY-MM-DD'))
+      }
+
+      if (dateRange.endDate && dayjs.isDayjs(dateRange.endDate)) {
+        queryParams.append('endTimestamp', dateRange.endDate.format('YYYY-MM-DD'))
+      }
+      if (searchTerm) {
+        queryParams.append('searchTerm', searchTerm)
+      }
+
+      const queryString = queryParams.toString()
+
+      const response = await downloadExcel(`reite/clients/list/download?${queryString}`)
+      console.log(response, 'respuesta')
+      const blob = new Blob([response.data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' })
+      FileSaver.saveAs(blob, 'clientes.xlsx')
+    } catch (error) {
+      console.error('Error al descargar el archivo Excel:', error)
+    }
   }
 
   return (
@@ -107,6 +133,14 @@ function TableClient () {
               handleDateChange={handleDateChange}
             />
           </div>
+
+          <button onClick={handleExcelDownload} className='btn btn-sm join-item rounded-full bg-d-dark-dark-purple border-none text-d-white hover:bg-d-soft-soft-purple hover:text-d-dark-dark-purple'>
+            <svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' strokeWidth={1.5} stroke='currentColor' className='w-6 h-6 mr-2'>
+              <path strokeLinecap='round' strokeLinejoin='round' d='M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3' />
+            </svg>
+            Descargar
+          </button>
+
         </div>
 
         <div className='overflow-x-auto p-5'>
