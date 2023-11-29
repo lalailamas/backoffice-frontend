@@ -19,3 +19,23 @@ export const swallError = (message, ok) => {
     })
   }
 }
+export const Toast = (message, html, timer) => {
+  let timerInterval
+  Swal.fire({
+    title: message,
+    html,
+    timer,
+    timerProgressBar: true,
+    didOpen: () => {
+      Swal.showLoading()
+    },
+    willClose: () => {
+      clearInterval(timerInterval)
+    }
+  }).then((result) => {
+    /* Read more about handling dismissals below */
+    if (result.dismiss === Swal.DismissReason.timer) {
+      console.log('I was closed by the timer')
+    }
+  })
+}

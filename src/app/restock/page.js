@@ -82,7 +82,7 @@ function Restock () {
   }
 
   return (
-    <div>
+    <div className='h-screen'>
       <InsideLayout />
       <div className='text-center pt-8'>
         <StepLayout />

@@ -27,11 +27,7 @@ function ShopListTable ({ data }) {
               </tbody>
             </table>
             )
-          : (
-            <div className=''>
-              <p className='text-center'>No hay datos disponibles</p>
-            </div>
-            )}
+          : null}
       </div>
     </div>
   )
