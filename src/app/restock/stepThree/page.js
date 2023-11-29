@@ -11,6 +11,7 @@ import { useState } from 'react'
 import useGetProdByStore from '@/hooks/useGetProdByStore'
 import { putRestockResult } from '@/api/restock'
 import ConfirmationModal from '../confirmationModal'
+import { swallError } from '@/utils/sweetAlerts'
 
 export default function page () {
   const searchParams = useSearchParams()
@@ -22,6 +23,8 @@ export default function page () {
   const transactionId = searchParams.get('transactionId')
   const { inventory, inventoryLoad } = useGetInventory(externalId)
   const { layout, layoutLoad } = useGetLayout(layoutId)
+  const [loaderVisible, setLoaderVisible] = useState(false)
+
   // const { products, loading } = useGetReiteProd()
   const { products, loading } = useGetProdByStore(externalId)
   // const [comments, setComments] = useState('Sin comentarios')
@@ -84,19 +87,37 @@ export default function page () {
 
     try {
       console.log('Step 3: stockData to Confirm PATCH RESULT', stockData)
+      setLoaderVisible(true)
       const response = await putRestockResult(externalTransactionId, stockData)
       console.log('Step 3: response PATCH RESULT', response)
       if (response.data.successful) {
+        swallError('Restock Confirmado', true)
         router.push(
           'stepFour' + `?external_id=${externalId}&layout_id=${layoutId}&store_name=${storeName}&externalTransactionId=${externalTransactionId}&transactionId=${transactionId}`
         )
       }
     } catch (error) {
       console.log(error)
+      if (error.response.status === 400) {
+        swallError('Solicitud incorrecta', false)
+      } else if (error.response.status === 500) {
+        swallError('Error en el servidor', false)
+        setLoaderVisible(false)
+      } else if (error.response.status === 403) {
+        swallError('La transacción ya fue validada', false)
+        router.push(
+          'stepFour' + `?external_id=${externalId}&layout_id=${layoutId}&store_name=${storeName}&externalTransactionId=${externalTransactionId}&transactionId=${transactionId}`
+        )
+      } else {
+        swallError('Error desconocido', false)
+      }
     }
   }
   const handleConfirmationModal = () => {
     setModalVisible(!modalVisible)
+  }
+  if (loaderVisible) {
+    return <DspLoader />
   }
 
   return (

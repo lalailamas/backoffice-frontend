@@ -15,6 +15,7 @@ function page () {
   const externalTransactionId = searchParams.get('external_transactionId')
 
   const { OperationStock, loading } = getTransactionsById(id, externalTransactionId)
+  console.log('OperationStock', OperationStock)
 
   function formatTimeDifference (start, end) {
     const startTime = new Date(start)
@@ -106,7 +107,7 @@ function page () {
                   </Card>
                   <Card className='text-center'>
                     <Text>Productos Repuestos</Text>
-                    <Metric>{countProducts(OperationStock[0].results.restocked)}</Metric>
+                    <Metric>{countProducts(OperationStock[0].results?.restocked)}</Metric>
                   </Card>
                   <Card className='text-center'>
                     <Text>Monto merma</Text>
@@ -116,7 +117,7 @@ function page () {
                 <Grid numItems={1} numItemsSm={1} numItemsLg={1} className='gap-2 mt-2'>
                   <Card className='text-center'>
                     <Text className='text-center font-bold'>Comentarios</Text>
-                    <Text>{OperationStock[0].comments || 'sin comentarios'}</Text>
+                    <Text>{OperationStock[0]?.comments || 'sin comentarios'}</Text>
 
                   </Card>
                 </Grid>
@@ -127,25 +128,28 @@ function page () {
                 <Card className='text-center'>
                   <Text>Imagen antes de abrir tienda</Text>
 
-                  <Image
-                    src={OperationStock[0].start_image_url}
-                    alt='store'
-                    className='w-96 m-2'
-                    width={1300} // Establece el ancho deseado
-                    height={500}
-                  />
+                  {OperationStock[0].start_image_url
+                    ? <Image
+                        src={OperationStock[0]?.start_image_url}
+                        alt='store'
+                        className='w-96 m-2'
+                        width={1300} // Establece el ancho deseado
+                        height={500}
+                      />
+                    : null}
                 </Card>
 
                 <Card className='text-center'>
                   <Text>Imagen luego de cerrar tienda</Text>
-
-                  <Image
-                    src={OperationStock[0].end_image_url}
-                    alt='store'
-                    className='w-96 m-2'
-                    width={1300} // Establece el ancho deseado
-                    height={500}
-                  />
+                  {OperationStock[0].start_image_url
+                    ? <Image
+                        src={OperationStock[0]?.end_image_url}
+                        alt='store'
+                        className='w-96 m-2'
+                        width={1300} // Establece el ancho deseado
+                        height={500}
+                      />
+                    : null}
                 </Card>
 
               </div>
