@@ -6,21 +6,24 @@ import { downloadStoresStock, getRepositionByStore } from '@/api/stock'
 import RequestedStockTable from './requestedStockTable'
 import { swallError, Toast } from '@/utils/sweetAlerts'
 import DspLoader from '@/components/admin/common/loader'
+import Swal from 'sweetalert2'
 
 function requestedByStore () {
   const [data, setData] = useState([])
   const [loading, setLoading] = useState(false)
 
   const handleExcelDownload = async () => {
-    Toast('Descargando archivo', 'aguarda unos segundos', 4000)
+    Toast('Descargando archivo', 'espera unos segundos')
 
     try {
       const response = await downloadStoresStock()
       console.log(response, 'response')
       const blob = new Blob([response.data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' })
       FileSaver.saveAs(blob, 'reposicionportienda.xlsx')
+      Swal.close()
     } catch (error) {
       console.error('Error al descargar el archivo Excel:', error)
+      Swal.close()
     }
   }
   const handleShopList = async () => {
