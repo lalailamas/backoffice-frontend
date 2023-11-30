@@ -13,8 +13,6 @@ function TableClient () {
   const [expandedRows, setExpandedRows] = useState([])
   const [searchTerm, setSearchTerm] = useState('')
 
-  let date
-
   const [dateRange, setDateRange] = useState({
     startDate: dayjs('2022-01-01'),
     endDate: dayjs()
@@ -144,7 +142,7 @@ function TableClient () {
               </thead>
               <tbody>
                 {clients.map((item) => {
-                  date = new Date(item.creation.timestamp * 1000)
+                  // const date = new Date(item.creation.timestamp * 1000)
                   // console.log(date, 'fecha')
                   // console.log(item.creation.timestamp, 'desde reite')
                   return (
