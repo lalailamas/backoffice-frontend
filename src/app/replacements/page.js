@@ -1,25 +1,39 @@
 'use client'
 import RepositionTable from './repositionTable/page'
 import { getStockOperation } from '@/api/restock'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import InsideLayout from '@/components/admin/layouts/inside'
 import DatePicker from '@/components/admin/common/datepicker/double'
 import dayjs from 'dayjs'
 import useGetStores2 from '@/hooks/useStores2'
+import DspLoader from '@/components/admin/common/loader'
+import { swallError2 } from '@/utils/sweetAlerts'
 
 function Replacements () {
   const [restockData, setRestockData] = useState([])
   const { stores } = useGetStores2()
+  const [isData, setIsData] = useState(true)
   const [dateRange, setDateRange] = useState({
     startDate: dayjs().subtract(1, 'month'),
     endDate: dayjs()
   })
+  const isInitialRender = useRef(true)
 
   useEffect(() => {
+    // Skip the initial render
+    if (isInitialRender.current) {
+      isInitialRender.current = false
+      return
+    }
+
     if (dateRange.startDate !== null && dateRange.endDate !== null) {
       getStockOperation(dateRange)
         .then((response) => {
           console.log(response.data)
+          if (response.data.length === 0) {
+            swallError2('No hay datos para el rango de fechas seleccionado')
+            setIsData(false)
+          }
           setRestockData(response.data)
         })
         .catch((error) => {
@@ -30,6 +44,7 @@ function Replacements () {
   [dateRange])
 
   const handleDateChange = (newDateRange) => {
+    setRestockData([]) // Reset data
     setDateRange(newDateRange)
   }
 
@@ -47,10 +62,15 @@ function Replacements () {
           />
         </div>
         {/* <div><pre>{JSON.stringify(restockData, null, 2)}</pre></div> */}
+        {restockData.length > 0 || !isData
+          ? (
 
-        <div className='overflow-x-auto p-10 mt-8'>
-          <RepositionTable data={restockData} stores={stores} />
-        </div>
+            <div className='overflow-x-auto p-10 mt-8'>
+              <RepositionTable data={restockData} stores={stores} />
+            </div>)
+          : (
+            <DspLoader />
+            )}
       </div>
 
     </>
