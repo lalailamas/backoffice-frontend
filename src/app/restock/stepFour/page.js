@@ -60,8 +60,11 @@ export default function stepFour () {
 
   const updateRestock = async () => {
     try {
-      const response = await putStockImageUpdate(transactionId, snapshot, comment)
-      console.log(response)
+      if (snapshot) {
+        const response = await putStockImageUpdate(transactionId, snapshot, comment)
+
+        console.log(response)
+      }
     } catch (error) {
       console.log(error)
     }
@@ -90,10 +93,10 @@ export default function stepFour () {
                   return (
                     <div key={index} className='text-center border-b-2 border-gray-300 pb-5 mb-5 md:mb-8'>
 
-                      <div className='bg-d-dark-dark-purple'>
+                      <div className='bg-d-dark-dark-purple w-full'>
                         <h2 className='text-d-soft-purple text-medium font-bold py-2 mb-2 md:mb-8'>Bandeja {index + 1}</h2>
                       </div>
-                      <div className='flex flex-col md:flex-row gap-4 items-center md:items-start h-full w-full'>
+                      <div className='flex flex-row gap-2 items-center overflow-x-auto'>
 
                         {
                                 tray
@@ -132,7 +135,7 @@ export default function stepFour () {
                                     }
                               maxQuantity={aggregatedValues.maxQuantity}
                               header={
-                                <div className=' w-full gap-3 items-center justify-center'>
+                                <div className=' w-full'>
                                   <figure className='flex justify-center'>
                                     <img
                                       className='w-auto max-w-[50px] h-[50px]'

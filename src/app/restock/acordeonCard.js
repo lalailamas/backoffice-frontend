@@ -70,15 +70,19 @@ const AccordeonCard = ({
       {/* STEP FOUR */}
       {step === 4
         ? (
-          <section className='w-[250px] h-[210px] flex flex-col items-center align-center gap-6 rounded shadow-lg'>
+          <section className='w-[250px] h-[300px] flex flex-col items-center align-center  rounded shadow-lg'>
 
             <span className='flex  items-center  h-full'>
               {header}
             </span>
+            <div className='h-full flex flex-col items-center gap-8'>
+              <div className='custom-number-input h-8 w-32'>
 
-            <div className='flex flex-col justify-center text-center items-center align-center h-[120px]'>
-              <p className='font-albert-sans text-center font-semibold text-gray-800'>${price}</p>
-              <p className='font-bold text-center text-d-dark-dark-purple'> {initialQuantity}/{maxQuantity}</p>
+                <div className='flex flex-col justify-center text-center items-center align-center h-[120px]'>
+                  <p className='font-albert-sans text-center font-semibold text-gray-800'>${price}</p>
+                  <p className='font-bold text-center text-d-dark-dark-purple'> {initialQuantity}/{maxQuantity}</p>
+                </div>
+              </div>
             </div>
           </section>
 
@@ -133,7 +137,7 @@ const AccordeonCard = ({
 
           : (
               {/* STEP THREE */},
-                <section className='w-[250px] h-[400px] flex flex-col items-center align-center gap-6 rounded shadow-lg'>
+                <section className='w-[250px] h-[380px] flex flex-col items-center align-center rounded shadow-lg'>
                   {/* <div className='p-2 rounded shadow-lg gap-2 w-full h-full'> */}
                   {/* <div className='flex flex-col gap-8 items-center justify-end '> */}
                   <span className='flex  items-center  h-full'>
