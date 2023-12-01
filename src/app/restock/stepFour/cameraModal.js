@@ -44,7 +44,7 @@ function CameraModal ({
   }
 
   function handleTakePhotoAnimationDone (dataUri) {
-    console.log(dataUri, 'takePhoto')
+    // console.log(dataUri, 'takePhoto')
     setImage(dataUri)
   }
 
@@ -52,13 +52,13 @@ function CameraModal ({
     console.log('handleCameraError', error)
   }
 
-  function handleCameraStart (stream) {
-    console.log('handleCameraStart')
-  }
+  // function handleCameraStart (stream) {
+  //   console.log('handleCameraStart')
+  // }
 
-  function handleCameraStop () {
-    console.log('handleCameraStop')
-  }
+  // function handleCameraStop () {
+  //   console.log('handleCameraStop')
+  // }
   const handleFileInputChange = (e) => {
     const file = e.target.files[0]
     if (file) {
@@ -66,6 +66,8 @@ function CameraModal ({
       reader.onloadend = () => {
         setImage(reader.result)
         setShowCamera(false)
+        setSelectedFile(file)
+
         console.log(reader.result, 'reader.result')
       }
       reader.readAsDataURL(file)
@@ -148,12 +150,12 @@ function CameraModal ({
                         onCameraError={(error) => {
                           handleCameraError(error)
                         }}
-                        onCameraStart={(stream) => {
-                          handleCameraStart(stream)
-                        }}
-                        onCameraStop={() => {
-                          handleCameraStop()
-                        }}
+                        // onCameraStart={(stream) => {
+                        //   handleCameraStart(stream)
+                        // }}
+                        // onCameraStop={() => {
+                        //   handleCameraStop()
+                        // }}
                         idealFacingMode='environment'
                         // isFullscreen
                       />

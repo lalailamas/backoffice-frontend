@@ -33,7 +33,7 @@ function CameraModal ({
     setShowCamera(false)
   }
   const handleShowCamera = () => {
-    console.log('handleShowCamera')
+    // console.log('handleShowCamera')
     setShowCamera(!showcamera)
     setImage('')
   }
@@ -43,7 +43,7 @@ function CameraModal ({
   }
 
   function handleTakePhotoAnimationDone (dataUri) {
-    console.log(dataUri, 'takePhoto')
+    // console.log(dataUri, 'takePhoto')
     setImage(dataUri)
   }
 
