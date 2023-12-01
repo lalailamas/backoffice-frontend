@@ -71,7 +71,18 @@ function shopList () {
         <div className='flex justify-center mt-4 mb-4 p-4'>
           <h2 className='text-d-dark-dark-purple text-2xl font-bold text-center md:text-left'>Lista de compras</h2>
         </div>
-        <div className='flex justify-center text-center p-5'>
+        {ids.length > 0 &&
+          <div className='flex justify-end items-start p-5'>
+            <div className='flex justify-left'>
+              <button onClick={handleExcelDownload} className='btn btn-sm join-item rounded-full bg-d-dark-dark-purple border-none text-d-white hover:bg-d-soft-soft-purple hover:text-d-dark-dark-purple'>
+                <svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' strokeWidth={1.5} stroke='currentColor' className='w-6 h-6 mr-2'>
+                  <path strokeLinecap='round' strokeLinejoin='round' d='M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3' />
+                </svg>
+                Descargar
+              </button>
+            </div>
+          </div>}
+        <div className='flex justify-center text-center p-5 '>
 
           <MultiSelect
             value={ids}
@@ -89,8 +100,7 @@ function shopList () {
                 : null
             ))}
           </MultiSelect>
-        </div>
-        <div>
+
           <button
             type='button'
             onClick={() => {
@@ -104,17 +114,9 @@ function shopList () {
               <path stroke='currentColor' strokeLinecap='round' strokeLinejoin='round' strokeWidth='2' d='M1 5h12m0 0L9 1m4 4L9 9' />
             </svg>
           </button>
+
         </div>
-        <div className='flex justify-end items-start p-5'>
-          <div className='flex justify-left'>
-            <button onClick={handleExcelDownload} className={`${ids.length > 0 ? 'btn btn-sm join-item rounded-full bg-d-dark-dark-purple border-none text-d-white hover:bg-d-soft-soft-purple hover:text-d-dark-dark-purple' : 'hidden'}`}>
-              <svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' strokeWidth={1.5} stroke='currentColor' className='w-6 h-6 mr-2'>
-                <path strokeLinecap='round' strokeLinejoin='round' d='M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3' />
-              </svg>
-              Descargar
-            </button>
-          </div>
-        </div>
+
         <div className=''>
           <ShopListTable data={data} />
         </div>
