@@ -19,6 +19,14 @@ export const swallError = (message, ok) => {
     })
   }
 }
+export const swallError2 = (message) => {
+  Swal.fire({
+    icon: 'info',
+    title: message,
+    showConfirmButton: false,
+    timer: 2000
+  })
+}
 export const Toast = async (message, html) => {
   try {
     const result = await Swal.fire({
