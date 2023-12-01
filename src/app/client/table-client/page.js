@@ -85,7 +85,7 @@ function TableClient () {
   return (
     <>
       <InsideLayout />
-      <div className=''>
+      <div className='h-screen'>
         <h1 className=' my-10 text-d-dark-dark-purple text-2xl font-bold text-center'>Clientes</h1>
         <div className='flex items-center gap-4 px-8 mt-4 max-[431px]:flex-col'>
           <div className='join'>
