@@ -17,10 +17,13 @@ function CameraModal ({
   const [image, setImage] = useState('')
   const [showcamera, setShowCamera] = useState(false)
   const [showInput, setShowInput] = useState(false)
+  const [selectedFile, setSelectedFile] = useState(null)
   const cameraRef = React.useRef()
   const handleShowBack = () => {
+    console.log('handleShowBack')
     setShowCamera(false)
     setShowInput(false)
+    setSelectedFile(null)
     setImage('')
   }
 
@@ -30,6 +33,7 @@ function CameraModal ({
     setShowCamera(false)
   }
   const handleShowCamera = () => {
+    console.log('handleShowCamera')
     setShowCamera(!showcamera)
     setImage('')
   }
@@ -47,13 +51,13 @@ function CameraModal ({
     console.log('handleCameraError', error)
   }
 
-  function handleCameraStart (stream) {
-    console.log('handleCameraStart')
-  }
+  // function handleCameraStart (stream) {
+  //   console.log('handleCameraStart')
+  // }
 
-  function handleCameraStop () {
-    console.log('handleCameraStop')
-  }
+  // function handleCameraStop () {
+  //   console.log('handleCameraStop')
+  // }
   const handleFileInputChange = (e) => {
     const file = e.target.files[0]
     if (file) {
@@ -61,6 +65,7 @@ function CameraModal ({
       reader.onloadend = () => {
         setImage(reader.result)
         setShowCamera(false)
+        setSelectedFile(file)
         console.log(reader.result, 'reader.result')
       }
       reader.readAsDataURL(file)
@@ -109,7 +114,7 @@ function CameraModal ({
             </div>
 
             <div className='mt-5'>
-              {image
+              {image && !selectedFile
                 ? (
                   <div className='relative'>
                     <button className='absolute top-2 right-2 z-10' onClick={handleShowCamera}>
@@ -138,12 +143,12 @@ function CameraModal ({
                         onCameraError={(error) => {
                           handleCameraError(error)
                         }}
-                        onCameraStart={(stream) => {
-                          handleCameraStart(stream)
-                        }}
-                        onCameraStop={() => {
-                          handleCameraStop()
-                        }}
+                        // onCameraStart={(stream) => {
+                        //   handleCameraStart(stream)
+                        // }}
+                        // onCameraStop={() => {
+                        //   handleCameraStop()
+                        // }}
                         idealFacingMode='environment'
                         // isFullscreen
                       />
