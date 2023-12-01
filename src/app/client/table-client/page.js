@@ -73,10 +73,11 @@ function TableClient () {
   const handleExcelDownload = async () => {
     try {
       const response = await downloadClientsExcel(dateRange, searchTerm)
-      console.log(response, 'respuesta')
 
-      const blob = new Blob([response.data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' })
-      FileSaver.saveAs(blob, 'clientes.xlsx')
+      const { buffer, filename } = response.data
+
+      const blob = new Blob([Buffer.from(buffer)], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' })
+      FileSaver.saveAs(blob, filename)
     } catch (error) {
       console.error('Error al descargar el archivo Excel:', error)
     }
