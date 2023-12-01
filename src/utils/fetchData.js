@@ -142,13 +142,13 @@ export const getDataStock = (url, contentType) => {
 }
 
 export const getDataForExcel = (relativeUrl) => {
-  const config = {
-    responseType: 'arraybuffer'
-  }
+  // const config = {
+  //   responseType: 'arraybuffer'
+  // }
 
   const fullUrl = urlApi + relativeUrl
 
-  return axios.get(fullUrl, config)
+  return axios.get(fullUrl)
 }
 
 export const DspApi = {
