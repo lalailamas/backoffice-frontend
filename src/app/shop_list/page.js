@@ -24,9 +24,12 @@ function shopList () {
     Toast('Descargando archivo', 'espera unos segundos', 2000)
     try {
       const response = await downloadShopList(ids)
+      // console.log(response.data, 'response')
+      const { buffer, filename } = response.data
 
-      const blob = new Blob([response.data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' })
-      FileSaver.saveAs(blob, 'reposicionportienda.xlsx')
+      const blob = new Blob([Buffer.from(buffer)], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' })
+
+      FileSaver.saveAs(blob, filename)
       Swal.close()
     } catch (error) {
       console.error('Error al descargar el archivo Excel:', error)
