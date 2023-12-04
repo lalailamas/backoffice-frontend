@@ -26,8 +26,10 @@ function Users () {
 
     try {
       const response = await downloadExcel()
-      const blob = new Blob([response.data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' })
-      FileSaver.saveAs(blob, 'usuarios.xlsx')
+      const { buffer, filename } = response.data
+
+      const blob = new Blob([Buffer.from(buffer)], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' })
+      FileSaver.saveAs(blob, filename)
     } catch (error) {
       console.error('Error al descargar el archivo Excel:', error)
     }

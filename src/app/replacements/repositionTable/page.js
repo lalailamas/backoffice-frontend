@@ -1,7 +1,7 @@
 /* eslint-disable multiline-ternary */
 'use client'
 import React from 'react'
-import DspLoader from '@/components/admin/common/loader'
+
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 
@@ -9,9 +9,7 @@ export default function RepositionTable ({ data, stores }) {
   console.log(data, 'data')
   console.log(stores, 'stores')
   const pathname = usePathname()
-  if (!data || data.length === 0 || !stores || stores.length === 0) {
-    return <DspLoader />
-  }
+
   function formatTimeDifference (start, end) {
     const startTime = new Date(start)
     const endTime = new Date(end)

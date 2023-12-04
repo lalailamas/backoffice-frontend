@@ -17,10 +17,13 @@ function CameraModal ({
   const [image, setImage] = useState('')
   const [showcamera, setShowCamera] = useState(false)
   const [showInput, setShowInput] = useState(false)
+  const [selectedFile, setSelectedFile] = useState(null)
   const cameraRef = React.useRef()
   const handleShowBack = () => {
-    setShowInput(false)
+    console.log('handleShowBack')
     setShowCamera(false)
+    setShowInput(false)
+    setSelectedFile(null)
     setImage('')
   }
 
@@ -30,6 +33,7 @@ function CameraModal ({
     setShowCamera(false)
   }
   const handleShowCamera = () => {
+    // console.log('handleShowCamera')
     setShowCamera(!showcamera)
     setImage('')
   }
@@ -39,7 +43,7 @@ function CameraModal ({
   }
 
   function handleTakePhotoAnimationDone (dataUri) {
-    console.log(dataUri, 'takePhoto')
+    // console.log(dataUri, 'takePhoto')
     setImage(dataUri)
   }
 
@@ -47,13 +51,13 @@ function CameraModal ({
     console.log('handleCameraError', error)
   }
 
-  function handleCameraStart (stream) {
-    console.log('handleCameraStart')
-  }
+  // function handleCameraStart (stream) {
+  //   console.log('handleCameraStart')
+  // }
 
-  function handleCameraStop () {
-    console.log('handleCameraStop')
-  }
+  // function handleCameraStop () {
+  //   console.log('handleCameraStop')
+  // }
   const handleFileInputChange = (e) => {
     const file = e.target.files[0]
     if (file) {
@@ -61,6 +65,7 @@ function CameraModal ({
       reader.onloadend = () => {
         setImage(reader.result)
         setShowCamera(false)
+        setSelectedFile(file)
         console.log(reader.result, 'reader.result')
       }
       reader.readAsDataURL(file)
@@ -109,7 +114,7 @@ function CameraModal ({
             </div>
 
             <div className='mt-5'>
-              {image
+              {image && !selectedFile
                 ? (
                   <div className='relative'>
                     <button className='absolute top-2 right-2 z-10' onClick={handleShowCamera}>
@@ -138,12 +143,12 @@ function CameraModal ({
                         onCameraError={(error) => {
                           handleCameraError(error)
                         }}
-                        onCameraStart={(stream) => {
-                          handleCameraStart(stream)
-                        }}
-                        onCameraStop={() => {
-                          handleCameraStop()
-                        }}
+                        // onCameraStart={(stream) => {
+                        //   handleCameraStart(stream)
+                        // }}
+                        // onCameraStop={() => {
+                        //   handleCameraStop()
+                        // }}
                         idealFacingMode='environment'
                         // isFullscreen
                       />
@@ -188,26 +193,32 @@ function CameraModal ({
                         </div>
                         )}
             </div>
-            <div>
-              <button
-                type='button'
-                databehavior='submit'
-                className={`${image ? ' mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:mt-0 sm:w-auto sm:text-sm' : 'hidden'}`}
-                onClick={SendSnapshot(image)}
-              >
-                Subir Foto
-              </button>
-            </div>
 
             <div className='mt-5 sm:mt-4 sm:flex sm:flex-row-reverse'>
-              <button
-                type='button'
-                databehavior='submit'
-                className='mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:mt-0 sm:w-auto sm:text-sm'
-                onClick={handleNext()}
-              >
-                Siguiente
-              </button>
+              {image
+                ? (
+                  <div>
+                    <button
+                      type='button'
+                      databehavior='submit'
+                      className={`${image ? ' mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:mt-0 sm:w-auto sm:text-sm' : 'hidden'}`}
+                      onClick={SendSnapshot(image)}
+                    >
+                      Siguiente
+                    </button>
+                  </div>
+                  )
+                : (
+                  <button
+                    type='button'
+                    databehavior='submit'
+                    className='mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:mt-0 sm:w-auto sm:text-sm'
+                    onClick={handleNext()}
+                  >
+                    Siguiente
+                  </button>
+                  )}
+
               <button type='button' databehavior='cancel' className='mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:mt-0 sm:w-auto sm:text-sm' onClick={handleOperationConfirmation}>
                 {cancelButtonText}
               </button>

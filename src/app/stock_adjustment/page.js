@@ -5,7 +5,10 @@ import useGetStores2 from '@/hooks/useStores2'
 import { getReiteProdByStore } from '@/api/product/reite'
 import DspLoader from '@/components/admin/common/loader'
 import QuantityModal from '../restock/quantityModal'
-import { getInventoryByStore } from '@/api/store'
+import { getInventoryByStore, downloadInventoryExcel } from '@/api/store'
+import FileSaver from 'file-saver'
+import { swallError, Toast } from '@/utils/sweetAlerts'
+import Swal from 'sweetalert2'
 
 function StockAdjustment () {
   const { stores } = useGetStores2()
@@ -35,6 +38,7 @@ function StockAdjustment () {
           setLoader(false)
         } catch (error) {
           console.log(error)
+          swallError('Ocurrió un error inesperado', false)
         }
       }
     }
@@ -60,13 +64,39 @@ function StockAdjustment () {
     }))
   }
 
+  const handleExcelDownload = async () => {
+    try {
+      Toast('Descargando archivo', 'espera unos segundos')
+      const response = await downloadInventoryExcel(selectedStore)
+      const { buffer, filename } = response.data
+
+      const blob = new Blob([Buffer.from(buffer)], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' })
+      FileSaver.saveAs(blob, filename)
+      Swal.close()
+    } catch (error) {
+      swallError('Error al descargar el archivo Excel:', false)
+      console.error('Error al descargar el archivo Excel:', error)
+    }
+  }
+
   return (
     <div className='h-screen'>
       <InsideLayout />
       <div className='flex justify-center text-center p-5'>
         <h2 className='text-d-dark-dark-purple text-2xl font-bold'>Modifica el Inventario</h2>
       </div>
+
       <div>
+        <div className={`${selectedStore ? 'flex justify-end items-start p-5' : 'hidden'}`}>
+
+          <button onClick={handleExcelDownload} className='btn btn-sm join-item rounded-full bg-d-dark-dark-purple border-none text-d-white hover:bg-d-soft-soft-purple hover:text-d-dark-dark-purple'>
+            <svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' strokeWidth={1.5} stroke='currentColor' className='w-6 h-6 mr-2'>
+              <path strokeLinecap='round' strokeLinejoin='round' d='M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3' />
+            </svg>
+            Descargar
+          </button>
+        </div>
+
         <div className='p-5 pt-10 flex flex-row items-center justify-center'>
           <select
             className='select select-sm select-bordered rounded-full w-full md:max-w-xs '
