@@ -19,7 +19,7 @@ function OperationTable ({ data }) {
   return (
     <>
       <div className='overflow-x-auto'>
-        {data
+        {data.products.length > 0
           ? (
             <table className='table text-d-dark-dark-purple table-zebra w-full max-[431px]:hidden'>
               <thead>

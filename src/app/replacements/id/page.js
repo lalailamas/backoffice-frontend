@@ -141,7 +141,7 @@ function page () {
 
                 <Card className='text-center'>
                   <Text>Imagen luego de cerrar tienda</Text>
-                  {OperationStock[0].start_image_url
+                  {OperationStock[0].end_image_url
                     ? <Image
                         src={OperationStock[0]?.end_image_url}
                         alt='store'
@@ -154,6 +154,7 @@ function page () {
 
               </div>
             </div>
+
             <div className='overflow-x-auto p-10 mt-8'>
               <OperationTable data={OperationStock[0]} />
             </div>
