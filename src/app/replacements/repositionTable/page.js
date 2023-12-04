@@ -56,7 +56,7 @@ export default function RepositionTable ({ data, stores }) {
   return (
     <>
       <div className='overflow-x-auto'>
-        {data.length > 0 ? (
+        {data?.length > 0 ? (
           <table className='table text-d-dark-dark-purple table-zebra w-full max-[431px]:hidden'>
             <thead>
               <tr className='bg-d-dark-dark-purple text-d-white'>
