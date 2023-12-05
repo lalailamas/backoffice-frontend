@@ -19,8 +19,8 @@ export default function Home () {
   const [loading, setLoading] = useState(false)
   const [previousLoading, setPreviousLoading] = useState(true)
   const router = useRouter()
-  const HJID = 3721483
-  const HJSV = 6
+  const HJID = process.env.NEXT_PUBLIC_HOTJAR_HJID
+  const HJSV = process.env.NEXT_PUBLIC_HOTJAR_HJSV
 
   const performLogin = async () => {
     setLoading(true)
