@@ -12,8 +12,8 @@ export const menuItems = [
     label: 'Inventario',
     icon: 'rotate-180',
     subMenuLinks: [
-      { label: 'Productos', href: '/inventory' },
-      { label: 'Órdenes de reabastecimiento', href: '/replenishment_orders' }
+      { label: 'Productos', href: '/inventory' }
+      // { label: 'Órdenes de reabastecimiento', href: '/replenishment_orders' }
     ]
   },
   {
@@ -21,18 +21,17 @@ export const menuItems = [
     icon: 'rotate-180',
     subMenuLinks: [
       { label: 'Reponer tienda', href: '/restock' },
-      { label: 'Historial de reposiciones', href: '/replacements' }
+      { label: 'Historial de reposiciones', href: '/replacements' },
+      { label: 'Lista de compras', href: '/shop_list' },
+      { label: 'Lista de faltantes', href: '/stock_stores_requested' }
     ]
   },
   {
     label: 'Tiendas',
     icon: 'rotate-180',
     subMenuLinks: [
-      { label: 'Stock actual productos', href: '/stock' },
       { label: 'Stock por máquina', href: '/stock_request' },
-      { label: 'Ajuste de stock', href: '/stock_adjustment' },
-      { label: 'Lista de compras', href: '/shop_list' },
-      { label: 'Lista de faltantes', href: '/stock_stores_requested' }
+      { label: 'Ajuste de stock', href: '/stock_adjustment' }
 
     ]
   },
