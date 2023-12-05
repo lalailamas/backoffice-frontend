@@ -7,6 +7,11 @@ const urlApiReite = process.env.NEXT_PUBLIC_DSP_API_BASE + 'reite/'
 export const postData = (credentials, url, contentType) => {
   return axios.post(urlApi + url, credentials, { headers: { 'content-type': contentType } })
 }
+
+export const putDataUsers = (credentials, url, contentType) => {
+  return axios.put(urlApi + url, credentials, { headers: { 'content-type': contentType } })
+}
+
 export const putImageData = async (snapshot, url, contentType) => {
   const formData = new FormData()
   const snapshotBlob = base64toBlob(snapshot, 'image/png')
