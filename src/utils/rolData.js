@@ -14,9 +14,9 @@ export const accessData = [
   {
     role: 'restock',
     menuItems_label: [
-      'Reposiciones',
-      'Tiendas',
-      'Tareas'
+      'Reposiciones'
+      // 'Tiendas',
+      // 'Tareas'
     ],
     submenu_pages: [
       'Reponer tienda',
