@@ -12,6 +12,9 @@ export const putDataUsers = (credentials, url, contentType) => {
   return axios.put(urlApi + url, credentials, { headers: { 'content-type': contentType } })
 }
 
+export const deleteDataUsers = (id, email, url, contentType) => {
+  return axios.delete(urlApi + url, { data: { id, email }, headers: { 'content-type': contentType } })
+}
 export const putImageData = async (snapshot, url, contentType) => {
   const formData = new FormData()
   const snapshotBlob = base64toBlob(snapshot, 'image/png')
@@ -113,8 +116,6 @@ export const getSearchTimeStampData = (url, contentType, startDate, endDate, sea
   return axios.get(urlApiReite + url + `?startTimestamp=${startDate}` + `&endTimestamp=${endDate}` + `&searchTerm=${searchTerm}`, { headers: { 'content-type': contentType } })
 }
 
-// api/reite/clients/list?startTimestamp=2022-03-30&endTimestamp=2023-08-30&searchTerm=Caro
-
 export const putData = (data, url, contentType) => {
   if (data !== '') {
     return axios.put(urlApi + url, data, { headers: { 'content-type': contentType } })
@@ -143,12 +144,7 @@ export const getReiteDataById = (id, url, contentType) => {
 }
 
 export const getDataForExcel = (relativeUrl) => {
-  // const config = {
-  //   responseType: 'arraybuffer'
-  // }
-
   const fullUrl = urlApi + relativeUrl
-
   return axios.get(fullUrl)
 }
 
