@@ -22,8 +22,7 @@ export const menuItems = [
     subMenuLinks: [
       { label: 'Reponer tienda', href: '/restock' },
       { label: 'Historial de reposiciones', href: '/replacements' },
-      { label: 'Lista de compras', href: '/shop_list' },
-      { label: 'Lista de faltantes', href: '/stock_stores_requested' }
+      { label: 'Lista de compras y reposición', href: '/shop_list' }
     ]
   },
   {
