@@ -12,6 +12,7 @@ import ConfirmationModal from '../confirmationModal'
 import { useState } from 'react'
 import CameraModal from './cameraModal'
 import { putStockImageUpdate } from '@/api/stock'
+import { errorHandler } from '@/utils/errors/errors'
 // import useGetStores2 from '@/hooks/useStores2'
 // import useGetStoreData from '@/hooks/useGetStoreData'
 
@@ -66,7 +67,8 @@ export default function stepFour () {
         console.log(response)
       }
     } catch (error) {
-      console.log(error)
+      // console.log(error)
+      errorHandler(error, { transactionId, snapshot, comment })
     }
   }
 

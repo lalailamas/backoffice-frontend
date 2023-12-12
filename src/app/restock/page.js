@@ -8,6 +8,7 @@ import ConfirmationModal from './confirmationModal'
 import CameraModal from './cameraModal'
 import { swallError } from '@/utils/sweetAlerts'
 import DspLoader from '@/components/admin/common/loader'
+import { errorHandler } from '@/utils/errors/errors'
 
 function Restock () {
   const [stores, setStores] = useState([])
@@ -31,7 +32,8 @@ function Restock () {
         setStores(response.data)
         // console.log('response', response.data)
       } catch (error) {
-        swallError('Error fetching stores:', false)
+        errorHandler(error)
+        // swallError('Error fetching stores:', false)
         // console.error('Error fetching stores:', error)
       }
     }
@@ -40,15 +42,11 @@ function Restock () {
   }, [])
 
   const handleOpenStore = async () => {
-    console.log('snapshot pero del handleOpenStore', snapshot)
-    console.log('LAYOUT', selectedStore.layoutId)
-
     if (selectedStore.layoutId === null) {
       swallError('Hubo un error con la tienda, contacta al administrador', false)
       return
     }
     try {
-      console.log('entré al try/catch')
       setLoaderVisible(true)
       const openStore = await OpenStore(selectedStore.storeId, snapshot)
       console.log('Step 1: openStore response', openStore)
@@ -58,7 +56,8 @@ function Restock () {
           'restock/stepTwo' + `?external_id=${selectedStore.storeId}&layout_id=${selectedStore.layoutId}&store_name=${selectedStore.name}&externalTransactionId=${openStore.external_transaction_id}&transactionId=${openStore.transaction_id}`
         )
       }
-    } catch {
+    } catch (error) {
+      errorHandler(error, { storeId: selectedStore.storeId, snapshot })
       setLoaderVisible(false)
       swallError('Error opening store:', false)
     }
@@ -70,7 +69,6 @@ function Restock () {
     setModalCameraVisible(!modalCameraVisible)
   }
   const takeSnapshot = async (img) => {
-    console.log('+----------------------img', img)
     const base64Content = img.split(';base64,').pop()
 
     setSnapshot(base64Content)

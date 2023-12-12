@@ -12,6 +12,7 @@ import { postRestockInventory } from '@/api/restock'
 import ConfirmationModal from '../confirmationModal'
 import useFlattenLayout from '@/hooks/useFlattenLayout'
 import { swallError } from '@/utils/sweetAlerts'
+import { errorHandler } from '@/utils/errors/errors'
 
 // import useGetReiteProd from '@/hooks/useGetReiteProd'
 
@@ -117,9 +118,8 @@ function StepTwo () {
         )
       }
     } catch (error) {
-      // Handle error if the API call fails
-      console.error('Error in API call:', error)
-      swallError('Ocurrió un error, lo sentimos mucho', false)
+      errorHandler(error, stockData)
+      // swallError('Ocurrió un error, lo sentimos mucho', false)
     }
   }
 
