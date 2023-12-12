@@ -78,12 +78,12 @@ function CameraModal ({
     takeSnapshot(image)
     handleConfirmationModal()
   }
-  const handleNext = () => {
-    return () => {
-      handleConfirmationModal()
-      handleOperationConfirmation()
-    }
-  }
+  // const handleNext = () => {
+  //   return () => {
+  //     handleConfirmationModal()
+  //     handleOperationConfirmation()
+  //   }
+  // }
 
   return (
     <div>
