@@ -108,6 +108,7 @@ export default function page () {
         router.push(
           'stepFour' + `?external_id=${externalId}&layout_id=${layoutId}&store_name=${storeName}&externalTransactionId=${externalTransactionId}&transactionId=${transactionId}`
         )
+        throw new Error('Forbidden')
       } else {
         swallError('Error desconocido', false)
       }
