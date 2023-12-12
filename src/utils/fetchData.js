@@ -12,9 +12,17 @@ export const putDataUsers = (credentials, url, contentType) => {
   return axios.put(urlApi + url, credentials, { headers: { 'content-type': contentType } })
 }
 
+// export const deleteDataUsers = (credentials, url, contentType) => {
+//   return axios.delete(urlApi + url, credentials, { headers: { 'content-type': contentType } })
+// }
+
 export const deleteDataUsers = (id, email, url, contentType) => {
-  return axios.delete(urlApi + url, { data: { id, email }, headers: { 'content-type': contentType } })
+  return axios.delete(urlApi + url, {
+    data: { id, email },
+    headers: { 'content-type': contentType }
+  })
 }
+
 export const putImageData = async (snapshot, url, contentType) => {
   const formData = new FormData()
   const snapshotBlob = base64toBlob(snapshot, 'image/png')

@@ -1,46 +1,18 @@
 import React, { useState } from 'react'
 import Link from 'next/link'
 import DspLoader from '@/components/admin/common/loader'
-// import SimpleModal from '../restock/simpleModal'
 import ConfirmationModal from '../restock/confirmationModal'
 import { deleteUser } from '@/api/user'
 
-export default function UsersTable ({ data }) {
+export default function UsersTable ({ data, updateUsers }) {
   const [showModal, setShowModal] = useState(false)
   const [selectedUser, setSelectedUser] = useState(null)
   const [successMessage, setSuccessMessage] = useState('')
 
-  // const handleDeleteClick = async (e, userId, email) => {
-  //   e.preventDefault()
-
-  //   try {
-  //     setSelectedUser(userId, email)
-  //     setShowModal(true)
-  //   } catch (error) {
-  //     console.error('Error al eliminar usuario:', error)
-  //   }
-  // }
-
-  // const handleConfirmationModal = async (userId) => {
-  //   try {
-  //     console.log('entre')
-  //     console.log(userId, 'user Id')
-  //     const user = { id: userId }
-  //     await deleteUser(user)
-  //     setSuccessMessage('Usuario eliminado exitosamente')
-  //     setShowModal(false)
-  //   } catch (error) {
-  //     console.error('Error al eliminar usuario:', error)
-  //   }
-  // }
-
-  const handleDeleteClick = async (e, userId, email) => {
-    console.log(userId, 'id usuario')
-    console.log(email, 'email usuario')
-
+  const handleDeleteClick = async (e, id, email) => {
     e.preventDefault()
     try {
-      const user = { id: userId, email }
+      const user = { id, email }
       setSelectedUser(user)
       setShowModal(true)
     } catch (error) {
@@ -48,13 +20,17 @@ export default function UsersTable ({ data }) {
     }
   }
 
-  const handleDeleteConfirmation = async (userId, email) => {
+  const handleDeleteConfirmation = async (id, email) => {
     try {
-      await deleteUser(userId, email)
-      setSuccessMessage('Usuario eliminado exitosamente')
+      await deleteUser(id, email)
       setShowModal(false)
+      setSuccessMessage('Usuario eliminado exitosamente')
+      setTimeout(() => {
+        setSuccessMessage('')
+        updateUsers()
+      }, 2000)
     } catch (error) {
-      console.error('Errorrrrrrrrrr', error)
+      console.error('Error', error)
     }
   }
 
@@ -102,6 +78,7 @@ export default function UsersTable ({ data }) {
                   </td>
                   <td>
                     <button onClick={(e) => handleDeleteClick(e, user.id, user.email)}>
+
                       <svg
                         xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' strokeWidth={1.5} stroke='currentColor' className='w-6 h-6 inline-block text-d-dark-dark-purple hover:text-d-soft-soft-purple transition duration-300 ease-in-out align-middle'
                       >
@@ -118,12 +95,15 @@ export default function UsersTable ({ data }) {
               title='Confirmación'
               message='¿Estás seguro de eliminar este usuario?'
               cancelButtonText='Cancelar'
-              handleOperationConfirmation={handleDeleteConfirmation}
+              handleOperationConfirmation={() => handleDeleteConfirmation(selectedUser.id, selectedUser.email)}
               // handleConfirmationModal={handleConfirmationModal}
               confirmButtonText='Eliminar usuario'
             />
           )}
         </div>
+        {successMessage && (
+          <p className='p-2 my-4'>{successMessage}</p>
+        )}
       </form>
       {/* MOBILE */}
       <form className='min-[431px]:hidden'>
