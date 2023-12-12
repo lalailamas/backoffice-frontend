@@ -99,7 +99,12 @@ export default function page () {
         )
       }
     } catch (error) {
-      errorHandler(error, nextRoute, stockData)
+      errorHandler(error, stockData)
+      if (error.response.status === 403) {
+        router.push(
+          nextRoute
+        )
+      }
       setLoaderVisible(false)
     }
   }

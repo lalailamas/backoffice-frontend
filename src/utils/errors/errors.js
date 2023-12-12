@@ -1,13 +1,14 @@
 'use client'
-import { useRouter } from 'next/navigation'
+
 import { swallError } from '../sweetAlerts'
 import * as Sentry from '@sentry/nextjs'
 import { withScope } from '@sentry/nextjs'
 
-export const errorHandler = (error, route, data) => {
+export const errorHandler = (error, data) => {
   withScope((scope) => {
     // Agrega información adicional al contexto de Sentry
-    scope.setContext('Data', data)
+    const serializedData = JSON.stringify(data)
+    scope.setExtras(serializedData)
 
     if (error instanceof ValidationError) {
       swallError(error.message, false)
@@ -17,7 +18,6 @@ export const errorHandler = (error, route, data) => {
       // Captura la excepción en Sentry con el contexto adicional
       Sentry.captureException(error)
       swallError('La transacción ya fue validada', false)
-      useRouter.push(route)
     } else if (error.response && error.response.status === 400) {
       // Captura la excepción en Sentry con el contexto adicional
       Sentry.captureException(error)
