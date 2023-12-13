@@ -212,6 +212,10 @@ export const patchReiteInventoryData = async (transactionId, url, url2, stockDat
   return axios.patch(urlApiReite + url + transactionId + url2, stockData, { headers: { 'content-type': contentType } })
 }
 
+export const exampleurl = async (url) => {
+  return axios.post(url)
+}
+
 function base64toBlob (base64, type) {
   const binary = atob(base64)
   const array = []
