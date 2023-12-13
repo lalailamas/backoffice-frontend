@@ -9,14 +9,18 @@ import FileSaver from 'file-saver'
 function Users () {
   const [users, setUsers] = useState([])
 
+  const fetchUsers = async () => {
+    try {
+      const response = await listUsers()
+      console.log(response.data.data, 'list usuarios')
+      setUsers(response.data.data)
+    } catch (error) {
+      console.error('Error fetching users', error)
+    }
+  }
+
   useEffect(() => {
-    listUsers()
-      .then((response) => {
-        setUsers(response.data.data)
-      })
-      .catch(() => {
-        console.error('error')
-      })
+    fetchUsers()
   }, [])
 
   const handleExcelDownload = async () => {
@@ -27,7 +31,6 @@ function Users () {
     try {
       const response = await downloadExcel()
       const { buffer, filename } = response.data
-
       const blob = new Blob([Buffer.from(buffer)], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' })
       FileSaver.saveAs(blob, filename)
     } catch (error) {
@@ -46,6 +49,7 @@ function Users () {
             <button className='btn btn-sm join-item rounded-full bg-d-dark-dark-purple border-none text-d-white hover:bg-d-soft-soft-purple hover:text-d-dark-dark-purple'>Crear Usuario</button>
           </div>
         </Link>
+
         <div className='p-2 pb-8 pr-10'>
           <button onClick={handleExcelDownload} className='btn btn-sm join-item rounded-full bg-d-dark-dark-purple border-none text-d-white hover:bg-d-soft-soft-purple hover:text-d-dark-dark-purple'>
             <svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' strokeWidth={1.5} stroke='currentColor' className='w-6 h-6 mr-2'>
@@ -56,7 +60,9 @@ function Users () {
         </div>
       </div>
       <div className='px-8 mb-11'>
-        <UsersTable data={users} />
+        <UsersTable
+          data={users} updateUsers={fetchUsers}
+        />
       </div>
     </>
   )

@@ -38,10 +38,10 @@ function CameraModal ({
     setShowCamera(!showcamera)
     setImage('')
   }
-  const handleShowInputFile = () => {
-    setShowCamera(false)
-    setShowInput(true)
-  }
+  // const handleShowInputFile = () => {
+  //   setShowCamera(false)
+  //   setShowInput(true)
+  // }
 
   function handleTakePhotoAnimationDone (dataUri) {
     // console.log(dataUri, 'takePhoto')
@@ -78,12 +78,12 @@ function CameraModal ({
     takeSnapshot(image)
     handleConfirmationModal()
   }
-  const handleNext = () => {
-    return () => {
-      handleConfirmationModal()
-      handleOperationConfirmation()
-    }
-  }
+  // const handleNext = () => {
+  //   return () => {
+  //     handleConfirmationModal()
+  //     handleOperationConfirmation()
+  //   }
+  // }
 
   return (
     <div>
@@ -175,7 +175,7 @@ function CameraModal ({
                               </div>
                             </div>
                           </button>
-                          <button className='flex-grow' onClick={handleShowInputFile}>
+                          {/* <button className='flex-grow' onClick={handleShowInputFile}>
                             <div className='flex-grow'>
                               <div className='flex flex-col justify-center items-center w-full h-full rounded-lg border border-gray-300 p-4 text-center'>
                                 <svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' strokeWidth='1.5' stroke='currentColor' className='w-6 h-6'>
@@ -184,7 +184,7 @@ function CameraModal ({
                                 <p className='text-xs'>Subir imagen</p>
                               </div>
                             </div>
-                          </button>
+                          </button> */}
 
                         </div>
                         )
@@ -210,7 +210,7 @@ function CameraModal ({
             </div>
 
             <div className='mt-5 sm:mt-4 sm:flex justify-start sm:flex-row-reverse justify-start'>
-              <div className={`${image ? 'hidden' : ''}`}>
+              {/* <div className={`${image ? 'hidden' : ''}`}>
                 <button
                   type='button'
                   databehavior='submit'
@@ -219,7 +219,7 @@ function CameraModal ({
                 >
                   Siguiente
                 </button>
-              </div>
+              </div> */}
 
               <button type='button' databehavior='cancel' className='mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:mt-0 sm:w-auto sm:text-sm' onClick={handleOperationConfirmation}>
                 {cancelButtonText}

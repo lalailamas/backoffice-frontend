@@ -12,6 +12,7 @@ import useGetProdByStore from '@/hooks/useGetProdByStore'
 import { putRestockResult } from '@/api/restock'
 import ConfirmationModal from '../confirmationModal'
 import { swallError } from '@/utils/sweetAlerts'
+import { errorHandler } from '@/utils/errors/errors'
 
 export default function page () {
   const searchParams = useSearchParams()
@@ -24,6 +25,7 @@ export default function page () {
   const { inventory, inventoryLoad } = useGetInventory(externalId)
   const { layout, layoutLoad } = useGetLayout(layoutId)
   const [loaderVisible, setLoaderVisible] = useState(false)
+  const nextRoute = 'stepFour' + `?external_id=${externalId}&layout_id=${layoutId}&store_name=${storeName}&externalTransactionId=${externalTransactionId}&transactionId=${transactionId}`
 
   // const { products, loading } = useGetReiteProd()
   const { products, loading } = useGetProdByStore(externalId)
@@ -93,24 +95,17 @@ export default function page () {
       if (response.data.successful) {
         swallError('Restock Confirmado', true)
         router.push(
-          'stepFour' + `?external_id=${externalId}&layout_id=${layoutId}&store_name=${storeName}&externalTransactionId=${externalTransactionId}&transactionId=${transactionId}`
+          nextRoute
         )
       }
     } catch (error) {
-      console.log(error)
-      if (error.response.status === 400) {
-        swallError('Solicitud incorrecta', false)
-      } else if (error.response.status === 500) {
-        swallError('Error en el servidor', false)
-        setLoaderVisible(false)
-      } else if (error.response.status === 403) {
-        swallError('La transacción ya fue validada', false)
+      errorHandler(error, stockData)
+      if (error.response.status === 403) {
         router.push(
-          'stepFour' + `?external_id=${externalId}&layout_id=${layoutId}&store_name=${storeName}&externalTransactionId=${externalTransactionId}&transactionId=${transactionId}`
+          nextRoute
         )
-      } else {
-        swallError('Error desconocido', false)
       }
+      setLoaderVisible(false)
     }
   }
   const handleConfirmationModal = () => {
