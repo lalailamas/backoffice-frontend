@@ -37,10 +37,10 @@ function CameraModal ({
     setShowCamera(!showcamera)
     setImage('')
   }
-  const handleShowInputFile = () => {
-    setShowCamera(false)
-    setShowInput(true)
-  }
+  // const handleShowInputFile = () => {
+  //   setShowCamera(false)
+  //   setShowInput(true)
+  // }
 
   function handleTakePhotoAnimationDone (dataUri) {
     // console.log(dataUri, 'takePhoto')
@@ -169,7 +169,7 @@ function CameraModal ({
                               </div>
                             </div>
                           </button>
-                          <button className='flex-grow' onClick={handleShowInputFile}>
+                          {/* <button className='flex-grow' onClick={handleShowInputFile}>
                             <div className='flex-grow'>
                               <div className='flex flex-col justify-center items-center w-full h-full rounded-lg border border-gray-300 p-4 text-center'>
                                 <svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' strokeWidth='1.5' stroke='currentColor' className='w-6 h-6'>
@@ -178,7 +178,7 @@ function CameraModal ({
                                 <p className='text-xs'>Subir imagen</p>
                               </div>
                             </div>
-                          </button>
+                          </button> */}
 
                         </div>
                         )
