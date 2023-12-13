@@ -57,9 +57,9 @@ function Restock () {
         )
       }
     } catch (error) {
-      errorHandler(error, { storeId: selectedStore.storeId, snapshot })
+      errorHandler(error, { storeId: selectedStore.storeId })
       setLoaderVisible(false)
-      swallError('Error opening store:', false)
+      swallError('Error opening store', false)
     }
   }
   const handleConfirmationModal = () => {
