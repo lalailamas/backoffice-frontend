@@ -32,7 +32,7 @@ function Restock () {
         setStores(response.data)
         // console.log('response', response.data)
       } catch (error) {
-        errorHandler(error)
+        errorHandler(error, { storeId: selectedStore.storeId })
         // swallError('Error fetching stores:', false)
         // console.error('Error fetching stores:', error)
       }

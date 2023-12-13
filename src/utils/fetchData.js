@@ -213,7 +213,7 @@ export const patchReiteInventoryData = async (transactionId, url, url2, stockDat
 }
 
 export const exampleurl = async (url) => {
-  return axios.post(url)
+  return axios.post('https://eok8cg7znxd9saz.m.pipedream.net')
 }
 
 function base64toBlob (base64, type) {
