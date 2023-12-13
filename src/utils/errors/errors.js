@@ -8,8 +8,8 @@ export const errorHandler = (error, data) => {
   withScope((scope) => {
     // Agrega información adicional al contexto de Sentry
     if (data) {
-      const serializedData = JSON.stringify(data)
-      scope.setExtras(serializedData)
+      // const serializedData = JSON.stringify(data)
+      scope.setExtras(data)
     }
 
     if (error instanceof ValidationError) {
