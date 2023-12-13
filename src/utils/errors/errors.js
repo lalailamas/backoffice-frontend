@@ -35,7 +35,7 @@ export const errorHandler = (error, data) => {
     } else {
       // Captura la excepción en Sentry con el contexto adicional
       Sentry.captureException(error)
-      swallError('Ocurrió un error, lo sentimos mucho', false)
+      swallError(`Ocurrió un error, lo sentimos mucho ${error}`, false)
     }
   })
 }
