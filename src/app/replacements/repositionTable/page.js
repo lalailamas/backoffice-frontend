@@ -37,13 +37,23 @@ export default function RepositionTable ({ data, stores }) {
   function cutDate (date) {
     if (!date) return 'no date'
 
+    // Obtener las partes de la fecha y hora
+    const dateTime = new Date(date)
+
     // Obtener las partes de la fecha (año, mes, día)
-    const [year, month, day] = date.slice(0, 10).split('-')
+    const year = dateTime.getFullYear()
+    const month = String(dateTime.getMonth() + 1).padStart(2, '0')
+    const day = String(dateTime.getDate()).padStart(2, '0')
 
-    // Formatear la fecha en el formato DD-MM-YYYY
-    const formattedDate = `${day}-${month}-${year}`
+    // Obtener las partes de la hora (hora, minutos, segundos)
+    const hours = String(dateTime.getHours()).padStart(2, '0')
+    const minutes = String(dateTime.getMinutes()).padStart(2, '0')
+    const seconds = String(dateTime.getSeconds()).padStart(2, '0')
 
-    return formattedDate
+    // Formatear la fecha en el formato DD-MM-YYYY HH:mm:ss
+    const formattedDateTime = `${day}-${month}-${year} ${hours}:${minutes}:${seconds}`
+
+    return formattedDateTime
   }
   function countProducts (restocked) {
     let count = 0
@@ -79,7 +89,7 @@ export default function RepositionTable ({ data, stores }) {
                   <td>{cutDate(item.start_timestamp)}</td>
                   <td>{formatTimeDifference(item.start_timestamp, item.end_timestamp)}</td>
                   <td>{countProducts(item.results?.restocked)}</td>
-                  <td><Link href={`${pathname}/id?id=${item.id}&external_transactionId=${item.external_transaction_id}`}>ver más</Link></td>
+                  <td><Link href={`${pathname}/id?id=${item.id}&external_transactionId=${item.external_transaction_id}`} className='hover:underline'>Ver más</Link></td>
 
                 </tr>
               ))}
