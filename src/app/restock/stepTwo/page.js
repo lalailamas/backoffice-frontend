@@ -130,6 +130,20 @@ function StepTwo () {
     return <DspLoader />
   }
 
+  const getStatus = (currentQuantity, maxQuantity) => {
+    const threshold = 0.25 // Umbral del 25% como ejemplo, puedes ajustarlo según tus necesidades
+
+    const percentage = (currentQuantity / maxQuantity)
+
+    if (percentage >= 1) {
+      return 'OK'
+    } else if (percentage >= threshold) {
+      return 'Reponer'
+    } else {
+      return 'Crítico'
+    }
+  }
+
   return (
     <div>
       {(loading || inventoryLoad || layoutLoad)
@@ -145,93 +159,105 @@ function StepTwo () {
                 <h1 className='text-d-dark-dark-purple text-2x2'>Cuenta la cantidad por producto y clickea la casilla</h1>
               </div>
             )}
-            {layout && layout.trays && layout.trays.map((tray, index) => {
-              return (
-                <div key={index} className='text-center border-b-2 border-gray-300 pb-5 mb-5 md:mb-8'>
-                  {/* <div className='bg-d-dark-dark-purple' /> */}
-                  {/* <div className='flex flex-col md:flex-row gap-4 items-center md:items-start'> */}
-                  <div className='flex flex-row gap-2 items-center justify-center overflow-x-auto'>
+            {layout && layout.trays && (
 
-                    <div>
-                      <table className='border-collapse w-full table-zebra'>
-                        <thead>
-                          <tr>
-                            <th className='border border-gray-300 py-2'>Producto</th>
-                            <th className='border border-gray-300 py-2'>Stock consolidado</th>
-                            <th className='border border-gray-300 py-2'>Máximo stock permitido</th>
-                            <th className='border border-gray-300 px-8'>Revisado OK</th>
+              <div className='flex flex-row gap-2 items-center justify-center overflow-x-auto'>
 
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {layout && layout.trays && layout.trays.map((tray) => {
-                            return tray.columns.map((column, index) => {
-                              const product = products?.find((product) => product.productId === column.productId)
-                              const quantityProd = inventory.products.find((prod) => prod.productId === column.productId)
-                              const maxQuantity = column.maxQuantity
-                              const multipleOccurrences = tray.columns.filter((c) => c.productId === column.productId).length > 1
+                <div className=' sm:px-6 md:px-8 lg:px-10'>
+                  <table className=' w-full table-zebra'>
+                    <thead>
+                      <tr>
+                        <th className='border border-gray-300 p-2'>Producto</th>
+                        <th className='border border-gray-300 p-4 '>Stock consolidado</th>
+                        <th className='border border-gray-300 p-4'>Máximo stock permitido</th>
+                        <th className='border border-gray-300 p-4'>Status</th>
+                        <th className='border border-gray-300 p-4'>Revisado OK</th>
 
-                              return (
-                                <tr key={column.productId + index} className='border-b border-gray-300'>
-                                  <td className='border border-gray-300 py-3'>
-                                    {product
-                                      ? (
-                                        <div className='flex items-center max-w-[200px] h-[80px]'>
-                                          <img
-                                            className='w-auto max-w-[50px] h-[50px]'
-                                            src={product.metadata?.imageUrl}
-                                            width={120}
-                                            height={120}
-                                            alt='Product'
-                                          />
-                                          <div className='ml-4'>
-                                            <h1 className='text-d-title-purple font-bold mb-1 line-clamp-2'>
-                                              {product.productName || 'Producto faltante'}
-                                            </h1>
-                                            <p className='text-black-500 font-bold text-xs'>(Máximo: {maxQuantity} unidades)</p>
-                                          </div>
-                                        </div>
-                                        )
-                                      : (
-                                        <p>Producto no encontrado</p>
-                                        )}
-                                  </td>
-                                  <td className=''>
-                                    <AccordeonCard
-                                      quantityChangeHandler={quantityChangeHandler}
-                                      step={2}
-                                      index={column.productId + index}
-                                      productId={column.productId}
-                                      initialQuantity={multipleOccurrences ? 0 : quantityProd ? quantityProd.quantity : 0}
-                                      occurrence={multipleOccurrences ? quantityProd?.quantity : false}
-                                      maxQuantity={maxQuantity}
-                                      header={<div />}
-                                    />
-                                  </td>
-                                  <td>
-                                    <h1>5</h1>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {layout && layout.trays && layout.trays.map((tray) => {
+                        const displayedProducts = new Set()
 
-                                  </td>
-                                  <td className=''>
-                                    <input
-                                      type='checkbox'
-                                      className='form-checkbox h-6 w-6 rounded border border-d-purple'
-                                    />
-                                  </td>
-                                </tr>
-                              )
-                            })
-                          })}
-                        </tbody>
-                      </table>
-                    </div>
-                  </div>
+                        return tray.columns.map((column, index) => {
+                          // Verificar si el producto ya fue mostrado, si es así, omitir
+                          if (displayedProducts.has(column.productId)) {
+                            return null
+                          }
+                          // Si el producto no ha sido mostrado, agregarlo al conjunto
+                          displayedProducts.add(column.productId)
+                          const product = products?.find((product) => product.productId === column.productId)
+                          const quantityProd = inventory.products.find((prod) => prod.productId === column.productId)
+                          const maxQuantity = column.maxQuantity
+                          const multipleOccurrences = tray.columns.filter((c) => c.productId === column.productId).length > 1
+                          const status = getStatus(quantityProd?.quantity || 0, maxQuantity)
+
+                          return (
+                            <tr key={column.productId + index} className='border-b border-gray-300'>
+                              <td className='border border-gray-300 px-6'>
+                                {product
+                                  ? (
+                                    <div className='flex items-center max-w-[200px] h-[80px]'>
+                                      <img
+                                        className='w-auto max-w-[50px] h-[50px]'
+                                        src={product.metadata?.imageUrl}
+                                        width={120}
+                                        height={120}
+                                        alt='Product'
+                                      />
+                                      <div className='ml-4'>
+                                        <h1 className='text-d-title-purple font-bold mb-1 line-clamp-2'>
+                                          {product.productName || 'Producto faltante'}
+                                        </h1>
+                                      </div>
+                                    </div>
+                                    )
+                                  : (
+                                    <p>Producto no encontrado</p>
+                                    )}
+                              </td>
+                              <td className='border border-gray-300 py-3'>
+                                <AccordeonCard
+                                  quantityChangeHandler={quantityChangeHandler}
+                                  step={2}
+                                  index={column.productId + index}
+                                  productId={column.productId}
+                                  initialQuantity={multipleOccurrences ? 0 : quantityProd ? quantityProd.quantity : 0}
+                                  occurrence={multipleOccurrences ? quantityProd?.quantity : false}
+                                      // maxQuantity={maxQuantity}
+                                  header={<div />}
+                                />
+                              </td>
+                              <td className='border border-gray-300 py-3'>
+                                <p className='text-black-500 font-bold text-sm'>{maxQuantity} unidades</p>
+
+                              </td>
+                              <td className='border border-gray-300 p-5'>
+                                <div className={`rounded-full w-20 h-8 flex items-center justify-center 
+                          ${status === 'Crítico' ? 'bg-red-200 text-red-500' : status === 'OK' ? 'bg-green-300 text-green-800' : 'bg-blue-200 text-blue-500'}`}
+                                >
+                                  <span className=''>{status}</span>
+                                </div>
+                              </td>
+                              <td className='border border-gray-300'>
+                                <input
+                                  type='checkbox'
+                                  className='form-checkbox h-6 w-6 rounded border border-d-purple'
+                                />
+                              </td>
+                            </tr>
+                          )
+                        })
+                      })}
+                    </tbody>
+                  </table>
                 </div>
-              )
-            })}
+              </div>
+
+            )}
 
             {/* </div> */}
-            <div className='pb-10'>
+            <div className='p-10'>
               <button
                 type='button'
                 onClick={() => {
