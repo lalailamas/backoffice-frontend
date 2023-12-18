@@ -14,8 +14,8 @@ function Replacements () {
   const { stores } = useGetStores2()
   const [isData, setIsData] = useState(true)
   const [dateRange, setDateRange] = useState({
-    startDate: dayjs().subtract(1, 'month'),
-    endDate: dayjs()
+    startDate: dayjs().subtract(1, 'week').startOf('week'),
+    endDate: dayjs().subtract(1, 'week').endOf('week')
   })
   const isInitialRender = useRef(true)
 
@@ -54,7 +54,7 @@ function Replacements () {
       <InsideLayout />
       <div className='h-screen'>
         <h2 className='text-d-dark-dark-purple text-2xl font-bold text-center p-4 '>Reposiciones históricas</h2>
-        <div className='absolute w-full px-10 mt-4'>
+        <div className='w-full px-10 mt-2'>
           <DatePicker
             startDate={dateRange.startDate}
             endDate={dateRange.endDate}
@@ -65,7 +65,7 @@ function Replacements () {
         {restockData.length > 0 || !isData
           ? (
 
-            <div className='overflow-x-auto p-10 mt-8'>
+            <div className='overflow-x-auto p-10 '>
               <RepositionTable data={restockData} stores={stores} />
             </div>)
           : (
