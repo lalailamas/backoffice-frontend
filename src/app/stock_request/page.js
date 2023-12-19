@@ -1,7 +1,6 @@
 'use client'
 import React, { useEffect, useState } from 'react'
 import { getStores } from '../../api/store'
-import InsideLayout from '@/components/admin/layouts/inside'
 import { getStockRequest } from '../../api/stock'
 import StockRequestTable from '@/components/admin/tables/stock_request'
 import DspLoader from '@/components/admin/common/loader'
@@ -37,8 +36,6 @@ function StockRequest () {
 
   return (
     <div>
-
-      <InsideLayout />
       <div>
         <div className='p-5'>
 

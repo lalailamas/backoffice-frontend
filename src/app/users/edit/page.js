@@ -1,7 +1,6 @@
 'use client'
 import { useForm, Controller } from 'react-hook-form'
 import { useRouter, useSearchParams } from 'next/navigation'
-import InsideLayout from '@/components/admin/layouts/inside'
 import { editUser, getUserById } from '@/api/user'
 import { useEffect, useState } from 'react'
 
@@ -51,7 +50,6 @@ export default function EditUserForm () {
 
   return (
     <div>
-      <InsideLayout />
       <div className='flex flex-col p-8 mb-8'>
         <div className='container max-w-sm mx-auto flex-1 flex flex-col items-center justify-center'>
           <div className='bg-white px-6 py-3'>

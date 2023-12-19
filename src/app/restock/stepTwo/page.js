@@ -4,7 +4,6 @@ import DspLoader from '@/components/admin/common/loader'
 import AccordeonCard from '../acordeonCard'
 import { useSearchParams, useRouter } from 'next/navigation'
 import StepLayout from '../stepLayout'
-import InsideLayout from '@/components/admin/layouts/inside'
 import useGetInventory from '@/hooks/useGetInventory'
 import useGetLayout from '@/hooks/useGetLayout'
 import useGetProdByStore from '@/hooks/useGetProdByStore'
@@ -137,7 +136,6 @@ function StepTwo () {
         ? (<DspLoader />)
         : (
           <div className='text-center'>
-            <InsideLayout />
             <StepLayout />
             <div className='px-4 md:px-6 lg:px-8'>
               {externalId && (

@@ -2,7 +2,7 @@ import { getToken } from 'next-auth/jwt'
 import { NextResponse } from 'next/server'
 
 export default async function middleware (req, res, next) {
-  console.log(req.nextUrl.pathname, 'req.nextUrl.pathname')
+  // console.log(req.nextUrl.pathname, 'req.nextUrl.pathname')
   const session = await getToken({ req, secret: process.env.NEXTAUTH_SECRET })
 
   const redirectTo = (path) => {

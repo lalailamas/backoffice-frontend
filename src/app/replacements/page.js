@@ -2,7 +2,6 @@
 import RepositionTable from './repositionTable/page'
 import { getStockOperation } from '@/api/restock'
 import { useState, useEffect, useRef } from 'react'
-import InsideLayout from '@/components/admin/layouts/inside'
 import DatePicker from '@/components/admin/common/datepicker/double'
 import dayjs from 'dayjs'
 import useGetStores2 from '@/hooks/useStores2'
@@ -51,7 +50,6 @@ function Replacements () {
   return (
     <>
 
-      <InsideLayout />
       <div className='h-screen'>
         <h2 className='text-d-dark-dark-purple text-2xl font-bold text-center p-4 '>Reposiciones históricas</h2>
         <div className='w-full px-10 mt-2'>

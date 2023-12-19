@@ -1,5 +1,4 @@
 'use client'
-import InsideLayout from '@/components/admin/layouts/inside'
 import React, { useEffect, useState } from 'react'
 import FileSaver from 'file-saver'
 import { downloadShopList, downloadStoresStock, getRepositionByStore, getShopList } from '@/api/stock'
@@ -149,7 +148,6 @@ function shopList () {
   return (
     <div className='h-screen'>
 
-      <InsideLayout />
       <div className='flex justify-center text-center p-5 '>
 
         <MultiSelect

@@ -1,6 +1,6 @@
 /* eslint-disable multiline-ternary */
 'use client'
-import InsideLayout from '@/components/admin/layouts/inside'
+
 import { useEffect, useState } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { getDetailsClient } from '@/api/client'
@@ -48,7 +48,6 @@ function DetailsClient () {
   if (!clientData) {
     return (
       <div>
-        <InsideLayout />
         <DspLoader />
       </div>
     )
@@ -306,7 +305,6 @@ function DetailsClient () {
   ]
   return (
     <>
-      <InsideLayout />
       <div className='flex justify-center'>
         <div className='mt-4 p-4 m-2 border rounded-xl shadow-lg '>
           <h1 className='mb-10 text-d-dark-dark-purple text-2xl font-bold text-center'>Información Cliente</h1>

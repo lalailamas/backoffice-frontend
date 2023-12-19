@@ -1,6 +1,5 @@
 'use client'
 import { useState } from 'react'
-import InsideLayout from '@/components/admin/layouts/inside'
 import { useForm, Controller } from 'react-hook-form'
 import { useRouter } from 'next/navigation'
 import { createUser } from '@/api/user'
@@ -39,7 +38,6 @@ function CreateUserForm () {
 
   return (
     <>
-      <InsideLayout />
       <div className='flex flex-col p-8 mb-8'>
         <div className='container max-w-sm mx-auto flex-1 flex flex-col items-center justify-center'>
           <div className='bg-white px-6 py-3'>

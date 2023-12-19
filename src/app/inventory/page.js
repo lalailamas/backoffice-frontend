@@ -1,5 +1,4 @@
 'use client'
-import InsideLayout from '@/components/admin/layouts/inside'
 import useGetProducts from '@/hooks/useProducts'
 import { useEffect, useRef, useState } from 'react'
 import ProductsTable from '@/components/admin/tables/products'
@@ -162,7 +161,6 @@ export default function Inventory () {
 
   return (
     <>
-      <InsideLayout />
       <div className='w-full p-8'>
         <div className='flex flex-col md:flex-row mt-4 gap-y-4 md:gap-y-0 md:gap-x-4 mb-4 min-[430px]:text-center '>
           <h2 className='text-d-dark-dark-purple text-2xl font-bold'>Productos</h2>
