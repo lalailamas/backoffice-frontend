@@ -31,7 +31,7 @@ export default function RootLayout ({ children }) {
 
               <div className='z-10 drawer-side'>
                 <label htmlFor='dsp-drawer' className='drawer-overlay' />
-                {!isLoginPage && <Sidebar />}
+                {!isLoginPage && showDrawer && <Sidebar toggle={() => setShowDrawer(!showDrawer)} />}
               </div>
             </div>
 
