@@ -1,6 +1,5 @@
 'use client'
 import React, { useState } from 'react'
-import InsideLayout from '@/components/admin/layouts/inside'
 import DatePicker from '@/components/admin/common/datepicker/double'
 import useGetStores2 from '@/hooks/useStores2'
 import {
@@ -42,8 +41,6 @@ function Marketing () {
 
   return (
     <div className='h-screen'>
-
-      <InsideLayout />
       <main className='p-12'>
         <Title>Dashboard Marketing </Title>
         <div className='flex flex-row p-4'>

@@ -4,15 +4,16 @@ import getTransactionsById from '@/hooks/useGetTransactionsById'
 import { useSearchParams } from 'next/navigation'
 import React from 'react'
 import OperationTable from './operationTable'
-import InsideLayout from '@/components/admin/layouts/inside'
 import { Card, Grid, Metric, Text } from '@tremor/react'
 import Image from 'next/image'
+import useGetStores2 from '@/hooks/useStores2'
 // const store = 'https://despnsa247-public-files.s3.amazonaws.com/gabinete1.jpg'
 
 function page () {
   const searchParams = useSearchParams()
   const id = searchParams.get('id')
   const externalTransactionId = searchParams.get('external_transactionId')
+  const { stores } = useGetStores2()
 
   const { OperationStock, loading } = getTransactionsById(id, externalTransactionId)
   console.log('OperationStock', OperationStock)
@@ -74,14 +75,21 @@ function page () {
     return formattedDate
   }
 
+  function findStoreName (storeId) {
+    const store = stores.find((store) => store.storeId === storeId)
+    return store.name
+  }
+
   return (
     <div>
       {(loading)
         ? (<DspLoader />)
         : (
           <div>
-            <InsideLayout />
-            <h2 className='text-d-dark-dark-purple text-2xl font-bold text-center p-4 '>Detalle de Reposición</h2>
+
+            <h2 className='text-d-dark-dark-purple text-2xl font-bold text-center p-4 '>Detalle de Reposición </h2>
+            <h3 className='text-d-dark-dark-purple text-xl text-center pb-4'>{findStoreName(OperationStock[0].store_id)} ({OperationStock[0].store_id}) </h3>
+
             <div className='flex justify-center w-full'>
               <Card className='w-full justify-center mt-2'>
                 <Grid numItems={2} numItemsSm={2} numItemsLg={2} className='gap-2'>

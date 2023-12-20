@@ -1,5 +1,4 @@
 'use client'
-import InsideLayout from '@/components/admin/layouts/inside'
 import { Suspense, useState } from 'react'
 import {
   Card,
@@ -43,7 +42,6 @@ export default function MyComponent () {
   return (
     <div>
 
-      <InsideLayout />
       <Suspense fallback={<DspLoader />}>
         <main className='p-12'>
           <Title>Dashboard</Title>

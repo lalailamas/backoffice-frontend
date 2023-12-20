@@ -1,5 +1,4 @@
 'use client'
-import InsideLayout from '@/components/admin/layouts/inside'
 import StepLayout from '../stepLayout'
 import { useSearchParams, useRouter } from 'next/navigation'
 import useGetLayout from '@/hooks/useGetLayout'
@@ -124,7 +123,6 @@ export default function page () {
         ? <DspLoader />
         : (
           <div>
-            <InsideLayout />
             <div className='text-center'>
 
               <StepLayout />
