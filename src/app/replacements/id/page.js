@@ -4,7 +4,6 @@ import getTransactionsById from '@/hooks/useGetTransactionsById'
 import { useSearchParams } from 'next/navigation'
 import React from 'react'
 import OperationTable from './operationTable'
-import InsideLayout from '@/components/admin/layouts/inside'
 import { Card, Grid, Metric, Text } from '@tremor/react'
 import Image from 'next/image'
 import useGetStores2 from '@/hooks/useStores2'
@@ -87,7 +86,6 @@ function page () {
         ? (<DspLoader />)
         : (
           <div>
-            <InsideLayout />
 
             <h2 className='text-d-dark-dark-purple text-2xl font-bold text-center p-4 '>Detalle de Reposición </h2>
             <h3 className='text-d-dark-dark-purple text-xl text-center pb-4'>{findStoreName(OperationStock[0].store_id)} ({OperationStock[0].store_id}) </h3>

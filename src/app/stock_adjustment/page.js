@@ -1,5 +1,4 @@
 'use client'
-import InsideLayout from '@/components/admin/layouts/inside'
 import React, { useState, useEffect } from 'react'
 import useGetStores2 from '@/hooks/useStores2'
 import { getReiteProdByStore } from '@/api/product/reite'
@@ -81,7 +80,6 @@ function StockAdjustment () {
 
   return (
     <div className='h-screen'>
-      <InsideLayout />
       <div className='flex justify-center text-center p-5'>
         <h2 className='text-d-dark-dark-purple text-2xl font-bold'>Modifica el Inventario</h2>
       </div>

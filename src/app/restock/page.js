@@ -1,7 +1,6 @@
 'use client'
 import React, { useEffect, useState } from 'react'
 import { OpenStore, getStores } from '../../api/store'
-import InsideLayout from '@/components/admin/layouts/inside'
 import { useRouter } from 'next/navigation'
 import StepLayout from './stepLayout'
 import ConfirmationModal from './confirmationModal'
@@ -81,7 +80,6 @@ function Restock () {
 
   return (
     <div className='h-screen'>
-      <InsideLayout />
       <div className='text-center pt-8'>
         <StepLayout />
 
