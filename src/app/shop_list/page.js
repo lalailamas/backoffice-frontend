@@ -148,7 +148,6 @@ function shopList () {
   return (
     <div className='h-screen'>
 
-      <InsideLayout />
       <h1 className='p-12 text-d-dark-dark-purple text-2xl font-bold text-center'>Gestión de abastecimiento</h1>
 
       <div className='flex justify-center gap-6 '>
