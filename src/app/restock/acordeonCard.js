@@ -90,7 +90,7 @@ const AccordeonCard = ({
         : step === 2
           ? (
             // <div className='w-[250px] h-[210px]'>
-            <section className='w-[250px] h-[300px] flex flex-col items-center align-center gap-6 rounded shadow-lg'>
+            <section className='flex flex-col items-center align-center gap-4'>
               {/* <div className='p-2 rounded shadow-lg gap-2 h-full overflow-hidden flex flex-col justify-end items-center'> */}
 
               <span className='flex  items-center  h-full'>

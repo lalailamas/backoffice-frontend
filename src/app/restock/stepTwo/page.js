@@ -129,85 +129,133 @@ function StepTwo () {
     return <DspLoader />
   }
 
+  const getStatus = (currentQuantity, maxQuantity) => {
+    const threshold = 0.25 // Umbral del 25% como ejemplo, puedes ajustarlo según tus necesidades
+
+    const percentage = (currentQuantity / maxQuantity)
+
+    if (percentage >= 1) {
+      return 'OK'
+    } else if (percentage >= threshold) {
+      return 'Reponer'
+    } else {
+      return 'Crítico'
+    }
+  }
+
   return (
     <div>
-      {/* <div><pre>{JSON.stringify(occInventory, null, 2)}</pre></div> */}
       {(loading || inventoryLoad || layoutLoad)
         ? (<DspLoader />)
         : (
           <div className='text-center'>
             <StepLayout />
-            <div className='px-4 md:px-6 lg:px-8'>
-              {externalId && (
-                <div className='text-center mb-4 md:mb-8'>
-                  <h1 className='text-d-dark-dark-purple text-2x2 font-bold'>Confirma el inventario de {storeName}</h1>
+            {/* <div className='px-4 md:px-6 lg:px-8'> */}
+            {externalId && (
+              <div className='text-center mb-4 md:mb-8'>
+                <h1 className='text-d-dark-dark-purple text-2x2 font-bold'>{storeName}</h1>
+                <h1 className='text-d-dark-dark-purple text-2x2'>Cuenta la cantidad por producto y clickea la casilla</h1>
+              </div>
+            )}
+            {layout && layout.trays && (
+
+              <div className='flex flex-row gap-2 items-center justify-center overflow-x-auto'>
+
+                <div className=' sm:px-6 md:px-8 lg:px-10'>
+                  <table className=' w-full table-zebra'>
+                    <thead>
+                      <tr>
+                        <th className='border border-gray-300 p-2'>Producto</th>
+                        <th className='border border-gray-300 p-4 '>Stock consolidado</th>
+                        <th className='border border-gray-300 p-4'>Máximo stock permitido</th>
+                        <th className='border border-gray-300 p-4'>Status</th>
+                        <th className='border border-gray-300 p-4'>Revisado OK</th>
+
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {layout && layout.trays && layout.trays.map((tray) => {
+                        const displayedProducts = new Set()
+
+                        return tray.columns.map((column, index) => {
+                          // Verificar si el producto ya fue mostrado, si es así, omitir
+                          if (displayedProducts.has(column.productId)) {
+                            return null
+                          }
+                          // Si el producto no ha sido mostrado, agregarlo al conjunto
+                          displayedProducts.add(column.productId)
+                          const product = products?.find((product) => product.productId === column.productId)
+                          const quantityProd = inventory.products.find((prod) => prod.productId === column.productId)
+                          const maxQuantity = column.maxQuantity
+                          const multipleOccurrences = tray.columns.filter((c) => c.productId === column.productId).length > 1
+                          const status = getStatus(quantityProd?.quantity || 0, maxQuantity)
+
+                          return (
+                            <tr key={column.productId + index} className='border-b border-gray-300'>
+                              <td className='border border-gray-300 px-6'>
+                                {product
+                                  ? (
+                                    <div className='flex items-center max-w-[200px] h-[80px]'>
+                                      <img
+                                        className='w-auto max-w-[50px] h-[50px]'
+                                        src={product.metadata?.imageUrl}
+                                        width={120}
+                                        height={120}
+                                        alt='Product'
+                                      />
+                                      <div className='ml-4'>
+                                        <h1 className='text-d-title-purple font-bold mb-1 line-clamp-2'>
+                                          {product.productName || 'Producto faltante'}
+                                        </h1>
+                                      </div>
+                                    </div>
+                                    )
+                                  : (
+                                    <p>Producto no encontrado</p>
+                                    )}
+                              </td>
+                              <td className='border border-gray-300 py-3'>
+                                <AccordeonCard
+                                  quantityChangeHandler={quantityChangeHandler}
+                                  step={2}
+                                  index={column.productId + index}
+                                  productId={column.productId}
+                                  initialQuantity={multipleOccurrences ? 0 : quantityProd ? quantityProd.quantity : 0}
+                                  occurrence={multipleOccurrences ? quantityProd?.quantity : false}
+                                      // maxQuantity={maxQuantity}
+                                  header={<div />}
+                                />
+                              </td>
+                              <td className='border border-gray-300 py-3'>
+                                <p className='text-black-500 font-bold text-sm'>{maxQuantity} unidades</p>
+
+                              </td>
+                              <td className='border border-gray-300 p-5'>
+                                <div className={`rounded-full w-20 h-8 flex items-center justify-center 
+                          ${status === 'Crítico' ? 'bg-red-200 text-red-500' : status === 'OK' ? 'bg-green-300 text-green-800' : 'bg-blue-200 text-blue-500'}`}
+                                >
+                                  <span className=''>{status}</span>
+                                </div>
+                              </td>
+                              <td className='border border-gray-300'>
+                                <input
+                                  type='checkbox'
+                                  className='form-checkbox h-6 w-6 rounded border border-d-purple'
+                                />
+                              </td>
+                            </tr>
+                          )
+                        })
+                      })}
+                    </tbody>
+                  </table>
                 </div>
-              )}
-              {layout && layout.trays && layout.trays.map((tray, index) => {
-                return (
-                  <div key={index} className='text-center border-b-2 border-gray-300 pb-5 mb-5 md:mb-8'>
-                    <div className='bg-d-dark-dark-purple'>
-                      <h2 className='text-d-soft-purple text-medium font-bold py-2 mb-2 md:mb-8'>BANDEJA {index + 1}</h2>
-                    </div>
-                    {/* <div className='flex flex-col md:flex-row gap-4 items-center md:items-start'> */}
-                    <div className='flex flex-row gap-2 items-center overflow-x-auto'>
+              </div>
 
-                      {
-                  tray
-                    ? tray.columns.map((column, index) => {
-                      const product = products?.filter((product) => product.productId === column.productId)
-                      const quantityProd = inventory.products.find((prod) => prod.productId === column.productId)
-                      const maxQuantity = column.maxQuantity
-                      const multipleOccurrences = tray.columns.filter(
-                        (c) => c.productId === column.productId
-                      ).length > 1
+            )}
 
-                      return (
-
-                        <AccordeonCard
-                          quantityChangeHandler={quantityChangeHandler}
-                          step={2}
-                          key={index}
-                          index={column.productId + index}
-                          productId={column.productId}
-                          initialQuantity={multipleOccurrences ? 0 : quantityProd ? quantityProd.quantity : 0}
-                          occurrence={multipleOccurrences ? quantityProd?.quantity : false}
-                          maxQuantity={maxQuantity}
-                          header={<div>
-                            {product[0] &&
-
-                              <div className='flex flex-col items-center align-start'>
-                                <div className=''>
-                                  <img
-                                    className='w-auto max-w-[50px] h-[50px]'
-                                    src={product[0].metadata?.imageUrl}
-                                    width={120}
-                                    height={120}
-                                    alt='Product'
-                                  />
-                                </div>
-                                <div className='flex justify-center'>
-                                  <h1 className='flex justify-center items-center text-center text-d-title-purple font-bold m-1 w-full line-clamp-2'>{product[0]?.productName || 'product missing'}</h1>
-
-                                </div>
-                                <h1 className='flex justify-center items-center text-black-500 font-bold m-1 text-xs'>(Máximo: {maxQuantity} unidades)</h1>
-                              </div>}
-
-                                  </div>}//eslint-disable-line
-                        />
-                      )
-                    })
-                    : null
-                }
-                    </div>
-
-                  </div>
-
-                )
-              })}
-
-            </div>
-            <div className='pb-10'>
+            {/* </div> */}
+            <div className='p-10'>
               <button
                 type='button'
                 onClick={() => {
