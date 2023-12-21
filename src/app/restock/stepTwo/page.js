@@ -29,6 +29,8 @@ function StepTwo () {
   const [modalVisible, setModalVisible] = useState(false)
   const [loaderVisible, setLoaderVisible] = useState(false)
   const { flattenedLayout } = useFlattenLayout(layoutId)
+  const [collapsedRows, setCollapsedRows] = useState({})
+  const [allCheckboxesChecked, setAllCheckboxesChecked] = useState(false)
 
   const router = useRouter()
 
@@ -82,6 +84,10 @@ function StepTwo () {
     return mergedOccurrenceQuantity
   }
   const setHandleStock = async () => {
+    if (!allCheckboxesChecked) {
+      swallError('Por favor, clickea todas las casillas para continuar', false)
+      return
+    }
     const flatOccInventory = await flattenData(occInventory)
     const mergedOccurrence = await mergeOccurrence(flatOccInventory)
 
@@ -129,18 +135,28 @@ function StepTwo () {
     return <DspLoader />
   }
 
-  const getStatus = (currentQuantity, maxQuantity) => {
-    const threshold = 0.25 // Umbral del 25% como ejemplo, puedes ajustarlo según tus necesidades
+  // const getStatus = (currentQuantity, maxQuantity) => {
+  //   const threshold = 0.25 // Umbral del 25% como ejemplo, puedes ajustarlo según tus necesidades
 
-    const percentage = (currentQuantity / maxQuantity)
+  //   const percentage = (currentQuantity / maxQuantity)
 
-    if (percentage >= 1) {
-      return 'OK'
-    } else if (percentage >= threshold) {
-      return 'Reponer'
-    } else {
-      return 'Crítico'
-    }
+  //   if (percentage >= 1) {
+  //     return 'OK'
+  //   } else if (percentage >= threshold) {
+  //     return 'Reponer'
+  //   } else {
+  //     return 'Crítico'
+  //   }
+  // }
+
+  const handleRowCollapse = (index) => {
+    setCollapsedRows({
+      ...collapsedRows,
+      [index]: !collapsedRows[index]
+    })
+    // Lógica para verificar si todos los checkboxes están marcados
+    const allChecked = Object.values(collapsedRows).every((value) => value)
+    setAllCheckboxesChecked(allChecked)
   }
 
   return (
@@ -162,13 +178,13 @@ function StepTwo () {
               <div className='flex flex-row gap-2 items-center justify-center overflow-x-auto'>
 
                 <div className=' sm:px-6 md:px-8 lg:px-10'>
-                  <table className=' w-full table-zebra'>
+                  <table className=' w-full'>
                     <thead>
                       <tr>
                         <th className='border border-gray-300 p-2'>Producto</th>
                         <th className='border border-gray-300 p-4 '>Stock consolidado</th>
                         <th className='border border-gray-300 p-4'>Máximo stock permitido</th>
-                        <th className='border border-gray-300 p-4'>Status</th>
+                        {/* <th className='border border-gray-300 p-4'>Status</th> */}
                         <th className='border border-gray-300 p-4'>Revisado OK</th>
 
                       </tr>
@@ -188,10 +204,10 @@ function StepTwo () {
                           const quantityProd = inventory.products.find((prod) => prod.productId === column.productId)
                           const maxQuantity = column.maxQuantity
                           const multipleOccurrences = tray.columns.filter((c) => c.productId === column.productId).length > 1
-                          const status = getStatus(quantityProd?.quantity || 0, maxQuantity)
+                          // const status = getStatus(quantityProd?.quantity || 0, maxQuantity)
 
                           return (
-                            <tr key={column.productId + index} className='border-b border-gray-300'>
+                            <tr key={column.productId + index} className={`border-b border-gray-300 ${collapsedRows[column.productId + index] ? 'bg-gray-300' : ''}`}>
                               <td className='border border-gray-300 px-6'>
                                 {product
                                   ? (
@@ -225,22 +241,24 @@ function StepTwo () {
                                       // maxQuantity={maxQuantity}
                                   header={<div />}
                                 />
+
                               </td>
                               <td className='border border-gray-300 py-3'>
                                 <p className='text-black-500 font-bold text-sm'>{maxQuantity} unidades</p>
 
                               </td>
-                              <td className='border border-gray-300 p-5'>
-                                <div className={`rounded-full w-20 h-8 flex items-center justify-center 
+                              {/* <td className='border border-gray-300 p-5'>
+                                <div className={`rounded-full w-20 h-8 flex items-center justify-center
                           ${status === 'Crítico' ? 'bg-red-200 text-red-500' : status === 'OK' ? 'bg-green-300 text-green-800' : 'bg-blue-200 text-blue-500'}`}
                                 >
                                   <span className=''>{status}</span>
                                 </div>
-                              </td>
+                              </td> */}
                               <td className='border border-gray-300'>
                                 <input
                                   type='checkbox'
                                   className='form-checkbox h-6 w-6 rounded border border-d-purple'
+                                  onChange={() => handleRowCollapse(column.productId + index)}
                                 />
                               </td>
                             </tr>
