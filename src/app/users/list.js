@@ -3,11 +3,12 @@ import Link from 'next/link'
 import DspLoader from '@/components/admin/common/loader'
 import ConfirmationModal from '../restock/confirmationModal'
 import { deleteUser } from '@/api/user'
+import { swallError, Toast, swallError2 } from '@/utils/sweetAlerts'
+import Swal from 'sweetalert2'
 
 export default function UsersTable ({ data, updateUsers }) {
   const [showModal, setShowModal] = useState(false)
   const [selectedUser, setSelectedUser] = useState(null)
-  const [successMessage, setSuccessMessage] = useState('')
 
   const handleDeleteClick = async (e, id, email) => {
     e.preventDefault()
@@ -16,6 +17,7 @@ export default function UsersTable ({ data, updateUsers }) {
       setSelectedUser(user)
       setShowModal(true)
     } catch (error) {
+      swallError('Error al eliminar usuario:', false)
       console.error('Error al eliminar usuario:', error)
     }
   }
@@ -24,11 +26,8 @@ export default function UsersTable ({ data, updateUsers }) {
     try {
       await deleteUser(id, email)
       setShowModal(false)
-      setSuccessMessage('Usuario eliminado exitosamente')
-      setTimeout(() => {
-        setSuccessMessage('')
-        updateUsers()
-      }, 2000)
+      swallError2('Usuario eliminado exitosamente')
+      updateUsers()
     } catch (error) {
       console.error('Error', error)
     }
@@ -104,9 +103,6 @@ export default function UsersTable ({ data, updateUsers }) {
             />
           )}
         </div>
-        {successMessage && (
-          <p className='p-2 my-4'>{successMessage}</p>
-        )}
       </form>
       {/* MOBILE */}
       <form className='min-[431px]:hidden'>

@@ -7,6 +7,8 @@ import DatePicker from '@/components/admin/common/datepicker/double'
 import Link from 'next/link'
 import DspLoader from '@/components/admin/common/loader'
 import FileSaver from 'file-saver'
+import Swal from 'sweetalert2'
+import { swallError, Toast, swallError2 } from '@/utils/sweetAlerts'
 
 function TableClient () {
   const [clients, setClients] = useState([])
@@ -72,13 +74,14 @@ function TableClient () {
 
   const handleExcelDownload = async () => {
     try {
+      Toast('Descargando archivo', 'Espera unos segundos')
       const response = await downloadClientsExcel(dateRange, searchTerm)
-
       const { buffer, filename } = response.data
-
       const blob = new Blob([Buffer.from(buffer)], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' })
       FileSaver.saveAs(blob, filename)
+      Swal.close()
     } catch (error) {
+      swallError('Error al descargar el archivo Excel:', false)
       console.error('Error al descargar el archivo Excel:', error)
     }
   }
@@ -128,7 +131,7 @@ function TableClient () {
 
         <div className='overflow-x-auto p-5'>
           {clients && (
-            <table className='table  text-d-dark-dark-purple table-zebra max-[431px]:hidden'>
+            <table className='table  text-d-dark-dark-purple table-zebra   mt-8 p-8 max-[431px]:hidden'>
               <thead>
                 <tr className='bg-d-dark-dark-purple text-d-white'>
                   <th />

@@ -6,7 +6,7 @@ import DspLoader from '@/components/admin/common/loader'
 import QuantityModal from '../restock/quantityModal'
 import { getInventoryByStore, downloadInventoryExcel } from '@/api/store'
 import FileSaver from 'file-saver'
-import { swallError, Toast } from '@/utils/sweetAlerts'
+import { swallError, Toast, swallError2 } from '@/utils/sweetAlerts'
 import Swal from 'sweetalert2'
 
 function StockAdjustment () {
@@ -68,16 +68,16 @@ function StockAdjustment () {
         }
         return item
       })
+      swallError2('Stock modificado exitosamente')
       return updatedInventory
     })
   }
 
   const handleExcelDownload = async () => {
     try {
-      Toast('Descargando archivo', 'espera unos segundos')
+      Toast('Descargando archivo', 'Espera unos segundos')
       const response = await downloadInventoryExcel(selectedStore)
       const { buffer, filename } = response.data
-
       const blob = new Blob([Buffer.from(buffer)], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' })
       FileSaver.saveAs(blob, filename)
       Swal.close()
@@ -88,14 +88,28 @@ function StockAdjustment () {
   }
 
   return (
-    <div className='h-screen'>
+    <div className='p-5'>
       <div className='flex justify-center text-center p-5'>
-        <h2 className='text-d-dark-dark-purple text-2xl font-bold'>Modifica el Inventario</h2>
+        <h2 className='text-d-dark-dark-purple text-2xl font-bold'>Ajuste de Stock</h2>
       </div>
 
-      <div>
-        <div className={`${selectedStore ? 'flex justify-end items-start p-5' : 'hidden'}`}>
+      <div className='flex justify-center items-center p-5'>
 
+        <div className='flex flex-row items-center'>
+          <select
+            className='select select-sm select-bordered rounded-full w-full md:max-w-xs'
+            onChange={(e) => handleStoreChange(e.target.value)}
+          >
+            <option value='0'>Selecciona una tienda</option>
+            {stores &&
+        stores.map((store) => (
+          <option key={store.storeId} value={store.storeId}>
+            {store.name}
+          </option>
+        ))}
+          </select>
+        </div>
+        <div className={`${selectedStore ? 'flex justify-end p-5' : 'hidden'}`}>
           <button onClick={handleExcelDownload} className='btn btn-sm join-item rounded-full bg-d-dark-dark-purple border-none text-d-white hover:bg-d-soft-soft-purple hover:text-d-dark-dark-purple'>
             <svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' strokeWidth={1.5} stroke='currentColor' className='w-6 h-6 mr-2'>
               <path strokeLinecap='round' strokeLinejoin='round' d='M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3' />
@@ -104,22 +118,8 @@ function StockAdjustment () {
           </button>
         </div>
 
-        <div className='p-5 pt-10 flex flex-row items-center justify-center'>
-          <select
-            className='select select-sm select-bordered rounded-full w-full md:max-w-xs '
-            onChange={(e) => handleStoreChange(e.target.value)}
-          >
-            <option value='0'>Selecciona una tienda</option>
-            {stores &&
-              stores.map((store) => (
-                <option key={store.storeId} value={store.storeId}>
-                  {store.name}
-                </option>
-              ))}
-          </select>
-
-        </div>
       </div>
+
       <div className={`${selectedStore ? 'flex flex-row items-center justify-center' : 'hidden'}`} />
       <div className='p-8'>
         {loader
@@ -128,10 +128,11 @@ function StockAdjustment () {
             <table className='table text-d-dark-dark-purple table-zebra mt-8 p-8'>
               <thead>
                 <tr className='bg-d-dark-dark-purple text-d-white'>
-                  <th className='py-2 px-4 border '>Imagen</th>
-                  <th className='py-2 px-4 border'>Producto</th>
-                  <th className='py-2 px-4 border'>Cantidad</th>
-                  <th className='py-2 px-4 border'>Editar</th>
+                  <th />
+                  <th>Imagen</th>
+                  <th>Producto</th>
+                  <th>Cantidad</th>
+                  <th>Editar</th>
                 </tr>
               </thead>
               <tbody>
@@ -139,12 +140,13 @@ function StockAdjustment () {
                   const quantityProd = inventory.find((prod) => prod.productId === product.productId)
                   const { metadata } = product
                   return (
-                    <tr key={product.productId} className='border'>
-                      <td className='py-2 px-2 border flex justify-center'>
+                    <tr key={product.productId}>
+                      <td />
+                      <td>
                         <img src={metadata.imageUrl} alt={product.productName} className='w-10 h-10' />
                       </td>
-                      <td className='py-2 px-4 border'>{product.productName}</td>
-                      <td className='py-2 px-4 border'>
+                      <td>{product.productName}</td>
+                      <td>
                         {
                           newQuantity && newQuantity[product.productId]
                             ? `${newQuantity[product.productId]}`
@@ -155,7 +157,7 @@ function StockAdjustment () {
 
                       </td>
 
-                      <td className='py-2 px-4 border'>
+                      <td>
                         <button
                           className='' onClick={() => {
                             handleEditProduct(product, quantityProd, metadata)
