@@ -39,6 +39,9 @@ export default function UsersTable ({ data, updateUsers }) {
       <DspLoader />
     )
   }
+  const handleConfirmationModal = () => {
+    setShowModal(!showModal)
+  }
 
   return (
     <>
@@ -96,7 +99,7 @@ export default function UsersTable ({ data, updateUsers }) {
               message='¿Estás seguro de eliminar este usuario?'
               cancelButtonText='Cancelar'
               handleOperationConfirmation={() => handleDeleteConfirmation(selectedUser.id, selectedUser.email)}
-              // handleConfirmationModal={handleConfirmationModal}
+              handleConfirmationModal={handleConfirmationModal}
               confirmButtonText='Eliminar usuario'
             />
           )}

@@ -61,6 +61,15 @@ function StockAdjustment () {
       ...prevQuantity,
       [productId]: newQuantity
     }))
+    setInventory(prevInventory => {
+      const updatedInventory = prevInventory.map(item => {
+        if (item.productId === productId) {
+          return { ...item, quantity: newQuantity }
+        }
+        return item
+      })
+      return updatedInventory
+    })
   }
 
   const handleExcelDownload = async () => {
