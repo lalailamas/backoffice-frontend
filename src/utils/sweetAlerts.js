@@ -19,12 +19,13 @@ export const swallError = (message, ok) => {
     })
   }
 }
-export const swallError2 = (message) => {
+export const swallInfo = (message) => {
   Swal.fire({
     icon: 'info',
     title: message,
     showConfirmButton: false,
-    timer: 2000
+    timer: 2000,
+    iconColor: '#d5d3fb'
   })
 }
 export const Toast = async (message, html) => {

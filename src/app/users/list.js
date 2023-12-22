@@ -3,8 +3,7 @@ import Link from 'next/link'
 import DspLoader from '@/components/admin/common/loader'
 import ConfirmationModal from '../restock/confirmationModal'
 import { deleteUser } from '@/api/user'
-import { swallError, Toast, swallError2 } from '@/utils/sweetAlerts'
-import Swal from 'sweetalert2'
+import { swallError, swallInfo } from '@/utils/sweetAlerts'
 
 export default function UsersTable ({ data, updateUsers }) {
   const [showModal, setShowModal] = useState(false)
@@ -26,7 +25,7 @@ export default function UsersTable ({ data, updateUsers }) {
     try {
       await deleteUser(id, email)
       setShowModal(false)
-      swallError2('Usuario eliminado exitosamente')
+      swallInfo('Usuario eliminado exitosamente')
       updateUsers()
     } catch (error) {
       console.error('Error', error)

@@ -8,7 +8,7 @@ import Link from 'next/link'
 import DspLoader from '@/components/admin/common/loader'
 import FileSaver from 'file-saver'
 import Swal from 'sweetalert2'
-import { swallError, Toast, swallError2 } from '@/utils/sweetAlerts'
+import { swallError, Toast, swallInfo } from '@/utils/sweetAlerts'
 
 function TableClient () {
   const [clients, setClients] = useState([])
@@ -131,7 +131,7 @@ function TableClient () {
 
         <div className='overflow-x-auto p-5'>
           {clients && (
-            <table className='table  text-d-dark-dark-purple table-zebra   mt-8 p-8 max-[431px]:hidden'>
+            <table className='table  text-d-dark-dark-purple table-zebra mt-8 p-8 max-[431px]:hidden'>
               <thead>
                 <tr className='bg-d-dark-dark-purple text-d-white'>
                   <th />

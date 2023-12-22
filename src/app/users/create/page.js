@@ -2,7 +2,7 @@
 import { useForm, Controller } from 'react-hook-form'
 import { useRouter } from 'next/navigation'
 import { createUser } from '@/api/user'
-import { swallError, swallError2 } from '@/utils/sweetAlerts'
+import { swallError, swallInfo } from '@/utils/sweetAlerts'
 
 function CreateUserForm () {
   const { control, handleSubmit, setError, formState, watch } = useForm({
@@ -21,7 +21,7 @@ function CreateUserForm () {
     createUser(data)
       .then((response) => {
         console.log(response, 'respuesta de create user')
-        swallError2('Usuario creado exitosamente')
+        swallInfo('Usuario creado exitosamente')
         router.push('/users')
       })
       .catch((error) => {

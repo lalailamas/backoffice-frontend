@@ -6,7 +6,7 @@ import DspLoader from '@/components/admin/common/loader'
 import QuantityModal from '../restock/quantityModal'
 import { getInventoryByStore, downloadInventoryExcel } from '@/api/store'
 import FileSaver from 'file-saver'
-import { swallError, Toast, swallError2 } from '@/utils/sweetAlerts'
+import { swallError, Toast, swallInfo } from '@/utils/sweetAlerts'
 import Swal from 'sweetalert2'
 
 function StockAdjustment () {
@@ -68,7 +68,7 @@ function StockAdjustment () {
         }
         return item
       })
-      swallError2('Stock modificado exitosamente')
+      swallInfo('Stock modificado exitosamente')
       return updatedInventory
     })
   }

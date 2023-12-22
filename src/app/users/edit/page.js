@@ -3,7 +3,7 @@ import { useForm, Controller } from 'react-hook-form'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { editUser, getUserById } from '@/api/user'
 import { useEffect, useState } from 'react'
-import { swallError2, swallError } from '@/utils/sweetAlerts'
+import { swallInfo, swallError } from '@/utils/sweetAlerts'
 
 export default function EditUserForm () {
   const searchParams = useSearchParams()
@@ -39,7 +39,7 @@ export default function EditUserForm () {
   const onSubmit = async (formData) => {
     try {
       await editUser(formData)
-      swallError2('Usuario modificado exitosamente')
+      swallInfo('Usuario modificado exitosamente')
       router.push('/users')
     } catch (error) {
       swallError('Error al editar el usuario:', false)
