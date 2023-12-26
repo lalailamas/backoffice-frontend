@@ -3,13 +3,13 @@ import { useForm, Controller } from 'react-hook-form'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { editUser, getUserById } from '@/api/user'
 import { useEffect, useState } from 'react'
+import { swallInfo, swallError } from '@/utils/sweetAlerts'
 
 export default function EditUserForm () {
   const searchParams = useSearchParams()
   const id = searchParams.get('id')
   const router = useRouter()
   const { handleSubmit, register, control, setValue, formState } = useForm()
-  const [successMessage, setSuccessMessage] = useState('')
   const [user, setUser] = useState(null)
 
   useEffect(() => {
@@ -39,11 +39,10 @@ export default function EditUserForm () {
   const onSubmit = async (formData) => {
     try {
       await editUser(formData)
-      setSuccessMessage('Usuario modificado exitosamente')
-      setTimeout(() => {
-        router.push('/users')
-      }, 2000)
+      swallInfo('Usuario modificado exitosamente')
+      router.push('/users')
     } catch (error) {
+      swallError('Error al editar el usuario:', false)
       console.error('Error al editar el usuario:', error)
     }
   }
@@ -170,15 +169,11 @@ export default function EditUserForm () {
                 />
 
                 <div className='flex gap-4'>
-                  <button type='submit' className='btn border-none mt-4 rounded-2xl bg-d-dark-dark-purple text-d-white hover:bg-d-soft-soft-purple hover:text-d-dark-dark-purple disabled:text-d-white'>Guardar cambios</button>
                   <button type='button' className='btn border-none mt-4 rounded-2xl bg-d-soft-soft-purple text-d-dark-dark-purple hover:bg-d-dark-dark-purple hover:text-d-white' onClick={() => router.push('/users')}>Cancelar</button>
+                  <button type='submit' className='btn border-none mt-4 rounded-2xl bg-d-dark-dark-purple text-d-white hover:bg-d-soft-soft-purple hover:text-d-dark-dark-purple disabled:text-d-white'>Guardar cambios</button>
                 </div>
               </form>
             )}
-          </div>
-          <div>
-            {successMessage &&
-              <p className='p-2 my-4'>{successMessage}</p>}
           </div>
         </div>
       </div>

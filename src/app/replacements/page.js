@@ -6,7 +6,7 @@ import DatePicker from '@/components/admin/common/datepicker/double'
 import dayjs from 'dayjs'
 import useGetStores2 from '@/hooks/useStores2'
 import DspLoader from '@/components/admin/common/loader'
-import { swallError2 } from '@/utils/sweetAlerts'
+import { swallInfo } from '@/utils/sweetAlerts'
 
 function Replacements () {
   const [restockData, setRestockData] = useState([])
@@ -30,7 +30,7 @@ function Replacements () {
         .then((response) => {
           console.log(response.data)
           if (response.data.length === 0) {
-            swallError2('No hay datos para el rango de fechas seleccionado')
+            swallInfo('No hay datos para el rango de fechas seleccionado')
             setIsData(false)
           }
           setRestockData(response.data)
