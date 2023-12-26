@@ -1,34 +1,74 @@
 'use client'
-import { useState, useEffect } from 'react'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useSearchParams } from 'next/navigation'
 import useGetLayout from '@/hooks/useGetLayout'
 import useGetProdByStore from '@/hooks/useGetProdByStore'
+import DspLoader from '@/components/admin/common/loader'
 
 function LayoutMachine () {
-  const router = useRouter()
   const searchParams = useSearchParams()
-  const externalId = searchParams.get('external_id')
-  const layoutId = searchParams.get('layout_id')
-  const [selectedStore, setSelectedStore] = useState({
-    layoutId: 'DEV_WE862puc_v5-5680609',
-    name: 'DEV PUC Lo Contador',
-    products: []
-  })
+  const layoutId = searchParams.get('layoutId') || 'DEV_WE862puc_v5-5680609'
+  console.log('Layout ID:', layoutId)
+  const storeName = searchParams.get('storeName') || 'DEV PUC Lo Contador'
+  console.log('Nombre tienda:', storeName)
+  const storeId = searchParams.get('storeId') || 'DEV_CNV_001'
+  console.log(storeId, 'storeId')
 
-  useEffect(() => {
-    if (selectedStore && selectedStore.layoutId !== null) {
-      router.push(`/public/layout?layout_id=${selectedStore.layoutId}&store_name=${selectedStore.name}`)
-    }
-  }, [selectedStore])
+  const { layout, layoutLoad } = useGetLayout(layoutId)
+  const { products, loading } = useGetProdByStore(storeId)
+
+  console.log('Productos:', products)
 
   return (
-    <>
-      <div className='flex items-center flex-col m-4 p-4'>
-        <div className='max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700'>
-          <h5 className='mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white'>{selectedStore.name}</h5>
-        </div>
-      </div>
 
+    <>
+      {(loading || layoutLoad)
+        ? (
+          <DspLoader />
+          )
+        : (
+          <div>
+            <div className='p-10 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700'>
+              <h5 className='text-2xl text-center mb-3 font-bold  text-gray-900 dark:text-white'>{storeName}</h5>
+
+              {layout && layout.trays && layout.trays.map((tray, index) => (
+                <div key={index} className='text-center border-gray-300'>
+                  <div className='bg-d-dark-dark-purple'>
+                    <h2 className='text-d-soft-purple text-sm font-bold'>BANDEJA {index + 1}</h2>
+                  </div>
+                  {tray && tray.columns && (
+                    <ul className='flex flex-row gap-2 justify-center overflow-x-auto'>
+                      {tray.columns.map((column, index) => {
+                        const product = products.find((prod) => prod.productId === column.productId)
+                        console.log(product, 'producto aquiiii')
+                        console.log(column, 'columna')
+                        return (
+                          <li key={index}>
+                            {product
+                              ? (
+                                <div className='flex flex-col items-center w-[100px] h-[80px] border border-gray-200 rounded-lg shadow text-xs'>
+                                  <img
+                                    className='w-auto max-w-[30px] h-[30px]'
+                                    src={product.metadata.imageUrl}
+                                    width={120}
+                                    height={120}
+                                    alt='Product'
+                                  />
+                                  {product.productName}
+                                </div>
+                                )
+                              : null}
+                          </li>
+                        )
+                      })}
+                    </ul>
+                  )}
+
+                </div>
+              ))}
+
+            </div>
+          </div>
+          )}
     </>
   )
 }

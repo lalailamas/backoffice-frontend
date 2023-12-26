@@ -18,6 +18,7 @@ import { errorHandler } from '@/utils/errors/errors'
 function StepTwo () {
   const searchParams = useSearchParams()
   const externalId = searchParams.get('external_id')
+  console.log(externalId, 'external ID en steptwo')
   const layoutId = searchParams.get('layout_id')
   const storeName = searchParams.get('store_name')
   const externalTransactionId = searchParams.get('externalTransactionId')
