@@ -1,34 +1,60 @@
 'use client'
 import { useSearchParams } from 'next/navigation'
-import useGetLayout from '@/hooks/useGetLayout'
+// import useGetLayout from '@/hooks/useGetLayout'
+import { getStores } from '@/api/store'
 import useGetProdByStore from '@/hooks/useGetProdByStore'
 import DspLoader from '@/components/admin/common/loader'
+import { useEffect, useState } from 'react'
+import { getLayout } from '@/api/layout'
 
 function LayoutMachine () {
+  // https://admin.despnsa247.com/public/layout?id=CNV_004
   const searchParams = useSearchParams()
-  const layoutId = searchParams.get('layoutId') || 'DEV_WE862puc_v5-5680609'
-  console.log('Layout ID:', layoutId)
-  const storeName = searchParams.get('storeName') || 'DEV PUC Lo Contador'
-  console.log('Nombre tienda:', storeName)
-  const storeId = searchParams.get('storeId') || 'DEV_CNV_001'
-  console.log(storeId, 'storeId')
+  const storeId = searchParams.get('id')
+  const [store, setStore] = useState()
+  const [layout, setLayout] = useState()
 
-  const { layout, layoutLoad } = useGetLayout(layoutId)
   const { products, loading } = useGetProdByStore(storeId)
 
-  console.log('Productos:', products)
+  const handleLayout = async (layoutId) => {
+    try {
+      const result = await getLayout(layoutId)
+      if (result) {
+        setLayout(result.data)
+      }
+    } catch (error) {
+
+    }
+  }
+
+  const handleBringStore = async () => {
+    try {
+      const storesResponse = await getStores()
+      if (storesResponse) {
+        const storeResponse = storesResponse.data.filter((store) => store.storeId === storeId)
+        setStore(storeResponse[0])
+        handleLayout(storeResponse[0].layoutId)
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  useEffect(() => {
+    handleBringStore()
+  }, [])
 
   return (
 
     <>
-      {(loading || layoutLoad)
+      {(loading)
         ? (
           <DspLoader />
           )
         : (
           <div>
             <div className='p-10 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700'>
-              <h5 className='text-2xl text-center mb-3 font-bold  text-gray-900 dark:text-white'>{storeName}</h5>
+              <h5 className='text-2xl text-center mb-3 font-bold  text-gray-900 dark:text-white'>{store.name}</h5>
 
               {layout && layout.trays && layout.trays.map((tray, index) => (
                 <div key={index} className='text-center border-gray-300'>
@@ -39,8 +65,8 @@ function LayoutMachine () {
                     <ul className='flex flex-row gap-2 justify-center overflow-x-auto'>
                       {tray.columns.map((column, index) => {
                         const product = products.find((prod) => prod.productId === column.productId)
-                        console.log(product, 'producto aquiiii')
-                        console.log(column, 'columna')
+                        // console.log(product, 'producto aquiiii')
+                        // console.log(column, 'columna')
                         return (
                           <li key={index}>
                             {product
