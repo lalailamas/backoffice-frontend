@@ -6,6 +6,7 @@ import useGetProdByStore from '@/hooks/useGetProdByStore'
 import DspLoader from '@/components/admin/common/loader'
 import { useEffect, useState } from 'react'
 import { getLayout } from '@/api/layout'
+import ErrorMessage from '@/components/admin/common/error'
 
 function LayoutMachine () {
   // https://admin.despnsa247.com/public/layout?id=CNV_004
@@ -14,7 +15,7 @@ function LayoutMachine () {
   const [store, setStore] = useState()
   const [layout, setLayout] = useState()
 
-  const { products, loading } = useGetProdByStore(storeId)
+  const { products, loading, error } = useGetProdByStore(storeId)
 
   const handleLayout = async (layoutId) => {
     try {
@@ -23,15 +24,18 @@ function LayoutMachine () {
         setLayout(result.data)
       }
     } catch (error) {
-
+      console.log(error, 'ERROR')
     }
   }
 
   const handleBringStore = async () => {
     try {
       const storesResponse = await getStores()
-      if (storesResponse) {
+      if (!storesResponse.error) {
         const storeResponse = storesResponse.data.filter((store) => store.storeId === storeId)
+        if (storeResponse.length === 0) {
+          return
+        }
         setStore(storeResponse[0])
         handleLayout(storeResponse[0].layoutId)
       }
@@ -43,6 +47,9 @@ function LayoutMachine () {
   useEffect(() => {
     handleBringStore()
   }, [])
+  if (error) {
+    return <ErrorMessage />
+  }
 
   return (
 
@@ -54,7 +61,7 @@ function LayoutMachine () {
         : (
           <div>
             <div className='p-10 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700'>
-              <h5 className='text-2xl text-center mb-3 font-bold  text-gray-900 dark:text-white'>{store.name}</h5>
+              <h5 className='text-2xl text-center mb-3 font-bold  text-gray-900 dark:text-white'>{store?.name}</h5>
 
               {layout && layout.trays && layout.trays.map((tray, index) => (
                 <div key={index} className='text-center border-gray-300'>
