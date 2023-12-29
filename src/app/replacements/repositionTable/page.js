@@ -1,9 +1,15 @@
 /* eslint-disable multiline-ternary */
-'use client'
-import React from 'react'
+import React, { Suspense } from 'react'
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import RepositionTableLoader from '@/app/loading'
+import dynamic from 'next/dynamic'
+
+const DynamicRepositionTable = dynamic(() => import('././page'), {
+  loading: () => <RepositionTableLoader />, // Componente de carga mientras se carga RepositionTable
+  ssr: false // Indica que este componente no debe ser renderizado en el servidor
+})
 
 export default function RepositionTable ({ data, stores }) {
   console.log(data, 'data')
@@ -96,9 +102,9 @@ export default function RepositionTable ({ data, stores }) {
             </tbody>
           </table>
         ) : (
-          <div className=''>
-            <p className='text-center'>No hay datos disponibles</p>
-          </div>
+          <Suspense fallback={RepositionTableLoader}>
+            <RepositionTable />
+          </Suspense>
         )}
       </div>
     </>
