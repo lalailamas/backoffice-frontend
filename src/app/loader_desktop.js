@@ -1,12 +1,11 @@
-import React from 'react'
 import ContentLoader from 'react-content-loader'
 
 const RepositionTableLoader = props => (
   <ContentLoader
     speed={2}
-    width={1500}
+    width={1200}
     height={650}
-    viewBox='0 0 1000 550'
+    viewBox='0 0 1000 500'
     backgroundColor='#eaeced'
     foregroundColor='#ffffff'
     {...props}
@@ -64,12 +63,5 @@ const RepositionTableLoader = props => (
     <rect x='933' y='54' rx='3' ry='3' width='24' height='33' />
   </ContentLoader>
 )
-
-RepositionTableLoader.metadata = {
-  name: 'Sridhar Easwaran',
-  github: 'sridhareaswaran',
-  description: 'Loader for Tables',
-  filename: 'TableLoader'
-}
 
 export default RepositionTableLoader
