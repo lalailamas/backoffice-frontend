@@ -208,14 +208,18 @@ export default function page () {
         </button>
       </div>
       {modalVisible && (
-        <ConfirmationModal
-          handleConfirmationModal={handleConfirmationModal}
-          handleOperationConfirmation={handleConfirmRestock}
-          title='¿Confirmas que los datos de reposición son correctos?'
-          message='Recuerda que una vez confirmados, no podrás realizar cambios'
-          confirmButtonText='Confirmar'
-          cancelButtonText='Cancelar'
-        />
+        <div className='fixed z-50 flex items-center justify-center'>
+
+          <ConfirmationModal
+            handleConfirmationModal={handleConfirmationModal}
+            handleOperationConfirmation={handleConfirmRestock}
+            title='¿Confirmas que los datos de reposición son correctos?'
+            message='Recuerda que una vez confirmados, no podrás realizar cambios'
+            confirmButtonText='Confirmar'
+            cancelButtonText='Cancelar'
+          />
+        </div>
+
       )}
     </div>
   )

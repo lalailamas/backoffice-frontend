@@ -180,31 +180,39 @@ export default function stepFour () {
       </div>
 
       {modalVisible && (
-        <ConfirmationModal
-          handleConfirmationModal={handleConfirmationModal}
-          handleOperationConfirmation={handleOperationConfirmation}
-          title='La reposición ha sido confirmada'
-          message='¡Muchas gracias! ya puedes cerrar la página'
-          confirmButtonText='Cerrar'
-          cancelButtonText='Cancelar'
-        />
+        <div className='fixed z-50 flex items-center justify-center'>
+
+          <ConfirmationModal
+            handleConfirmationModal={handleConfirmationModal}
+            handleOperationConfirmation={handleOperationConfirmation}
+            title='La reposición ha sido confirmada'
+            message='¡Muchas gracias! ya puedes cerrar la página'
+            confirmButtonText='Cerrar'
+            cancelButtonText='Cancelar'
+          />
+        </div>
+
       )}
       {modalCameraVisible && (
-        <CameraModal
-          step={4}
-          handleConfirmationModal={handleConfirmationModal}
-          handleOperationConfirmation={handleCameraModal}
-          title='Necesitamos que tomes una foto de la tienda para confirmar la reposición'
-          message={(
-            <span>
-              Toma una foto de la tienda luego de cerrarla
-            </span>
+        <div className='fixed z-50 flex items-center justify-center'>
+
+          <CameraModal
+            step={4}
+            handleConfirmationModal={handleConfirmationModal}
+            handleOperationConfirmation={handleCameraModal}
+            title='Necesitamos que tomes una foto de la tienda para confirmar la reposición'
+            message={(
+              <span>
+                Toma una foto de la tienda luego de cerrarla
+              </span>
                 )}
-          confirmButtonText='Siguiente'
-          cancelButtonText='Cancelar'
-          takeSnapshot={takeSnapshot}
-          handleComment={handleComment}
-        />
+            confirmButtonText='Siguiente'
+            cancelButtonText='Cancelar'
+            takeSnapshot={takeSnapshot}
+            handleComment={handleComment}
+          />
+        </div>
+
       )}
 
     </div>

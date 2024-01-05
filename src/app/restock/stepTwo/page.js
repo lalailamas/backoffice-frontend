@@ -292,16 +292,20 @@ function StepTwo () {
 
           )}
       {modalVisible && (
-        <ConfirmationModal
-          handleConfirmationModal={handleConfirmationModal}
-          handleOperationConfirmation={setHandleStock}
-          title='¿Deseas confirmar el inventario?'
-          message={(
-            <a>Una vez confirmado el inventario de <strong>{storeName}</strong> no podrás realizar cambios</a>
+        <div className='fixed z-50 flex items-center justify-center'>
+
+          <ConfirmationModal
+            handleConfirmationModal={handleConfirmationModal}
+            handleOperationConfirmation={setHandleStock}
+            title='¿Deseas confirmar el inventario?'
+            message={(
+              <a>Una vez confirmado el inventario de <strong>{storeName}</strong> no podrás realizar cambios</a>
           )}
-          confirmButtonText='Confirmar'
-          cancelButtonText='Cancelar'
-        />
+            confirmButtonText='Confirmar'
+            cancelButtonText='Cancelar'
+          />
+        </div>
+
       )}
     </div>
   )
