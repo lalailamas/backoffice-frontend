@@ -18,6 +18,7 @@ function StockAdjustment () {
   const [newQuantity, setNewQuantity] = useState(null)
   const [selectedProduct, setSelectedProduct] = useState(null)
   const [loader, setLoader] = useState(false)
+  console.log('inventory', inventory)
 
   const handleStoreChange = (e) => {
     setProducts([])
@@ -30,7 +31,9 @@ function StockAdjustment () {
         setLoader(true)
         try {
           const products = await getReiteProdByStore(selectedStore)
+          console.log('products', products)
           const store = await getInventoryByStore(selectedStore)
+          console.log('store', store)
           setNewQuantity(null)
           setProducts(products)
           setInventory(store.data.products)
@@ -124,7 +127,7 @@ function StockAdjustment () {
       <div className='p-8'>
         {loader
           ? <DspLoader />
-          : products.data && (
+          : products && (
             <table className='table text-d-dark-dark-purple table-zebra mt-8 p-8'>
               <thead>
                 <tr className='bg-d-dark-dark-purple text-d-white'>
@@ -136,7 +139,7 @@ function StockAdjustment () {
                 </tr>
               </thead>
               <tbody>
-                {products.data.map((product) => {
+                {products.map((product) => {
                   const quantityProd = inventory.find((prod) => prod.productId === product.productId)
                   const { metadata } = product
                   return (
