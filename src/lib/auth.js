@@ -20,9 +20,9 @@ export const authOptions = {
 
           // console.log(data);
 
-          if (response.data && response.data.appUser) {
+          if (response && response.appUser) {
             // Obtén el rol real del usuario desde la respuesta
-            const user = response.data.appUser
+            const user = response.appUser
             // console.log(user, 'user dentro de authorize')
 
             // Agrega el rol a la respuesta
