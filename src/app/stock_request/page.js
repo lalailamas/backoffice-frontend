@@ -13,18 +13,18 @@ function StockRequest () {
     // console.log(id, 'id')
     setData([])
     const response = await getStockRequest(id)
-    setData(response.data)
+    setData(response)
   }
 
   useEffect(() => {
     const fetchStores = async () => {
       try {
         const response = await getStores()
-        setStores(response.data)
-        console.log(response.data, 'response')
-        if (response.data.length > 0) {
-          console.log(response.data[0].storeId, 'response[0].storeId')
-          handleStoreChange(response.data[0].storeId)
+        setStores(response)
+        console.log(response, 'response')
+        if (response.length > 0) {
+          console.log(response[0].storeId, 'response[0].storeId')
+          handleStoreChange(response[0].storeId)
         }
       } catch (error) {
         console.error('Error fetching stores:', error)
