@@ -91,7 +91,7 @@ export default function page () {
       setLoaderVisible(true)
       const response = await putRestockResult(externalTransactionId, stockData)
       console.log('Step 3: response PATCH RESULT', response)
-      if (response.data.successful) {
+      if (response.successful) {
         swallError('Restock Confirmado', true)
         router.push(
           nextRoute

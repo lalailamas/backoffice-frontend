@@ -12,10 +12,10 @@ export default function useGetProdByStore (id) {
   async function fetchAllReiteData () {
     try {
       const productsResponse = await getReiteProdByStore(id)
-      if (productsResponse.data) {
-        console.log(productsResponse.data, 'respuesta productos')
+      if (productsResponse) {
+        // console.log(productsResponse, 'respuesta productos')
         setState({
-          products: productsResponse.data,
+          products: productsResponse,
           loading: false,
           error: null
         })
