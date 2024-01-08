@@ -8,7 +8,7 @@ import Link from 'next/link'
 import DspLoader from '@/components/admin/common/loader'
 import FileSaver from 'file-saver'
 import Swal from 'sweetalert2'
-import { swallError, Toast, swallInfo } from '@/utils/sweetAlerts'
+import { swallError, Toast } from '@/utils/sweetAlerts'
 
 function TableClient () {
   const [clients, setClients] = useState([])
