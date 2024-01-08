@@ -36,8 +36,8 @@ function DetailsClient () {
     if (id) {
       getDetailsClient(id)
         .then((response) => {
-          console.log(response.data.data, 'respuesta get')
-          setClientData(response.data.data)
+          console.log(response.data, 'respuesta get')
+          setClientData(response.data)
         })
         .catch((error) => {
           console.error('Error fetching client details:', error)
