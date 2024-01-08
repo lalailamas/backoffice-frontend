@@ -32,6 +32,9 @@ function StepTwo () {
   const { flattenedLayout } = useFlattenLayout(layoutId)
   const [collapsedRows, setCollapsedRows] = useState({})
   const [allCheckboxesChecked, setAllCheckboxesChecked] = useState(false)
+  console.log(inventory, 'inventory')
+  console.log(layout, 'layout')
+  console.log(products, 'products')
 
   const router = useRouter()
 
@@ -116,7 +119,7 @@ function StepTwo () {
       setLoaderVisible(true)
       const response = await postRestockInventory(externalId, transactionId, stockData)
       console.log('Step 2: inventory response', response)
-      if (response.status === 200) {
+      if (response.result.successful) {
         swallError('Stock confirmado', true)
         router.push(
           'stepThree' +

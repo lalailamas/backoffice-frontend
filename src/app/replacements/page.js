@@ -28,12 +28,12 @@ function Replacements () {
     if (dateRange.startDate !== null && dateRange.endDate !== null) {
       getStockOperation(dateRange)
         .then((response) => {
-          console.log(response.data)
-          if (response.data.length === 0) {
+          console.log(response)
+          if (response.length === 0) {
             swallInfo('No hay datos para el rango de fechas seleccionado')
             setIsData(false)
           }
-          setRestockData(response.data)
+          setRestockData(response)
         })
         .catch((error) => {
           console.error('Error fetching restock data:', error)

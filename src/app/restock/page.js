@@ -28,7 +28,7 @@ function Restock () {
     const fetchStores = async () => {
       try {
         const response = await getStores('active')
-        setStores(response.data)
+        setStores(response)
         // console.log('response', response.data)
       } catch (error) {
         errorHandler(error)
