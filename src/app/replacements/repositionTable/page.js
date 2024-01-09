@@ -1,14 +1,17 @@
 /* eslint-disable multiline-ternary */
 'use client'
-import React from 'react'
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import RepositionTableLoader from '@/app/loader_desktop'
+import { useState } from 'react'
+import MobileTableLoader from '@/app/loader_mobile'
 
 export default function RepositionTable ({ data, stores }) {
   console.log(data, 'data')
   console.log(stores, 'stores')
   const pathname = usePathname()
+  const [expandedRows, setExpandedRows] = useState([])
 
   function formatTimeDifference (start, end) {
     const startTime = new Date(start)
@@ -65,129 +68,109 @@ export default function RepositionTable ({ data, stores }) {
 
   return (
     <>
-      <div className='overflow-x-auto'>
-        {data?.length > 0 ? (
-          <table className='table text-d-dark-dark-purple table-zebra w-full max-[431px]:hidden'>
-            <thead>
-              <tr className='bg-d-dark-dark-purple text-d-white'>
-                <th />
-                <th>ID de Transacción</th>
-                <th>Tienda</th>
-                <th>Fecha</th>
-                <th>Duración</th>
-                <th>Productos Repuestos</th>
-                <th>Detalle</th>
-              </tr>
-            </thead>
+      {window.innerWidth <= 431 ? (
+        <div className='md:hidden m-2'>
+          {data.length === 0 ? (
+            <MobileTableLoader />
+          ) : (
+            data.map((item) => (
+              <div key={item.external_transaction_id} className='pb-2'>
+                <div className='flex justify-between w-full md:hidden bg-d-soft-purple p-2 rounded-md'>
+                  <div>
+                    <h3>
+                      <span className='mr-5 font-bold'>
+                        Tienda
+                      </span>
+                      {findStoreName(item.store_id)}
+                    </h3>
+                    <h3>
+                      <span className='mr-5 font-bold'>
+                        Fecha
+                      </span>
+                      {cutDate(item.start_timestamp)}
+                    </h3>
+                  </div>
+                  <button
+                    className='btn'
+                    onClick={() => {
+                      const newExpandedRows = [...expandedRows]
+                      if (newExpandedRows.includes(item)) {
+                        newExpandedRows.splice(newExpandedRows.indexOf(item), 1)
+                      } else {
+                        newExpandedRows.push(item)
+                      }
+                      setExpandedRows(newExpandedRows)
+                    }}
+                  >
+                    <svg width='19' height='8' viewBox='0 0 19 8' fill='none' xmlns='http://www.w3.org/2000/svg'>
+                      <g id='&#240;&#159;&#166;&#134; icon &#34;arrow down 1&#34;'>
+                        <path id='Vector' d='M9.24372 7.31144C8.52431 7.31144 7.8049 7.08182 7.26021 6.6311L0.559468 1.08641C0.261427 0.839788 0.261427 0.431587 0.559468 0.184966C0.857508 -0.0616553 1.35082 -0.0616553 1.64886 0.184966L8.3496 5.72966C8.84291 6.13786 9.64453 6.13786 10.1378 5.72966L16.8386 0.184966C17.1367 -0.0616553 17.63 -0.0616553 17.928 0.184966C18.226 0.431587 18.226 0.839788 17.928 1.08641L11.2272 6.6311C10.6825 7.08182 9.96313 7.31144 9.24372 7.31144Z' fill='#292D32' />
+                      </g>
+                    </svg>
+                  </button>
+                </div>
+                {expandedRows.includes(item) && (
+                  <div className='mt-2 p-2'>
+                    <div className='grid grid-cols-2 gap-4'>
+                      <h2 className='font-semibold'>ID de transacción</h2>
+                      <span>{item.external_transaction_id}</span>
 
-            <tbody>
-              {data.map((item) => (
-                <tr key={item.external_transaction_id}>
-                  <td />
-                  <td>{item.external_transaction_id}</td>
-                  <td>{findStoreName(item.store_id)}</td>
-                  <td>{cutDate(item.start_timestamp)}</td>
-                  <td>{formatTimeDifference(item.start_timestamp, item.end_timestamp)}</td>
-                  <td>{countProducts(item.results?.restocked)}</td>
-                  <td><Link href={`${pathname}/id?id=${item.id}&external_transactionId=${item.external_transaction_id}`} className='hover:underline'>Ver más</Link></td>
+                      <h2 className='font-semibold'>Duración</h2>
+                      <div>
+                        <span>{formatTimeDifference(item.start_timestamp, item.end_timestamp)}</span>
+                      </div>
 
+                      <h2 className='font-semibold'>Productos repuestos</h2>
+                      <span>{countProducts(item.results?.restocked)}</span>
+                    </div>
+                    <div className='flex justify-center'>
+                      <button className='btn mt-5'>
+                        <Link href={`${pathname}/id?id=${item.id}&external_transactionId=${item.external_transaction_id}`} className='hover:underline'>Ver más</Link>
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
+            ))
+          )}
+        </div>
+      ) : (
+        <div className='overflow-x-auto p-4'>
+          {data.length === 0 ? (
+            <RepositionTableLoader />
+          ) : (
+            <table className='table text-d-dark-dark-purple table-zebra mt-8 p-8 max-[431px]:hidden'>
+              <thead>
+
+                <tr className='bg-d-dark-dark-purple text-d-white'>
+                  <th />
+                  <th>ID de Transacción</th>
+                  <th>Tienda</th>
+                  <th>Fecha</th>
+                  <th>Duración</th>
+                  <th>Productos Repuestos</th>
+                  <th>Detalle</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        ) : (
-          <div className=''>
-            <p className='text-center'>No hay datos disponibles</p>
-          </div>
-        )}
-      </div>
+
+              </thead>
+              <tbody>
+                {data.map((item) => (
+                  <tr key={item.external_transaction_id}>
+                    <td />
+                    <td>{item.external_transaction_id}</td>
+                    <td>{findStoreName(item.store_id)}</td>
+                    <td>{cutDate(item.start_timestamp)}</td>
+                    <td>{formatTimeDifference(item.start_timestamp, item.end_timestamp)}</td>
+                    <td>{countProducts(item.results?.restocked)}</td>
+                    <td><Link href={`${pathname}/id?id=${item.id}&external_transactionId=${item.external_transaction_id}`} className='hover:underline'>Ver más</Link></td>
+
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
+        </div>
+      )}
     </>
   )
 }
-
-// function formatLocalDate (utcFechaString) {
-//   if (!utcFechaString) return 'no date'
-//   // Crear un objeto Date desde la cadena de fecha UTC
-//   const fechaUtc = new Date(utcFechaString)
-
-//   // Obtener opciones de formato para la zona horaria local
-//   const opcionesDeFormato = {
-//     year: 'numeric',
-//     month: '2-digit',
-//     day: '2-digit',
-//     hour: '2-digit',
-//     minute: '2-digit',
-//     second: '2-digit',
-//     fractionalSecondDigits: 3,
-//     timeZoneName: 'short'
-//   }
-
-//   // Formatear la fecha en el formato de la zona horaria local
-//   const formatoLocal = new Intl.DateTimeFormat(undefined, opcionesDeFormato)
-//   const fechaFormateada = formatoLocal.format(fechaUtc)
-
-//   return fechaFormateada
-// }
-// [
-// {
-//   "id": 12,
-//   "external_transaction_id": "179a1ea6-2e9e-40dc-a247-e3cbc9e60074",
-//   "store_id": "DEV_CNV_002",
-//   "start_timestamp": "2023-11-06T13:39:39.619Z",
-//   "end_timestamp": "2023-11-06T13:45:08.638Z",
-//   "comments": "string de prueba",
-//   "start_image_url": null,
-//   "end_image_url": null,
-//   "products": [
-//     {
-//       "productId": "DEV_CNV_048",
-//       "productName": "Redbull 250ml",
-//       "img": "https://storage.googleapis.com/reite-store-products/RED_BULL_250.webp",
-//       "stockBefore": 7,
-//       "stockAfter": 7
-//     },
-//     {
-//       "productId": "DEV_CNV_059",
-//       "productName": "Yogurt Protein con Frutos Secos 150gr",
-//       "img": "https://storage.googleapis.com/smart-stores-dev-products/WE862T5CBxVkuzyI9GnT/CNV_059/YOGHURT_PROTEIN_FRUTOS_SECOS.webp",
-//       "stockBefore": 6,
-//       "stockAfter": 6
-//     },
-//     {
-//       "productId": "DEV_CNV_057",
-//       "productName": "Galleta Tritón Vainilla 126gr",
-//       "img": "https://storage.googleapis.com/smart-stores-dev-products/WE862T5CBxVkuzyI9GnT/CNV_057/TRITON_126.webp",
-//       "stockBefore": 7,
-//       "stockAfter": 7
-//     }
-//   ],
-//   "results": {
-//     "after": [],
-//     "purchased": [
-//       {
-//         "quantity": 2,
-//         "productId": "DEV_CNV_004"
-//       },
-//       {
-//         "quantity": 2,
-//         "productId": "DEV_CNV_006"
-//       }
-//     ],
-//     "restocked": [
-//       {
-//         "quantity": 2,
-//         "productId": "DEV_CNV_004"
-//       },
-//       {
-//         "quantity": 2,
-//         "productId": "DEV_CNV_006"
-//       },
-//       {
-//         "quantity": 3,
-//         "productId": "DEV_gNfXKMwp6zNULBXQ5hy9"
-//       }
-//     ],
-//     "before": []
-//   }
-// }
-// ]
