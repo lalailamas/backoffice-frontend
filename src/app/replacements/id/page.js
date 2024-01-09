@@ -90,7 +90,7 @@ function page () {
             <h2 className='text-d-dark-dark-purple text-2xl font-bold text-center p-4 '>Detalle de Reposición </h2>
             <h3 className='text-d-dark-dark-purple text-xl text-center pb-4'>{findStoreName(OperationStock[0].store_id)} ({OperationStock[0].store_id}) </h3>
 
-            <div className='flex justify-center w-full'>
+            <div className='flex justify-center w-full max-[431px]:hidden'>
               <Card className='w-full justify-center mt-2'>
                 <Grid numItems={2} numItemsSm={2} numItemsLg={2} className='gap-2'>
                   <Card className='text-center'>
@@ -160,6 +160,82 @@ function page () {
                     : null}
                 </Card>
 
+              </div>
+            </div>
+            {/* Mobile */}
+            <div className='md:hidden'>
+              <Card className='w-full justify-center mt-2'>
+                <Grid numItems={2} numItemsSm={2} numItemsLg={2} className='gap-2'>
+                  <Card className='text-center'>
+                    <Text>Duración de la reposición</Text>
+                    <Metric>{formatTimeDifference(OperationStock[0].start_timestamp, OperationStock[0].end_timestamp)}</Metric>
+                  </Card>
+                  <Card className='text-center'>
+                    <Text>Fecha</Text>
+                    <Metric>{cutDate(OperationStock[0].start_timestamp)}</Metric>
+                  </Card>
+                  <Card className='text-center'>
+                    <Text>Hora inicio de reposición</Text>
+                    <Metric>{formatLocalDate(OperationStock[0].start_timestamp)}</Metric>
+                  </Card>
+                  <Card className='text-center'>
+                    <Text>Hora fin de reposición</Text>
+                    <Metric>{formatLocalDate(OperationStock[0].end_timestamp)}</Metric>
+                  </Card>
+                  <Card className='text-center'>
+                    <Text>Productos Retirados</Text>
+                    <Metric>{countProducts(OperationStock[0].results?.purchased)}</Metric>
+                  </Card>
+                  <Card className='text-center'>
+                    <Text>Productos Repuestos</Text>
+                    <Metric>{countProducts(OperationStock[0].results?.restocked)}</Metric>
+                  </Card>
+                  <Card className='text-center'>
+                    <Text>Monto merma</Text>
+                    <Metric>$0</Metric>
+                  </Card>
+                </Grid>
+                <Grid numItems={1} numItemsSm={1} numItemsLg={1} className='gap-2 mt-2'>
+                  <Card className='text-center'>
+                    <Text className='text-center font-bold'>Comentarios</Text>
+                    <Text>{OperationStock[0]?.comments || 'sin comentarios'}</Text>
+
+                  </Card>
+                </Grid>
+              </Card>
+
+              <div className='md:hidden'>
+
+                <Card className='text-center'>
+                  <Text>Imagen antes de abrir tienda</Text>
+
+                  {OperationStock[0].start_image_url
+                    ? <Image
+                        src={OperationStock[0]?.start_image_url}
+                        alt='store'
+                        className='w-96 m-2'
+                        width={1300} // Establece el ancho deseado
+                        height={500}
+                      />
+                    : null}
+                </Card>
+
+                <Card className='text-center'>
+                  <Text>Imagen luego de cerrar tienda</Text>
+                  {OperationStock[0].end_image_url
+                    ? <Image
+                        src={OperationStock[0]?.end_image_url}
+                        alt='store'
+                        className='w-96 m-2'
+                        width={1300} // Establece el ancho deseado
+                        height={500}
+                      />
+                    : null}
+                </Card>
+
+              </div>
+              <div className='md:hidden'>
+                <OperationTable data={OperationStock[0]} />
               </div>
             </div>
 
