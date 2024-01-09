@@ -31,8 +31,6 @@ export const deleteData = (id, url, contentType) => sendData('delete', url, { id
 export const getDataOnly = (url, contentType) => sendData('get', url, null, contentType)
 export const deleteDataUsers = (id, email, url, contentType) => sendData('delete', url, { id, email }, contentType)
 
-export const getDataByQuery = (url, contentType, query) => sendData('get', url, null, contentType, { params: query })
-
 const createFormData = async ({ snapshot, comment, storeId }, contentType, method, url) => {
   const formData = new FormData()
 

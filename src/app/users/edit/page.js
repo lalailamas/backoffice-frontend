@@ -16,8 +16,8 @@ export default function EditUserForm () {
     const fetchId = async () => {
       try {
         const response = await getUserById(id)
-        console.log(response.data, 'respuesta')
-        setUser(response.data)
+        console.log(response, 'respuesta')
+        setUser(response)
       } catch (error) {
         console.error('error')
       }
