@@ -28,7 +28,7 @@ function Restock () {
     const fetchStores = async () => {
       try {
         const response = await getStores('active')
-        setStores(response.data)
+        setStores(response)
         // console.log('response', response.data)
       } catch (error) {
         errorHandler(error)
@@ -119,33 +119,38 @@ function Restock () {
               </button>
             </div>
             {modalVisible && (
-              <ConfirmationModal
-                handleConfirmationModal={handleConfirmationModal}
-                handleOperationConfirmation={handleOpenStore}
-                title='¿Estás seguro que quieres abrir esta máquina?'
-                message={(
-                  <span>
-                    Verifica que <strong>{selectedStore.name}</strong> sea la correcta antes de proceder
-                  </span>
+              <div className='fixed z-50 flex items-center justify-center'>
+                <ConfirmationModal
+                  handleConfirmationModal={handleConfirmationModal}
+                  handleOperationConfirmation={handleOpenStore}
+                  title='¿Estás seguro que quieres abrir esta máquina?'
+                  message={(
+                    <span>
+                      Verifica que <strong>{selectedStore.name}</strong> sea la correcta antes de proceder
+                    </span>
                 )}
-                confirmButtonText='Abrir máquina'
-                cancelButtonText='Cancelar'
-              />
+                  confirmButtonText='Abrir máquina'
+                  cancelButtonText='Cancelar'
+                />
+              </div>
+
             )}
             {modalCameraVisible && (
-              <CameraModal
-                handleConfirmationModal={handleConfirmationModal}
-                handleOperationConfirmation={handleCameraModal}
-                title='Necesitamos que tomes una foto de la tienda antes de abrirla'
-                message={(
-                  <span>
-                    Toma una foto de la tienda antes de abrirla
-                  </span>
+              <div className='fixed z-50 flex items-center justify-center'>
+                <CameraModal
+                  handleConfirmationModal={handleConfirmationModal}
+                  handleOperationConfirmation={handleCameraModal}
+                  title='Necesitamos que tomes una foto de la tienda antes de abrirla'
+                  message={(
+                    <span>
+                      Toma una foto de la tienda antes de abrirla
+                    </span>
                 )}
-                confirmButtonText='Siguiente'
-                cancelButtonText='Cancelar'
-                takeSnapshot={takeSnapshot}
-              />
+                  confirmButtonText='Siguiente'
+                  cancelButtonText='Cancelar'
+                  takeSnapshot={takeSnapshot}
+                />
+              </div>
             )}
 
           </div>

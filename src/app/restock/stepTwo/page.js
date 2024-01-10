@@ -32,6 +32,9 @@ function StepTwo () {
   const { flattenedLayout } = useFlattenLayout(layoutId)
   const [collapsedRows, setCollapsedRows] = useState({})
   const [allCheckboxesChecked, setAllCheckboxesChecked] = useState(false)
+  console.log(inventory, 'inventory')
+  console.log(layout, 'layout')
+  console.log(products, 'products')
 
   const router = useRouter()
 
@@ -116,7 +119,7 @@ function StepTwo () {
       setLoaderVisible(true)
       const response = await postRestockInventory(externalId, transactionId, stockData)
       console.log('Step 2: inventory response', response)
-      if (response.status === 200) {
+      if (response.result.successful) {
         swallError('Stock confirmado', true)
         router.push(
           'stepThree' +
@@ -292,16 +295,20 @@ function StepTwo () {
 
           )}
       {modalVisible && (
-        <ConfirmationModal
-          handleConfirmationModal={handleConfirmationModal}
-          handleOperationConfirmation={setHandleStock}
-          title='¿Deseas confirmar el inventario?'
-          message={(
-            <a>Una vez confirmado el inventario de <strong>{storeName}</strong> no podrás realizar cambios</a>
+        <div className='fixed z-50 flex items-center justify-center'>
+
+          <ConfirmationModal
+            handleConfirmationModal={handleConfirmationModal}
+            handleOperationConfirmation={setHandleStock}
+            title='¿Deseas confirmar el inventario?'
+            message={(
+              <a>Una vez confirmado el inventario de <strong>{storeName}</strong> no podrás realizar cambios</a>
           )}
-          confirmButtonText='Confirmar'
-          cancelButtonText='Cancelar'
-        />
+            confirmButtonText='Confirmar'
+            cancelButtonText='Cancelar'
+          />
+        </div>
+
       )}
     </div>
   )

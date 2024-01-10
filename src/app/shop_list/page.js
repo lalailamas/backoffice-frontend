@@ -50,11 +50,11 @@ function shopList () {
     try {
       const response = await getShopList(ids)
       handleShopListRequested()
-      if (response.data.length === 0) {
+      if (response.length === 0) {
         swallError('No hay datos para mostrar', false)
       } else {
         setLoading(false)
-        setData(response.data)
+        setData(response)
       }
     } catch (error) {
       swallError('Error al obtener los datos', false)
@@ -81,12 +81,12 @@ function shopList () {
     setLoadingRequested(true)
     try {
       const responseRequested = await getRepositionByStore(ids)
-      console.log(responseRequested.data, 'response.data')
-      if (responseRequested.data.length === 0) {
+      console.log(responseRequested, 'response.data')
+      if (responseRequested.length === 0) {
         swallError('No hay datos para mostrar', false)
       } else {
         setLoadingRequested(false)
-        setDataRequested(responseRequested.data)
+        setDataRequested(responseRequested)
       }
     } catch (error) {
       swallError('Error al obtener los datos', false)
@@ -179,7 +179,7 @@ function shopList () {
           className=' items-center px-3 py-2 text-sm font-medium text-center text-white bg-d-dark-dark-purple rounded-lg hover:bg-d-soft-soft-purple hover:text-d-dark-dark-purple focus:ring-4 focus:outline-none '
         >
 
-          <svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' strokeWidth={1.5} stroke='currentColor' dataSlot='icon' className='w-6 h-6'>
+          <svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' strokeWidth={1.5} stroke='currentColor' dataslot='icon' className='w-6 h-6'>
             <path strokeLinecap='round' strokeLinejoin='round' d='m19.5 8.25-7.5 7.5-7.5-7.5' />
           </svg>
 

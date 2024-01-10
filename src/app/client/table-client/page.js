@@ -28,6 +28,7 @@ function TableClient () {
     if (dateRange.startDate !== null && dateRange.endDate !== null) {
       getListClients(dateRange, searchTerm)
         .then((response) => {
+          // console.log(response, 'response')
           setClients(response)
         })
         .catch((error) => {

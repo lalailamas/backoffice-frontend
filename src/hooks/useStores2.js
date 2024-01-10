@@ -11,8 +11,8 @@ const useGetStores2 = () => {
       setLoading(true)
       getStores().then(
         (response) => {
-          console.log(response.data, 'respuesta getStores2')
-          setStores(response.data)
+          console.log(response, 'respuesta getStores2')
+          setStores(response)
         }
       ).catch((err) => {
         setError(err)

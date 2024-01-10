@@ -91,7 +91,7 @@ export default function page () {
       setLoaderVisible(true)
       const response = await putRestockResult(externalTransactionId, stockData)
       console.log('Step 3: response PATCH RESULT', response)
-      if (response.data.successful) {
+      if (response.successful) {
         swallError('Restock Confirmado', true)
         router.push(
           nextRoute
@@ -208,14 +208,18 @@ export default function page () {
         </button>
       </div>
       {modalVisible && (
-        <ConfirmationModal
-          handleConfirmationModal={handleConfirmationModal}
-          handleOperationConfirmation={handleConfirmRestock}
-          title='¿Confirmas que los datos de reposición son correctos?'
-          message='Recuerda que una vez confirmados, no podrás realizar cambios'
-          confirmButtonText='Confirmar'
-          cancelButtonText='Cancelar'
-        />
+        <div className='fixed z-50 flex items-center justify-center'>
+
+          <ConfirmationModal
+            handleConfirmationModal={handleConfirmationModal}
+            handleOperationConfirmation={handleConfirmRestock}
+            title='¿Confirmas que los datos de reposición son correctos?'
+            message='Recuerda que una vez confirmados, no podrás realizar cambios'
+            confirmButtonText='Confirmar'
+            cancelButtonText='Cancelar'
+          />
+        </div>
+
       )}
     </div>
   )

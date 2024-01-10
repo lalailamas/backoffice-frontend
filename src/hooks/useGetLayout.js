@@ -10,9 +10,9 @@ export default function useGetLayout (layoutId) {
   const fetchLayout = async (layoutId) => {
     try {
       const layoutResponse = await getLayout(layoutId)
-      if (layoutResponse.data) {
+      if (layoutResponse) {
         setState({
-          layout: layoutResponse.data,
+          layout: layoutResponse,
           layoutLoad: false,
           error: null
         })

@@ -21,7 +21,7 @@ function LayoutMachine () {
     try {
       const result = await getLayout(layoutId)
       if (result) {
-        setLayout(result.data)
+        setLayout(result)
       }
     } catch (error) {
       console.log(error, 'ERROR')
@@ -32,7 +32,8 @@ function LayoutMachine () {
     try {
       const storesResponse = await getStores()
       if (!storesResponse.error) {
-        const storeResponse = storesResponse.data.filter((store) => store.storeId === storeId)
+        console.log(storesResponse, 'storesResponse')
+        const storeResponse = storesResponse.filter((store) => store.storeId === storeId)
         if (storeResponse.length === 0) {
           return
         }
