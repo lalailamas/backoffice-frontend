@@ -1,83 +1,69 @@
+// PriceModal.jsx
 import React, { useState, useEffect } from 'react'
-import { putStockInventory } from '@/api/stock'
+import { patchReitePrices } from '@/api/product/reite'
 
-function QuantityModal ({
-  handleOperationConfirmation,
+function PriceModal ({
   title,
   message,
   confirmButtonText,
   cancelButtonText,
   handleConfirmationModal,
-  showQuantityControls = false,
-  initialQuantity,
-  productId, storeId, updateProductQuantity
+  productId,
+  storeId,
+  initialPrice,
+  updateProductPrice,
+  brand,
+  name
 }) {
-  const [quantity, setQuantity] = useState(0)
+  const [price, setPrice] = useState(initialPrice !== undefined ? initialPrice : 0)
 
-  const quantityChangeHandler = async () => {
-    const stockData = {
-      added: [],
-      removed: []
+  useEffect(() => {
+    console.log('initialPrice en useEffect:', initialPrice)
+    if (initialPrice !== undefined) {
+      setPrice(price)
     }
-    const quantityDifference = quantity - initialQuantity
-    if (quantityDifference > 0) {
-      stockData.added.push({
-        productId,
-        quantity: quantityDifference
-      })
+  }, [initialPrice])
+
+  const priceChangeHandler = async () => {
+    console.log('Precio actual antes de la actualización:', price)
+    const priceData = {
+      brand,
+      name,
+      price,
+      storeId
     }
-    if (quantityDifference < 0) {
-      stockData.removed.push({
-        productId,
-        quantity: Math.abs(quantityDifference)
-      })
-    }
+
     try {
-      console.log(stockData, 'stockData')
-      const response = await putStockInventory(storeId, stockData)
+      console.log(priceData, 'priceData')
+      const response = await patchReitePrices(priceData, productId)
+      console.log(response, 'respuesta patch')
+
       if (response) {
-        setQuantity(quantity)
+        setPrice(price)
         handleConfirmationModal()
-        updateProductQuantity(productId, quantity)
+        updateProductPrice(productId, price)
+      } else {
+        console.error('Error en la actualización de precio:', response.message)
       }
-      console.log(response, 'respuesta put')
     } catch (error) {
       console.log(error)
     }
   }
 
-  useEffect(() => {
-    if (initialQuantity !== undefined) {
-      setQuantity(initialQuantity)
-    }
-  }, [initialQuantity])
-
-  const decreaseQuantity = () => {
-    if (quantity > 0) {
-      setQuantity(quantity - 1)
-    }
-  }
-
-  const increaseQuantity = () => {
-    setQuantity(quantity + 1)
-  }
-
   return (
     <div>
       <div id='YOUR_ID' className='fixed z-50 inset-0 overflow-y-auto'>
-        <div className='flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0'>
-
+        <div className='flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0'>
           <div className='fixed inset-0 transition-opacity' aria-hidden='true'>
             <div className='absolute inset-0 bg-gray-500 opacity-75' />
           </div>
-
           <span className='hidden sm:inline-block sm:align-middle sm:h-screen' aria-hidden='true'>&#8203;</span>
-
           <div
             className='inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full sm:p-6'
             role='dialog' aria-modal='true' aria-labelledby='modal-headline'
           >
             <div className='sm:flex sm:items-start'>
+
               <div
                 className='mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-d-soft-soft-purple sm:mx-0 sm:h-10 sm:w-10'
               >
@@ -102,54 +88,40 @@ function QuantityModal ({
                 </div>
               </div>
             </div>
-            {showQuantityControls && (
-              <div className='mt-2 flex justify-center items-center'>
-                <button
-                  onClick={decreaseQuantity}
-                  className='bg-gray-200 text-gray-600 hover:bg-gray-300 focus:outline-none focus:ring rounded-l-md px-3 py-1'
-                >
-                  -
-                </button>
-                <span className='bg-gray-100 px-3 py-1'>{quantity}</span>
-                <button
-                  onClick={increaseQuantity}
-                  className='bg-gray-200 text-gray-600 hover:bg-gray-300 focus:outline-none focus:ring rounded-r-md px-3 py-1'
-                >
-                  +
-                </button>
+            <div className='mt-2 flex justify-center items-center'>
+              <label htmlFor='priceInput' className='sr-only'>
+                Precio
+              </label>
+              <div className='relative'>
+                <span className='absolute inset-y-0 left-0 flex items-center pl-2 text-gray-700'>$</span>
+                <input
+                  type='number'
+                  id='priceInput'
+                  className='bg-gray-100 px-8 py-1 w-28 border border-1 pl-8'
+                  value={price}
+                  onChange={(e) => setPrice(e.target.value)}
+                />
               </div>
-            )}
+            </div>
+
             <div className='mt-5 sm:mt-4 sm:flex sm:flex-row-reverse'>
-              <button type='button' className='w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-d-dark-dark-purple font-medium hover:bg-d-soft-soft-purple hover:text-d-dark-dark-purple text-white sm:ml-3 sm:w-auto sm:text-sm' onClick={quantityChangeHandler}>
+              <button
+                type='button' className='w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-d-dark-dark-purple font-medium hover:bg-d-soft-soft-purple hover:text-d-dark-dark-purple text-white sm:ml-3 sm:w-auto sm:text-sm'
+                onClick={priceChangeHandler}
+              >
                 {confirmButtonText}
               </button>
               <button type='button' databehavior='cancel' className='mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:mt-0 sm:w-auto sm:text-sm' onClick={handleConfirmationModal}>
                 {cancelButtonText}
               </button>
             </div>
-
           </div>
         </div>
+
       </div>
 
     </div>
   )
 }
 
-export default QuantityModal
-
-// /api/reite/stores/DEV_CNV_002/inventory
-// {
-//     "added": [
-//         {
-//             "productId": "DEV_CNV_004",
-//             "quantity": 1
-//         }
-//     ],
-//     "removed": [
-//         {
-//             "productId": "DEV_CNV_007",
-//             "quantity": 1
-//         }
-//     ]
-// }
+export default PriceModal
