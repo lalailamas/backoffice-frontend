@@ -1,17 +1,18 @@
 'use client'
-import { getAllLayouts, getLayout } from '@/api/layout'
+import { getAllLayouts } from '@/api/layout'
 import React, { useState, useEffect } from 'react'
 // import DspLoader from '@/components/admin/common/loader'
 
-// import useGetProdByStore from '@/hooks/useGetProdByStore'
+import { getAllReiteData } from '@/api/product/reite'
 
 function Layout () {
   const [layouts, setLayouts] = useState([])
-  const [selectedLayout, setSelectedLayout] = useState('0')
+  const [selectedLayout, setSelectedLayout] = useState('')
+  console.log(selectedLayout, 'layout selected')
+  const [selectedLayoutDetails, setSelectedLayoutDetails] = useState(null)
 
-  const [layout, setLayout] = useState(null)
-  //   const [store, setStore] = useState(null)
-  //   const { products, loading, error } = useGetProdByStore(storeId)
+  const [products, setProducts] = useState([])
+  console.log(products, 'productos')
 
   useEffect(() => {
     const fetchLayouts = async () => {
@@ -27,40 +28,28 @@ function Layout () {
     fetchLayouts()
   }, [])
 
-  const handleLayoutSelection = (e) => {
-    const selectedLayoutId = e.target.value
-    setSelectedLayout(e)
-    console.log(selectedLayoutId, 'id layout seleccionado NO ES EL ID')
-    if (selectedLayoutId) {
+  useEffect(() => {
+    const fetchProducts = async () => {
       try {
-        const selectedLayoutObject = layouts.find(layout => layout.id === selectedLayoutId)
-        if (selectedLayoutObject) {
-          const specificLayoutId = selectedLayoutObject.id
-          console.log('ID del diseño específico:', specificLayoutId)
-        }
+        const productsResponse = await getAllReiteData()
+        setProducts(productsResponse)
       } catch (error) {
-        console.error('Error al obtener el diseño específico:', error)
+        console.error('Error al obtener los productos:', error)
       }
     }
+
+    fetchProducts()
+  }, [])
+
+  useEffect(() => {
+    const layoutDetails = layouts.find(layout => layout.name === selectedLayout)
+    console.log(layoutDetails, 'detalles de layout')
+    setSelectedLayoutDetails(layoutDetails || null)
+  }, [selectedLayout, layouts])
+
+  const handleLayoutChange = (e) => {
+    setSelectedLayout(e)
   }
-
-  //   const handleLayout = async (selectedLayoutId) => {
-  //     try {
-  //       const result = await getLayout(selectedLayoutId)
-  //       if (result) {
-  //         setLayout(result)
-  //       }
-  //     } catch (error) {
-  //       console.log('estoy entrando aqui')
-  //       console.log(error, 'ERROR')
-  //     }
-  //   }
-
-  //   useEffect(() => {
-  //     if (selectedLayout !== '0') {
-  //       handleLayout(selectedLayout)
-  //     }
-  //   }, [selectedLayout])
 
   return (
     <div className='p-5'>
@@ -69,28 +58,26 @@ function Layout () {
       </div>
 
       <div className='flex justify-center items-center p-5'>
-        <div className='flex justify-center items-center p-5'>
-          <div className='flex flex-row items-center'>
-            <select
-              className='select select-sm select-bordered rounded-full w-full md:max-w-xs'
-              onChange={handleLayoutSelection}
-              value={selectedLayout}
-            >
-              <option value='0'>Selecciona un layout</option>
-              {layouts && layouts.map((layout) => (
-                <option key={layout.layoutId} value={layout.layoutId}>
-                  {layout.name}
-                </option>
-              ))}
-            </select>
-          </div>
+        <div className='flex flex-row items-center'>
+          <select
+            className='select select-sm select-bordered rounded-full w-full md:max-w-xs'
+            onChange={(e) => handleLayoutChange(e.target.value)}
+            value={selectedLayout}
+          >
+            <option value='0'>Selecciona un layout</option>
+            {layouts && layouts.map((layout) => (
+              <option key={layout.id}>
+                {layout.name}
+              </option>
+            ))}
+          </select>
+
         </div>
       </div>
+      <div className={`${selectedLayoutDetails !== '0' ? 'flex flex-col items-center justify-center' : 'hidden'}`} />
       <div className='p-10 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700'>
-        {/* <h5 className='text-2xl text-center mb-3 font-bold  text-gray-900 dark:text-white'>{store?.name}</h5> */}
-
-        {layout && layout.trays && layout.trays.map((tray, index) => (
-
+        <h5 className='text-2xl text-center mb-3 font-bold  text-gray-900 dark:text-white'>{selectedLayout}</h5>
+        {selectedLayoutDetails && selectedLayoutDetails.trays && selectedLayoutDetails.trays.map((tray, index) => (
           <div key={index} className='text-center border-gray-300'>
             <div className='bg-d-dark-dark-purple'>
               <h2 className='text-d-soft-purple text-sm font-bold'>BANDEJA {index + 1}</h2>
@@ -99,8 +86,7 @@ function Layout () {
               <ul className='flex flex-row gap-2 justify-center overflow-x-auto'>
                 {tray.columns.map((column, index) => {
                   const product = products.find((prod) => prod.productId === column.productId)
-                  console.log(product, 'producto aquiiii')
-                  // console.log(column, 'columna')
+                  console.log(product, 'aqui producto')
                   return (
                     <li key={index}>
                       {product
@@ -122,11 +108,10 @@ function Layout () {
                 })}
               </ul>
             )}
-
           </div>
         ))}
-
       </div>
+
     </div>
   )
 }
