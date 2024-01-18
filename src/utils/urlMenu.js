@@ -9,12 +9,15 @@ export const menuItems = [
     ]
   },
   {
-    label: 'Inventario',
+    label: 'Productos',
     icon: 'rotate-180',
     subMenuLinks: [
+      { label: 'Categorías', href: '/categories' },
+
       { label: 'Productos', href: '/inventory' },
       // { label: 'Órdenes de reabastecimiento', href: '/replenishment_orders' }
       { label: 'Registro de compras', href: '/purchase_register' }
+
     ]
   },
   {
@@ -31,8 +34,8 @@ export const menuItems = [
     icon: 'rotate-180',
     subMenuLinks: [
       { label: 'Stock por máquina', href: '/stock_request' },
-      { label: 'Ajuste de stock', href: '/stock_adjustment' },
-      { label: 'Resumen stock de tiendas', href: '/stock_overview' }
+      { label: 'Ajuste de Stock y Precios', href: '/stock_adjustment' },
+      { label: 'Informe de Inventario', href: '/stock_overview' }
 
     ]
   },

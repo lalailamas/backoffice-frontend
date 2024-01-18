@@ -3,7 +3,7 @@ import axios from 'axios'
 const baseUrl = process.env.NEXT_PUBLIC_DSP_API_BASE
 
 // Luego, utiliza apiConfig.baseUrl y apiConfig.reiteUrl en lugar de repetir las URL en cada función.
-const sendData = async (method, url, data, contentType = 'application/json', options = {}) => {
+const sendData = async (method, url, data, contentType, options = {}) => {
   try {
     const config = {
       method,
@@ -27,6 +27,7 @@ const sendData = async (method, url, data, contentType = 'application/json', opt
 // Ejemplos de uso
 export const postData = (data, url, contentType) => sendData('post', url, data, contentType)
 export const putData = (data, url, contentType) => sendData('put', url, data, contentType)
+export const patchData = (data, url, contentType) => sendData('patch', url, data, contentType)
 export const deleteData = (id, url, contentType) => sendData('delete', url, { id }, contentType)
 export const getDataOnly = (url, contentType) => sendData('get', url, null, contentType)
 export const deleteDataUsers = (id, email, url, contentType) => sendData('delete', url, { id, email }, contentType)
