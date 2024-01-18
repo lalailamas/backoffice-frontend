@@ -9,12 +9,15 @@ export const menuItems = [
     ]
   },
   {
-    label: 'Inventario',
+    label: 'Productos',
     icon: 'rotate-180',
     subMenuLinks: [
+      { label: 'Categorías', href: '/categories' },
+
       { label: 'Productos', href: '/inventory' },
       // { label: 'Órdenes de reabastecimiento', href: '/replenishment_orders' }
       { label: 'Registro de compras', href: '/purchase_register' }
+
     ]
   },
   {

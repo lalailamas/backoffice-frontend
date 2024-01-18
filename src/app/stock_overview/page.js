@@ -17,7 +17,7 @@ function StockOverview () {
   const [loader, setLoader] = useState(false)
   const layoutId = stores && stores.find(store => store.storeId === selectedStore)?.layoutId
   console.log(layoutId, 'layout id ')
-
+  console.log(products, 'products')
   const { layout } = useGetLayout(layoutId)
   console.log(layout, 'layout')
   const [expandedRows, setExpandedRows] = useState([])
@@ -76,7 +76,7 @@ function StockOverview () {
       <div className='p-8'>
         {loader
           ? <DspLoader />
-          : products.data && (
+          : products && (
             <table className='table  text-d-dark-dark-purple table-zebra mt-8 p-8 max-[431px]:hidden'>
               <thead>
                 <tr className='bg-d-dark-dark-purple text-d-white'>
@@ -90,7 +90,7 @@ function StockOverview () {
                 </tr>
               </thead>
               <tbody>
-                {products.data.map((product) => {
+                {products.map((product) => {
                   const quantityProd = inventory.find((prod) => prod.productId === product.productId)
                   const { metadata, prices } = product
                   const trayColumn = layout?.trays?.flatMap((tray) => tray.columns)?.find((column) => column.productId === product.productId)
@@ -131,7 +131,7 @@ function StockOverview () {
           )}
 
         <div className='md:hidden m-2'>
-          {Array.isArray(products.data) && products.data.map((product) => (
+          {Array.isArray(products) && products.map((product) => (
             <div key={product.productId} className='pb-2'>
               <div className='flex justify-between w-full md:hidden bg-d-soft-purple p-2 rounded-md'>
                 <div className=''>
