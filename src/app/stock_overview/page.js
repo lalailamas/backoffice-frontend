@@ -50,7 +50,7 @@ function StockOverview () {
   return (
     <div className='p-5'>
       <div className='flex justify-center text-center p-5'>
-        <h2 className='text-d-dark-dark-purple text-2xl font-bold'>Resumen de Stock</h2>
+        <h2 className='text-d-dark-dark-purple text-2xl font-bold'>Informe de Inventario por Tienda</h2>
       </div>
 
       <div className='flex justify-center items-center p-5'>

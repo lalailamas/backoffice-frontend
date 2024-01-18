@@ -1,4 +1,4 @@
-import { getDataOnly } from '@/utils/fetchData'
+import { getDataOnly, patchData } from '@/utils/fetchData'
 
 export const getAllReiteData = async () => {
   const url = 'reite/product/list'
@@ -15,5 +15,11 @@ export const getReiteProdData = async (id) => {
 export const getReiteProdByStore = async (storeId) => {
   const url = 'reite/stores/' + storeId + '/products'
   const response = await getDataOnly(url, 'multipart/form-data')
+  return response.data
+}
+
+export const patchReitePrices = async (data, productId) => {
+  const url = `reite/product/${productId}`
+  const response = await patchData(data, url, 'application/x-www-form-urlencoded')
   return response.data
 }
