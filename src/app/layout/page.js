@@ -1,14 +1,15 @@
 'use client'
 import { getAllLayouts } from '@/api/layout'
 import React, { useState, useEffect } from 'react'
-// import DspLoader from '@/components/admin/common/loader'
+import DraggableTray from './DraggableTray'
+import { DragDropContext } from '@hello-pangea/dnd'
 
 import { getAllReiteData } from '@/api/product/reite'
 
 function Layout () {
   const [layouts, setLayouts] = useState([])
   const [selectedLayout, setSelectedLayout] = useState('')
-  //   console.log(selectedLayout, 'layout selected')
+  // console.log(selectedLayout, 'layout selected')
   const [selectedLayoutDetails, setSelectedLayoutDetails] = useState(null)
 
   const [products, setProducts] = useState([])
@@ -43,117 +44,89 @@ function Layout () {
 
   useEffect(() => {
     const layoutDetails = layouts.find(layout => layout.name === selectedLayout)
-    console.log(layoutDetails, 'detalles de layout')
+    // console.log(layoutDetails, 'detalles de layout')
     setSelectedLayoutDetails(layoutDetails || null)
-  }, [selectedLayout, layouts])
+  }, [selectedLayout, layouts, selectedLayoutDetails])
 
   const handleLayoutChange = (e) => {
     setSelectedLayout(e)
   }
+  const handleDragEnd = (result) => {
+    console.log(result, 'resultado') // 20 -> 22
+    // {draggableId: '20',
+    //  type: 'DEFAULT',
+    //  source: {droppableId: '1', index: 22},
+    //  reason: 'DROP',
+    //  mode: 'FLUID'
+    //  combine: nulldestination:
+    //  draggableId: "20"mode: "FLUID"reason: "DROP"source:
+    //   {index: 20, droppableId: '1'}type: "DEFAULT"[[Prototype]]: Object 'resultado'
+    if (!result.destination) return
+
+    const updatedLayoutDetails = { ...selectedLayoutDetails }
+
+    // Verifica que la bandeja exista antes de intentar acceder a sus columnas
+    const sourceTray = updatedLayoutDetails.trays[parseInt(result.source.droppableId)]
+    console.log(sourceTray, 'source tray')
+    if (!sourceTray) return // Puedes manejar esto según tus necesidades
+
+    const trayColumns = [...sourceTray.columns]
+    console.log(trayColumns, 'tray columns')
+    const startIndex = result.source.index % 10 // 0
+    const endIndex = result.destination.index % 10 // 2
+    console.log(startIndex, 'start index')
+    console.log(endIndex, 'end index')
+
+    const [reorderedColumn] = trayColumns.splice(startIndex, 1)
+    trayColumns.splice(endIndex, 0, reorderedColumn)
+
+    // Actualiza las columnas de la bandeja
+    sourceTray.columns = trayColumns
+
+    setSelectedLayoutDetails(updatedLayoutDetails)
+  }
 
   return (
-    <div className='p-5'>
-      <div className='flex justify-center text-center p-5'>
-        <h2 className='text-d-dark-dark-purple text-2xl font-bold'>Administra Layout</h2>
-      </div>
-
-      <div className='flex justify-center items-center p-5'>
-        <div className='flex flex-row items-center'>
-          <select
-            className='select select-sm select-bordered rounded-full w-full md:max-w-xs'
-            onChange={(e) => handleLayoutChange(e.target.value)}
-            value={selectedLayout}
-          >
-            <option value='0'>Selecciona un layout</option>
-            {layouts && layouts.map((layout) => (
-              <option key={layout.id}>
-                {layout.name}
-              </option>
-            ))}
-          </select>
-
+    <DragDropContext onDragEnd={handleDragEnd}>
+      <div className='p-5'>
+        <div className='flex justify-center text-center p-5'>
+          <h2 className='text-d-dark-dark-purple text-2xl font-bold'>Administra Layout</h2>
         </div>
-      </div>
-      <div className={`${selectedLayoutDetails !== '0' ? 'flex flex-col items-center justify-center' : 'hidden'}`} />
-      <div className='p-10 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700'>
-        <h5 className='text-2xl text-center mb-3 font-bold  text-gray-900 dark:text-white'>{selectedLayout}</h5>
-        {selectedLayoutDetails && selectedLayoutDetails.trays && selectedLayoutDetails.trays.map((tray, index) => (
-          <div key={index} className='text-center border-gray-300'>
-            <div className='bg-d-dark-dark-purple'>
-              <h2 className='text-d-soft-purple text-sm font-bold p-4'>BANDEJA {index + 1}</h2>
-            </div>
-            {tray && tray.columns && (
-              <ul className='flex flex-row gap-2 justify-center overflow-x-auto p-4'>
-                {tray.columns.map((column, index) => {
-                  const product = products.find((prod) => prod.productId === column.productId)
-                  //   console.log(product, 'aqui producto')
-                  return (
-                    <li key={index}>
-                      {product
-                        ? (
 
-                          <section className='flex flex-col items-end justify-end w-[120px] h-[180px] border border-gray-200 rounded-lg shadow text-xs'>
-
-                            <svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' strokeWidth='1.5' stroke='currentColor' className='w-10 h-10'>
-                              <path strokeLinecap='round' strokeLinejoin='round' d='M6 18 18 6M6 6l12 12' />
-                            </svg>
-                            <div className='px-2 pt-2 flex flex-col items-center justify-center h-full self-center'>
-                              <img
-                                className='max-w-[30px] h-[30px] mx-auto self-center'
-                                src={product.metadata.imageUrl}
-                                width={120}
-                                height={120}
-                                alt='Product'
-                              />
-                              <p className='text-gray-600 dark:text-gray-300 text-xs text-center'>{product.productName}</p>
-                            </div>
-
-                            <div className='flex flex-row pt-10'>
-                              <button className='btn-sm join-item hover:bg-d-soft-soft-purple rounded-full'>
-                                <svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none'>
-                                  <g clipPath='url(#clip0_1384_742)'>
-                                    <circle cx='12' cy='12' r='12' fill='#8480C0' />
-                                    <path d='M7 12H17' stroke='#DCDAD8' strokeLinecap='round' strokeLinejoin='round' />
-                                  </g>
-                                  <defs>
-                                    <clipPath id='clip0_1384_742'>
-                                      <rect width='24' height='24' fill='white' />
-                                    </clipPath>
-                                  </defs>
-                                </svg>
-                              </button>
-
-                              <p className='flex items-center justify-center font-bold text-d-dark-dark-purple'>{selectedLayoutDetails.maxQuantities[column.productId]}</p>
-
-                              <button className='btn-sm join-item hover:bg-d-soft-soft-purple rounded-full'>
-                                <svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none'>
-                                  <g clipPath='url(#clip0_1384_744)'>
-                                    <circle cx='12' cy='12' r='12' fill='#7A36E6' />
-                                    <path d='M12 7V17M7 12H17' stroke='white' strokeLinecap='round' strokeLinejoin='round' />
-                                  </g>
-                                  <defs>
-                                    <clipPath id='clip0_1384_744'>
-                                      <rect width='24' height='24' fill='white' />
-                                    </clipPath>
-                                  </defs>
-                                </svg>
-                              </button>
-                            </div>
-
-                          </section>
-
-                          )
-                        : null}
-                    </li>
-                  )
-                })}
-              </ul>
-            )}
+        <div className='flex justify-center items-center p-5'>
+          <div className='flex flex-row items-center'>
+            <select
+              className='select select-sm select-bordered rounded-full w-full md:max-w-xs'
+              onChange={(e) => handleLayoutChange(e.target.value)}
+              value={selectedLayout}
+            >
+              <option value='0'>Selecciona un layout</option>
+              {layouts && layouts.map((layout) => (
+                <option key={layout.id}>
+                  {layout.name}
+                </option>
+              ))}
+            </select>
           </div>
-        ))}
+        </div>
+
+        <div className={`${selectedLayoutDetails !== '0' ? 'flex flex-col items-center justify-center' : 'hidden'}`} />
+        <div className='p-10  border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700'>
+          <h5 className='text-2xl text-center mb-3 font-bold text-gray-900 dark:text-white'>{selectedLayout}</h5>
+          {selectedLayoutDetails && selectedLayoutDetails.trays && selectedLayoutDetails.trays.map((tray, trayIndex) => (
+            <DraggableTray
+              key={trayIndex}
+              tray={tray}
+              trayIndex={trayIndex}
+              products={products}
+              selectedLayoutDetails={selectedLayoutDetails}
+
+            />
+          ))}
+        </div>
+
       </div>
-    </div>
+    </DragDropContext>
   )
 }
-
 export default Layout
