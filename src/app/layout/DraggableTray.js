@@ -3,7 +3,7 @@ import React from 'react'
 import { Droppable } from '@hello-pangea/dnd'
 import DraggableProduct from './DraggableProduct'
 
-function DraggableTray ({ tray, trayIndex, products, selectedLayoutDetails, quantityChangeHandler, hanldeDeleteProduct }) {
+function DraggableTray ({ tray, trayIndex, products, selectedLayoutDetails, quantityChangeHandler, hanldeDeleteProduct, setAddProductModal }) {
   return (
     <div key={trayIndex} className='text-center border-gray-300'>
       <div className='bg-d-dark-dark-purple'>
@@ -30,7 +30,7 @@ function DraggableTray ({ tray, trayIndex, products, selectedLayoutDetails, quan
                     />
                   )
                 })}
-                <button>
+                <button onClick={setAddProductModal}>
                   <div className='flex flex-col items-center items-stetch h-full justify-center text-center w-[120px]  border border-gray-200 rounded-lg shadow text-xs bg-white hover:bg-d-soft-soft-purple gap-4'>
                     <svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' strokeWidth='1.5' stroke='currentColor' className='w-8 h-8'>
                       <path strokeLinecap='round' strokeLinejoin='round' d='M12 4.5v15m7.5-7.5h-15' />
