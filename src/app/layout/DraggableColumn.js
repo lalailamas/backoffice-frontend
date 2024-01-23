@@ -9,7 +9,6 @@ function DraggableColumn () {
       {(provided) => (
         <div ref={provided.innerRef} {...provided.droppableProps}>
           <DraggableItem />
-          {/* Otros elementos arrastrables en la columna */}
           {provided.placeholder}
         </div>
       )}

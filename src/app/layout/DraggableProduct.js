@@ -1,10 +1,25 @@
+'use client'
 // DraggableProduct.js
-import React from 'react'
+import React, { useState } from 'react'
 import { Draggable } from '@hello-pangea/dnd'
 
-function DraggableProduct ({ product, combinedIndex, selectedLayoutDetails }) {
-  // Parsea el índice como un número entero
+function DraggableProduct ({ product, combinedIndex, selectedLayoutDetails, quantityChangeHandler }) {
   const index = parseInt(combinedIndex, 10)
+  // console.log(selectedLayoutDetails, 'SelectedLayoutDetails del DraggableProducts')
+  // console.log(product, 'product del DraggableProducts')
+  const [quantity, setQuantity] = useState(selectedLayoutDetails.maxQuantities[product.productId])
+
+  const handleIncrease = () => {
+    setQuantity(quantity + 1)
+    quantityChangeHandler(product.productId, (quantity + 1))
+  }
+
+  const handleDecrease = () => {
+    if (quantity > 0) {
+      setQuantity(quantity - 1)
+      quantityChangeHandler(product.productId, (quantity - 1))
+    }
+  }
   return (
     <Draggable
       key={combinedIndex}
@@ -36,7 +51,7 @@ function DraggableProduct ({ product, combinedIndex, selectedLayoutDetails }) {
                 </div>
 
                 <div className='flex flex-row pt-10'>
-                  <button className='btn-sm join-item hover:bg-d-soft-soft-purple rounded-full'>
+                  <button onClick={handleDecrease} className='btn-sm join-item hover:bg-d-soft-soft-purple rounded-full'>
                     <svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none'>
                       <g clipPath='url(#clip0_1384_742)'>
                         <circle cx='12' cy='12' r='12' fill='#8480C0' />
@@ -50,9 +65,9 @@ function DraggableProduct ({ product, combinedIndex, selectedLayoutDetails }) {
                     </svg>
                   </button>
 
-                  {/* <p className='flex items-center justify-center font-bold text-d-dark-dark-purple'>{selectedLayoutDetails.maxQuantities[column.productId]}</p> */}
+                  <p className='flex items-center justify-center font-bold text-d-dark-dark-purple'>{quantity}</p>
 
-                  <button className='btn-sm join-item hover:bg-d-soft-soft-purple rounded-full'>
+                  <button onClick={handleIncrease} className='btn-sm join-item hover:bg-d-soft-soft-purple rounded-full'>
                     <svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none'>
                       <g clipPath='url(#clip0_1384_744)'>
                         <circle cx='12' cy='12' r='12' fill='#7A36E6' />

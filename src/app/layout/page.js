@@ -11,9 +11,22 @@ function Layout () {
   const [selectedLayout, setSelectedLayout] = useState('')
   // console.log(selectedLayout, 'layout selected')
   const [selectedLayoutDetails, setSelectedLayoutDetails] = useState(null)
+  // console.log(selectedLayoutDetails, 'detalles de layout seleccionado')
 
   const [products, setProducts] = useState([])
   //   console.log(products, 'productos')
+  const [newLayoutName, setNewLayoutName] = useState('')
+
+  const quantityChangeHandler = (productId, quantity) => {
+    selectedLayoutDetails.trays.forEach((tray) => {
+      tray.columns.forEach((column) => {
+        if (column.productId === productId) {
+          column.maxQuantity = quantity
+        }
+      })
+    })
+    setSelectedLayoutDetails({ ...selectedLayoutDetails })
+  }
 
   useEffect(() => {
     const fetchLayouts = async () => {
@@ -51,39 +64,23 @@ function Layout () {
   const handleLayoutChange = (e) => {
     setSelectedLayout(e)
   }
+
   const handleDragEnd = (result) => {
-    console.log(result, 'resultado') // 20 -> 22
-    // {draggableId: '20',
-    //  type: 'DEFAULT',
-    //  source: {droppableId: '1', index: 22},
-    //  reason: 'DROP',
-    //  mode: 'FLUID'
-    //  combine: nulldestination:
-    //  draggableId: "20"mode: "FLUID"reason: "DROP"source:
-    //   {index: 20, droppableId: '1'}type: "DEFAULT"[[Prototype]]: Object 'resultado'
     if (!result.destination) return
-
     const updatedLayoutDetails = { ...selectedLayoutDetails }
-
-    // Verifica que la bandeja exista antes de intentar acceder a sus columnas
     const sourceTray = updatedLayoutDetails.trays[parseInt(result.source.droppableId)]
-    console.log(sourceTray, 'source tray')
-    if (!sourceTray) return // Puedes manejar esto según tus necesidades
-
+    if (!sourceTray) return
     const trayColumns = [...sourceTray.columns]
-    console.log(trayColumns, 'tray columns')
-    const startIndex = result.source.index % 10 // 0
-    const endIndex = result.destination.index % 10 // 2
-    console.log(startIndex, 'start index')
-    console.log(endIndex, 'end index')
-
+    const startIndex = result.source.index % 10
+    const endIndex = result.destination.index % 10
     const [reorderedColumn] = trayColumns.splice(startIndex, 1)
     trayColumns.splice(endIndex, 0, reorderedColumn)
-
-    // Actualiza las columnas de la bandeja
     sourceTray.columns = trayColumns
-
     setSelectedLayoutDetails(updatedLayoutDetails)
+  }
+
+  const handleNewLayoutNameChange = (value) => {
+    setNewLayoutName(value)
   }
 
   return (
@@ -92,26 +89,40 @@ function Layout () {
         <div className='flex justify-center text-center p-5'>
           <h2 className='text-d-dark-dark-purple text-2xl font-bold'>Administra Layout</h2>
         </div>
+        <h3 className='text-center'>En esta sección podrás crear un nuevo layout basándote en plantillas existentes</h3>
 
         <div className='flex justify-center items-center p-5'>
-          <div className='flex flex-row items-center'>
+          <div className='flex flex-row items-center gap-4'>
             <select
               className='select select-sm select-bordered rounded-full w-full md:max-w-xs'
               onChange={(e) => handleLayoutChange(e.target.value)}
               value={selectedLayout}
             >
-              <option value='0'>Selecciona un layout</option>
+              <option value='0'>Selecciona un layout existente</option>
               {layouts && layouts.map((layout) => (
                 <option key={layout.id}>
                   {layout.name}
                 </option>
               ))}
             </select>
+            <input
+              type='text'
+              className='rounded-full w-full md:max-w-xs border border-black px-4 py-2'
+              placeholder='Nombre de nuevo layout'
+              onChange={(e) => handleNewLayoutNameChange(e.target.value)}
+              value={newLayoutName}
+            />
+            {/* <button
+              className='bg-blue-500 text-white rounded-full px-4 py-2'
+              onClick={handleSaveNewLayout}
+            >
+              Guardar
+            </button> */}
           </div>
         </div>
 
         <div className={`${selectedLayoutDetails !== '0' ? 'flex flex-col items-center justify-center' : 'hidden'}`} />
-        <div className='p-10  border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700'>
+        <div className='p-10  border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 '>
           <h5 className='text-2xl text-center mb-3 font-bold text-gray-900 dark:text-white'>{selectedLayout}</h5>
           {selectedLayoutDetails && selectedLayoutDetails.trays && selectedLayoutDetails.trays.map((tray, trayIndex) => (
             <DraggableTray
@@ -120,6 +131,7 @@ function Layout () {
               trayIndex={trayIndex}
               products={products}
               selectedLayoutDetails={selectedLayoutDetails}
+              quantityChangeHandler={quantityChangeHandler}
 
             />
           ))}

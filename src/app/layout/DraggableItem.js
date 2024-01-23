@@ -10,9 +10,7 @@ function DraggableItem () {
           ref={provided.innerRef}
           {...provided.draggableProps}
           {...provided.dragHandleProps}
-        >
-          {/* Contenido del elemento arrastrable */}
-        </div>
+        />
       )}
     </Draggable>
   )
