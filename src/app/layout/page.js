@@ -1,10 +1,11 @@
 'use client'
-import { getAllLayouts } from '@/api/layout'
+import { getAllLayouts, createLayout } from '@/api/layout'
 import React, { useState, useEffect } from 'react'
 import DraggableTray from './DraggableTray'
 import { DragDropContext } from '@hello-pangea/dnd'
 
 import { getAllReiteData } from '@/api/product/reite'
+import { swallError, swallInfo } from '@/utils/sweetAlerts'
 
 function Layout () {
   const [layouts, setLayouts] = useState([])
@@ -26,6 +27,16 @@ function Layout () {
       })
     })
     setSelectedLayoutDetails({ ...selectedLayoutDetails })
+  }
+  const hanldeDeleteProduct = (productId) => {
+    console.log('Eliminar producto:', productId)
+    const newLayout = { ...selectedLayoutDetails } // Crear una copia del objeto
+
+    newLayout.trays.forEach((tray) => {
+      tray.columns = tray.columns.filter((column) => column.productId !== productId)
+    })
+
+    setSelectedLayoutDetails(newLayout)
   }
 
   useEffect(() => {
@@ -61,6 +72,27 @@ function Layout () {
     setSelectedLayoutDetails(layoutDetails || null)
   }, [selectedLayout, layouts, selectedLayoutDetails])
 
+  const handleSaveNewLayout = async () => {
+    if (newLayoutName.length > 0) {
+      const data = {
+        name: newLayoutName,
+        layout: selectedLayoutDetails.trays
+      }
+
+      try {
+        const response = await createLayout(data)
+        swallInfo('Layout creado exitosamente')
+        // TODO: REDIRIGIR DONDE SE MUESTRE EL LAYOUT CREADO
+        console.log(response, 'respuesta crear layout')
+      } catch (error) {
+        swallError('Error al crear Layout')
+        console.error(error, 'Error al crear Layout')
+      }
+    } else {
+      swallError('El nombre del nuevo layout no puede estar vacío')
+      console.error('El nombre del nuevo layout no puede estar vacío')
+    }
+  }
   const handleLayoutChange = (e) => {
     setSelectedLayout(e)
   }
@@ -112,12 +144,6 @@ function Layout () {
               onChange={(e) => handleNewLayoutNameChange(e.target.value)}
               value={newLayoutName}
             />
-            {/* <button
-              className='bg-blue-500 text-white rounded-full px-4 py-2'
-              onClick={handleSaveNewLayout}
-            >
-              Guardar
-            </button> */}
           </div>
         </div>
 
@@ -132,13 +158,27 @@ function Layout () {
               products={products}
               selectedLayoutDetails={selectedLayoutDetails}
               quantityChangeHandler={quantityChangeHandler}
+              hanldeDeleteProduct={hanldeDeleteProduct}
 
             />
           ))}
         </div>
 
       </div>
+      <div className='flex justify-center pb-10'>
+        <button
+          type='button'
+          onClick={handleSaveNewLayout}
+          className='inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-d-dark-dark-purple rounded-lg hover:bg-d-soft-soft-purple hover:text-d-dark-dark-purple focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800'
+        >
+          Crear Nuevo Layout
+          <svg className='w-3.5 h-3.5 ml-2' aria-hidden='true' xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 14 10'>
+            <path stroke='currentColor' strokeLinecap='round' strokeLinejoin='round' strokeWidth='2' d='M1 5h12m0 0L9 1m4 4L9 9' />
+          </svg>
+        </button>
+      </div>
     </DragDropContext>
+
   )
 }
 export default Layout
