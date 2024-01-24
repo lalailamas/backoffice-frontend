@@ -16,30 +16,11 @@ function Layout () {
   // console.log(selectedLayoutDetails, 'detalles de layout seleccionado')
 
   const [products, setProducts] = useState([])
+  const [newProductTrayIndex, setNewProductTrayIndex] = useState(null)
+  console.log(newProductTrayIndex, 'newProductTrayIndex')
   //   console.log(products, 'productos')
   const [newLayoutName, setNewLayoutName] = useState('')
-  const [addProductModal, setAddProductModal] = useState(false)
-
-  const quantityChangeHandler = (productId, quantity) => {
-    selectedLayoutDetails.trays.forEach((tray) => {
-      tray.columns.forEach((column) => {
-        if (column.productId === productId) {
-          column.maxQuantity = quantity
-        }
-      })
-    })
-    setSelectedLayoutDetails({ ...selectedLayoutDetails })
-  }
-  const hanldeDeleteProduct = (productId) => {
-    console.log('Eliminar producto:', productId)
-    const newLayout = { ...selectedLayoutDetails } // Crear una copia del objeto
-
-    newLayout.trays.forEach((tray) => {
-      tray.columns = tray.columns.filter((column) => column.productId !== productId)
-    })
-
-    setSelectedLayoutDetails(newLayout)
-  }
+  const [showProductModal, setShowProductModal] = useState(false)
 
   useEffect(() => {
     const fetchLayouts = async () => {
@@ -74,6 +55,43 @@ function Layout () {
     setSelectedLayoutDetails(layoutDetails || null)
   }, [selectedLayout, layouts, selectedLayoutDetails])
 
+  const quantityChangeHandler = (productId, quantity) => {
+    selectedLayoutDetails.trays.forEach((tray) => {
+      tray.columns.forEach((column) => {
+        if (column.productId === productId) {
+          column.maxQuantity = quantity
+        }
+      })
+    })
+    setSelectedLayoutDetails({ ...selectedLayoutDetails })
+  }
+  const handleDeleteProduct = (productId) => {
+    console.log('Eliminar producto:', productId)
+    const newLayout = { ...selectedLayoutDetails } // Crear una copia del objeto
+
+    newLayout.trays.forEach((tray) => {
+      tray.columns = tray.columns.filter((column) => column.productId !== productId)
+    })
+
+    setSelectedLayoutDetails(newLayout)
+  }
+  const handleSaveNewProduct = (newProduct, quantity) => {
+    // console.log('Guardar nuevo producto:', newProduct, quantity)
+    const productLayout = {
+      productId: newProduct.productId,
+      maxQuantity: quantity
+    }
+    console.log(productLayout, 'productLayout')
+    console.log(newProductTrayIndex, 'newProductTrayIndex')
+    const newLayout = { ...selectedLayoutDetails }
+    newLayout.trays.forEach((tray, index) => {
+      if (index === newProductTrayIndex) {
+        tray.columns.push(productLayout)
+      }
+    })
+    setSelectedLayoutDetails(newLayout)
+  }
+
   const handleSaveNewLayout = async () => {
     if (newLayoutName.length > 0) {
       const data = {
@@ -97,6 +115,11 @@ function Layout () {
   }
   const handleLayoutChange = (e) => {
     setSelectedLayout(e)
+  }
+  const handleShowProductModal = (trayIndex) => {
+    console.log('Mostrar trayIndex de producto', trayIndex)
+    if (trayIndex) { setNewProductTrayIndex(trayIndex) }
+    return setShowProductModal(!showProductModal)
   }
 
   const handleDragEnd = (result) => {
@@ -142,8 +165,8 @@ function Layout () {
               </select>
               <input
                 type='text'
-                className='rounded-full w-full md:max-w-xs border border-black px-4 py-2'
-                placeholder='Nombre de nuevo layout'
+                className='rounded-full w-full md:max-w-xs border border-gray-300 px-4 py-1'
+                placeholder='Nombre de Nuevo Layout'
                 onChange={(e) => handleNewLayoutNameChange(e.target.value)}
                 value={newLayoutName}
               />
@@ -154,16 +177,18 @@ function Layout () {
           <div className='p-10  border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 '>
             <h5 className='text-2xl text-center mb-3 font-bold text-gray-900 dark:text-white'>{selectedLayout}</h5>
             {selectedLayoutDetails && selectedLayoutDetails.trays && selectedLayoutDetails.trays.map((tray, trayIndex) => (
-              <DraggableTray
-                key={trayIndex}
-                tray={tray}
-                trayIndex={trayIndex}
-                products={products}
-                selectedLayoutDetails={selectedLayoutDetails}
-                quantityChangeHandler={quantityChangeHandler}
-                hanldeDeleteProduct={hanldeDeleteProduct}
-                setAddProductModal={setAddProductModal}
-              />
+              <React.Fragment key={trayIndex}>
+                <DraggableTray
+                  tray={tray}
+                  trayIndex={trayIndex}
+                  products={products}
+                  selectedLayoutDetails={selectedLayoutDetails}
+                  quantityChangeHandler={quantityChangeHandler}
+                  handleDeleteProduct={handleDeleteProduct}
+                  handleShowProductModal={() => handleShowProductModal(trayIndex)}
+                />
+
+              </React.Fragment>
             ))}
           </div>
 
@@ -181,9 +206,15 @@ function Layout () {
           </button>
         </div>
       </DragDropContext>
-      {addProductModal && (
-        <AddProductModal products={products} />
+      {/* AddProductModal inside the map */}
+      {showProductModal && (
+        <AddProductModal
+          products={products}
+          handleShowProductModal={handleShowProductModal}
+          handleSaveNewProduct={handleSaveNewProduct}
+        />
       )}
+
     </div>
   )
 }
