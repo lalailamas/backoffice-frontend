@@ -1,14 +1,10 @@
-import React, { useState, useEffect } from 'react'
-import { patchReitePrices } from '@/api/product/reite'
+import React, { useState } from 'react'
 // SearchSelect
 import { SearchSelect, SearchSelectItem } from '@tremor/react'
 
 function AddProductModal ({ products, handleShowProductModal, handleSaveNewProduct }) {
-  // console.log(products, 'products')
   const [newProduct, setNewProduct] = useState('')
   const [quantity, setQuantity] = useState('')
-  console.log(newProduct, 'product')
-  console.log(quantity, 'quantity')
   const handleNewQuantityChange = (e) => {
     setQuantity(e)
   }

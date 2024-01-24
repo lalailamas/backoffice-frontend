@@ -5,8 +5,6 @@ import { Draggable } from '@hello-pangea/dnd'
 
 function DraggableProduct ({ product, combinedIndex, selectedLayoutDetails, quantityChangeHandler, handleDeleteProduct }) {
   const index = parseInt(combinedIndex, 10)
-  // console.log(selectedLayoutDetails, 'SelectedLayoutDetails del DraggableProducts')
-  // console.log(product, 'product del DraggableProducts')
   const [quantity, setQuantity] = useState(selectedLayoutDetails.maxQuantities[product.productId])
 
   const handleIncrease = () => {

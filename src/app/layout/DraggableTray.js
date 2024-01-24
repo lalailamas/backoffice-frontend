@@ -18,7 +18,6 @@ function DraggableTray ({ tray, trayIndex, products, selectedLayoutDetails, quan
                   const product = products.find((prod) => prod.productId === column.productId)
                   const trayNumber = trayIndex + 1
                   const combinedIndex = `${trayNumber.toString()}${columnIndex.toString()}`
-
                   return (
 
                     <DraggableProduct

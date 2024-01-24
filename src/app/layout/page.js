@@ -17,7 +17,7 @@ function Layout () {
 
   const [products, setProducts] = useState([])
   const [newProductTrayIndex, setNewProductTrayIndex] = useState(null)
-  console.log(newProductTrayIndex, 'newProductTrayIndex')
+  // console.log(newProductTrayIndex, 'newProductTrayIndex')
   //   console.log(products, 'productos')
   const [newLayoutName, setNewLayoutName] = useState('')
   const [showProductModal, setShowProductModal] = useState(false)
@@ -75,23 +75,33 @@ function Layout () {
 
     setSelectedLayoutDetails(newLayout)
   }
+
+  // Agregar nuevo producto a una bandeja
   const handleSaveNewProduct = (newProduct, quantity) => {
-    // console.log('Guardar nuevo producto:', newProduct, quantity)
+    const quantityNumber = parseInt(quantity)
     const productLayout = {
-      productId: newProduct.productId,
-      maxQuantity: quantity
+      productId: newProduct,
+      maxQuantity: quantityNumber
     }
-    console.log(productLayout, 'productLayout')
-    console.log(newProductTrayIndex, 'newProductTrayIndex')
     const newLayout = { ...selectedLayoutDetails }
     newLayout.trays.forEach((tray, index) => {
       if (index === newProductTrayIndex) {
         tray.columns.push(productLayout)
       }
     })
+
+    if (newProduct in newLayout.maxQuantities) {
+      newLayout.maxQuantities[newProduct] += quantityNumber
+    } else {
+      newLayout.maxQuantities[newProduct] = quantityNumber
+    }
+
     setSelectedLayoutDetails(newLayout)
+    console.log(newLayout, 'newLayout')
+    setShowProductModal(false)
   }
 
+  // Crear nuevo layout
   const handleSaveNewLayout = async () => {
     if (newLayoutName.length > 0) {
       const data = {
@@ -117,8 +127,7 @@ function Layout () {
     setSelectedLayout(e)
   }
   const handleShowProductModal = (trayIndex) => {
-    console.log('Mostrar trayIndex de producto', trayIndex)
-    if (trayIndex) { setNewProductTrayIndex(trayIndex) }
+    setNewProductTrayIndex(trayIndex)
     return setShowProductModal(!showProductModal)
   }
 
@@ -185,7 +194,7 @@ function Layout () {
                   selectedLayoutDetails={selectedLayoutDetails}
                   quantityChangeHandler={quantityChangeHandler}
                   handleDeleteProduct={handleDeleteProduct}
-                  handleShowProductModal={() => handleShowProductModal(trayIndex)}
+                  handleShowProductModal={handleShowProductModal}
                 />
 
               </React.Fragment>
