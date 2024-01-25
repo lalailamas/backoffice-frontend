@@ -9,7 +9,7 @@ import useGetInventory from '@/hooks/useGetInventory'
 import { useState } from 'react'
 import useGetProdByStore from '@/hooks/useGetProdByStore'
 import { putRestockResult } from '@/api/restock'
-import ConfirmationModal from '../confirmationModal'
+import ConfirmationModal from '../../../components/admin/modals/confirmationModal'
 import { swallError } from '@/utils/sweetAlerts'
 import { errorHandler } from '@/utils/errors/errors'
 
