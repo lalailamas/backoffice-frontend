@@ -4,6 +4,11 @@ const Seasons = {
   transversal: 'Transversal'
 
 }
+const proxy_duration = { // eslint-disable-line camelcase
+  corta: 'Corta',
+  media: 'Media',
+  noPerecible: 'No Perecible'
+}
 
 const Categories = {
   desayuno: 'Desayuno',
@@ -16,4 +21,4 @@ const Categories = {
   snack: 'Snack'
 }
 
-export { Seasons, Categories }
+export { Seasons, Categories, proxy_duration } // eslint-disable-line camelcase
