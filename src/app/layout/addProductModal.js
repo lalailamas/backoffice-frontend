@@ -4,7 +4,7 @@ import { SearchSelect, SearchSelectItem } from '@tremor/react'
 
 function AddProductModal ({ products, handleShowProductModal, handleSaveNewProduct }) {
   const [newProduct, setNewProduct] = useState('')
-  const [quantity, setQuantity] = useState('')
+  const [quantity, setQuantity] = useState(null)
   const handleNewQuantityChange = (e) => {
     setQuantity(e)
   }
