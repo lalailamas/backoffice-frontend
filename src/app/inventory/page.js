@@ -6,7 +6,7 @@ import EditProductModal from '@/components/admin/modals/product/edit'
 import useGetWarehouses from '@/hooks/useWarehouses'
 // import S from '@/lib/storage'
 import { SearchField } from '@/components/admin/common/search'
-import { findProductByEAN, getProduct, updateProductImage, updateProductStock, deleteProduct, createProduct, updateProduct } from '@/api/product'
+import { findProductByEAN, getProduct, updateProductImage, deleteProduct, createProduct, updateProduct } from '@/api/product'
 
 export default function Inventory () {
   const [cachekey, setCachekey] = useState(0)
@@ -14,6 +14,7 @@ export default function Inventory () {
   const [params, setParams] = useState({ limit: 10, page: 1, search: '' })
   const [warehouseParams] = useState({ limit: 10, page: 1 })
   const { products } = useGetProducts(params, cachekey)
+  // console.log(products, 'products')
   const { warehouses } = useGetWarehouses(warehouseParams, cachekey)
   const [scanMode, setScanMode] = useState(false)
   const [currentEan, setCurrentEan] = useState('')
@@ -77,16 +78,15 @@ export default function Inventory () {
         Promise.all([responseGet])
         const product = responseGet.data
         console.log(product)
-        let newStock = currentQuantity
 
-        if (product.warehouse_product && product.warehouse_product.length > 0) {
-          const filtered = product.warehouse_product.filter(w => w.warehouse_id === currentWarehouse)[0]
-          if (filtered) {
-            newStock = parseInt(filtered.stock) + currentQuantity
-          }
-        }
-        const update = await updateProductStock({ productId: product.id, warehouseId: currentWarehouse, stock: newStock })
-        Promise.all([update])
+        // if (product.warehouse_product && product.warehouse_product.length > 0) {
+        //   const filtered = product.warehouse_product.filter(w => w.warehouse_id === currentWarehouse)[0]
+        //   if (filtered) {
+        //     newStock = parseInt(filtered.stock) + currentQuantity
+        //   }
+        // }
+        // const update = await updateProductStock({ productId: product.id, warehouseId: currentWarehouse, stock: newStock })
+        // Promise.all([update])
         setCurrentQuantity(1)
         scanElement.current.focus()
 
@@ -164,13 +164,13 @@ export default function Inventory () {
       <div className='w-full p-8'>
         <div className='flex flex-col md:flex-row mt-4 gap-y-4 md:gap-y-0 md:gap-x-4 mb-4 min-[430px]:text-center '>
           <h2 className='text-d-dark-dark-purple text-2xl font-bold'>Productos</h2>
-          <select value={currentWarehouse} onChange={(e) => { setCurrentWarehouse(e.target.value) }} className='select select-sm select-bordered  rounded-full w-full md:max-w-xs'>
+          {/* <select value={currentWarehouse} onChange={(e) => { setCurrentWarehouse(e.target.value) }} className='select select-sm select-bordered  rounded-full w-full md:max-w-xs'>
             <option disabled value={0}>Bodega</option>
             {warehouses && warehouses.map(w =>
               <option key={w.id} value={w.id}>{w.name}</option>
             )}
 
-          </select>
+          </select> */}
           <div className='rounded-full text-d-dark-dark-purple py-1 min-[430px]:hidden md:block'>
             <div className='form-control'>
               <label className='label p-0'>
@@ -240,7 +240,9 @@ export default function Inventory () {
             </div>}
         </div>
         <div className='divider' />
-        <ProductsTable products={products} edit={handleEditProduct} showTraining={showTraining} showMachines={showMachines} showExpiration={showExpiration} warehouses={warehouses} />
+        {products && products.length > 0 &&
+
+          <ProductsTable products={products} edit={handleEditProduct} showTraining={showTraining} showMachines={showMachines} showExpiration={showExpiration} />}
         <div className='w-full flex flex-row mt-4' />
       </div>
 
