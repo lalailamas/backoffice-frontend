@@ -66,11 +66,23 @@ function Layout () {
     setSelectedLayoutDetails({ ...selectedLayoutDetails })
   }
   const handleDeleteProduct = (productId) => {
-    console.log('Eliminar producto:', productId)
-    const newLayout = { ...selectedLayoutDetails } // Crear una copia del objeto
+    // console.log('Eliminar producto:', productId)
+    const newLayout = { ...selectedLayoutDetails }
 
+    // Usar una bandera para rastrear si ya se eliminó un producto con el mismo ID
+    let productRemoved = false
+
+    // Recorrer cada bandeja
     newLayout.trays.forEach((tray) => {
-      tray.columns = tray.columns.filter((column) => column.productId !== productId)
+      // Actualizar las columnas de la bandeja
+      tray.columns = tray.columns.filter((column) => {
+        // Verificar si el ID coincide y aún no se ha eliminado un producto con el mismo ID
+        if (column.productId === productId && !productRemoved) {
+          productRemoved = true // Marcar que se ha eliminado un producto
+          return false // No incluir este producto en el nuevo array
+        }
+        return true // Incluir otros productos en el nuevo array
+      })
     })
 
     setSelectedLayoutDetails(newLayout)

@@ -1,19 +1,34 @@
-// DraggableTray.js
-import React from 'react'
+'use client'
+import React, { useEffect, useState } from 'react'
 import { Droppable } from '@hello-pangea/dnd'
 import DraggableProduct from './DraggableProduct'
 
 function DraggableTray ({ tray, trayIndex, products, selectedLayoutDetails, quantityChangeHandler, handleDeleteProduct, handleShowProductModal }) {
+  const [droppableDirection, setDroppableDirection] = useState(
+    window.innerWidth <= 431 ? 'vertical' : 'horizontal'
+  )
+
+  useEffect(() => {
+    const handleResize = () => {
+      setDroppableDirection(window.innerWidth <= 431 ? 'vertical' : 'horizontal')
+    }
+
+    window.addEventListener('resize', handleResize)
+    return () => {
+      window.removeEventListener('resize', handleResize)
+    }
+  }, [])
+
   return (
     <div key={trayIndex} className='text-center border-gray-300'>
       <div className='bg-d-dark-dark-purple'>
         <h2 className='text-d-soft-purple text-sm font-bold p-4'>{`BANDEJA ${trayIndex + 1}`}</h2>
       </div>
       {tray && tray.columns && (
-        <ul className='flex flex-row lg:flex-col lg:items-center justify-center p-4 lg:p-0'>
-          <Droppable droppableId={trayIndex.toString()} direction='horizontal'>
+        <ul className='flex flex-row justify-start p-4'>
+          <Droppable droppableId={trayIndex.toString()} direction={droppableDirection}>
             {(provided) => (
-              <div className='grid grid-cols-9' ref={provided.innerRef} {...provided.droppableProps}>
+              <div className='grid grid-cols-10 max-[431px]:flex flex-col' ref={provided.innerRef} {...provided.droppableProps}>
                 {tray.columns.map((column, columnIndex) => {
                   const product = products.find((prod) => prod.productId === column.productId)
                   const trayNumber = trayIndex + 1
@@ -31,19 +46,27 @@ function DraggableTray ({ tray, trayIndex, products, selectedLayoutDetails, quan
 
                   )
                 })}
-                <button onClick={(e) => { e.stopPropagation(); handleShowProductModal(trayIndex) }}>
-                  <div className='flex flex-col items-center justify-center text-center  w-[100px] h-[140px]   border border-gray-200 rounded-lg shadow text-xs bg-white hover:bg-d-soft-soft-purple gap-4'>
-                    <svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' strokeWidth='1.5' stroke='currentColor' className='w-8 h-8'>
-                      <path strokeLinecap='round' strokeLinejoin='round' d='M12 4.5v15m7.5-7.5h-15' />
-                    </svg>
-                    <span className='text-center'>Agregar Producto</span>
-                  </div>
-                </button>
 
                 {provided.placeholder}
               </div>
             )}
           </Droppable>
+
+          <button
+            onClick={(e) => {
+              e.stopPropagation()
+              handleShowProductModal(trayIndex)
+            }}
+            className='ml-auto max-[431px]:flex flex-col'
+          >
+            <div className='flex flex-col items-center justify-center text-center w-[100px] h-[140px] border border-gray-200 rounded-lg shadow text-xs bg-white hover:bg-d-soft-soft-purple gap-4'>
+              <svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' strokeWidth='1.5' stroke='currentColor' className='w-8 h-8'>
+                <path strokeLinecap='round' strokeLinejoin='round' d='M12 4.5v15m7.5-7.5h-15' />
+              </svg>
+              <span className='text-center'>Agregar Producto</span>
+            </div>
+          </button>
+
         </ul>
       )}
     </div>

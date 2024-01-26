@@ -35,26 +35,30 @@ function DraggableProduct ({ product, combinedIndex, selectedLayoutDetails, quan
             {product
               ? (
 
-                <section className='flex flex-col items-end justify-end w-[100px] h-[140px] border border-gray-200 rounded-lg shadow text-xs bg-white'>
-                  <button className='btn-xs text-xs pt-4' onClick={() => handleDeleteProduct(product.productId)}>
-                    <svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' strokeWidth='1.5' stroke='currentColor' className='w-4 h-4 '>
-                      <path strokeLinecap='round' strokeLinejoin='round' d='M6 18 18 6M6 6l12 12' />
-                    </svg>
-                  </button>
-                  <div className='px-2 pt-2 flex flex-col items-center justify-center h-full self-center'>
-                    <img
-                      className='max-w-[25px] h-[25px] mx-auto self-center'
-                      src={product.metadata.imageUrl}
-                      width={100}
-                      height={100}
-                      alt='Product'
-                    />
-                    <p className='text-gray-600 dark:text-gray-300 text-xs text-center'>
-                      {product.productName.length > 20
-                        ? `${product.productName.substring(0, 20)}...`
-                        : product.productName}
-                    </p>
+                <section className='flex flex-col items-end justify-end w-[100px] h-[140px] border border-gray-200 rounded-lg shadow text-xs bg-white hover:border-b-2 border-transparent transition-all duration-300'>
 
+                  <div className='px-2 flex flex-col h-full'>
+                    <div className='flex justify-end align-end'>
+                      <button onClick={() => handleDeleteProduct(product.productId)}>
+                        <svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' strokeWidth='1.5' stroke='currentColor' className='w-4 h-4 '>
+                          <path strokeLinecap='round' strokeLinejoin='round' d='M6 18 18 6M6 6l12 12' />
+                        </svg>
+                      </button>
+                    </div>
+                    <div className='flex flex-col items-center' style={{ minHeight: '60px' }}>
+                      <img
+                        className='max-w-[25px] h-[25px] mx-auto'
+                        src={product.metadata.imageUrl}
+                        width={100}
+                        height={100}
+                        alt='Product'
+                      />
+                      <p className='text-gray-600 dark:text-gray-300 text-xs text-center'>
+                        {product.productName.length > 20
+                          ? `${product.productName.substring(0, 20)}...`
+                          : product.productName}
+                      </p>
+                    </div>
                   </div>
 
                   <div className='flex flex-row pt-8 items-center align-center justify-center'>
