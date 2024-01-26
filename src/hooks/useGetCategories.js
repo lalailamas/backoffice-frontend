@@ -4,15 +4,17 @@ import { useEffect, useState } from 'react'
 export default function useGetCategories () {
   const [state, setState] = useState({
     categories: [],
+    meta: [],
     categoryLoad: true,
     error: null
   })
   const fetchCategories = async () => {
     try {
-      const categoriesResponse = await listCategories()
+      const categoriesResponse = await listCategories(20, 1, [])
       if (categoriesResponse) {
         setState({
-          categories: categoriesResponse,
+          categories: categoriesResponse.data,
+          meta: categoriesResponse.meta,
           categoryLoad: false,
           error: null
         })

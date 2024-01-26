@@ -3,19 +3,18 @@ import useGetProducts from '@/hooks/useProducts'
 import { useEffect, useRef, useState } from 'react'
 import ProductsTable from '@/components/admin/tables/products'
 import EditProductModal from '@/components/admin/modals/product/edit'
-import useGetWarehouses from '@/hooks/useWarehouses'
-// import S from '@/lib/storage'
 import { SearchField } from '@/components/admin/common/search'
 import { findProductByEAN, getProduct, updateProductImage, deleteProduct, createProduct, updateProduct } from '@/api/product'
+import useGetCategories from '@/hooks/useGetCategories'
 
 export default function Inventory () {
   const [cachekey, setCachekey] = useState(0)
   const [searchKey, setSearchKey] = useState('')
   const [params, setParams] = useState({ limit: 10, page: 1, search: '' })
-  const [warehouseParams] = useState({ limit: 10, page: 1 })
   const { products } = useGetProducts(params, cachekey)
-  // console.log(products, 'products')
-  const { warehouses } = useGetWarehouses(warehouseParams, cachekey)
+  const { categories } = useGetCategories()
+  // console.log(categories, 'categories')
+
   const [scanMode, setScanMode] = useState(false)
   const [currentEan, setCurrentEan] = useState('')
 
@@ -25,12 +24,9 @@ export default function Inventory () {
   const [action, setAction] = useState('create')
 
   const [currentProduct, setCurrentProduct] = useState({})
-  const [currentWarehouse, setCurrentWarehouse] = useState(0)
   const [currentQuantity, setCurrentQuantity] = useState(1)
 
-  const [showTraining, setShowTraining] = useState(false)
   const [showMachines] = useState(false)
-  const [showExpiration, setShowExpiration] = useState(false)
 
   const handleNewProduct = () => {
     setCurrentProduct({})
@@ -79,14 +75,6 @@ export default function Inventory () {
         const product = responseGet.data
         console.log(product)
 
-        // if (product.warehouse_product && product.warehouse_product.length > 0) {
-        //   const filtered = product.warehouse_product.filter(w => w.warehouse_id === currentWarehouse)[0]
-        //   if (filtered) {
-        //     newStock = parseInt(filtered.stock) + currentQuantity
-        //   }
-        // }
-        // const update = await updateProductStock({ productId: product.id, warehouseId: currentWarehouse, stock: newStock })
-        // Promise.all([update])
         setCurrentQuantity(1)
         scanElement.current.focus()
 
@@ -164,30 +152,6 @@ export default function Inventory () {
       <div className='w-full p-8'>
         <div className='flex flex-col md:flex-row mt-4 gap-y-4 md:gap-y-0 md:gap-x-4 mb-4 min-[430px]:text-center '>
           <h2 className='text-d-dark-dark-purple text-2xl font-bold'>Productos</h2>
-          {/* <select value={currentWarehouse} onChange={(e) => { setCurrentWarehouse(e.target.value) }} className='select select-sm select-bordered  rounded-full w-full md:max-w-xs'>
-            <option disabled value={0}>Bodega</option>
-            {warehouses && warehouses.map(w =>
-              <option key={w.id} value={w.id}>{w.name}</option>
-            )}
-
-          </select> */}
-          <div className='rounded-full text-d-dark-dark-purple py-1 min-[430px]:hidden md:block'>
-            <div className='form-control'>
-              <label className='label p-0'>
-                <span className='label-text pr-4 text-d-dark-dark-purple'>Mostrar Entrenamiento</span>
-                <input type='checkbox' className='toggle  toggle-sm  toggle-primary' checked={showTraining} onChange={() => { setShowTraining(!showTraining) }} />
-              </label>
-            </div>
-          </div>
-
-          <div className='rounded-full  text-d-dark-dark-purple py-1 min-[430px]:hidden md:block'>
-            <div className='form-control'>
-              <label className='label p-0'>
-                <span className='label-text pr-4 text-d-dark-dark-purple'>Mostrar Expiración</span>
-                <input type='checkbox' className='toggle toggle-sm toggle-primary' checked={showExpiration} onChange={() => { setShowExpiration(!showExpiration) }} />
-              </label>
-            </div>
-          </div>
 
         </div>
         <div className='divider min-[430px]:hidden md:block ' />
@@ -242,12 +206,12 @@ export default function Inventory () {
         <div className='divider' />
         {products && products.length > 0 &&
 
-          <ProductsTable products={products} edit={handleEditProduct} showTraining={showTraining} showMachines={showMachines} showExpiration={showExpiration} />}
+          <ProductsTable products={products} edit={handleEditProduct} showMachines={showMachines} />}
         <div className='w-full flex flex-row mt-4' />
       </div>
 
       {showModal &&
-        <EditProductModal show={showModal} toggleModal={handleToggleModal} action={action} product={currentProduct} save={handleSave} deleter={handleDelete} />}
+        <EditProductModal categories={categories} show={showModal} toggleModal={handleToggleModal} action={action} product={currentProduct} save={handleSave} deleter={handleDelete} />}
 
     </>
 
