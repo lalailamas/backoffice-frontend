@@ -1,21 +1,33 @@
 'use client'
 // DraggableProduct.js
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Draggable } from '@hello-pangea/dnd'
 
 function DraggableProduct ({ product, combinedIndex, selectedLayoutDetails, quantityChangeHandler, handleDeleteProduct }) {
   const index = parseInt(combinedIndex, 10)
   const [quantity, setQuantity] = useState(selectedLayoutDetails.maxQuantities[product.productId])
+  // console.log(quantity, product.productId, 'cantidad')
+
+  useEffect(() => {
+    setQuantity(null)
+    setQuantity(selectedLayoutDetails.maxQuantities[product.productId])
+  }, [selectedLayoutDetails.maxQuantities, product.productId])
 
   const handleIncrease = () => {
-    setQuantity(quantity + 1)
-    quantityChangeHandler(product.productId, (quantity + 1))
+    setQuantity(prevQuantity => {
+      const newQuantity = prevQuantity + 1
+      quantityChangeHandler(product.productId, newQuantity)
+      return newQuantity
+    })
   }
 
   const handleDecrease = () => {
     if (quantity > 0) {
-      setQuantity(quantity - 1)
-      quantityChangeHandler(product.productId, (quantity - 1))
+      setQuantity(prevQuantity => {
+        const newQuantity = prevQuantity - 1
+        quantityChangeHandler(product.productId, newQuantity)
+        return newQuantity
+      })
     }
   }
 

@@ -53,7 +53,7 @@ function Layout () {
     const layoutDetails = layouts.find(layout => layout.name === selectedLayout)
     // console.log(layoutDetails, 'detalles de layout')
     setSelectedLayoutDetails(layoutDetails || null)
-  }, [selectedLayout, layouts, selectedLayoutDetails])
+  }, [selectedLayout, layouts])
 
   const quantityChangeHandler = (productId, quantity) => {
     selectedLayoutDetails.trays.forEach((tray) => {
@@ -146,7 +146,15 @@ function Layout () {
   const handleDragEnd = (result) => {
     if (!result.destination) return
     const updatedLayoutDetails = { ...selectedLayoutDetails }
+    console.log(updatedLayoutDetails, 'layout actualizado')
+
     const sourceTray = updatedLayoutDetails.trays[parseInt(result.source.droppableId)]
+    console.log(sourceTray, 'bandeja source')
+
+    const destinationTrayIndex = parseInt(result.destination.droppableId, 10)
+    console.log(destinationTrayIndex, 'destination bandeja index')
+    console.log(result.destination.droppableId, 'droppableID')
+
     if (!sourceTray) return
     const trayColumns = [...sourceTray.columns]
     const startIndex = result.source.index % 10
@@ -154,6 +162,7 @@ function Layout () {
     const [reorderedColumn] = trayColumns.splice(startIndex, 1)
     trayColumns.splice(endIndex, 0, reorderedColumn)
     sourceTray.columns = trayColumns
+
     setSelectedLayoutDetails(updatedLayoutDetails)
   }
 
