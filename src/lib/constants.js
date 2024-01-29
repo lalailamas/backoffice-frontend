@@ -5,9 +5,14 @@ const Seasons = {
 
 }
 const proxy_duration = { // eslint-disable-line camelcase
+  noPerecible: 'No Perecible',
   corta: 'Corta',
-  media: 'Media',
-  noPerecible: 'No Perecible'
+  media: 'Media'
+}
+const measure_unit = { // eslint-disable-line camelcase
+  gramos: 'gr',
+  unidades: 'un',
+  mililitros: 'ml'
 }
 
 const Categories = {
@@ -21,4 +26,4 @@ const Categories = {
   snack: 'Snack'
 }
 
-export { Seasons, Categories, proxy_duration } // eslint-disable-line camelcase
+export { Seasons, Categories, proxy_duration, measure_unit } // eslint-disable-line camelcase
