@@ -3,7 +3,6 @@ import { getAllLayouts, createLayout } from '@/api/layout'
 import React, { useState, useEffect } from 'react'
 import DraggableTray from './DraggableTray'
 import { DragDropContext } from '@hello-pangea/dnd'
-
 import { getAllReiteData } from '@/api/product/reite'
 import { swallError, swallInfo } from '@/utils/sweetAlerts'
 import AddProductModal from './addProductModal'
@@ -11,22 +10,17 @@ import AddProductModal from './addProductModal'
 function Layout () {
   const [layouts, setLayouts] = useState([])
   const [selectedLayout, setSelectedLayout] = useState('')
-  // console.log(selectedLayout, 'layout selected')
   const [selectedLayoutDetails, setSelectedLayoutDetails] = useState(null)
-  // console.log(selectedLayoutDetails, 'detalles de layout seleccionado')
-
   const [products, setProducts] = useState([])
   const [newProductTrayIndex, setNewProductTrayIndex] = useState(null)
-  // console.log(newProductTrayIndex, 'newProductTrayIndex')
-  //   console.log(products, 'productos')
   const [newLayoutName, setNewLayoutName] = useState('')
   const [showProductModal, setShowProductModal] = useState(false)
+  const [selectedTrayToDelete, setSelectedTrayToDelete] = useState(null)
 
   useEffect(() => {
     const fetchLayouts = async () => {
       try {
         const response = await getAllLayouts()
-        // console.log(response, 'respuesta todos los layouts')
         setLayouts(response)
       } catch (error) {
         console.error('Error al obtener los layouts:', error)
@@ -66,12 +60,9 @@ function Layout () {
     setSelectedLayoutDetails({ ...selectedLayoutDetails })
   }
   const handleDeleteProduct = (productId) => {
-    // console.log('Eliminar producto:', productId)
     const newLayout = { ...selectedLayoutDetails }
 
-    // Usar una bandera para rastrear si ya se eliminó un producto con el mismo ID
     let productRemoved = false
-
     // Recorrer cada bandeja
     newLayout.trays.forEach((tray) => {
       // Actualizar las columnas de la bandeja
@@ -146,14 +137,14 @@ function Layout () {
   const handleDragEnd = (result) => {
     if (!result.destination) return
     const updatedLayoutDetails = { ...selectedLayoutDetails }
-    console.log(updatedLayoutDetails, 'layout actualizado')
+    // console.log(updatedLayoutDetails, 'layout actualizado')
 
     const sourceTray = updatedLayoutDetails.trays[parseInt(result.source.droppableId)]
-    console.log(sourceTray, 'bandeja source')
+    // console.log(sourceTray, 'bandeja source')
 
-    const destinationTrayIndex = parseInt(result.destination.droppableId, 10)
-    console.log(destinationTrayIndex, 'destination bandeja index')
-    console.log(result.destination.droppableId, 'droppableID')
+    // const destinationTrayIndex = parseInt(result.destination.droppableId, 10)
+    // console.log(destinationTrayIndex, 'destination bandeja index')
+    // console.log(result.destination.droppableId, 'droppableID')
 
     if (!sourceTray) return
     const trayColumns = [...sourceTray.columns]
@@ -168,6 +159,34 @@ function Layout () {
 
   const handleNewLayoutNameChange = (value) => {
     setNewLayoutName(value)
+  }
+
+  const handleDeleteTray = (trayIndex) => {
+    const trayToDelete = selectedLayoutDetails.trays[trayIndex]
+    setSelectedTrayToDelete({ tray: trayToDelete, index: trayIndex })
+  }
+
+  const handleDeleteTrayConfirmed = () => {
+    if (selectedTrayToDelete) {
+      const updatedTrays = [...selectedLayoutDetails.trays]
+      updatedTrays.splice(selectedTrayToDelete.index, 1)
+      setSelectedLayoutDetails({
+        ...selectedLayoutDetails,
+        trays: updatedTrays
+      })
+      setSelectedTrayToDelete(null)
+    }
+  }
+
+  const handleAddTray = () => {
+    const newTray = {
+      columns: []
+    }
+    setSelectedLayoutDetails((prevDetails) => ({
+      ...prevDetails,
+      trays: [...prevDetails.trays, newTray]
+    }))
+    setSelectedTrayToDelete({ tray: newTray, index: selectedLayoutDetails.trays.length })
   }
 
   return (
@@ -208,6 +227,7 @@ function Layout () {
             <h5 className='text-2xl text-center mb-3 font-bold text-gray-900 dark:text-white'>{selectedLayout}</h5>
             {selectedLayoutDetails && selectedLayoutDetails.trays && selectedLayoutDetails.trays.map((tray, trayIndex) => (
               <React.Fragment key={trayIndex}>
+
                 <DraggableTray
                   tray={tray}
                   trayIndex={trayIndex}
@@ -216,6 +236,8 @@ function Layout () {
                   quantityChangeHandler={quantityChangeHandler}
                   handleDeleteProduct={handleDeleteProduct}
                   handleShowProductModal={handleShowProductModal}
+                  handleDeleteTray={() => handleDeleteTray(trayIndex)}
+                  handleDeleteTrayConfirmed={handleDeleteTrayConfirmed}
                 />
 
               </React.Fragment>
@@ -223,6 +245,18 @@ function Layout () {
           </div>
 
         </div>
+        <button
+          onClick={handleAddTray}
+          className='w-full px-4'
+        >
+          <div className='flex flex-row text-xs items-center justify-center text-center p-2 mb-4 border border-gray-200 rounded-lg shadow  bg-white hover:bg-d-soft-soft-purple gap-4'>
+            <svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' strokeWidth={1.5} stroke='currentColor' className='w-6 h-6'>
+              <path strokeLinecap='round' strokeLinejoin='round' d='M12 4.5v15m7.5-7.5h-15' />
+            </svg>
+
+            <span> Agregar Bandeja</span>
+          </div>
+        </button>
         <div className='flex justify-center pb-10'>
           <button
             type='button'
@@ -234,9 +268,10 @@ function Layout () {
               <path stroke='currentColor' strokeLinecap='round' strokeLinejoin='round' strokeWidth='2' d='M1 5h12m0 0L9 1m4 4L9 9' />
             </svg>
           </button>
+
         </div>
+
       </DragDropContext>
-      {/* AddProductModal inside the map */}
       {showProductModal && (
         <AddProductModal
           products={products}
@@ -244,7 +279,6 @@ function Layout () {
           handleSaveNewProduct={handleSaveNewProduct}
         />
       )}
-
     </div>
   )
 }

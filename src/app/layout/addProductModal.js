@@ -107,6 +107,7 @@ function AddProductModal ({ products, handleShowProductModal, handleSaveNewProdu
                 >
                   Agregar Producto
                 </button>
+
               </div>
             </div>
 

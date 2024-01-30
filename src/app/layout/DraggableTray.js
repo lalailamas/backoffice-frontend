@@ -2,11 +2,13 @@
 import React, { useEffect, useState } from 'react'
 import { Droppable } from '@hello-pangea/dnd'
 import DraggableProduct from './DraggableProduct'
+import ConfirmationModal from '../restock/confirmationModal'
 
-function DraggableTray ({ tray, trayIndex, products, selectedLayoutDetails, quantityChangeHandler, handleDeleteProduct, handleShowProductModal }) {
+function DraggableTray ({ tray, trayIndex, products, selectedLayoutDetails, quantityChangeHandler, handleDeleteProduct, handleShowProductModal, handleDeleteTray, handleDeleteTrayConfirmed }) {
   const [droppableDirection, setDroppableDirection] = useState(
     window.innerWidth <= 431 ? 'vertical' : 'horizontal'
   )
+  const [isConfirmationModalVisible, setConfirmationModalVisible] = useState(false)
 
   useEffect(() => {
     const handleResize = () => {
@@ -19,10 +21,16 @@ function DraggableTray ({ tray, trayIndex, products, selectedLayoutDetails, quan
     }
   }, [])
 
+  const handleRemoveTray = () => {
+    handleDeleteTray(trayIndex)
+    setConfirmationModalVisible(true)
+  }
+
   return (
     <div key={trayIndex} className='text-center border-gray-300'>
       <div className='bg-d-dark-dark-purple'>
         <h2 className='text-d-soft-purple text-sm font-bold p-4'>{`BANDEJA ${trayIndex + 1}`}</h2>
+
       </div>
       {tray && tray.columns && (
         <ul className='flex flex-row justify-start p-4'>
@@ -68,8 +76,36 @@ function DraggableTray ({ tray, trayIndex, products, selectedLayoutDetails, quan
           </button>
 
         </ul>
+
+      )}
+
+      <button
+        onClick={handleRemoveTray}
+        className='w-full'
+      >
+        <div className='flex flex-row text-xs text-red-500 items-center justify-center text-center p-2 mb-4 border border-gray-200 rounded-lg shadow  bg-white hover:bg-d-soft-soft-purple gap-4'>
+          <svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' strokeWidth={1.5} stroke='currentColor' className='w-6 h-6'>
+            <path strokeLinecap='round' strokeLinejoin='round' d='M5 12h14' />
+          </svg>
+          <span> Eliminar Bandeja</span>
+        </div>
+      </button>
+      {isConfirmationModalVisible && (
+        <ConfirmationModal
+          title='Eliminar Bandeja'
+          message={`¿Estás seguro de que deseas eliminar la BANDEJA ${trayIndex + 1}?`}
+          confirmButtonText='Eliminar'
+          cancelButtonText='Cancelar'
+          handleOperationConfirmation={() => {
+            handleDeleteTray()
+            handleDeleteTrayConfirmed()
+            setConfirmationModalVisible(false)
+          }}
+          handleConfirmationModal={() => setConfirmationModalVisible(false)}
+        />
       )}
     </div>
+
   )
 }
 
