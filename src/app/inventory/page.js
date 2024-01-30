@@ -14,14 +14,10 @@ export default function Inventory () {
   const [searchKey, setSearchKey] = useState('')
   const [page, setPage] = useState(1)
   const [params, setParams] = useState({ limit: 10, search: '' })
-  // const { products, meta } = useGetProducts(params, cachekey)
+  console.log(params, 'params')
   const [products, setProducts] = useState([])
   const [meta, setMeta] = useState(null)
-  // console.log(products, 'products')
-  // console.log(meta, 'meta del useproducts')
   const { categories } = useGetCategories()
-
-  // console.log(categories, 'categories')
 
   const [scanMode, setScanMode] = useState(false)
   const [currentEan, setCurrentEan] = useState('')
@@ -63,7 +59,6 @@ export default function Inventory () {
 
       if (response) {
         setProducts(response.data)
-        console.log(response.meta, 'response.meta')
         setMeta({
           pagination: {
             page: parseInt(response.meta.pagination.page),
@@ -79,7 +74,7 @@ export default function Inventory () {
   }
   useEffect(() => {
     fetchProducts()
-  }, [page])
+  }, [page, params])
 
   useEffect(
     () => {
