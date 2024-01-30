@@ -111,3 +111,29 @@ export const getDataForExcel = (relativeUrl) => {
   const fullUrl = baseUrl + relativeUrl
   return axios.get(fullUrl)
 }
+
+export const postProduct = async (product, image, url, contentType) => {
+  const data = new FormData()
+  for (const key of Object.keys(product)) {
+    data.append(key, product[key])
+  }
+  if (image) {
+    const fileName = `image_${product.ean}.png`
+    data.append('primary_image', image, fileName)
+  }
+  try {
+    const response = await axios({
+      method: 'post',
+      url: baseUrl + url,
+      data,
+      headers: {
+        'content-type': contentType
+      }
+    })
+
+    return response.data
+  } catch (error) {
+    console.error(error)
+    throw error
+  }
+}

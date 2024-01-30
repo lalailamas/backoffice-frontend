@@ -10,9 +10,9 @@ const proxy_duration = { // eslint-disable-line camelcase
   media: 'Media'
 }
 const measure_unit = { // eslint-disable-line camelcase
-  gramos: 'gr',
-  unidades: 'un',
-  mililitros: 'ml'
+  gr: 'gramos',
+  un: 'unidades',
+  ml: 'mililitros'
 }
 
 const Categories = {

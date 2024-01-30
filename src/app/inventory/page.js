@@ -6,6 +6,8 @@ import EditProductModal from '@/components/admin/modals/product/edit'
 import { SearchField } from '@/components/admin/common/search'
 import { findProductByEAN, getProduct, updateProductImage, deleteProduct, createProduct, updateProduct } from '@/api/product'
 import useGetCategories from '@/hooks/useGetCategories'
+import { swallError } from '@/utils/sweetAlerts'
+import { TryCatch } from '@sentry/nextjs'
 
 export default function Inventory () {
   const [cachekey, setCachekey] = useState(0)
@@ -94,38 +96,42 @@ export default function Inventory () {
 
     )
   }
-  const handleSave = (data) => {
+  const handleSave = async (formData, selectedImage) => {
     if (action === 'create') {
-      data.expiration_date = data.expiration_date.startDate
-      data.manufacture_date = data.manufacture_date.startDate
-
-      createProduct(data).then(
-        (response) => {
+      try {
+        const response = await createProduct(formData, selectedImage)
+        if (response) {
           setCachekey(cachekey + 1)
           setShowModal(false)
+          swallError('Producto creado correctamente', true)
         }
-      )
+      } catch (error) {
+        swallError('Error al crear el producto', false)
+        console.log(error)
+      }
     } else {
-      const image = data.image
-      data.expiration_date = data.expiration_date.startDate
-      data.manufacture_date = data.manufacture_date.startDate
+      const image = selectedImage
+      try {
+        updateProduct(formData).then(
+          () => {
+            if (image) {
+              updateProductImage(formData.id, image).then(
+                () => {
+                  setCachekey(cachekey + 1)
+                  setShowModal(false)
+                }
 
-      updateProduct(data).then(
-        () => {
-          if (image) {
-            updateProductImage(data.id, image).then(
-              () => {
-                setCachekey(cachekey + 1)
-                setShowModal(false)
-              }
-
-            )
-          } else {
-            setCachekey(cachekey + 1)
-            setShowModal(false)
+              )
+            } else {
+              setCachekey(cachekey + 1)
+              setShowModal(false)
+            }
           }
-        }
-      )
+        )
+      } catch (error) {
+        swallError('Error al editar el producto', false)
+        console.log(error)
+      }
     }
   }
 
