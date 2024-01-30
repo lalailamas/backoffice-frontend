@@ -13,7 +13,7 @@ const useGetProducts = (params, cachekey) => {
       (response) => {
         // console.log(response, 'response')
         setProducts(response.data)
-        setMeta(response.data.meta)
+        setMeta(response.meta)
       }
     ).catch((err) => {
       setError(err)

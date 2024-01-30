@@ -1,20 +1,26 @@
 'use client'
-import useGetProducts from '@/hooks/useProducts'
+// import useGetProducts from '@/hooks/useProducts'
 import { useEffect, useRef, useState } from 'react'
 import ProductsTable from '@/components/admin/tables/products'
 import EditProductModal from '@/components/admin/modals/product/edit'
 import { SearchField } from '@/components/admin/common/search'
-import { findProductByEAN, getProduct, updateProductImage, deleteProduct, createProduct, updateProduct } from '@/api/product'
+import { findProductByEAN, getProduct, updateProductImage, deleteProduct, createProduct, updateProduct, listProducts } from '@/api/product'
 import useGetCategories from '@/hooks/useGetCategories'
 import { swallError } from '@/utils/sweetAlerts'
-import { TryCatch } from '@sentry/nextjs'
+import Pager from '@/components/admin/common/pager'
 
 export default function Inventory () {
   const [cachekey, setCachekey] = useState(0)
   const [searchKey, setSearchKey] = useState('')
-  const [params, setParams] = useState({ limit: 10, page: 1, search: '' })
-  const { products } = useGetProducts(params, cachekey)
+  const [page, setPage] = useState(1)
+  const [params, setParams] = useState({ limit: 10, search: '' })
+  // const { products, meta } = useGetProducts(params, cachekey)
+  const [products, setProducts] = useState([])
+  const [meta, setMeta] = useState(null)
+  // console.log(products, 'products')
+  // console.log(meta, 'meta del useproducts')
   const { categories } = useGetCategories()
+
   // console.log(categories, 'categories')
 
   const [scanMode, setScanMode] = useState(false)
@@ -51,6 +57,29 @@ export default function Inventory () {
   const handleToggleModal = () => {
     setShowModal(!showModal)
   }
+  const fetchProducts = async () => {
+    try {
+      const response = await listProducts(params.limit, page, params.search)
+
+      if (response) {
+        setProducts(response.data)
+        console.log(response.meta, 'response.meta')
+        setMeta({
+          pagination: {
+            page: parseInt(response.meta.pagination.page),
+            pages: response.meta.pagination.pages,
+            total: response.meta.pagination.total,
+            limit: parseInt(response.meta.pagination.limit)
+          }
+        })
+      }
+    } catch (error) {
+      console.error('Error fetching categories', error)
+    }
+  }
+  useEffect(() => {
+    fetchProducts()
+  }, [page])
 
   useEffect(
     () => {
@@ -160,6 +189,7 @@ export default function Inventory () {
           <h2 className='text-d-dark-dark-purple text-2xl font-bold'>Productos</h2>
 
         </div>
+
         <div className='divider min-[430px]:hidden md:block ' />
         <div className='flex flex-col md:flex-row mt-4 gap-y-4 md:gap-y-0 md:gap-x-4 mb-4 min-[430px]:flex-wrap'>
 
@@ -213,7 +243,11 @@ export default function Inventory () {
         {products && products.length > 0 &&
 
           <ProductsTable products={products} edit={handleEditProduct} showMachines={showMachines} />}
+
         <div className='w-full flex flex-row mt-4' />
+        <div className='w-full flex flex-row mt-4 justify-center'>
+          <Pager meta={meta} setPage={setPage} />
+        </div>
       </div>
 
       {showModal &&
