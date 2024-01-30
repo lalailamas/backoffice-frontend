@@ -5,13 +5,18 @@ import { Draggable } from '@hello-pangea/dnd'
 
 function DraggableProduct ({ product, combinedIndex, selectedLayoutDetails, quantityChangeHandler, handleDeleteProduct }) {
   const index = parseInt(combinedIndex, 10)
-  const [quantity, setQuantity] = useState(selectedLayoutDetails.maxQuantities[product.productId])
+  const [quantity, setQuantity] = useState(product.maxQuantity)
   // console.log(quantity, product.productId, 'cantidad')
 
   useEffect(() => {
-    setQuantity(null)
-    setQuantity(selectedLayoutDetails.maxQuantities[product.productId])
-  }, [selectedLayoutDetails.maxQuantities, product.productId])
+    const currentTray = selectedLayoutDetails.trays.find((tray) =>
+      tray.columns.some((column) => column.productId === product.productId)
+    )
+    const currentColumn = currentTray?.columns.find(
+      (column) => column.productId === product.productId
+    )
+    setQuantity(currentColumn?.maxQuantity || null)
+  }, [selectedLayoutDetails.trays, product.productId])
 
   const handleIncrease = () => {
     setQuantity(prevQuantity => {
