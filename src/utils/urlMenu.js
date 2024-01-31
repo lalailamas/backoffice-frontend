@@ -43,8 +43,8 @@ export const menuItems = [
     label: 'Layout',
     icon: 'rotate-180',
     subMenuLinks: [
-      { label: 'Administra layout', href: '/layout' },
-      { label: 'Consulta layout existente', href: '/layout_request' },
+      { label: 'Crear layout', href: '/layout' },
+      { label: 'Editar layout', href: '/layout_edit' },
       { label: 'Enlaza layout con tienda', href: '/layout_linktostore' }
 
     ]

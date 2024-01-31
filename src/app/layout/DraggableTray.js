@@ -39,8 +39,12 @@ function DraggableTray ({ tray, trayIndex, products, selectedLayoutDetails, quan
               <div className='grid grid-cols-10 max-[431px]:flex flex-col' ref={provided.innerRef} {...provided.droppableProps}>
                 {tray.columns.map((column, columnIndex) => {
                   const product = products.find((prod) => prod.productId === column.productId)
+                  // console.log(product, 'product del dragglableTray')
                   const trayNumber = trayIndex + 1
                   const combinedIndex = `${trayNumber.toString()}${columnIndex.toString()}`
+                  const maxQuantity = column.maxQuantity
+                  // console.log(product, maxQuantity, 'DRAGGLABLETRAY')
+
                   return (
 
                     <DraggableProduct
@@ -50,6 +54,7 @@ function DraggableTray ({ tray, trayIndex, products, selectedLayoutDetails, quan
                       selectedLayoutDetails={selectedLayoutDetails}
                       quantityChangeHandler={quantityChangeHandler}
                       handleDeleteProduct={handleDeleteProduct}
+                      maxQuantity={maxQuantity}
                     />
 
                   )

@@ -3,20 +3,15 @@
 import React, { useEffect, useState } from 'react'
 import { Draggable } from '@hello-pangea/dnd'
 
-function DraggableProduct ({ product, combinedIndex, selectedLayoutDetails, quantityChangeHandler, handleDeleteProduct }) {
+function DraggableProduct ({ product, combinedIndex, quantityChangeHandler, handleDeleteProduct, maxQuantity }) {
   const index = parseInt(combinedIndex, 10)
-  const [quantity, setQuantity] = useState(product.maxQuantity)
+  // console.log(product, 'product del draggableProduct')
+  const [quantity, setQuantity] = useState()
   // console.log(quantity, product.productId, 'cantidad')
 
   useEffect(() => {
-    const currentTray = selectedLayoutDetails.trays.find((tray) =>
-      tray.columns.some((column) => column.productId === product.productId)
-    )
-    const currentColumn = currentTray?.columns.find(
-      (column) => column.productId === product.productId
-    )
-    setQuantity(currentColumn?.maxQuantity || null)
-  }, [selectedLayoutDetails.trays, product.productId])
+    setQuantity(maxQuantity)
+  }, [maxQuantity])
 
   const handleIncrease = () => {
     setQuantity(prevQuantity => {
@@ -54,9 +49,9 @@ function DraggableProduct ({ product, combinedIndex, selectedLayoutDetails, quan
 
                 <section className='flex flex-col items-end justify-end w-[100px] h-[140px] border border-gray-200 rounded-lg shadow text-xs bg-white hover:border-b-2 border-transparent transition-all duration-300'>
 
-                  <div className='px-2 flex flex-col h-full'>
+                  <div className='px-2 flex flex-col'>
                     <div className='flex justify-end align-end'>
-                      <button onClick={() => handleDeleteProduct(product.productId)}>
+                      <button onClick={() => handleDeleteProduct(product.productId, index)}>
                         <svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' strokeWidth='1.5' stroke='currentColor' className='w-4 h-4 '>
                           <path strokeLinecap='round' strokeLinejoin='round' d='M6 18 18 6M6 6l12 12' />
                         </svg>

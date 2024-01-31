@@ -6,6 +6,7 @@ import { DragDropContext } from '@hello-pangea/dnd'
 import { getAllReiteData } from '@/api/product/reite'
 import { swallError, swallInfo } from '@/utils/sweetAlerts'
 import AddProductModal from './addProductModal'
+import { useRouter } from 'next/navigation'
 
 function Layout () {
   const [layouts, setLayouts] = useState([])
@@ -16,6 +17,7 @@ function Layout () {
   const [newLayoutName, setNewLayoutName] = useState('')
   const [showProductModal, setShowProductModal] = useState(false)
   const [selectedTrayToDelete, setSelectedTrayToDelete] = useState(null)
+  const router = useRouter()
 
   useEffect(() => {
     const fetchLayouts = async () => {
@@ -29,6 +31,7 @@ function Layout () {
 
     fetchLayouts()
   }, [])
+  useEffect(() => {}, [selectedLayoutDetails])
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -59,27 +62,29 @@ function Layout () {
     })
     setSelectedLayoutDetails({ ...selectedLayoutDetails })
   }
-  const handleDeleteProduct = (productId) => {
+
+  const handleDeleteProduct = (productId, combinedIndex) => {
+    console.log(productId, combinedIndex, 'entreee')
+    const columnIndex = (combinedIndex % 10)
+    const trayIndex = (Math.floor((combinedIndex / 10) % 10)) - 1
+    console.log(trayIndex, 'trayIndex')
+    console.log(columnIndex, 'columnIndex')
+
     const newLayout = { ...selectedLayoutDetails }
-
-    let productRemoved = false
-    // Recorrer cada bandeja
-    newLayout.trays.forEach((tray) => {
-      // Actualizar las columnas de la bandeja
-      tray.columns = tray.columns.filter((column) => {
-        // Verificar si el ID coincide y aún no se ha eliminado un producto con el mismo ID
-        if (column.productId === productId && !productRemoved) {
-          productRemoved = true // Marcar que se ha eliminado un producto
-          return false // No incluir este producto en el nuevo array
-        }
-        return true // Incluir otros productos en el nuevo array
-      })
+    newLayout.trays.forEach((tray, index) => {
+      if (index === trayIndex) {
+        tray.columns = tray.columns.filter((column, colIndex) => {
+          if (column.productId === productId && colIndex === columnIndex) {
+            return false
+          }
+          return true
+        })
+      }
     })
-
     setSelectedLayoutDetails(newLayout)
+    console.log('Updated Layout Details:', newLayout)
   }
 
-  // Agregar nuevo producto a una bandeja
   const handleSaveNewProduct = (newProduct, quantity) => {
     const quantityNumber = parseInt(quantity)
     const productLayout = {
@@ -92,12 +97,6 @@ function Layout () {
         tray.columns.push(productLayout)
       }
     })
-
-    if (newProduct in newLayout.maxQuantities) {
-      newLayout.maxQuantities[newProduct] += quantityNumber
-    } else {
-      newLayout.maxQuantities[newProduct] = quantityNumber
-    }
 
     setSelectedLayoutDetails(newLayout)
     console.log(newLayout, 'newLayout')
@@ -115,7 +114,8 @@ function Layout () {
       try {
         const response = await createLayout(data)
         swallInfo('Layout creado exitosamente')
-        // TODO: REDIRIGIR DONDE SE MUESTRE EL LAYOUT CREADO
+        // if (response)
+        // router.push(`/layout/edit/${response.id}`)
         console.log(response, 'respuesta crear layout')
       } catch (error) {
         swallError('Error al crear Layout')
@@ -194,7 +194,7 @@ function Layout () {
       <DragDropContext onDragEnd={handleDragEnd}>
         <div className='p-5'>
           <div className='flex justify-center text-center p-5'>
-            <h2 className='text-d-dark-dark-purple text-2xl font-bold'>Administra Layout</h2>
+            <h2 className='text-d-dark-dark-purple text-2xl font-bold'>Crear Layout</h2>
           </div>
           <h3 className='text-center'>En esta sección podrás crear un nuevo layout basándote en plantillas existentes</h3>
 
