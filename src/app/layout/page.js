@@ -6,7 +6,7 @@ import { DragDropContext } from '@hello-pangea/dnd'
 import { getAllReiteData } from '@/api/product/reite'
 import { swallError, swallInfo } from '@/utils/sweetAlerts'
 import AddProductModal from './addProductModal'
-import { useRouter } from 'next/navigation'
+// import { useRouter } from 'next/navigation'
 
 function Layout () {
   const [layouts, setLayouts] = useState([])
@@ -17,7 +17,7 @@ function Layout () {
   const [newLayoutName, setNewLayoutName] = useState('')
   const [showProductModal, setShowProductModal] = useState(false)
   const [selectedTrayToDelete, setSelectedTrayToDelete] = useState(null)
-  const router = useRouter()
+  // const router = useRouter()
 
   useEffect(() => {
     const fetchLayouts = async () => {
@@ -64,11 +64,10 @@ function Layout () {
   }
 
   const handleDeleteProduct = (productId, combinedIndex) => {
-    console.log(productId, combinedIndex, 'entreee')
     const columnIndex = (combinedIndex % 10)
     const trayIndex = (Math.floor((combinedIndex / 10) % 10)) - 1
-    console.log(trayIndex, 'trayIndex')
-    console.log(columnIndex, 'columnIndex')
+    // console.log(trayIndex, 'trayIndex')
+    // console.log(columnIndex, 'columnIndex')
 
     const newLayout = { ...selectedLayoutDetails }
     newLayout.trays.forEach((tray, index) => {
@@ -82,7 +81,7 @@ function Layout () {
       }
     })
     setSelectedLayoutDetails(newLayout)
-    console.log('Updated Layout Details:', newLayout)
+    // console.log('Updated Layout Details:', newLayout)
   }
 
   const handleSaveNewProduct = (newProduct, quantity) => {
@@ -114,8 +113,10 @@ function Layout () {
       try {
         const response = await createLayout(data)
         swallInfo('Layout creado exitosamente')
-        // if (response)
-        // router.push(`/layout/edit/${response.id}`)
+        console.log(response.id, 'id')
+        if (response) {
+          // router.push(`/layout/edit?id=${response.id}`)
+        }
         console.log(response, 'respuesta crear layout')
       } catch (error) {
         swallError('Error al crear Layout')
@@ -135,26 +136,109 @@ function Layout () {
   }
 
   const handleDragEnd = (result) => {
-    if (!result.destination) return
-    const updatedLayoutDetails = { ...selectedLayoutDetails }
-    // console.log(updatedLayoutDetails, 'layout actualizado')
+    //     destination
+    // :
+    // droppableId hace referencia a la tray donde droppeo el producto
+    // :
+    // "1"
+    // index posicion dentro de la bandeja
+    // :
+    // 26
 
-    const sourceTray = updatedLayoutDetails.trays[parseInt(result.source.droppableId)]
-    // console.log(sourceTray, 'bandeja source')
+    // source
+    // :
+    // droppableId tray de donde viene el producto
+    // :
+    // "0"
+    // index
+    // :
+    // 17
 
-    // const destinationTrayIndex = parseInt(result.destination.droppableId, 10)
-    // console.log(destinationTrayIndex, 'destination bandeja index')
-    // console.log(result.destination.droppableId, 'droppableID')
+    // destination no tenemos la tray de destino
+    // :
+    // null
+    // source
+    // :
+    // droppableId
+    // :
+    // "1"
+    // index
+    // :
+    // 25
 
-    if (!sourceTray) return
-    const trayColumns = [...sourceTray.columns]
-    const startIndex = result.source.index % 10
-    const endIndex = result.destination.index % 10
-    const [reorderedColumn] = trayColumns.splice(startIndex, 1)
-    trayColumns.splice(endIndex, 0, reorderedColumn)
-    sourceTray.columns = trayColumns
+    console.log(result, 'drag result')
+    // if (!result.destination) return
+    console.log(result.destination, 'result.destination')
+    console.log(result.source, 'result.source')
 
-    setSelectedLayoutDetails(updatedLayoutDetails)
+    const updatedLayoutDetails = { ...selectedLayoutDetails } // copia de layoutDetails porque no podemos modificar directamente el estado
+
+    if (!result.destination) { // en caso de que no exista tray destino, que pasa cuando la tray está vacía
+      const sourceTray = updatedLayoutDetails.trays[parseInt(result.source.droppableId)] // bandeja de donde viene el prod =[0] (index)
+      const destinationTrayIndex = updatedLayoutDetails.trays // tray donde droppeo el prod =[5] (index), es un array
+        .map((tray, index) => (tray.columns.length === 0 ? index : undefined))
+        .filter(index => index !== undefined)
+      const destinationTray = updatedLayoutDetails.trays[destinationTrayIndex] // bandeja de destino
+
+      console.log(destinationTray, 'destinationTray')
+      if (!sourceTray && !destinationTray) return
+
+      const sourceTrayColumns = [...sourceTray.columns]
+      const destinationTrayColumns = [...destinationTray.columns]
+      console.log(destinationTrayColumns, 'destinationTrayColumns')
+
+      const startIndex = result.source.index % 10
+      const endIndex = 0
+
+      const [reorderedColumn] = sourceTrayColumns.splice(startIndex, 1)
+      destinationTrayColumns.splice(endIndex, 0, reorderedColumn)
+
+      updatedLayoutDetails.trays[parseInt(result.source.droppableId)].columns = sourceTrayColumns
+      updatedLayoutDetails.trays[parseInt(destinationTrayIndex)].columns = destinationTrayColumns
+      // actualiza las columnas de la bandeja de origen y la bandeja de destino en el objeto updatedLayoutDetails con las columnas reordenadas y actualiza el estado con los detalles del diseño seleccionado.
+      setSelectedLayoutDetails(updatedLayoutDetails)
+
+      // console.warn('Intento de drop sin destination.')
+      return
+    }
+
+    if (result.source.droppableId === result.destination.droppableId) {
+      const sourceTray = updatedLayoutDetails.trays[parseInt(result.source.droppableId)]
+
+      if (!sourceTray) return
+      const trayColumns = [...sourceTray.columns]
+      const startIndex = result.source.index % 10
+      const endIndex = result.destination.index % 10
+      const [reorderedColumn] = trayColumns.splice(startIndex, 1)
+      trayColumns.splice(endIndex, 0, reorderedColumn)
+      sourceTray.columns = trayColumns
+
+      setSelectedLayoutDetails(updatedLayoutDetails)
+    } else {
+      const sourceTray = updatedLayoutDetails.trays[parseInt(result.source.droppableId)]
+      const destinationTray = updatedLayoutDetails.trays[parseInt(result.destination.droppableId)]
+      // Obtiene las bandejas de origen y destino del objeto updatedLayoutDetails utilizando los droppableId del resultado del evento de arrastre.
+
+      if (!sourceTray || !destinationTray) return
+      const sourceTrayColumns = [...sourceTray.columns]
+      const destinationTrayColumns = [...destinationTray.columns]
+      //  Hace copias de las columnas de la bandeja de origen y la bandeja de destino. Esto es importante para evitar mutaciones directas en los datos del estado.
+
+      const startIndex = result.source.index % 10
+      const endIndex = result.destination.index % 10
+      // Calcula los índices de inicio y fin para el reordenamiento de columnas dentro de las bandejas. Nuevamente, parece que se aplica un límite de 10 productos por bandeja
+      const [reorderedColumn] = sourceTrayColumns.splice(startIndex, 1)
+      destinationTrayColumns.splice(endIndex, 0, reorderedColumn)
+      // Realiza el movimiento de la columna desde la bandeja de origen a la bandeja de destino. Elimina la columna de la posición de inicio en la bandeja de origen y la inserta en la posición de fin en la bandeja de destino.
+      if (destinationTrayColumns.length > 10) {
+        swallError('El máximo permitido es 10 productos por bandeja')
+      } else {
+        updatedLayoutDetails.trays[parseInt(result.source.droppableId)].columns = sourceTrayColumns
+        updatedLayoutDetails.trays[parseInt(result.destination.droppableId)].columns = destinationTrayColumns
+        // actualiza las columnas de la bandeja de origen y la bandeja de destino en el objeto updatedLayoutDetails con las columnas reordenadas y actualiza el estado con los detalles del diseño seleccionado.
+        setSelectedLayoutDetails(updatedLayoutDetails)
+      }
+    }
   }
 
   const handleNewLayoutNameChange = (value) => {
@@ -177,16 +261,22 @@ function Layout () {
       setSelectedTrayToDelete(null)
     }
   }
-
   const handleAddTray = () => {
     const newTray = {
       columns: []
     }
-    setSelectedLayoutDetails((prevDetails) => ({
-      ...prevDetails,
-      trays: [...prevDetails.trays, newTray]
-    }))
-    setSelectedTrayToDelete({ tray: newTray, index: selectedLayoutDetails.trays.length })
+
+    setSelectedLayoutDetails((prevDetails) => {
+      const updatedDetails = {
+        ...prevDetails,
+        trays: [...prevDetails.trays, newTray]
+      }
+
+      // Asegurar que la nueva bandeja tenga la información necesaria
+      setSelectedTrayToDelete({ tray: newTray, index: updatedDetails.trays.length - 1 })
+
+      return updatedDetails
+    })
   }
 
   return (

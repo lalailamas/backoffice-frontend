@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { Droppable } from '@hello-pangea/dnd'
 import DraggableProduct from './DraggableProduct'
 import ConfirmationModal from '../restock/confirmationModal'
+import { swallError } from '@/utils/sweetAlerts'
 
 function DraggableTray ({ tray, trayIndex, products, selectedLayoutDetails, quantityChangeHandler, handleDeleteProduct, handleShowProductModal, handleDeleteTray, handleDeleteTrayConfirmed }) {
   const [droppableDirection, setDroppableDirection] = useState(
@@ -68,7 +69,11 @@ function DraggableTray ({ tray, trayIndex, products, selectedLayoutDetails, quan
           <button
             onClick={(e) => {
               e.stopPropagation()
-              handleShowProductModal(trayIndex)
+              if (tray.columns.length > 9) {
+                swallError('El máximo permitido es 10 productos por bandeja')
+              } else {
+                handleShowProductModal(trayIndex)
+              }
             }}
             className='ml-auto max-[431px]:flex flex-col'
           >

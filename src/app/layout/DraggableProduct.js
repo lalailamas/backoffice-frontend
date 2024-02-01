@@ -1,5 +1,4 @@
 'use client'
-// DraggableProduct.js
 import React, { useEffect, useState } from 'react'
 import { Draggable } from '@hello-pangea/dnd'
 
