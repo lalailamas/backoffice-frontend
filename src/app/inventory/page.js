@@ -14,7 +14,7 @@ export default function Inventory () {
   const [searchKey, setSearchKey] = useState('')
   const [page, setPage] = useState(1)
   const [params, setParams] = useState({ limit: 10, search: '' })
-  console.log(params, 'params')
+  // console.log(params, 'params')
   const [products, setProducts] = useState([])
   const [meta, setMeta] = useState(null)
   const { categories } = useGetCategories()
@@ -111,14 +111,22 @@ export default function Inventory () {
       }
     }
   }
-  const handleDelete = (id) => {
-    deleteProduct(id).then(
-      (response) => {
+  const handleDelete = async (id) => {
+    try {
+      const response = await deleteProduct(id)
+      if (response) {
         setCachekey(cachekey + 1)
         setShowModal(false)
+        swallError('Producto eliminado correctamente', true)
+        reloadPage()
       }
-
-    )
+    } catch (error) {
+      // Manejo del error
+      console.error('Error al eliminar el producto:', error)
+    }
+  }
+  const reloadPage = () => {
+    window.location.reload()
   }
   const handleSave = async (formData, selectedImage) => {
     if (action === 'create') {
@@ -128,30 +136,34 @@ export default function Inventory () {
           setCachekey(cachekey + 1)
           setShowModal(false)
           swallError('Producto creado correctamente', true)
+          reloadPage()
         }
       } catch (error) {
         swallError('Error al crear el producto', false)
         console.log(error)
       }
     } else {
-      const image = selectedImage
       try {
-        updateProduct(formData).then(
-          () => {
-            if (image) {
-              updateProductImage(formData.id, image).then(
-                () => {
-                  setCachekey(cachekey + 1)
-                  setShowModal(false)
-                }
-
-              )
-            } else {
+        const response = await updateProduct(formData)
+        console.log(response, 'response updateProduct')
+        if (response) {
+          if (selectedImage) {
+            const updateImage = await updateProductImage(formData.id, selectedImage)
+            console.log(updateImage, 'updateImage')
+            if (updateImage) {
               setCachekey(cachekey + 1)
               setShowModal(false)
+              swallError('Producto editado correctamente', true)
+              reloadPage()
             }
+          } else {
+            setCachekey(cachekey + 1)
+            setShowModal(false)
+            swallError('Producto editado correctamente', true)
+
+            reloadPage()
           }
-        )
+        }
       } catch (error) {
         swallError('Error al editar el producto', false)
         console.log(error)
@@ -191,13 +203,6 @@ export default function Inventory () {
           <div className='join w-full md:max-w-xs '>
             <SearchField type='text' placeholder='Búsqueda' name='search' className='input input-sm input-bordered w-full  bg-d-white join-item rounded-full text-d-dark-dark-purple' onChange={(v) => setSearchKey(v)} />
 
-            <button type='button ' onClick={() => setSearchKey('')} className='btn btn-sm join-item rounded-r-full bg-d-dark-dark-purple border-none text-d-white  hover:bg-d-soft-soft-purple hover:text-d-dark-dark-purple'>
-
-              <svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' strokeWidth={1.5} stroke='currentColor' className='w-6 h-6'>
-                <path strokeLinecap='round' strokeLinejoin='round' d='M6 18L18 6M6 6l12 12' />
-              </svg>
-
-            </button>
           </div>
 
           <button type='submit' onClick={() => handleNewProduct()} className='btn btn-sm join-item rounded-full bg-d-dark-dark-purple border-none text-d-white  hover:bg-d-soft-soft-purple hover:text-d-dark-dark-purple'>
