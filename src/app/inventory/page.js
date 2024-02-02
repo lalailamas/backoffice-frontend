@@ -175,6 +175,7 @@ export default function Inventory () {
     () => {
       const clone = JSON.parse(JSON.stringify(params))
       clone.search = searchKey
+      setPage(1)
       setParams(clone)
     },
     [searchKey]
