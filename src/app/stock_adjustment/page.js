@@ -3,12 +3,12 @@ import React, { useState, useEffect } from 'react'
 import useGetStores2 from '@/hooks/useStores2'
 import { getReiteProdByStore } from '@/api/product/reite'
 import DspLoader from '@/components/admin/common/loader'
-import QuantityModal from '../restock/quantityModal'
+import QuantityModal from '../../components/admin/modals/quantityModal'
 import { getInventoryByStore, downloadInventoryExcel } from '@/api/store'
 import FileSaver from 'file-saver'
 import { swallError, Toast, swallInfo } from '@/utils/sweetAlerts'
 import Swal from 'sweetalert2'
-import PriceModal from '../restock/priceModal'
+import PriceModal from '@/components/admin/modals/priceModal'
 
 function StockAdjustment () {
   const { stores } = useGetStores2()

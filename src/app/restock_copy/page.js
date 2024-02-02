@@ -9,7 +9,7 @@ import { swallError } from '@/utils/sweetAlerts'
 import DspLoader from '@/components/admin/common/loader'
 import { errorHandler } from '@/utils/errors/errors'
 
-function Restock () {
+function RestockOld () {
   const [stores, setStores] = useState([])
   const [selectedStore, setSelectedStore] = useState(null)
   const [modalVisible, setModalVisible] = useState(false)
@@ -52,7 +52,7 @@ function Restock () {
       if (openStore) {
         swallError('Abriendo tienda', true)
         router.push(
-          'restock/stepTwo' + `?external_id=${selectedStore.storeId}&layout_id=${selectedStore.layoutId}&store_name=${selectedStore.name}&externalTransactionId=${openStore.external_transaction_id}&transactionId=${openStore.transaction_id}`
+          'restock_copy/stepTwo' + `?external_id=${selectedStore.storeId}&layout_id=${selectedStore.layoutId}&store_name=${selectedStore.name}&externalTransactionId=${openStore.external_transaction_id}&transactionId=${openStore.transaction_id}`
         )
       }
     } catch (error) {
@@ -161,4 +161,4 @@ function Restock () {
   )
 }
 
-export default Restock
+export default RestockOld

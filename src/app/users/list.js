@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import Link from 'next/link'
 import DspLoader from '@/components/admin/common/loader'
-import ConfirmationModal from '../restock/confirmationModal'
+import ConfirmationModal from '../../components/admin/modals/confirmationModal'
 import { deleteUser } from '@/api/user'
 import { swallError, swallInfo } from '@/utils/sweetAlerts'
 

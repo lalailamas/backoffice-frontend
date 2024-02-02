@@ -24,7 +24,9 @@ export const menuItems = [
     label: 'Reposiciones',
     icon: 'rotate-180',
     subMenuLinks: [
-      { label: 'Reponer tienda', href: '/restock' },
+      { label: 'Reponer tienda NEW', href: '/restock' },
+      { label: 'Reponer tienda OLD', href: '/restock_copy' },
+
       { label: 'Historial de reposiciones', href: '/replacements' },
       { label: 'Lista de compras y reposición', href: '/shop_list' }
     ]
