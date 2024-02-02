@@ -4,30 +4,33 @@ import { Draggable } from '@hello-pangea/dnd'
 
 function DraggableProduct ({ product, combinedIndex, quantityChangeHandler, handleDeleteProduct, maxQuantity }) {
   const index = parseInt(combinedIndex, 10)
-  // console.log(product, 'product del draggableProduct')
   const [quantity, setQuantity] = useState()
-  // console.log(quantity, product.productId, 'cantidad')
 
   useEffect(() => {
     setQuantity(maxQuantity)
   }, [maxQuantity])
 
-  const handleIncrease = () => {
-    setQuantity(prevQuantity => {
+  const handleIncrease = async () => {
+    setQuantity((prevQuantity) => {
       const newQuantity = prevQuantity + 1
-      quantityChangeHandler(product.productId, newQuantity)
+      updateQuantity(product.productId, newQuantity, combinedIndex)
       return newQuantity
     })
   }
 
-  const handleDecrease = () => {
+  const handleDecrease = async () => {
     if (quantity > 0) {
-      setQuantity(prevQuantity => {
+      setQuantity((prevQuantity) => {
         const newQuantity = prevQuantity - 1
-        quantityChangeHandler(product.productId, newQuantity)
+        updateQuantity(product.productId, newQuantity, combinedIndex)
         return newQuantity
       })
     }
+  }
+
+  const updateQuantity = async (productId, newQuantity, combinedIndex) => {
+    await new Promise((resolve) => setTimeout(resolve, 0))
+    quantityChangeHandler(productId, newQuantity, combinedIndex)
   }
 
   return (
@@ -73,7 +76,10 @@ function DraggableProduct ({ product, combinedIndex, quantityChangeHandler, hand
                   </div>
 
                   <div className='flex flex-row pt-8 items-center align-center justify-center'>
-                    <button onClick={handleDecrease} className='btn-sm join-item hover:bg-d-soft-soft-purple rounded-full'>
+                    <button
+                      onClick={() => handleDecrease(combinedIndex)}
+                      className='btn-sm join-item hover:bg-d-soft-soft-purple rounded-full'
+                    >
                       <svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none'>
                         <g clipPath='url(#clip0_1384_742)'>
                           <circle cx='12' cy='12' r='12' fill='#8480C0' />
@@ -90,7 +96,7 @@ function DraggableProduct ({ product, combinedIndex, quantityChangeHandler, hand
                     <p className='flex items-center justify-center font-bold text-d-dark-dark-purple'>{quantity}</p>
 
                     <button
-                      onClick={handleIncrease}
+                      onClick={() => handleIncrease(combinedIndex)}
                       className='btn-sm join-item hover:bg-d-soft-soft-purple rounded-full'
                     >
                       <svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none'>
