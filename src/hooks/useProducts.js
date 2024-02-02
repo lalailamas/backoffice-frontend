@@ -11,8 +11,9 @@ const useGetProducts = (params, cachekey) => {
     setLoading(true)
     listProducts(params.limit, params.page, params.search).then(
       (response) => {
-        setProducts(response.data.data)
-        setMeta(response.data.meta)
+        // console.log(response, 'response')
+        setProducts(response.data)
+        setMeta(response.meta)
       }
     ).catch((err) => {
       setError(err)
