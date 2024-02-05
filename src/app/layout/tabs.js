@@ -4,6 +4,7 @@ import { useEffect, React, Fragment } from 'react'
 // import { Tab, initTE } from 'tw-elements'
 
 const TabsComponentLayout = ({ tabs, handleTabChange }) => {
+  // console.log('Received tabs prop:', tabs)
   useEffect(() => {
     const init = async () => {
       const { Tab, initTE } = await import('tw-elements')
@@ -21,7 +22,8 @@ const TabsComponentLayout = ({ tabs, handleTabChange }) => {
             {index === 0
               ? <a
                   href={`#${tab.id}`}
-                  className='my-2 block border-x-0 border-b-2 border-t-0 border-transparent px-7 pb-3.5 pt-4 text-xs font-medium uppercase leading-tight text-neutral-500 hover:isolate hover:border-transparent hover:bg-neutral-100 focus:isolate focus:border-transparent data-[te-nav-active]:border-primary data-[te-nav-active]:text-primary dark:text-neutral-400 dark:hover:bg-transparent dark:data-[te-nav-active]:border-primary-400 dark:data-[te-nav-active]:text-primary-400'
+                  // className='my-2 block border-x-0 border-b-2 border-t-0 border-transparent px-7 pb-3.5 pt-4 text-xs font-medium uppercase leading-tight text-neutral-500 hover:isolate hover:border-transparent hover:bg-neutral-100 focus:isolate focus:border-transparent data-[te-nav-active]:border-primary data-[te-nav-active]:text-primary dark:text-neutral-400 dark:hover:bg-transparent dark:data-[te-nav-active]:border-primary-400 dark:data-[te-nav-active]:text-primary-400'
+                  className={`my-2 block border-x-0 border-b-2 border-t-0 border-transparent px-7 pb-3.5 pt-4 text-xs font-medium uppercase leading-tight text-neutral-500 hover:isolate hover:border-transparent hover:bg-neutral-100 focus:isolate focus:border-transparent ${tab.active ? 'border-primary text-primary' : ''}`}
                   data-te-toggle='pill'
                   data-te-target={`#${tab.id}`}
                   role='tab'
@@ -35,10 +37,11 @@ const TabsComponentLayout = ({ tabs, handleTabChange }) => {
               </a>
               : <a
                   href={`#${tab.id}`}
-                  className='my-2 block border-x-0 border-b-2 border-t-0 border-transparent px-7 pb-3.5 pt-4 text-xs font-medium uppercase leading-tight text-neutral-500 hover:isolate hover:border-transparent hover:bg-neutral-100 focus:isolate focus:border-transparent data-[te-nav-active]:border-primary data-[te-nav-active]:text-primary dark:text-neutral-400 dark:hover:bg-transparent dark:data-[te-nav-active]:border-primary-400 dark:data-[te-nav-active]:text-primary-400'
+                  className={`my-2 block border-x-0 border-b-2 border-t-0 border-transparent px-7 pb-3.5 pt-4 text-xs font-medium uppercase leading-tight text-neutral-500 hover:isolate hover:border-transparent hover:bg-neutral-100 focus:isolate focus:border-transparent ${tab.active ? 'border-primary text-primary' : ''}`}
                   data-te-toggle='pill'
                   data-te-target={`#${tab.id}`}
                   role='tab'
+                  data-te-nav-active
                   aria-controls={`#${tab.id}`}
                   aria-selected='true'
                   onClick={() => handleTabChange(index)}

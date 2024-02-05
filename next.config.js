@@ -18,13 +18,13 @@ const sentryWebpackPluginOptions = {
   // recommended:
   //   release, url, configFile, stripPrefix, urlPrefix, include, ignore
 
-  org: 'despnsa247',
-  project: 'despnsa-frontend',
+  // org: 'despnsa247',
+  // project: 'despnsa-frontend',
 
-  // An auth token is required for uploading source maps.
-  authToken: process.env.SENTRY_AUTH_TOKEN,
+  // // An auth token is required for uploading source maps.
+  // authToken: process.env.SENTRY_AUTH_TOKEN,
 
-  silent: true // Suppresses all logs
+  // silent: true // Suppresses all logs
 
   // For all available options, see:
   // https://github.com/getsentry/sentry-webpack-plugin#options.

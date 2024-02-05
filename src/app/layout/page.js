@@ -1,5 +1,5 @@
 'use client'
-import { getAllLayouts, createLayout, editLayout, deleteLayout } from '@/api/layout'
+import { getAllLayouts, createLayout, editLayout, deleteLayout, getLayout } from '@/api/layout'
 import React, { useState, useEffect } from 'react'
 import DraggableTray from './DraggableTray'
 import { DragDropContext } from '@hello-pangea/dnd'
@@ -20,10 +20,12 @@ function Layout () {
   const [showLayoutModal, setShowLayoutModal] = useState(false)
   const [selectedTrayToDelete, setSelectedTrayToDelete] = useState(null)
   const [editingLayoutName, setEditingLayoutName] = useState('')
+  // const titleRef = useRef(null)
   const [tabsState, setTabsState] = useState([
     { id: 'tabs-home', name: 'Crear Layout', active: true },
     { id: 'tabs-message', name: 'Editar Layout', active: false }
   ])
+  // console.log('Updated tabs state:', tabsState)
 
   useEffect(() => {
     const fetchLayouts = async () => {
@@ -53,9 +55,11 @@ function Layout () {
 
   useEffect(() => {
     const layoutDetails = layouts.find(layout => layout.name === selectedLayout)
-    // console.log(layoutDetails, 'detalles de layout')
     setSelectedLayoutDetails(layoutDetails || null)
-  }, [selectedLayout, layouts])
+    if (tabsState[1].active && layoutDetails) {
+      setEditingLayoutName(layoutDetails.name)
+    }
+  }, [selectedLayout, layouts, tabsState])
 
   const quantityChangeHandler = (productId, quantity, combinedIndex) => {
     const columnIndex = (combinedIndex % 10)
@@ -119,20 +123,37 @@ function Layout () {
       const data = {
         name: newLayoutName,
         layout: selectedLayoutDetails.trays
-
       }
 
       try {
         const response = await createLayout(data)
         swallInfo('Layout creado exitosamente')
         console.log(response.id, 'id')
-        if (response) {
-          setTabsState([
-            { id: 'tabs-home', name: 'Crear Layout', active: false },
-            { id: 'tabs-message', name: 'Editar Layout', active: true }
-          ])
-          setSelectedLayout(response.name)
-        }
+
+        // Actualizar la lista de diseños después de la creación exitosa
+        const updatedLayouts = await getAllLayouts()
+        setLayouts(updatedLayouts)
+
+        // Actualizar el estado de las pestañas y el diseño seleccionado
+        setTabsState([
+          { id: 'tabs-home', name: 'Crear Layout', active: false },
+          { id: 'tabs-message', name: 'Editar Layout', active: true }
+        ])
+
+        // Establecer el nuevo diseño como el diseño seleccionado
+        setSelectedLayout(response.name)
+        setNewLayoutName(response.name) // También puedes establecer el nombre en el input directamente si es necesario
+
+        // Obtener los detalles actualizados del diseño creado
+        const updatedLayoutDetails = await getLayout(response.id)
+
+        // Actualizar el estado selectedLayoutDetails con los nuevos detalles
+        setSelectedLayoutDetails(updatedLayoutDetails)
+        // Desplazar la página hacia la parte superior
+        window.scrollTo({
+          top: 0,
+          behavior: 'auto'
+        })
         console.log(response, 'respuesta crear layout')
       } catch (error) {
         swallError('Error al crear Layout')
@@ -146,9 +167,9 @@ function Layout () {
 
   // Editar layout
   const handleEditLayout = async () => {
-    if (newLayoutName.length > 0) {
+    if (editingLayoutName.length > 0) {
       const data = {
-        name: newLayoutName,
+        name: editingLayoutName,
         layout: selectedLayoutDetails.trays,
         prices: {}
       }
@@ -163,7 +184,7 @@ function Layout () {
             { id: 'tabs-message', name: 'Editar Layout', active: true }
           ])
           setSelectedLayout(response.name)
-          setSelectedLayoutDetails()
+          setSelectedLayoutDetails(null) // Puedes reiniciar los detalles del layout aquí si es necesario
         }
         console.log(response, 'respuesta editar layout')
       } catch (error) {
@@ -288,9 +309,9 @@ function Layout () {
     }
   }
 
-  const handleNewLayoutNameChange = (value) => {
-    setNewLayoutName(value)
-  }
+  // const handleNewLayoutNameChange = (value) => {
+  //   setNewLayoutName(value)
+  // }
 
   const handleDeleteTray = (trayIndex) => {
     const trayToDelete = selectedLayoutDetails?.trays?.[trayIndex]
@@ -327,6 +348,7 @@ function Layout () {
   }
 
   const handleTabChange = (index) => {
+    // console.log('Changing tab to index:', index)
     setTabsState((prevTabs) =>
       prevTabs.map((tab, i) => ({
         ...tab,
@@ -334,6 +356,10 @@ function Layout () {
       }))
     )
   }
+
+  useEffect(() => {
+
+  }, [tabsState])
 
   const tabs = [
     {
@@ -393,8 +419,10 @@ function Layout () {
               type='text'
               className='rounded-full w-full md:max-w-xs border border-gray-300 px-4 py-1'
               placeholder='Nombre de Nuevo Layout'
-              onChange={(e) => handleNewLayoutNameChange(e.target.value)}
-              value={newLayoutName}
+              onChange={(e) => {
+                tabsState[1].active ? setEditingLayoutName(e.target.value) : setNewLayoutName(e.target.value)
+              }}
+              value={tabsState[1].active ? editingLayoutName : newLayoutName}
             />
           </div>
         </div>
@@ -458,7 +486,7 @@ function Layout () {
           title='Confirmación'
           message='¿Estás seguro de eliminar este layout?'
           cancelButtonText='Cancelar'
-          handleOperationConfirmation={handleDeleteConfirmation} // No necesitas pasar el ID aquí
+          handleOperationConfirmation={handleDeleteConfirmation}
           handleConfirmationModal={handleConfirmationModal}
           confirmButtonText='Eliminar layout'
         />
