@@ -38,7 +38,7 @@ function DraggableTray ({ tray, trayIndex, products, selectedLayoutDetails, quan
           <Droppable droppableId={trayIndex.toString()} direction={droppableDirection}>
             {(provided) => (
               <div className='grid grid-cols-10 max-[431px]:flex flex-col' ref={provided.innerRef} {...provided.droppableProps}>
-                {tray.columns.map((column, columnIndex) => {
+                {tray?.columns.map((column, columnIndex) => {
                   const product = products.find((prod) => prod.productId === column.productId)
                   // console.log(product, 'product del dragglableTray')
                   const trayNumber = trayIndex + 1
