@@ -5,6 +5,7 @@ import DraggableTray from './DraggableTray'
 import { DragDropContext } from '@hello-pangea/dnd'
 import { getAllReiteData } from '@/api/product/reite'
 import { swallError, swallInfo } from '@/utils/sweetAlerts'
+import Swal from 'sweetalert2'
 import AddProductModal from './addProductModal'
 import TabsComponentLayout from './tabs'
 import ConfirmationModal from '../restock/confirmationModal'
@@ -167,6 +168,10 @@ function Layout () {
 
   // Editar layout
   const handleEditLayout = async () => {
+    await selectedLayoutDetails.trays.forEach((tray) => {
+      tray.columnsQuantity = tray.columns.length
+    })
+
     if (editingLayoutName.length > 0) {
       const data = {
         name: editingLayoutName,
@@ -176,17 +181,26 @@ function Layout () {
 
       try {
         const response = await editLayout(data, selectedLayoutDetails.id)
-        swallInfo('Layout editado exitosamente')
-        console.log(response, 'respuesta')
+
         if (response) {
           setTabsState([
             { id: 'tabs-home', name: 'Crear Layout', active: false },
             { id: 'tabs-message', name: 'Editar Layout', active: true }
           ])
           setSelectedLayout(response.name)
-          setSelectedLayoutDetails(null) // Puedes reiniciar los detalles del layout aquí si es necesario
+          // Obtener los detalles actualizados del diseño creado
+          const updatedLayoutDetails = await getLayout(response.id)
+
+          // Actualizar el estado selectedLayoutDetails con los nuevos detalles
+          setSelectedLayoutDetails(updatedLayoutDetails)
+
+          // Esperar 500 milisegundos (0.5 segundos) antes de desplazar la página hacia arriba
+          setTimeout(() => {
+            document.getElementById('DivId').scrollIntoView({ behavior: 'smooth' })
+          }, 500)
         }
         console.log(response, 'respuesta editar layout')
+        // swallInfo('Layout editado exitosamente')
       } catch (error) {
         swallError('Error al editar Layout')
         console.error(error, 'Error al editar Layout')
@@ -198,12 +212,31 @@ function Layout () {
   const handleDeleteClick = () => {
     setShowLayoutModal(true)
   }
-
+  // delete layout
   const handleDeleteConfirmation = async () => {
     try {
       await deleteLayout(selectedLayoutDetails.id)
       swallInfo('Layout eliminado exitosamente')
       setShowLayoutModal(false)
+
+      // Actualizar la lista de diseños después de la eliminación exitosa
+      const updatedLayouts = await getAllLayouts()
+      setLayouts(updatedLayouts)
+
+      // Limpiar el input del nombre del tab editar layout
+      setEditingLayoutName('')
+
+      // Actualizar el estado para que el tab de crear esté activo
+      setTabsState([
+        { id: 'tabs-home', name: 'Crear Layout', active: true },
+        { id: 'tabs-message', name: 'Editar Layout', active: false }
+      ])
+
+      // Establecer el layout seleccionado como vacío
+      setSelectedLayout('')
+
+      // Limpiar los detalles del layout seleccionado
+      setSelectedLayoutDetails(null)
     } catch (error) {
       swallError('Error al eliminar layout', false)
       console.error('Error al eliminar layout:', error)
@@ -222,6 +255,7 @@ function Layout () {
     return setShowProductModal(!showProductModal)
   }
 
+  // mover los productos de lugar
   const handleDragEnd = (result) => {
     console.log('Drag End Result:', result)
     const updatedLayoutDetails = { ...selectedLayoutDetails }
@@ -313,11 +347,13 @@ function Layout () {
   //   setNewLayoutName(value)
   // }
 
+  // Elimina bandeja
   const handleDeleteTray = (trayIndex) => {
     const trayToDelete = selectedLayoutDetails?.trays?.[trayIndex]
     setSelectedTrayToDelete({ tray: trayToDelete, index: trayIndex })
   }
 
+  // Confirmación Eliminar bandeja
   const handleDeleteTrayConfirmed = () => {
     if (selectedTrayToDelete) {
       const updatedTrays = [...selectedLayoutDetails.trays]
@@ -329,11 +365,13 @@ function Layout () {
       setSelectedTrayToDelete(null)
     }
   }
+
+  // Agregar bandeja
   const handleAddTray = () => {
     const newTray = {
       columns: []
-    }
 
+    }
     setSelectedLayoutDetails((prevDetails) => {
       const updatedDetails = {
         ...prevDetails,
@@ -387,7 +425,7 @@ function Layout () {
   return (
     <div>
       <DragDropContext onDragEnd={handleDragEnd}>
-        <div className='flex justify-center text-center p-5'>
+        <div id='DivId' className='flex justify-center text-center p-5'>
           <h2 className='text-d-dark-dark-purple text-2xl font-bold'>
             {tabsState[0].active ? 'Crear Layout' : 'Editar Layout'}
           </h2>
@@ -461,15 +499,7 @@ function Layout () {
             <span> Agregar Bandeja</span>
           </div>
         </button>
-        <div className='flex justify-center pb-10 gap-4'>
-          <button
-            type='button'
-            onClick={tabsState[0].active ? handleSaveNewLayout : handleEditLayout}
-            className='inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-d-dark-dark-purple rounded-lg hover:bg-d-soft-soft-purple hover:text-d-dark-dark-purple focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800'
-          >
-            {tabsState[0].active ? 'Crear Nuevo Layout' : 'Editar Layout'}
-          </button>
-
+        <div className='flex justify-center pb-10 gap-8'>
           {tabsState[1].active && (
             <button
               type='button'
@@ -479,6 +509,14 @@ function Layout () {
               Eliminar Layout
             </button>
           )}
+          <button
+            type='button'
+            onClick={tabsState[0].active ? handleSaveNewLayout : handleEditLayout}
+            className='inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-d-dark-dark-purple rounded-lg hover:bg-d-soft-soft-purple hover:text-d-dark-dark-purple focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800'
+          >
+            {tabsState[0].active ? 'Crear Nuevo Layout' : 'Editar Layout'}
+          </button>
+
         </div>
       </DragDropContext>
       {showLayoutModal && (
