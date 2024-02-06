@@ -37,7 +37,8 @@ export const menuItems = [
     subMenuLinks: [
       { label: 'Stock por máquina', href: '/stock_request' },
       { label: 'Ajuste de Stock y Precios', href: '/stock_adjustment' },
-      { label: 'Informe de Inventario', href: '/stock_overview' }
+      { label: 'Informe de Inventario', href: '/stock_overview' },
+      { label: 'Administra tiendas', href: '/stores' }
 
     ]
   },
