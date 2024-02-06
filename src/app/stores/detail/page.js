@@ -15,13 +15,12 @@ function Detail () {
   const searchParams = useSearchParams()
   const storeId = searchParams.get('storeId')
   const layoutId = searchParams.get('layoutId')
+  const storeName = searchParams.get('storeName')
   const [loader, setLoader] = useState(false)
   const { products, loading } = useGetReiteProd()
-  console.log(products, 'products')
   const [inventory, setInventory] = useState([])
   const [newQuantity, setNewQuantity] = useState(null)
   const { layout } = useGetLayout(layoutId)
-  // console.log(layout, 'layout')
   const [expandedRows, setExpandedRows] = useState([])
 
   useEffect(() => {
@@ -47,7 +46,7 @@ function Detail () {
       name: 'Productos',
       active: true,
       content: (
-        <div>
+        <div className='p-3'>
           {loading ? <DspLoader /> : <Products loader={loader} products={products} inventory={inventory} newQuantity={newQuantity} storeId={storeId} layout={layout} expandedRows={expandedRows} setExpandedRows={setExpandedRows} />}
         </div>
       )
@@ -58,7 +57,7 @@ function Detail () {
       name: 'Layout',
       active: false,
       content: (
-        <div>
+        <div className='flex justify-center gap-6 '>
           {loader || loading ? <DspLoader /> : <LayoutDetail products={products} layout={layout} layoutId={layoutId} />}
 
         </div>
@@ -68,12 +67,16 @@ function Detail () {
   ]
 
   return (
-    <>
-      <h3>Administra {storeId} </h3>
-      <div className='p-10'>
+    <div className='p-5'>
+      <div className='flex justify-center text-center p-5'>
+        <h2 className='text-d-dark-dark-purple text-2xl font-bold'>Detalle de tienda {storeName}</h2>
+      </div>
+      <div className='flex justify-center text-center h-full w-full'>
+
         <TabsComponent tabs={tabs} />
       </div>
-    </>
+
+    </div>
   )
 }
 

@@ -5,10 +5,9 @@ import DraggableTray from './DraggableTray'
 import { DragDropContext } from '@hello-pangea/dnd'
 import { getAllReiteData } from '@/api/product/reite'
 import { swallError, swallInfo } from '@/utils/sweetAlerts'
-import Swal from 'sweetalert2'
 import AddProductModal from './addProductModal'
 import TabsComponentLayout from './tabs'
-import ConfirmationModal from '../restock/confirmationModal'
+import ConfirmationModal from '@/components/admin/modals/confirmationModal'
 
 function Layout () {
   const [layouts, setLayouts] = useState([])

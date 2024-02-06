@@ -2,8 +2,8 @@
 import React, { useEffect, useState } from 'react'
 import { Droppable } from '@hello-pangea/dnd'
 import DraggableProduct from './DraggableProduct'
-import ConfirmationModal from '../restock/confirmationModal'
 import { swallError } from '@/utils/sweetAlerts'
+import ConfirmationModal from '@/components/admin/modals/confirmationModal'
 
 function DraggableTray ({ tray, trayIndex, products, selectedLayoutDetails, quantityChangeHandler, handleDeleteProduct, handleShowProductModal, handleDeleteTray, handleDeleteTrayConfirmed }) {
   const [droppableDirection, setDroppableDirection] = useState(

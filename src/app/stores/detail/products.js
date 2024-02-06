@@ -46,9 +46,9 @@ function Products ({ loader, products, inventory, newQuantity, storeId, layout, 
                         {Object.entries(product.prices)
                           .filter(([key]) => key === storeId)
                           .map(([key, value]) => (
-                    <td key={key}>
-                      $ {value}
-                    </td>
+                            <td key={key}>
+                              $ {value}
+                            </td>
                           ))}
                       </td>
                     </tr>
