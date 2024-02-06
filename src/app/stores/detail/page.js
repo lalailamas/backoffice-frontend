@@ -10,6 +10,8 @@ import TabsComponent from '@/components/admin/common/tabs'
 import DspLoader from '@/components/admin/common/loader'
 import LayoutDetail from './layoutDetail'
 import useGetReiteProd from '@/hooks/useGetReiteProd'
+import StockRequestTable from '@/components/admin/tables/stock_request'
+import { getStockRequest } from '@/api/stock'
 
 function Detail () {
   const searchParams = useSearchParams()
@@ -22,6 +24,7 @@ function Detail () {
   const [newQuantity, setNewQuantity] = useState(null)
   const { layout } = useGetLayout(layoutId)
   const [expandedRows, setExpandedRows] = useState([])
+  const [stockRequest, setStockRequest] = useState([])
 
   useEffect(() => {
     const updateProductsInventory = async () => {
@@ -29,6 +32,9 @@ function Detail () {
       if (storeId) {
         try {
           const store = await getInventoryByStore(storeId)
+          const response = await getStockRequest(storeId)
+          setStockRequest(response)
+
           setNewQuantity(null)
           setInventory(store.data.products)
           setLoader(false)
@@ -38,6 +44,7 @@ function Detail () {
         }
       }
     }
+
     updateProductsInventory()
   }, [storeId])
   const tabs = [
@@ -59,6 +66,18 @@ function Detail () {
       content: (
         <div className='flex justify-center gap-6 '>
           {loader || loading ? <DspLoader /> : <LayoutDetail products={products} layout={layout} layoutId={layoutId} />}
+
+        </div>
+      )
+
+    },
+    {
+      id: 'stock',
+      name: 'Faltante de stock',
+      active: false,
+      content: (
+        <div className='p-3'>
+          {stockRequest.length === 0 ? <DspLoader /> : <StockRequestTable data={stockRequest} />}
 
         </div>
       )

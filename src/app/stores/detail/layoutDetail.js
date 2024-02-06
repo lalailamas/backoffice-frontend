@@ -6,10 +6,10 @@ import React, { useEffect, useState } from 'react'
 function LayoutDetail ({ products, layout, layoutId }) {
   const [layouts, setLayouts] = useState([])
   const [selectedLayout, setSelectedLayout] = useState(layoutId)
-  console.log(selectedLayout, 'selected layout')
+  // console.log(selectedLayout, 'selected layout')
   const [showLayout, setShowLayout] = useState(layout)
   const [loader, setLoader] = useState(false)
-  console.log(showLayout, 'show layout')
+  // console.log(showLayout, 'show layout')
   // console.log(layouts, 'layouts')
   // console.log(layout, 'layout')
 
