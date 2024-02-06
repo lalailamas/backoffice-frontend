@@ -43,6 +43,14 @@ export const menuItems = [
     ]
   },
   {
+    label: 'Layout',
+    icon: 'rotate-180',
+    subMenuLinks: [
+      { label: 'Crear/Editar layout', href: '/layout' }
+
+    ]
+  },
+  {
     label: 'Clientes',
     icon: 'rotate-180',
     subMenuLinks: [

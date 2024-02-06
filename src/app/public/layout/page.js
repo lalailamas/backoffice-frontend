@@ -10,6 +10,7 @@ import ErrorMessage from '@/components/admin/common/error'
 
 function LayoutMachine () {
   // https://admin.despnsa247.com/public/layout?id=CNV_004
+  // http://localhost:3000/public/layout?id=DEV_CNV_005
   const searchParams = useSearchParams()
   const storeId = searchParams.get('id')
   const [store, setStore] = useState()
@@ -20,6 +21,7 @@ function LayoutMachine () {
   const handleLayout = async (layoutId) => {
     try {
       const result = await getLayout(layoutId)
+      console.log(layoutId, ' layout id ')
       if (result) {
         setLayout(result)
       }
