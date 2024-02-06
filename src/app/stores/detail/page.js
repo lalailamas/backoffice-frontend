@@ -1,5 +1,5 @@
 'use client'
-import { getReiteProdByStore } from '@/api/product/reite'
+
 import { getInventoryByStore } from '@/api/store'
 import { swallError } from '@/utils/sweetAlerts'
 import { useSearchParams } from 'next/navigation'
@@ -8,17 +8,20 @@ import Products from './products'
 import useGetLayout from '@/hooks/useGetLayout'
 import TabsComponent from '@/components/admin/common/tabs'
 import DspLoader from '@/components/admin/common/loader'
+import LayoutDetail from './layoutDetail'
+import useGetReiteProd from '@/hooks/useGetReiteProd'
 
 function Detail () {
   const searchParams = useSearchParams()
   const storeId = searchParams.get('storeId')
   const layoutId = searchParams.get('layoutId')
   const [loader, setLoader] = useState(false)
-  const [products, setProducts] = useState([])
+  const { products, loading } = useGetReiteProd()
+  console.log(products, 'products')
   const [inventory, setInventory] = useState([])
   const [newQuantity, setNewQuantity] = useState(null)
   const { layout } = useGetLayout(layoutId)
-  console.log(layout, 'layout')
+  // console.log(layout, 'layout')
   const [expandedRows, setExpandedRows] = useState([])
 
   useEffect(() => {
@@ -26,10 +29,8 @@ function Detail () {
       setLoader(true)
       if (storeId) {
         try {
-          const products = await getReiteProdByStore(storeId)
           const store = await getInventoryByStore(storeId)
           setNewQuantity(null)
-          setProducts(products)
           setInventory(store.data.products)
           setLoader(false)
         } catch (error) {
@@ -46,7 +47,21 @@ function Detail () {
       name: 'Productos',
       active: true,
       content: (
-        <Products loader={loader} products={products} inventory={inventory} newQuantity={newQuantity} storeId={storeId} layout={layout} expandedRows={expandedRows} setExpandedRows={setExpandedRows} />
+        <div>
+          {loading ? <DspLoader /> : <Products loader={loader} products={products} inventory={inventory} newQuantity={newQuantity} storeId={storeId} layout={layout} expandedRows={expandedRows} setExpandedRows={setExpandedRows} />}
+        </div>
+      )
+
+    },
+    {
+      id: 'layout',
+      name: 'Layout',
+      active: false,
+      content: (
+        <div>
+          {loader || loading ? <DspLoader /> : <LayoutDetail products={products} layout={layout} layoutId={layoutId} />}
+
+        </div>
       )
 
     }
