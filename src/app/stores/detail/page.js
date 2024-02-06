@@ -71,10 +71,8 @@ function Detail () {
       <div className='flex justify-center text-center p-5'>
         <h2 className='text-d-dark-dark-purple text-2xl font-bold'>Detalle de tienda {storeName}</h2>
       </div>
-      <div className='flex justify-center text-center h-full w-full'>
 
-        <TabsComponent tabs={tabs} />
-      </div>
+      <TabsComponent tabs={tabs} />
 
     </div>
   )
