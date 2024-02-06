@@ -18,7 +18,7 @@ function Stores () {
           </header>
           <section className='py-4  flex flex-col gap-2'>
             {stores && stores.map((store) => (
-              <Link href={`/stores/${store.storeId}`} key={store.storeId}>
+              <Link href={`/stores/detail?storeId=${store.storeId}&layoutId=${store.layoutId}`} key={store.storeId}>
                 <div className='flex items-center  py-3 cursor-pointer  shadow-md hover:shadow-lg'>
                   {/* Contenido de la tienda */}
                   <span
