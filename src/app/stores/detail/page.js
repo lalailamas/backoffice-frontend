@@ -65,7 +65,7 @@ function Detail () {
       active: false,
       content: (
         <div className='flex justify-center gap-6 '>
-          {loader || loading ? <DspLoader /> : <LayoutDetail products={products} layout={layout} layoutId={layoutId} />}
+          {loader || loading ? <DspLoader /> : <LayoutDetail storeId={storeId} products={products} layout={layout} layoutId={layoutId} />}
 
         </div>
       )
