@@ -49,7 +49,7 @@ function LayoutDetail ({ products, layout, layoutId }) {
           <button
             className={`${selectedLayout !== layoutId ? 'inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-d-dark-dark-purple rounded-lg hover:bg-d-soft-soft-purple hover:text-d-dark-dark-purple focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800' : 'hidden'}`}
           >
-            Asignar Layout
+            Asignar este layout a la tienda
           </button>
         </div>
       </div>
