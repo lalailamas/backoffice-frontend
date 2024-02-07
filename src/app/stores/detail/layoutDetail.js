@@ -1,17 +1,19 @@
 'use client'
 import { getAllLayouts } from '@/api/layout'
+import { updateLayout } from '@/api/store'
 import DspLoader from '@/components/admin/common/loader'
 import React, { useEffect, useState } from 'react'
 
-function LayoutDetail ({ products, layout, layoutId }) {
+function LayoutDetail ({ storeId, products, layout, layoutId }) {
   const [layouts, setLayouts] = useState([])
   const [selectedLayout, setSelectedLayout] = useState(layoutId)
-  // console.log(selectedLayout, 'selected layout')
   const [showLayout, setShowLayout] = useState(layout)
   const [loader, setLoader] = useState(false)
-  // console.log(showLayout, 'show layout')
-  // console.log(layouts, 'layouts')
-  // console.log(layout, 'layout')
+
+  const handleUpdateStoreLayout = async () => {
+    const response = await updateLayout(storeId, layoutId)
+    console.log(response)
+  }
 
   useEffect(() => {
     const fetchLayouts = async () => {
@@ -47,6 +49,7 @@ function LayoutDetail ({ products, layout, layoutId }) {
         </select>
         <div className='p-3'>
           <button
+            onClick={() => handleUpdateStoreLayout()}
             className={`${selectedLayout !== layoutId ? 'inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-d-dark-dark-purple rounded-lg hover:bg-d-soft-soft-purple hover:text-d-dark-dark-purple focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800' : 'hidden'}`}
           >
             Asignar este layout a la tienda
