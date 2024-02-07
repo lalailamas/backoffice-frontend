@@ -1,11 +1,23 @@
 'use client'
 import useGetStores2 from '@/hooks/useStores2'
-import React from 'react'
+import React, { useState } from 'react'
 import Link from 'next/link'
+import { SearchField } from '@/components/admin/common/search'
 
 function Stores () {
   const { stores } = useGetStores2()
 
+  const [searchTerm, setSearchTerm] = useState('')
+
+  const filteredStores = stores
+    ? stores.filter(store =>
+      store.name.toLowerCase().includes(searchTerm.toLowerCase())
+    )
+    : []
+
+  const handleSearchChange = (value) => {
+    setSearchTerm(value)
+  }
   return (
     <>
       <div className='flex items-center justify-center min-h-screen'>
@@ -16,11 +28,17 @@ function Stores () {
             </svg>
             <h2 className='text-d-dark-dark-purple text-2xl font-bold'>Tiendas</h2>
           </header>
+          <div className='p-6'>
+            <SearchField
+              placeholder='Busca una tienda...'
+              onChange={handleSearchChange}
+            />
+          </div>
           <section className='py-4  flex flex-col gap-2'>
-            {stores && stores.map((store) => (
+            {stores && filteredStores.map((store) => (
               <Link href={`/stores/detail?storeId=${store.storeId}&layoutId=${store.layoutId}&storeName=${store.name}`} key={store.storeId}>
                 <div className='flex items-center  p-4 cursor-pointer  shadow-md hover:shadow-lg '>
-                  {/* Contenido de la tienda */}
+
                   <span
                     className='w-8 h-8 shrink-0 mr-4 rounded-full bg-green-50 flex items-center justify-center'
                   >
