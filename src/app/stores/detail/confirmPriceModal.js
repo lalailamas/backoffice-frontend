@@ -1,10 +1,33 @@
 import React, { useState, useEffect } from 'react'
-import { patchReitePrices } from '@/api/product/reite'
 
 function ConfirmPriceModal ({
   showLayout,
-  products, storeId
+  products,
+  storeId,
+  handleShowPriceModal,
+  handleUpdateStoreLayout
+
 }) {
+  const [prices, setPrices] = useState({})
+  // console.log(price, 'price')
+
+  const createPriceLayout = async () => {
+    const data = {}
+    showLayout.trays.forEach((tray) => {
+      tray.columns.forEach((column) => {
+        const ID = column.productId
+        const productPrice = products.find(product => product.productId === ID).prices[storeId] || 0
+
+        data[ID] = productPrice
+      })
+    })
+    console.log(data, 'data')
+    setPrices(data)
+  }
+
+  useEffect(() => {
+    createPriceLayout()
+  }, [showLayout])
   return (
     <div>
       <div id='YOUR_ID' className='fixed z-50 inset-0 overflow-y-auto'>
@@ -43,31 +66,37 @@ function ConfirmPriceModal ({
                 </div>
               </div>
             </div>
-            <div className='mt-2 flex justify-center items-center'>
-              <label htmlFor='priceInput' className='sr-only'>
-                Precio
-              </label>
-              <div className='relative'>
-                <span className='absolute inset-y-0 left-0 flex items-center pl-2 text-gray-700'>$</span>
-                <input
-                  type='number'
-                  id='priceInput'
-                  className='bg-gray-100 px-8 py-1 w-28 border border-1 pl-8'
-                  value={price}
-                  onChange={(e) => setPrice(e.target.value)}
-                />
-              </div>
+            <div className='mt-2 flex flex-col justify-center items-center overflow-y-auto'>
+              {
+              prices && Object.keys(prices).map((productId, index) => {
+                return (
+                  <div key={index} className='grid grid-cols-12 gap-2 flex justify-between m-2'>
+                    <h3 className='col-span-8 text-lg leading-6 font-medium text-gray-900' id='modal-headline'>
+                      {products.find(product => product.productId === productId).productName}
+                    </h3>
+                    <input
+                      type='number'
+                      className={`${prices[productId] === 0 ? ' col-span-4 input input-bordered border-red-500 w-full' : ' col-span-4 input input-bordered w-full'}`}
+                      placeholder='Precio'
+                      value={prices[productId]}
+                      onChange={(e) => setPrices({ ...prices, [productId]: e.target.value })}
+                    />
+                  </div>
+                )
+              })
+
+            }
             </div>
 
             <div className='mt-5 sm:mt-4 sm:flex sm:flex-row-reverse'>
               <button
                 type='button' className='w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-d-dark-dark-purple font-medium hover:bg-d-soft-soft-purple hover:text-d-dark-dark-purple text-white sm:ml-3 sm:w-auto sm:text-sm'
-                onClick={priceChangeHandler}
+                onClick={() => handleUpdateStoreLayout(prices)}
               >
-                {confirmButtonText}
+                Confirmar
               </button>
-              <button type='button' databehavior='cancel' className='mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:mt-0 sm:w-auto sm:text-sm' onClick={handleConfirmationModal}>
-                {cancelButtonText}
+              <button type='button' databehavior='cancel' className='mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:mt-0 sm:w-auto sm:text-sm' onClick={handleShowPriceModal}>
+                Cancelar
               </button>
             </div>
           </div>

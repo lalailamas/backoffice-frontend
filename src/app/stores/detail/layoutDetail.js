@@ -4,6 +4,7 @@ import { updateLayout } from '@/api/store'
 import DspLoader from '@/components/admin/common/loader'
 import React, { useEffect, useState } from 'react'
 import ConfirmPriceModal from './confirmPriceModal'
+import { swallError } from '@/utils/sweetAlerts'
 
 function LayoutDetail ({ storeId, products, layout, layoutId }) {
   const [layouts, setLayouts] = useState([])
@@ -12,10 +13,32 @@ function LayoutDetail ({ storeId, products, layout, layoutId }) {
   const [loader, setLoader] = useState(false)
   const [showPriceModal, setShowPriceModal] = useState(false)
 
-  // const handleUpdateStoreLayout = async () => {
-  //   const response = await updateLayout(storeId, layoutId)
-  //   console.log(response)
-  // }
+  const reloadPage = () => {
+    window.location.reload()
+  }
+  const handleUpdateStoreLayout = async (prices) => {
+    console.log(prices, 'prices')
+    Object.keys(prices).forEach((productId) => {
+      const productPrice = prices[productId]
+      if (productPrice === 0) {
+        return swallError('Los precios no pueden estar en 0', false)
+      }
+    })
+
+    try {
+      setShowPriceModal(false)
+      setLoader(true)
+      const response = await updateLayout(storeId, layoutId, prices)
+      console.log(response)
+      if (response.successful) {
+        swallError('Layout actualizado correctamente', true)
+        setShowPriceModal(false)
+        setTimeout(() => reloadPage(), 2000)
+      }
+    } catch (error) {
+      swallError('Error al actualizar el layout', false)
+    }
+  }
   const handleShowPriceModal = () => {
     setShowPriceModal(!showPriceModal)
   }
@@ -106,7 +129,7 @@ function LayoutDetail ({ storeId, products, layout, layoutId }) {
           </div>
           )}
       {showPriceModal && (
-        <ConfirmPriceModal showLayout={showLayout} products={products} storeId={storeId} />
+        <ConfirmPriceModal showLayout={showLayout} products={products} storeId={storeId} handleUpdateStoreLayout={handleUpdateStoreLayout} handleShowPriceModal={handleShowPriceModal} />
       )}
     </div>
   )
