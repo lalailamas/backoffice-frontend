@@ -35,9 +35,18 @@ export const menuItems = [
     label: 'Tiendas',
     icon: 'rotate-180',
     subMenuLinks: [
-      { label: 'Stock por máquina', href: '/stock_request' },
+      // { label: 'Stock por máquina', href: '/stock_request' },
       { label: 'Ajuste de Stock y Precios', href: '/stock_adjustment' },
-      { label: 'Informe de Inventario', href: '/stock_overview' }
+      // { label: 'Informe de Inventario', href: '/stock_overview' },
+      { label: 'Ver detalle de tiendas', href: '/stores' }
+
+    ]
+  },
+  {
+    label: 'Layout',
+    icon: 'rotate-180',
+    subMenuLinks: [
+      { label: 'Crear/Editar layout', href: '/layout' }
 
     ]
   },

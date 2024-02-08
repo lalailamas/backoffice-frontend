@@ -123,6 +123,7 @@ export default function Inventory () {
     } catch (error) {
       // Manejo del error
       console.error('Error al eliminar el producto:', error)
+      swallError('Error al eliminar el producto', false)
     }
   }
   const reloadPage = () => {

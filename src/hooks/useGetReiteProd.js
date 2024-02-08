@@ -10,9 +10,9 @@ export default function useGetReiteProd () {
   async function fetchAllReiteData () {
     try {
       const productsResponse = await getAllReiteData()
-      if (productsResponse.data) {
+      if (productsResponse) {
         setState({
-          products: productsResponse.data,
+          products: productsResponse,
           loading: false,
           error: null
         })

@@ -9,7 +9,7 @@ import Link from 'next/link'
 import TabsComponent from '@/components/admin/common/tabs'
 import CreditCardDisplay from './creditcard'
 import useGetStores2 from '@/hooks/useStores2'
-import SimpleModal from '@/app/restock/simpleModal'
+import SimpleModal from '@/components/admin/modals/simpleModal'
 
 function DetailsClient () {
   const searchParams = useSearchParams()
