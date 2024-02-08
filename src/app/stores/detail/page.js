@@ -46,7 +46,7 @@ function Detail () {
     }
 
     updateProductsInventory()
-  }, [storeId])
+  }, [storeId, layoutId])
   const tabs = [
     {
       id: 'products',
@@ -76,7 +76,7 @@ function Detail () {
       name: 'Faltante de stock',
       active: false,
       content: (
-        <div className='p-3'>
+        <div className='overflow-x-auto'>
           {stockRequest.length === 0 ? <DspLoader /> : <StockRequestTable data={stockRequest} />}
 
         </div>
@@ -88,7 +88,7 @@ function Detail () {
   return (
     <div className='p-5'>
       <div className='flex justify-center text-center p-5'>
-        <h2 className='text-d-dark-dark-purple text-2xl font-bold'>Detalle de tienda {storeName}</h2>
+        <h2 className='text-d-dark-dark-purple text-2xl font-bold '>Detalle de tienda {storeName}</h2>
       </div>
 
       <TabsComponent tabs={tabs} />

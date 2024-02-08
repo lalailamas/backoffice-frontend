@@ -66,21 +66,25 @@ function ConfirmPriceModal ({
                 </div>
               </div>
             </div>
-            <div className='mt-2 flex flex-col justify-center items-center overflow-y-auto'>
+            <div className='mt-2 flex flex-col justify-center items-center '>
               {
               prices && Object.keys(prices).map((productId, index) => {
                 return (
-                  <div key={index} className='grid grid-cols-12 gap-2 flex justify-between m-2'>
-                    <h3 className='col-span-8 text-lg leading-6 font-medium text-gray-900' id='modal-headline'>
+                  <div key={index} className='grid grid-cols-12 gap-2 m-2'>
+                    <h3 className='col-span-8 text-sm leading-6 mt-3' id='modal-headline'>
                       {products.find(product => product.productId === productId).productName}
                     </h3>
-                    <input
-                      type='number'
-                      className={`${prices[productId] === 0 ? ' col-span-4 input input-bordered border-red-500 w-full' : ' col-span-4 input input-bordered w-full'}`}
-                      placeholder='Precio'
-                      value={prices[productId]}
-                      onChange={(e) => setPrices({ ...prices, [productId]: e.target.value })}
-                    />
+                    <div className={`${prices[productId] === 0 ? 'col-span-4 flex items-center input input-bordered border-red-500 gap-2' : 'col-span-4 flex items-center input input-bordered gap-2'}`}>
+                      <span>$</span>
+                      <input
+                        type='number'
+                        placeholder='Precio'
+                        value={prices[productId]}
+                        onChange={(e) => setPrices({ ...prices, [productId]: e.target.value })}
+                        className='w-full'
+                      />
+                    </div>
+
                   </div>
                 )
               })
