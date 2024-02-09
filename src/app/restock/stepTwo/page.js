@@ -206,7 +206,8 @@ function StepTwo () {
                           displayedProducts.add(column.productId)
                           const product = products?.find((product) => product.productId === column.productId)
                           const quantityProd = inventory.products.find((prod) => prod.productId === column.productId)
-                          const maxQuantity = column.maxQuantity
+                          console.log(layout.maxQuantities, 'maxQuanities')
+                          const maxQuantity = layout.maxQuantities[column.productId]
                           const multipleOccurrences = tray.columns.filter((c) => c.productId === column.productId).length > 1
                           // const status = getStatus(quantityProd?.quantity || 0, maxQuantity)
 
