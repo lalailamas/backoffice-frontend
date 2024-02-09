@@ -18,8 +18,19 @@ function Categories () {
     try {
       const response = await listCategories(limit, page, search)
       // console.log(response, 'lista categorias')
-      setCategories(response.data)
-      setMeta(response.meta)
+      // setCategories(response.data)
+      // setMeta(response.meta)
+      if (response) {
+        setCategories(response.data)
+        setMeta({
+          pagination: {
+            page: parseInt(response.meta.pagination.page),
+            pages: response.meta.pagination.pages,
+            total: response.meta.pagination.total,
+            limit: parseInt(response.meta.pagination.limit)
+          }
+        })
+      }
     } catch (error) {
       console.error('Error fetching categories', error)
     }

@@ -40,7 +40,7 @@ function Marketing () {
   }
 
   return (
-    <div className='h-screen'>
+    <div className=''>
       <main className='p-12'>
         <Title>Dashboard Marketing </Title>
         <div className='flex flex-row p-4'>
