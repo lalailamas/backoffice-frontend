@@ -10,10 +10,31 @@ function VersionTag () {
 
   const handleVersion = async () => {
     const response = await fetchVersion()
-    const latestVersion = response.values[0].name
-    console.log(latestVersion, 'respuesta')
-    setVersion(latestVersion)
+
+    // Obtener la versión más reciente mediante reduce
+    const latestVersion = response.values.reduce((latest, current) => {
+      // Convertir las fechas de creación a objetos Date para compararlas
+      const latestDate = new Date(latest && latest.target.date)
+      const currentDate = new Date(current.target.date)
+
+      // Comprobar si la versión actual tiene una fecha de creación más reciente que la última registrada
+      if (!latest || currentDate > latestDate) {
+        return current
+      } else {
+        return latest
+      }
+    }, null)
+
+    // Si se encontró la última versión, establecerla
+    if (latestVersion) {
+      const latestVersionName = latestVersion.name
+      console.log(latestVersionName, 'respuesta')
+      setVersion(latestVersionName)
+    } else {
+      console.log('No se encontraron versiones')
+    }
   }
+
   return (
     <>
       <h1>Versión {version} </h1>
