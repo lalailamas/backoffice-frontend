@@ -7,6 +7,7 @@ import UsersTable from './list'
 import FileSaver from 'file-saver'
 import { swallError, Toast } from '@/utils/sweetAlerts'
 import Swal from 'sweetalert2'
+import ButtonPrimary from '@/components/admin/common/buttons/ButtonPrimary'
 
 function Users () {
   const [users, setUsers] = useState([])
@@ -51,17 +52,12 @@ function Users () {
       <div className='flex flex-row md:flex-row gap-y-2 md:gap-y-0 md:gap-x-2 justify-end'>
         <Link href='/users/create'>
           <div className='p-2 pb-8 pr-10'>
-            <button className='btn btn-sm join-item rounded-full bg-d-dark-dark-purple border-none text-d-white hover:bg-d-soft-soft-purple hover:text-d-dark-dark-purple'>Crear Usuario</button>
+            <ButtonPrimary text='Crear Usuario' type='create' />
           </div>
         </Link>
 
         <div className='p-2 pb-8 pr-10'>
-          <button onClick={handleExcelDownload} className='btn btn-sm join-item rounded-full bg-d-dark-dark-purple border-none text-d-white hover:bg-d-soft-soft-purple hover:text-d-dark-dark-purple'>
-            <svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' strokeWidth={1.5} stroke='currentColor' className='w-6 h-6 mr-2'>
-              <path strokeLinecap='round' strokeLinejoin='round' d='M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3' />
-            </svg>
-            Descargar
-          </button>
+          <ButtonPrimary text='Descargar' onClick={handleExcelDownload} type='download' />
         </div>
       </div>
       <div className='px-8 mb-11'>
