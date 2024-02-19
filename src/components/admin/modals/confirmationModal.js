@@ -1,4 +1,5 @@
 import React from 'react'
+import ButtonCancel from '../common/buttons/ButtonCancel'
 
 function ConfirmationModal ({ handleOperationConfirmation, title, message, confirmButtonText, cancelButtonText, handleConfirmationModal }) {
   return (
@@ -45,9 +46,8 @@ function ConfirmationModal ({ handleOperationConfirmation, title, message, confi
               <button type='button' className='w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-d-dark-dark-purple font-medium hover:bg-d-soft-soft-purple hover:text-d-dark-dark-purple text-white sm:ml-3 sm:w-auto sm:text-sm' onClick={handleOperationConfirmation}>
                 {confirmButtonText}
               </button>
-              <button type='button' databehavior='cancel' className='mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:mt-0 sm:w-auto sm:text-sm' onClick={handleConfirmationModal}>
-                {cancelButtonText}
-              </button>
+
+              <ButtonCancel onClick={handleConfirmationModal} />
             </div>
           </div>
         </div>
