@@ -53,18 +53,6 @@ const AccordeonCard = ({
     }
   }
 
-  // const handleCheck = () => {
-  //   // Lógica para confirmar la cantidad, podrías enviarla al servidor aquí si es necesario
-  // }
-  // const handleInputChange = (e) => {
-  //   const inputQuantity = parseInt(e.target.value, 10)
-  //   setQuantity(isNaN(inputQuantity) ? 0 : inputQuantity)
-  // }
-  // const handleInputChangePurchased = (e) => {
-  //   const inputQuantityPurchased = parseInt(e.target.value, 10)
-  //   setQuantityPurchased(isNaN(inputQuantityPurchased) ? 0 : inputQuantityPurchased)
-  // }
-
   return (
     <>
       {/* STEP FOUR */}
@@ -89,15 +77,12 @@ const AccordeonCard = ({
           )
         : step === 2
           ? (
-            // <div className='w-[250px] h-[210px]'>
             <section className='w-[250px] h-[300px] flex flex-col items-center align-center gap-6 rounded shadow-lg'>
-              {/* <div className='p-2 rounded shadow-lg gap-2 h-full overflow-hidden flex flex-col justify-end items-center'> */}
 
               <span className='flex  items-center  h-full'>
                 {header}
               </span>
               <div className='flex flex-row mb-6'>
-                {/* <div className='p-2 rounded shadow-lg gap-2 h-full overflow-hidden flex flex-row justify-end items-center'> */}
 
                 <button className='btn-sm join-item hover:bg-d-soft-soft-purple rounded-full' onClick={handleDecrease}>
                   <svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none'>
@@ -127,19 +112,15 @@ const AccordeonCard = ({
                     </defs>
                   </svg>
                 </button>
-                {/* <button className='btn btn-sm join-item rounded-full bg-d-dark-dark-purple border-none text-d-white hover:bg-d-soft-soft-purple hover:text-d-dark-dark-purple' onClick={handleCheck}>✓</button> */}
               </div>
-              {/* </div> */}
-              {/* </div> */}
+
             </section>
-            // </div>
+
             )
 
           : (
               {/* STEP THREE */},
                 <section className='w-[250px] h-[380px] flex flex-col items-center align-center rounded shadow-lg'>
-                  {/* <div className='p-2 rounded shadow-lg gap-2 w-full h-full'> */}
-                  {/* <div className='flex flex-col gap-8 items-center justify-end '> */}
                   <span className='flex  items-center  h-full'>
                     {header}
                   </span>
@@ -165,7 +146,6 @@ const AccordeonCard = ({
                         <input
                           readOnly
                           className='outline-none focus:outline-none text-center w-full font-semibold text-md md:text-basecursor-default flex items-center text-black' name='custom-input-number' value={quantity}
-                      // onChange={handleInputChange}
                           max={maxQuantity}
                         />
                         <button data-action='increment' className='btn-sm join-item rounded-full hover:bg-d-soft-soft-purple' onClick={handleIncrease}>
@@ -205,7 +185,6 @@ const AccordeonCard = ({
                         <input
                           readOnly
                           className='outline-none focus:outline-none text-center w-full font-semibold text-md flex items-center text-black' name='custom-input-number' value={quantityPurchased}
-                      // onChange={handleInputChange}
                           max={maxQuantity}
                         />
                         <button data-action='increment' className='btn-sm join-item rounded-full hover:bg-d-soft-soft-purple' onClick={handleIncreasePurchased}>
@@ -226,8 +205,6 @@ const AccordeonCard = ({
                     </div>
                   </div>
                 </section>
-        // </div>
-        // </div>
 
             )}
 
