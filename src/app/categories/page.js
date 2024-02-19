@@ -5,6 +5,7 @@ import CategoriesTable from './table'
 import Pager from '@/components/admin/common/pager'
 import { swallInfo, swallError } from '@/utils/sweetAlerts'
 import ButtonPrimary from '@/components/admin/common/buttons/ButtonPrimary'
+import ButtonCancel from '@/components/admin/common/buttons/ButtonCancel'
 
 function Categories () {
   const [categories, setCategories] = useState([])
@@ -95,12 +96,7 @@ function Categories () {
                     >
                       Crear
                     </button>
-                    <button
-                      onClick={closeModal}
-                      className='mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:mt-0 sm:w-auto sm:text-sm'
-                    >
-                      Cancelar
-                    </button>
+                    <ButtonCancel onClick={closeModal} />
                   </div>
                 </div>
               </div>
