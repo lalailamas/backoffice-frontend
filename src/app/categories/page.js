@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react'
 import CategoriesTable from './table'
 import Pager from '@/components/admin/common/pager'
 import { swallInfo, swallError } from '@/utils/sweetAlerts'
+import ButtonPrimary from '@/components/admin/common/buttons/ButtonPrimary'
 
 function Categories () {
   const [categories, setCategories] = useState([])
@@ -17,9 +18,6 @@ function Categories () {
   const fetchCategories = async () => {
     try {
       const response = await listCategories(limit, page, search)
-      // console.log(response, 'lista categorias')
-      // setCategories(response.data)
-      // setMeta(response.meta)
       if (response) {
         setCategories(response.data)
         setMeta({
@@ -108,7 +106,7 @@ function Categories () {
               </div>
             </div>
           )}
-          <button onClick={openModal} className='btn btn-sm join-item rounded-full bg-d-dark-dark-purple border-none text-d-white hover:bg-d-soft-soft-purple hover:text-d-dark-dark-purple'>Crear Categoría</button>
+          <ButtonPrimary text='Crear Categoría' onClick={openModal} />
         </div>
       </div>
       <div className='px-8 mb-11'>
