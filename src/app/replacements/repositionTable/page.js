@@ -70,11 +70,11 @@ export default function RepositionTable ({ data, stores }) {
     <>
       {window.innerWidth <= 431 ? (
         <div className='md:hidden m-2'>
-          {data.length === 0 ? (
+          {data && data.length === 0 ? (
             <MobileTableLoader />
           ) : (
             data.map((item) => (
-              <div key={item.external_transaction_id} className='pb-2'>
+              <div key={item.external_transaction_id} className='pb-2 h-screen'>
                 <div className='flex justify-between w-full md:hidden bg-d-soft-purple p-2 rounded-md'>
                   <div>
                     <h3>
@@ -136,8 +136,10 @@ export default function RepositionTable ({ data, stores }) {
         </div>
       ) : (
         <div className='overflow-x-auto p-4'>
-          {data.length === 0 ? (
+          {data && data.length === 0 ? (
+
             <RepositionTableLoader />
+
           ) : (
             <table className='table text-d-dark-dark-purple table-zebra mt-8 p-8 max-[431px]:hidden'>
               <thead>

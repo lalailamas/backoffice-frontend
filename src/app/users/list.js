@@ -1,3 +1,4 @@
+'use client'
 import React, { useState } from 'react'
 import Link from 'next/link'
 import DspLoader from '@/components/admin/common/loader'
@@ -5,7 +6,7 @@ import ConfirmationModal from '../../components/admin/modals/confirmationModal'
 import { deleteUser } from '@/api/user'
 import { swallError, swallInfo } from '@/utils/sweetAlerts'
 
-export default function UsersTable ({ data, updateUsers }) {
+export default function UsersTable ({ data }) {
   const [showModal, setShowModal] = useState(false)
   const [selectedUser, setSelectedUser] = useState(null)
 
@@ -26,7 +27,6 @@ export default function UsersTable ({ data, updateUsers }) {
       await deleteUser(id, email)
       setShowModal(false)
       swallInfo('Usuario eliminado exitosamente')
-      updateUsers()
     } catch (error) {
       console.error('Error', error)
     }
@@ -57,7 +57,7 @@ export default function UsersTable ({ data, updateUsers }) {
               </tr>
             </thead>
             <tbody>
-              {data.map((user) => (
+              {data.data.map((user) => (
                 <tr key={user.id}>
                   <td />
                   <td>{user.id}</td>
@@ -106,7 +106,7 @@ export default function UsersTable ({ data, updateUsers }) {
       {/* MOBILE */}
       <form className='min-[431px]:hidden'>
         <div className='overflow-x-auto'>
-          {data.map((user) => (
+          {data.data.map((user) => (
             <div key={user.fullname} className='pb-2 w-screen'>
               <div className='flex flex-col md:hidden bg-d-soft-purple rounded-md'>
                 <div className='flex justify-end mr-16 mt-2'>
