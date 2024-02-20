@@ -1,7 +1,5 @@
 'use client'
 import React, { useState } from 'react'
-// import Webcam from 'react-webcam'
-// import { Camera } from 'react-camera-pro'
 import { Camera } from 'react-html5-camera-photo'
 import 'react-html5-camera-photo/build/css/index.css'
 import Comments from './comments'
@@ -39,10 +37,6 @@ function CameraModal ({
     setShowCamera(!showcamera)
     setImage('')
   }
-  // const handleShowInputFile = () => {
-  //   setShowCamera(false)
-  //   setShowInput(true)
-  // }
 
   function handleTakePhotoAnimationDone (dataUri) {
     // console.log(dataUri, 'takePhoto')
@@ -53,13 +47,6 @@ function CameraModal ({
     console.log('handleCameraError', error)
   }
 
-  // function handleCameraStart (stream) {
-  //   console.log('handleCameraStart')
-  // }
-
-  // function handleCameraStop () {
-  //   console.log('handleCameraStop')
-  // }
   const handleFileInputChange = (e) => {
     const file = e.target.files[0]
     if (file) {
@@ -126,7 +113,6 @@ function CameraModal ({
                 ? (
                   <div className='relative'>
                     <button className='absolute top-2 right-2 z-10' onClick={handleShowCamera}>
-                      {/* Puedes personalizar el botón de cerrar según tus necesidades */}
                       <span className='text-2xl font-bold text-grey-700'>X</span>
                     </button>
                     <img src={image} alt='Taken photo' />
@@ -136,7 +122,6 @@ function CameraModal ({
                   ? (
                     <div className={`${showcamera ? 'mt-2 relative' : 'hidden'}`}>
                       <button className='absolute top-2 right-2 z-10' onClick={handleShowCamera}>
-                        {/* Puedes personalizar el botón de cerrar según tus necesidades */}
                         <span className='text-2xl font-bold text-white'>X</span>
                       </button>
                       <Camera
@@ -176,23 +161,11 @@ function CameraModal ({
                               </div>
                             </div>
                           </button>
-                          {/* <button className='flex-grow' onClick={handleShowInputFile}>
-                            <div className='flex-grow'>
-                              <div className='flex flex-col justify-center items-center w-full h-full rounded-lg border border-gray-300 p-4 text-center'>
-                                <svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' strokeWidth='1.5' stroke='currentColor' className='w-6 h-6'>
-                                  <path strokeLinecap='round' strokeLinejoin='round' d='M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z' />
-                                </svg>
-                                <p className='text-xs'>Subir imagen</p>
-                              </div>
-                            </div>
-                          </button> */}
-
                         </div>
                         )
                       : (
                         <div className='relative'>
                           <button className='absolute top-2 right-2 z-10' onClick={handleShowBack}>
-                            {/* Puedes personalizar el botón de cerrar según tus necesidades */}
                             <span className='text-2xl font-bold text-grey -700'>X</span>
                           </button>
                           <div className='p-3'>
@@ -204,15 +177,16 @@ function CameraModal ({
             <div className={`${image && step === 4 ? '' : 'hidden'}`}>
               {(
                 step === 4
-                  ? (<Comments SendSnapshotComment={SendSnapshotComment} />)
+                  ? (<Comments SendSnapshotComment={SendSnapshotComment} handleOperationConfirmation={handleOperationConfirmation} />)
                   : null
               )}
 
             </div>
 
-            <div className='mt-5 sm:mt-4 sm:flex justify-start sm:flex-row-reverse justify-start'>
-
-              <ButtonCancel onClick={handleOperationConfirmation} />
+            <div className='mt-5 sm:mt-4 sm:flex justify-start sm:flex-row-reverse'>
+              {/* <button type='button' databehavior='cancel' className='mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:mt-0 sm:w-auto sm:text-sm' onClick={handleOperationConfirmation}>
+                {cancelButtonText}
+              </button> */}
 
             </div>
           </div>

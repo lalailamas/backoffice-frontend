@@ -13,12 +13,10 @@ import useFlattenLayout from '@/hooks/useFlattenLayout'
 import { swallError } from '@/utils/sweetAlerts'
 import { errorHandler } from '@/utils/errors/errors'
 
-// import useGetReiteProd from '@/hooks/useGetReiteProd'
-
 function StepTwo () {
   const searchParams = useSearchParams()
   const externalId = searchParams.get('external_id')
-  console.log(externalId, 'external ID en steptwo')
+  // console.log(externalId, 'external ID en steptwo')
   const layoutId = searchParams.get('layout_id')
   const storeName = searchParams.get('store_name')
   const externalTransactionId = searchParams.get('externalTransactionId')
@@ -30,11 +28,14 @@ function StepTwo () {
   const [modalVisible, setModalVisible] = useState(false)
   const [loaderVisible, setLoaderVisible] = useState(false)
   const { flattenedLayout } = useFlattenLayout(layoutId)
+
   const [collapsedRows, setCollapsedRows] = useState({})
+  console.log(collapsedRows, 'collapsedRows')
   const [allCheckboxesChecked, setAllCheckboxesChecked] = useState(false)
-  console.log(inventory, 'inventory')
-  console.log(layout, 'layout')
-  console.log(products, 'products')
+  console.log(allCheckboxesChecked, 'casillas checks')
+  // console.log(inventory, 'inventory')
+  // console.log(layout, 'layout')
+  // console.log(products, 'products')
 
   const router = useRouter()
 
@@ -87,11 +88,8 @@ function StepTwo () {
     }
     return mergedOccurrenceQuantity
   }
+
   const setHandleStock = async () => {
-    if (!allCheckboxesChecked) {
-      swallError('Por favor, clickea todas las casillas para continuar', false)
-      return
-    }
     const flatOccInventory = await flattenData(occInventory)
     const mergedOccurrence = await mergeOccurrence(flatOccInventory)
 
@@ -115,10 +113,8 @@ function StepTwo () {
     })
 
     try {
-      console.log('Step 2: stockData to Confirm Inventory', stockData)
       setLoaderVisible(true)
       const response = await postRestockInventory(externalId, transactionId, stockData)
-      console.log('Step 2: inventory response', response)
       if (response.result.successful) {
         swallError('Stock confirmado', true)
         router.push(
@@ -128,13 +124,23 @@ function StepTwo () {
       }
     } catch (error) {
       errorHandler(error, stockData)
-      // swallError('Ocurrió un error, lo sentimos mucho', false)
     }
   }
 
-  const handleConfirmationModal = () => {
-    setModalVisible(!modalVisible)
+  const handleCheckboxChange = (index) => {
+    // Actualiza el estado collapsedRows y verifica después de la actualización
+    setCollapsedRows((prevCollapsedRows) => {
+      const updatedCollapsedRows = {
+        ...prevCollapsedRows,
+        [index]: !prevCollapsedRows[index]
+      }
+      const allChecked = Object.values(updatedCollapsedRows).every((value) => value)
+      setAllCheckboxesChecked(allChecked)
+      console.log(allChecked, 'allChecked')
+      return updatedCollapsedRows
+    })
   }
+
   if (loaderVisible) {
     return <DspLoader />
   }
@@ -153,14 +159,12 @@ function StepTwo () {
   //   }
   // }
 
-  const handleRowCollapse = (index) => {
-    setCollapsedRows({
-      ...collapsedRows,
-      [index]: !collapsedRows[index]
-    })
-    // Lógica para verificar si todos los checkboxes están marcados
-    const allChecked = Object.values(collapsedRows).every((value) => value)
-    setAllCheckboxesChecked(allChecked)
+  const handleConfirmationModal = () => {
+    if (!allCheckboxesChecked) {
+      swallError('Por favor, haz clic en todas las casillas para continuar', false)
+      return
+    }
+    setModalVisible(!modalVisible)
   }
 
   return (
@@ -206,7 +210,7 @@ function StepTwo () {
                           displayedProducts.add(column.productId)
                           const product = products?.find((product) => product.productId === column.productId)
                           const quantityProd = inventory.products.find((prod) => prod.productId === column.productId)
-                          console.log(layout.maxQuantities, 'maxQuanities')
+                          // console.log(layout.maxQuantities, 'maxQuanities')
                           const maxQuantity = layout.maxQuantities[column.productId]
                           const multipleOccurrences = tray.columns.filter((c) => c.productId === column.productId).length > 1
                           // const status = getStatus(quantityProd?.quantity || 0, maxQuantity)
@@ -263,7 +267,8 @@ function StepTwo () {
                                 <input
                                   type='checkbox'
                                   className='form-checkbox h-6 w-6 rounded border border-d-purple'
-                                  onChange={() => handleRowCollapse(column.productId + index)}
+                                  onChange={() => handleCheckboxChange(column.productId + index)}
+                                  // checked={collapsedRows[column.productId + index] || false}
                                 />
                               </td>
                             </tr>

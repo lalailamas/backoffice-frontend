@@ -1,8 +1,7 @@
-'use client'
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 // import InsideLayout from '@/components/admin/layouts/inside'
 import Link from 'next/link'
-import { listUsers, downloadExcel } from '../../api/user'
+import { listUsers } from '../../api/user'
 import UsersTable from './list'
 import FileSaver from 'file-saver'
 import { swallError, Toast } from '@/utils/sweetAlerts'
@@ -45,7 +44,6 @@ function Users () {
   }
   return (
     <>
-      {/* <InsideLayout /> */}
       <div className='flex justify-center mt-4 mb-4 p-4'>
         <h2 className='text-d-dark-dark-purple text-2xl font-bold text-center md:text-left'>Usuarios</h2>
       </div>
@@ -62,11 +60,10 @@ function Users () {
       </div>
       <div className='px-8 mb-11'>
         <UsersTable
-          data={users} updateUsers={fetchUsers}
+          data={users}
         />
       </div>
     </>
   )
 }
-
 export default Users
