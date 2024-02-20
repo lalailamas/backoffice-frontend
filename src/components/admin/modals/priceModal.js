@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react'
 import { patchReitePrices } from '@/api/product/reite'
 import ButtonCancel from '../common/buttons/ButtonCancel'
+import ButtonPrimary from '../common/buttons/ButtonPrimary'
 
 function PriceModal ({
   title,
@@ -105,13 +106,8 @@ function PriceModal ({
               </div>
             </div>
 
-            <div className='mt-5 sm:mt-4 sm:flex sm:flex-row-reverse'>
-              <button
-                type='button' className='w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-d-dark-dark-purple font-medium hover:bg-d-soft-soft-purple hover:text-d-dark-dark-purple text-white sm:ml-3 sm:w-auto sm:text-sm'
-                onClick={priceChangeHandler}
-              >
-                {confirmButtonText}
-              </button>
+            <div className='mt-5 sm:mt-4 sm:flex sm:flex-row-reverse gap-4'>
+              <ButtonPrimary onClick={priceChangeHandler} text={confirmButtonText} />
               <ButtonCancel onClick={handleConfirmationModal} />
             </div>
           </div>

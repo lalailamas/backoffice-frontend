@@ -8,6 +8,8 @@ import { swallError, swallInfo } from '@/utils/sweetAlerts'
 import AddProductModal from './addProductModal'
 import TabsComponentLayout from './tabs'
 import ConfirmationModal from '@/components/admin/modals/confirmationModal'
+import ButtonPrimary from '@/components/admin/common/buttons/ButtonPrimary'
+import ButtonCancel from '@/components/admin/common/buttons/ButtonCancel'
 
 function Layout () {
   const [layouts, setLayouts] = useState([])
@@ -500,21 +502,20 @@ function Layout () {
         </button>
         <div className='flex justify-center pb-10 gap-8'>
           {tabsState[1].active && (
-            <button
-              type='button'
-              onClick={handleDeleteClick}
-              className='inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-red-500 rounded-lg hover:bg-red-600 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300'
-            >
-              Eliminar Layout
-            </button>
+            <ButtonCancel onClick={handleDeleteClick} text='Eliminar Layout' />
+
           )}
-          <button
+          {/* <button
             type='button'
             onClick={tabsState[0].active ? handleSaveNewLayout : handleEditLayout}
             className='inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-d-dark-dark-purple rounded-lg hover:bg-d-soft-soft-purple hover:text-d-dark-dark-purple focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800'
           >
             {tabsState[0].active ? 'Crear Nuevo Layout' : 'Editar Layout'}
-          </button>
+          </button> */}
+          <ButtonPrimary
+            onClick={tabsState[0].active ? handleSaveNewLayout : handleEditLayout}
+            text={tabsState[0].active ? 'Crear Nuevo Layout' : 'Editar Layout'}
+          />
 
         </div>
       </DragDropContext>
@@ -522,7 +523,6 @@ function Layout () {
         <ConfirmationModal
           title='Confirmación'
           message='¿Estás seguro de eliminar este layout?'
-          cancelButtonText='Cancelar'
           handleOperationConfirmation={handleDeleteConfirmation}
           handleConfirmationModal={handleConfirmationModal}
           confirmButtonText='Eliminar layout'

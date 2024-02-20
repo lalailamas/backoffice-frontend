@@ -1,5 +1,6 @@
 import React from 'react'
 import ButtonCancel from '../common/buttons/ButtonCancel'
+import ButtonPrimary from '../common/buttons/ButtonPrimary'
 
 function ConfirmationModal ({ handleOperationConfirmation, title, message, confirmButtonText, cancelButtonText, handleConfirmationModal }) {
   return (
@@ -42,10 +43,9 @@ function ConfirmationModal ({ handleOperationConfirmation, title, message, confi
                 </div>
               </div>
             </div>
-            <div className='mt-5 sm:mt-4 sm:flex sm:flex-row-reverse'>
-              <button type='button' className='w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-d-dark-dark-purple font-medium hover:bg-d-soft-soft-purple hover:text-d-dark-dark-purple text-white sm:ml-3 sm:w-auto sm:text-sm' onClick={handleOperationConfirmation}>
-                {confirmButtonText}
-              </button>
+            <div className='mt-5 sm:mt-4 sm:flex sm:flex-row-reverse gap-4'>
+              {/* <button type='button' className='w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-d-dark-dark-purple font-medium hover:bg-d-soft-soft-purple hover:text-d-dark-dark-purple text-white sm:ml-3 sm:w-auto sm:text-sm' /> */}
+              <ButtonPrimary onClick={handleOperationConfirmation} text={confirmButtonText} />
 
               <ButtonCancel onClick={handleConfirmationModal} />
             </div>

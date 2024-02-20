@@ -4,6 +4,8 @@ import { useSearchParams, useRouter } from 'next/navigation'
 import { getCategory, editCategory } from '@/api/categories'
 import DspLoader from '@/components/admin/common/loader'
 import { swallError, swallInfo } from '@/utils/sweetAlerts'
+import ButtonCancel from '@/components/admin/common/buttons/ButtonCancel'
+import ButtonPrimary from '@/components/admin/common/buttons/ButtonPrimary'
 
 function EditCategory () {
   const searchParams = useSearchParams()
@@ -90,19 +92,9 @@ function EditCategory () {
           </div>
 
           <div className='flex flex-col sm:flex-row gap-4'>
-            <button
-              className='btn border-none mt-4 rounded-2xl bg-d-dark-dark-purple text-d-white hover:bg-d-soft-soft-purple hover:text-d-dark-dark-purple disabled:text-d-white'
-              onClick={handleSave}
-            >
-              Guardar Cambios
-            </button>
-            <button
-              type='button'
-              className='btn border-none mt-4 rounded-2xl bg-d-soft-soft-purple text-d-dark-dark-purple hover:bg-d-dark-dark-purple hover:text-d-white'
-              onClick={() => router.push('/categories')}
-            >
-              Cancelar
-            </button>
+            <ButtonCancel text='Cancelar' onClick={() => router.push('/categories')} />
+            <ButtonPrimary text='Guardar Cambios' onClick={handleSave} />
+
           </div>
         </div>
       </div>
