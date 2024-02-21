@@ -28,10 +28,10 @@ function VersionTag () {
     // Si se encontró la última versión, establecerla
     if (latestVersion) {
       const latestVersionName = latestVersion.name
-      console.log(latestVersionName, 'respuesta')
+      // console.log(latestVersionName, 'respuesta')
       setVersion(latestVersionName)
     } else {
-      console.log('No se encontraron versiones')
+      // console.log('No se encontraron versiones')
     }
   }
 
