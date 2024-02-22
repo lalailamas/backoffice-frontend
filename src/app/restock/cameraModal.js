@@ -199,13 +199,13 @@ function CameraModal ({
                         )}
             </div>
 
-            <div className='mt-5 sm:mt-4 sm:flex sm:flex-row-reverse'>
+            <div className='mt-5 flex flex-row-reverse gap-2'>
               {image &&
                 <div>
                   <button
                     type='button'
                     databehavior='submit'
-                    className={`${image ? ' mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:mt-0 sm:w-auto sm:text-sm' : 'hidden'}`}
+                    className={`${image ? ' inline-flex items-center px-4 py-2 text-sm font-medium text-center text-white bg-d-dark-dark-purple rounded-lg hover:bg-d-soft-soft-purple hover:text-d-dark-dark-purple focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800' : 'hidden'}`}
                     onClick={SendSnapshot(image)}
                   >
                     Siguiente
