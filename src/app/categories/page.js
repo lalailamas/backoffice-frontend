@@ -6,6 +6,7 @@ import Pager from '@/components/admin/common/pager'
 import { swallInfo, swallError } from '@/utils/sweetAlerts'
 import ButtonPrimary from '@/components/admin/common/buttons/ButtonPrimary'
 import ButtonCancel from '@/components/admin/common/buttons/ButtonCancel'
+import MainTitle from '@/components/admin/common/titles/MainTitle'
 
 function Categories () {
   const [categories, setCategories] = useState([])
@@ -62,9 +63,7 @@ function Categories () {
 
   return (
     <>
-      <div className='flex justify-center mt-4 mb-4 p-4'>
-        <h2 className='text-d-dark-dark-purple text-2xl font-bold text-center md:text-left'>Categorías</h2>
-      </div>
+      <MainTitle>Categorías</MainTitle>
       <div className='flex flex-row md:flex-row gap-y-2 md:gap-y-0 md:gap-x-2 justify-end'>
         <div className='p-2 pb-8 pr-10'>
           {showModal && (
