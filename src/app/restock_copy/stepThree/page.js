@@ -2,7 +2,6 @@
 import StepLayout from '../stepLayout'
 import { useSearchParams, useRouter } from 'next/navigation'
 import useGetLayout from '@/hooks/useGetLayout'
-// import useGetReiteProd from '@/hooks/useGetReiteProd'
 import AccordeonCard from '../acordeonCard'
 import DspLoader from '@/components/admin/common/loader'
 import useGetInventory from '@/hooks/useGetInventory'
@@ -12,6 +11,7 @@ import { putRestockResult } from '@/api/restock'
 import ConfirmationModal from '../../../components/admin/modals/confirmationModal'
 import { swallError } from '@/utils/sweetAlerts'
 import { errorHandler } from '@/utils/errors/errors'
+import ButtonPrimary from '@/components/admin/common/buttons/ButtonPrimary'
 
 export default function page () {
   const searchParams = useSearchParams()
@@ -194,18 +194,8 @@ export default function page () {
           </div>
           )}
       <div className='flex justify-center pb-10'>
-        <button
-          type='button'
-          onClick={() => {
-            handleConfirmationModal()
-          }}
-          className='inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-d-dark-dark-purple rounded-lg hover:bg-d-soft-soft-purple hover:text-d-dark-dark-purple focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800'
-        >
-          Confirmar Restock
-          <svg className='w-3.5 h-3.5 ml-2' aria-hidden='true' xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 14 10'>
-            <path stroke='currentColor' strokeLinecap='round' strokeLinejoin='round' strokeWidth='2' d='M1 5h12m0 0L9 1m4 4L9 9' />
-          </svg>
-        </button>
+        <ButtonPrimary text='Confirmar Restock' onClick={() => { handleConfirmationModal() }} />
+
       </div>
       {modalVisible && (
         <div className='fixed z-50 flex items-center justify-center'>

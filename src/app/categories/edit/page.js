@@ -92,17 +92,9 @@ function EditCategory () {
             </label>
           </div>
 
-          <div className='flex flex-col sm:flex-row gap-4'>
-            <ButtonPrimary text='Guardar cambios' onClick={handleSave} />
-            <ButtonCancel onClick={() => router.push('/categories')} />
-            {/* <button
-              type='button'
-              className='btn border-none mt-4 rounded-2xl bg-d-soft-soft-purple text-d-dark-dark-purple hover:bg-d-dark-dark-purple hover:text-d-white'
+          <ButtonCancel text='Cancelar' onClick={() => router.push('/categories')} />
+          <ButtonPrimary text='Guardar cambios' onClick={handleSave} />
 
-            >
-              Cancelar
-            </button> */}
-          </div>
         </div>
       </div>
     </>
