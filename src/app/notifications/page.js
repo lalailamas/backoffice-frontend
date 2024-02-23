@@ -54,7 +54,7 @@ const IndexPage = () => {
   }
 
   return (
-    <div>
+    <div className='flex flex-col p-4'>
       <h1>Estado de las Tiendas</h1>
       <ButtonPrimary text='Tienda A UP' onClick={() => handleNotify('Tienda A', 'UP')} />
       <ButtonPrimary text='Tienda A DOWN' onClick={() => handleNotify('Tienda A', 'DOWN')} />
