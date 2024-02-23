@@ -1,26 +1,47 @@
 'use client'
 import ButtonPrimary from '@/components/admin/common/buttons/ButtonPrimary'
 import { useEffect, useState } from 'react'
+import { useSession } from 'next-auth/react'
 
 const IndexPage = () => {
+  const { data: session, status } = useSession()
+  console.log(session?.user.email)
   const [notifications, setNotifications] = useState([])
+  console.log(notifications)
 
   useEffect(() => {
-    const eventSource = new EventSource('http://localhost:3500/api/notification/reite/subscribe') //eslint-disable-line
+    if (status === 'authenticated' && session.user.email) {
+      try {
+        const eventSource = new EventSource('http://localhost:3500/api/notification/subscribe?email=graciana.baratti@gmail.com', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+          }
+        })
 
-    eventSource.onmessage = (event) => {
-      const newNotification = JSON.parse(event.data)
-      setNotifications(prevNotifications => [...prevNotifications, newNotification])
-    }
+        eventSource.onmessage = (event) => {
+          const newNotification = JSON.parse(event.data)
+          console.log(newNotification, 'newNotification')
 
-    eventSource.onerror = (error) => {
-      console.error('Error de EventSource:', error)
-    }
+          // Verificar si la notificación ya existe en el estado
+          if (notifications.find(notification => notification.id === newNotification.id)) return
 
-    return () => {
-      eventSource.close()
+          // Agregar la nueva notificación al estado
+          setNotifications(prevNotifications => [...prevNotifications, newNotification])
+        }
+
+        eventSource.onerror = (error) => {
+          console.error('Error de EventSource:', error)
+        }
+
+        return () => {
+          eventSource.close()
+        }
+      } catch (e) {
+        console.log(e)
+      }
     }
-  }, [])
+  }, [status, session])
 
   const handleNotify = async (store, status) => {
     await fetch('http://localhost:3500/api/notification/reite/store/status', {
@@ -41,7 +62,7 @@ const IndexPage = () => {
       <ButtonPrimary text='Tienda B DOWN' onClick={() => handleNotify('Tienda B', 'DOWN')} />
       <ul>
         {notifications.map((notification, index) => (
-          <li key={index}>{`${notification.store} está ${notification.status}`}</li>
+          <li key={index}>{`${notification.title}: ${notification.body}`}</li>
         ))}
       </ul>
     </div>
