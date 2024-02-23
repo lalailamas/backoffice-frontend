@@ -1,9 +1,7 @@
 'use client'
-
 import StepLayout from '../stepLayout'
 import { useSearchParams, useRouter } from 'next/navigation'
 import useGetLayout from '@/hooks/useGetLayout'
-// import useGetReiteProd from '@/hooks/useGetReiteProd'
 import AccordeonCard from '../acordeonCard'
 import DspLoader from '@/components/admin/common/loader'
 import useGetInventory from '@/hooks/useGetInventory'
@@ -13,8 +11,7 @@ import { useState } from 'react'
 import CameraModal from './cameraModal'
 import { putStockImageUpdate } from '@/api/stock'
 import { errorHandler } from '@/utils/errors/errors'
-// import useGetStores2 from '@/hooks/useStores2'
-// import useGetStoreData from '@/hooks/useGetStoreData'
+import ButtonPrimary from '@/components/admin/common/buttons/ButtonPrimary'
 
 export default function stepFour () {
   const searchParams = useSearchParams()
@@ -167,16 +164,7 @@ export default function stepFour () {
           </div>
           )}
       <div className='flex gap-5 justify-center pb-10'>
-
-        <button
-          type='button'
-          onClick={() => {
-            handleCameraModal()
-          }}
-          className='items-center px-3 py-2 text-sm font-medium text-center text-white bg-d-dark-dark-purple rounded-lg hover:bg-d-soft-soft-purple hover:text-d-dark-dark-purple focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800'
-        >
-          Confirmar Operación
-        </button>
+        <ButtonPrimary text='Confirmar Operacion' onClick={() => { handleCameraModal() }} />
       </div>
 
       {modalVisible && (
@@ -200,7 +188,7 @@ export default function stepFour () {
             step={4}
             handleConfirmationModal={handleConfirmationModal}
             handleOperationConfirmation={handleCameraModal}
-            title='Necesitamos que tomes una foto de la tienda para confirmar la reposición'
+            title='Toma una foto de la tienda para confirmar la reposición'
             message={(
               <span>
                 Toma una foto de la tienda luego de cerrarla

@@ -1,4 +1,5 @@
 'use client'
+import MainTitle from '@/components/admin/common/titles/MainTitle'
 import React from 'react'
 
 function PurchaseRegister () {
@@ -49,8 +50,7 @@ function PurchaseRegister () {
 
   return (
     <>
-      <h2 className='text-d-dark-dark-purple text-2xl font-bold text-center p-4'>Registro de Compras</h2>
-
+      <MainTitle>Registro de Compras</MainTitle>
       <div className='overflow-x-auto p-5'>
         <table className='table text-d-dark-dark-purple table-zebra mt-8 p-8'>
           <thead>

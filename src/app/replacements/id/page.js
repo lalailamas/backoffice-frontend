@@ -7,6 +7,7 @@ import OperationTable from './operationTable'
 import { Card, Grid, Metric, Text } from '@tremor/react'
 import Image from 'next/image'
 import useGetStores2 from '@/hooks/useStores2'
+import MainTitle from '@/components/admin/common/titles/MainTitle'
 // const store = 'https://despnsa247-public-files.s3.amazonaws.com/gabinete1.jpg'
 
 function page () {
@@ -87,7 +88,7 @@ function page () {
         : (
           <div>
 
-            <h2 className='text-d-dark-dark-purple text-2xl font-bold text-center p-4 '>Detalle de Reposición </h2>
+            <MainTitle>Detalle de Reposición</MainTitle>
             <h3 className='text-d-dark-dark-purple text-xl text-center pb-4'>{findStoreName(OperationStock[0].store_id)} ({OperationStock[0].store_id}) </h3>
 
             <div className='flex justify-center w-full max-[431px]:hidden'>

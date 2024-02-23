@@ -8,6 +8,9 @@ import { swallError, swallInfo } from '@/utils/sweetAlerts'
 import AddProductModal from './addProductModal'
 import TabsComponentLayout from './tabs'
 import ConfirmationModal from '@/components/admin/modals/confirmationModal'
+import MainTitle from '@/components/admin/common/titles/MainTitle'
+import ButtonCancel from '@/components/admin/common/buttons/ButtonCancel'
+import ButtonPrimary from '@/components/admin/common/buttons/ButtonPrimary'
 
 function Layout () {
   const [layouts, setLayouts] = useState([])
@@ -425,10 +428,7 @@ function Layout () {
     <div>
       <DragDropContext onDragEnd={handleDragEnd}>
         <div id='DivId' className='flex justify-center text-center p-5'>
-          <h2 className='text-d-dark-dark-purple text-2xl font-bold'>
-            {tabsState[0].active ? 'Crear Layout' : 'Editar Layout'}
-          </h2>
-
+          <MainTitle>{tabsState[0].active ? 'Crear Layout' : 'Editar Layout'}</MainTitle>
         </div>
         <div className='flex justify-center'>
           <TabsComponentLayout tabs={tabs} handleTabChange={handleTabChange} />
@@ -438,7 +438,6 @@ function Layout () {
             ? 'En esta sección podrás crear un nuevo layout basándote en plantillas existentes'
             : 'En esta sección podrás editar o eliminar un layout'}
         </h3>
-
         <div className='flex justify-center items-center p-5'>
           <div className='flex flex-row items-center gap-4'>
             <select
@@ -463,13 +462,11 @@ function Layout () {
             />
           </div>
         </div>
-
         <div className={`${selectedLayoutDetails !== '0' ? 'flex flex-col items-center justify-center' : 'hidden'}`} />
         <div className='p-10  border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 '>
           <h5 className='text-2xl text-center mb-3 font-bold text-gray-900 dark:text-white'>{selectedLayout}</h5>
           {selectedLayoutDetails && selectedLayoutDetails.trays && selectedLayoutDetails.trays.map((tray, trayIndex) => (
             <React.Fragment key={trayIndex}>
-
               <DraggableTray
                 tray={tray}
                 trayIndex={trayIndex}
@@ -481,11 +478,9 @@ function Layout () {
                 handleDeleteTray={() => handleDeleteTray(trayIndex)}
                 handleDeleteTrayConfirmed={handleDeleteTrayConfirmed}
               />
-
             </React.Fragment>
           ))}
         </div>
-
         <button
           onClick={handleAddTray}
           className='w-full px-4'
@@ -500,22 +495,9 @@ function Layout () {
         </button>
         <div className='flex justify-center pb-10 gap-8'>
           {tabsState[1].active && (
-            <button
-              type='button'
-              onClick={handleDeleteClick}
-              className='inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-red-500 rounded-lg hover:bg-red-600 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300'
-            >
-              Eliminar Layout
-            </button>
+            <ButtonCancel text='Eliminar Layout' onClick={handleDeleteClick} />
           )}
-          <button
-            type='button'
-            onClick={tabsState[0].active ? handleSaveNewLayout : handleEditLayout}
-            className='inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-d-dark-dark-purple rounded-lg hover:bg-d-soft-soft-purple hover:text-d-dark-dark-purple focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800'
-          >
-            {tabsState[0].active ? 'Crear Nuevo Layout' : 'Editar Layout'}
-          </button>
-
+          <ButtonPrimary text={tabsState[0].active ? 'Crear Nuevo Layout' : 'Editar Layout'} onClick={tabsState[0].active ? handleSaveNewLayout : handleEditLayout} />
         </div>
       </DragDropContext>
       {showLayoutModal && (
