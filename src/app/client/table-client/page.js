@@ -10,6 +10,7 @@ import FileSaver from 'file-saver'
 import Swal from 'sweetalert2'
 import { swallError, Toast } from '@/utils/sweetAlerts'
 import ButtonPrimary from '@/components/admin/common/buttons/ButtonPrimary'
+import MainTitle from '@/components/admin/common/titles/MainTitle'
 
 function TableClient () {
   const [clients, setClients] = useState([])
@@ -91,7 +92,7 @@ function TableClient () {
   return (
     <>
       <div className='h-screen'>
-        <h1 className=' my-10 text-d-dark-dark-purple text-2xl font-bold text-center'>Clientes</h1>
+        <MainTitle>Clientes</MainTitle>
         <div className='flex items-center gap-4 px-8 mt-4 max-[431px]:flex-col'>
           <div className='join'>
             <input

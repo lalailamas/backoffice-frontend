@@ -210,7 +210,7 @@ function CameraModal ({
 
             </div>
 
-            <div className='mt-5 sm:mt-4 sm:flex justify-start sm:flex-row-reverse justify-start'>
+            <div className='mt-5 sm:mt-4 sm:flex justify-start sm:flex-row-reverse'>
               <ButtonCancel onClick={handleOperationConfirmation} />
 
             </div>

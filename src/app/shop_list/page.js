@@ -11,6 +11,7 @@ import Swal from 'sweetalert2'
 import TabsComponent from '@/components/admin/common/tabs'
 import RequestedStockTable from './requestedStockTable'
 import ButtonPrimary from '@/components/admin/common/buttons/ButtonPrimary'
+import MainTitle from '@/components/admin/common/titles/MainTitle'
 
 function shopList () {
   const [ids, setIds] = useState([])
@@ -148,11 +149,8 @@ function shopList () {
   ]
   return (
     <div className='h-screen'>
-
-      <h1 className='p-12 text-d-dark-dark-purple text-2xl font-bold text-center'>Gestión de abastecimiento</h1>
-
+      <MainTitle>Gestión de abastecimiento</MainTitle>
       <div className='flex justify-center gap-6 '>
-
         <MultiSelect
           placeholderSearch='Buscar'
           placeholder='Selecciona una(s) tienda(s)'
@@ -160,7 +158,6 @@ function shopList () {
           onValueChange={handleStoreChange}
           className='data-te-select-init multiple w-1/2'
         >
-
           {stores?.map((store) => (
             store.layoutId
               ? (
@@ -198,11 +195,9 @@ function shopList () {
             </div>
           </div>}
       </div>
-
       <div className='p-10'>
         <TabsComponent tabs={tabs} />
       </div>
-
     </div>
 
   )
