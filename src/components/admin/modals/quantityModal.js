@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { putStockInventory } from '@/api/stock'
 import ButtonCancel from '../common/buttons/ButtonCancel'
+import ButtonPrimary from '../common/buttons/ButtonPrimary'
 
 function QuantityModal ({
   handleOperationConfirmation,
@@ -120,11 +121,8 @@ function QuantityModal ({
                 </button>
               </div>
             )}
-            <div className='mt-5 sm:mt-4 sm:flex sm:flex-row-reverse'>
-              <button type='button' className='w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-d-dark-dark-purple font-medium hover:bg-d-soft-soft-purple hover:text-d-dark-dark-purple text-white sm:ml-3 sm:w-auto sm:text-sm' onClick={quantityChangeHandler}>
-                {confirmButtonText}
-              </button>
-
+            <div className='mt-5 sm:mt-4 sm:flex sm:flex-row-reverse gap-4'>
+              <ButtonPrimary text={confirmButtonText} onClick={quantityChangeHandler} type='submit' />
               <ButtonCancel onClick={handleConfirmationModal} />
             </div>
 

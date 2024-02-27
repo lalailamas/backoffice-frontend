@@ -8,4 +8,8 @@ function ButtonCancel ({ onClick, text }) {
   )
 }
 
+ButtonCancel.defaultProps = {
+  text: 'Cancelar'
+}
+
 export default ButtonCancel

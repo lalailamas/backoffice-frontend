@@ -88,13 +88,8 @@ function Categories () {
                       />
                     </div>
                   </div>
-                  <div className='mt-5 sm:mt-4 sm:flex sm:flex-row-reverse'>
-                    <button
-                      onClick={() => onSubmit()}
-                      className='w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-d-dark-dark-purple font-medium hover:bg-d-soft-soft-purple hover:text-d-dark-dark-purple text-white sm:ml-3 sm:w-auto sm:text-sm'
-                    >
-                      Crear
-                    </button>
+                  <div className='mt-5 sm:mt-4 sm:flex sm:flex-row-reverse gap-4'>
+                    <ButtonPrimary text='Crear' onClick={() => onSubmit()} />
                     <ButtonCancel onClick={closeModal} />
                   </div>
                 </div>

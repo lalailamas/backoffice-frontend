@@ -6,6 +6,7 @@ import Navbar from '@/components/admin/common/navbar'
 import { useState } from 'react'
 import { usePathname } from 'next/navigation'
 import Footer from '@/components/admin/common/footer'
+import Bell from '@/components/admin/common/bell'
 
 export default function RootLayout ({ children }) {
   const [showDrawer, setShowDrawer] = useState(false)
@@ -16,6 +17,7 @@ export default function RootLayout ({ children }) {
     <html lang='es'>
       <body data-theme='light' className='bg-d-white'>
         <SessionAuthProvider>
+
           <div className='drawer-content overflow-x-auto flex flex-col min-h-screen bg-d-white'>
             <div className='drawer' data-theme='light'>
               <input
@@ -26,15 +28,18 @@ export default function RootLayout ({ children }) {
                 className='drawer-toggle'
               />
               <div className='drawer-content overflow-x-auto bg-d-white'>
-                {!isLoginPage && <Navbar toggle={() => setShowDrawer(!showDrawer)} />}
-
+                {!isLoginPage && (
+                  <Navbar toggle={() => setShowDrawer(!showDrawer)} />
+                )}
+                {/* <Bell /> */}
               </div>
-
               <div className='z-10 drawer-side'>
                 <label htmlFor='dsp-drawer' className='drawer-overlay' />
                 {!isLoginPage && showDrawer && <Sidebar toggle={() => setShowDrawer(!showDrawer)} />}
               </div>
+
             </div>
+
             <div className='flex-grow'>
 
               {children}

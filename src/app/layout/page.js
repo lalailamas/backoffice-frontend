@@ -504,7 +504,6 @@ function Layout () {
         <ConfirmationModal
           title='Confirmación'
           message='¿Estás seguro de eliminar este layout?'
-          cancelButtonText='Cancelar'
           handleOperationConfirmation={handleDeleteConfirmation}
           handleConfirmationModal={handleConfirmationModal}
           confirmButtonText='Eliminar layout'

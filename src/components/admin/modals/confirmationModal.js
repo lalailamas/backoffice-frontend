@@ -1,6 +1,7 @@
 import React from 'react'
 import ButtonCancel from '../common/buttons/ButtonCancel'
 import ButtonPrimary from '../common/buttons/ButtonPrimary'
+import ButtonPrimary from '../common/buttons/ButtonPrimary'
 
 function ConfirmationModal ({ handleOperationConfirmation, title, message, confirmButtonText, cancelButtonText, handleConfirmationModal }) {
   return (

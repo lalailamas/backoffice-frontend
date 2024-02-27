@@ -23,12 +23,12 @@ export const authOptions = {
           if (response && response.appUser) {
             // Obtén el rol real del usuario desde la respuesta
             const user = response.appUser
-            // console.log(user, 'user dentro de authorize')
 
             // Agrega el rol a la respuesta
             credentials.role = user.role
             credentials.fullname = user.fullname
             credentials.callbackUrl = 'http://localhost:3000/'
+            credentials.id = user.id
             // console.log(credentials, 'credentials dentro de authorize')
 
             return Promise.resolve(credentials)
