@@ -11,7 +11,7 @@ function Comments ({ SendSnapshotComment }) {
     }
   }
   return (
-    <div className='flex mx-auto items-center justify-center shadow-lg mt-5 mx-8 mb-4 max-w-lg'>
+    <div className='flex mx-auto items-center justify-center shadow-lg mt-5 mb-4 max-w-lg'>
       <form className='w-full max-w-xl bg-white rounded-lg px-4 pt-2' onSubmit={(e) => { e.preventDefault(); SendSnapshotComment(comment) }}>
         <div className='flex flex-wrap -mx-3 mb-6'>
           <h2 className='px-4 pt-3 pb-2 text-gray-800 text-lg'>Agrega un comentario</h2>
@@ -26,7 +26,7 @@ function Comments ({ SendSnapshotComment }) {
             />
             <p className='text-sm text-gray-500'>{maxLength - comment.length} caracteres restantes</p>
           </div>
-          <div className='w-full md:w-full flex items-start md:w-full px-3'>
+          <div className='w-full md:w-full flex items-start px-3'>
             <div className='flex items-start w-1/2 text-gray-700 px-2 mr-auto'>
               <svg fill='none' className='w-5 h-5 text-gray-600 mr-1' viewBox='0 0 24 24' stroke='currentColor'>
                 <path strokeLinecap='round' strokeLinejoin='round' strokeWidth='2' d='M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z' />

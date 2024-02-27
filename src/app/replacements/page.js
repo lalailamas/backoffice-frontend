@@ -6,6 +6,7 @@ import DatePicker from '@/components/admin/common/datepicker/double'
 import dayjs from 'dayjs'
 import useGetStores2 from '@/hooks/useStores2'
 import { swallInfo } from '@/utils/sweetAlerts'
+import MainTitle from '@/components/admin/common/titles/MainTitle'
 
 function Replacements () {
   const [restockData, setRestockData] = useState([])
@@ -49,7 +50,7 @@ function Replacements () {
   return (
 
     <div>
-      <h2 className='text-d-dark-dark-purple text-2xl font-bold text-center p-4 '>Reposiciones históricas</h2>
+      <MainTitle>Reposiciones históricas</MainTitle>
       <div className='w-full px-10 mt-2'>
         <DatePicker
           startDate={dateRange.startDate}

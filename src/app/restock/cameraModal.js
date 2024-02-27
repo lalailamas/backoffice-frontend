@@ -1,8 +1,7 @@
 'use client'
 import ButtonCancel from '@/components/admin/common/buttons/ButtonCancel'
+import ButtonPrimary from '@/components/admin/common/buttons/ButtonPrimary'
 import React, { useState } from 'react'
-// import Webcam from 'react-webcam'
-// import { Camera } from 'react-camera-pro'
 import { Camera } from 'react-html5-camera-photo'
 import 'react-html5-camera-photo/build/css/index.css'
 
@@ -29,22 +28,15 @@ function CameraModal ({
   }
 
   const handleTakePhoto = (dataUri) => {
-    // Callback cuando se toma una foto
     setImage(dataUri)
     setShowCamera(false)
   }
   const handleShowCamera = () => {
-    // console.log('handleShowCamera')
     setShowCamera(!showcamera)
     setImage('')
   }
-  // const handleShowInputFile = () => {
-  //   setShowCamera(false)
-  //   setShowInput(true)
-  // }
 
   function handleTakePhotoAnimationDone (dataUri) {
-    // console.log(dataUri, 'takePhoto')
     setImage(dataUri)
   }
 
@@ -52,13 +44,6 @@ function CameraModal ({
     console.log('handleCameraError', error)
   }
 
-  // function handleCameraStart (stream) {
-  //   console.log('handleCameraStart')
-  // }
-
-  // function handleCameraStop () {
-  //   console.log('handleCameraStop')
-  // }
   const handleFileInputChange = (e) => {
     const file = e.target.files[0]
     if (file) {
@@ -90,7 +75,6 @@ function CameraModal ({
     <div>
       <div id='YOUR_ID' className='fixed z-50 inset-0 overflow-y-auto'>
         <div className='flex items-center justify-center min-h-screen pt-4 px-4 text-center sm:p-0'>
-          {/* Blurry background */}
           <div className='fixed inset-0 transition-opacity' aria-hidden='true'>
             <div className='absolute inset-0 bg-gray-500 opacity-75' />
           </div>
@@ -124,7 +108,6 @@ function CameraModal ({
                 ? (
                   <div className='relative'>
                     <button className='absolute top-2 right-2 z-10' onClick={handleShowCamera}>
-                      {/* Puedes personalizar el botón de cerrar según tus necesidades */}
                       <span className='text-2xl font-bold text-grey-700'>X</span>
                     </button>
                     <img src={image} alt='Taken photo' />
@@ -134,7 +117,6 @@ function CameraModal ({
                   ? (
                     <div className={`${showcamera ? 'mt-2 relative' : 'hidden'}`}>
                       <button className='absolute top-2 right-2 z-10' onClick={handleShowCamera}>
-                        {/* Puedes personalizar el botón de cerrar según tus necesidades */}
                         <span className='text-2xl font-bold text-white'>X</span>
                       </button>
                       <Camera
@@ -149,14 +131,7 @@ function CameraModal ({
                         onCameraError={(error) => {
                           handleCameraError(error)
                         }}
-                        // onCameraStart={(stream) => {
-                        //   handleCameraStart(stream)
-                        // }}
-                        // onCameraStop={() => {
-                        //   handleCameraStop()
-                        // }}
                         idealFacingMode='environment'
-                        // isFullscreen
                       />
                     </div>
                     )
@@ -190,7 +165,6 @@ function CameraModal ({
                       : (
                         <div className='relative'>
                           <button className='absolute top-2 right-2 z-10' onClick={handleShowBack}>
-                            {/* Puedes personalizar el botón de cerrar según tus necesidades */}
                             <span className='text-2xl font-bold text-grey -700'>X</span>
                           </button>
                           <div className='p-3'>
@@ -203,17 +177,18 @@ function CameraModal ({
             <div className='mt-5 flex flex-row-reverse gap-2'>
               {image &&
                 <div>
-                  <button
+                  <ButtonPrimary text={confirmButtonText} onClick={SendSnapshot(image)} />
+                  {/* <button
                     type='button'
                     databehavior='submit'
                     className={`${image ? ' inline-flex items-center px-4 py-2 text-sm font-medium text-center text-white bg-d-dark-dark-purple rounded-lg hover:bg-d-soft-soft-purple hover:text-d-dark-dark-purple focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800' : 'hidden'}`}
                     onClick={SendSnapshot(image)}
                   >
                     Siguiente
-                  </button>
+                  </button> */}
                 </div>}
 
-              <ButtonCancel onClick={handleOperationConfirmation} />
+              <ButtonCancel text={cancelButtonText} onClick={handleOperationConfirmation} />
 
             </div>
           </div>

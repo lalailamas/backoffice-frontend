@@ -8,28 +8,23 @@ import { findProductByEAN, getProduct, updateProductImage, deleteProduct, create
 import useGetCategories from '@/hooks/useGetCategories'
 import { swallError } from '@/utils/sweetAlerts'
 import Pager from '@/components/admin/common/pager'
+import MainTitle from '@/components/admin/common/titles/MainTitle'
 
 export default function Inventory () {
   const [cachekey, setCachekey] = useState(0)
   const [searchKey, setSearchKey] = useState('')
   const [page, setPage] = useState(1)
   const [params, setParams] = useState({ limit: 10, search: '' })
-  // console.log(params, 'params')
   const [products, setProducts] = useState([])
   const [meta, setMeta] = useState(null)
   const { categories } = useGetCategories()
-
   const [scanMode, setScanMode] = useState(false)
   const [currentEan, setCurrentEan] = useState('')
-
   const scanElement = useRef()
-
   const [showModal, setShowModal] = useState(false)
   const [action, setAction] = useState('create')
-
   const [currentProduct, setCurrentProduct] = useState({})
   const [currentQuantity, setCurrentQuantity] = useState(1)
-
   const [showMachines] = useState(false)
 
   const handleNewProduct = () => {
@@ -121,7 +116,6 @@ export default function Inventory () {
         reloadPage()
       }
     } catch (error) {
-      // Manejo del error
       console.error('Error al eliminar el producto:', error)
       swallError('Error al eliminar el producto', false)
     }
@@ -193,11 +187,11 @@ export default function Inventory () {
 
   return (
     <>
-      <div className='w-full p-8'>
-        <div className='flex flex-col md:flex-row mt-4 gap-y-4 md:gap-y-0 md:gap-x-4 mb-4 min-[430px]:text-center '>
-          <h2 className='text-d-dark-dark-purple text-2xl font-bold'>Productos</h2>
+      <MainTitle>Productos</MainTitle>
 
-        </div>
+      <div className='w-full p-8'>
+
+        <div className='flex flex-col md:flex-row mt-4 gap-y-4 md:gap-y-0 md:gap-x-4 mb-4 min-[430px]:text-center ' />
 
         <div className='divider min-[430px]:hidden md:block ' />
         <div className='flex flex-col md:flex-row mt-4 gap-y-4 md:gap-y-0 md:gap-x-4 mb-4 min-[430px]:flex-wrap'>

@@ -4,8 +4,9 @@ import { useSearchParams, useRouter } from 'next/navigation'
 import { getCategory, editCategory } from '@/api/categories'
 import DspLoader from '@/components/admin/common/loader'
 import { swallError, swallInfo } from '@/utils/sweetAlerts'
-import ButtonCancel from '@/components/admin/common/buttons/ButtonCancel'
+import MainTitle from '@/components/admin/common/titles/MainTitle'
 import ButtonPrimary from '@/components/admin/common/buttons/ButtonPrimary'
+import ButtonCancel from '@/components/admin/common/buttons/ButtonCancel'
 
 function EditCategory () {
   const searchParams = useSearchParams()
@@ -65,10 +66,10 @@ function EditCategory () {
   }
 
   return (
-    <div className='flex flex-col p-8 mb-8'>
+    <>
+      <MainTitle>Editar Categoría</MainTitle>
       <div className='container max-w-sm mx-auto flex-1 flex flex-col items-center justify-center'>
         <div className='bg-white px-6 py-3'>
-          <h1 className='text-d-dark-dark-purple text-2xl font-bold pb-4'>Editar Categoría</h1>
           <div>
             <input
               type='text'
@@ -91,15 +92,12 @@ function EditCategory () {
             </label>
           </div>
 
-          <div className='flex flex-col sm:flex-row gap-4'>
-            <ButtonCancel text='Cancelar' onClick={() => router.push('/categories')} />
-            <ButtonPrimary text='Guardar Cambios' onClick={handleSave} />
+          <ButtonCancel text='Cancelar' onClick={() => router.push('/categories')} />
+          <ButtonPrimary text='Guardar cambios' onClick={handleSave} />
 
-          </div>
         </div>
       </div>
-    </div>
-
+    </>
   )
 }
 

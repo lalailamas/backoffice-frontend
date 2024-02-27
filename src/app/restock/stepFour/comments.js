@@ -1,4 +1,5 @@
 'use client'
+import ButtonCancel from '@/components/admin/common/buttons/ButtonCancel'
 import React, { useState } from 'react'
 
 function Comments ({ SendSnapshotComment, handleOperationConfirmation }) {
@@ -35,10 +36,8 @@ function Comments ({ SendSnapshotComment, handleOperationConfirmation }) {
             </div>
           </div>
           <div className='flex flex-row justify-end gap-6 w-full p-4 mt-4'>
-            <button type='button' databehavior='cancel' className='mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:mt-0 sm:w-auto sm:text-sm' onClick={handleOperationConfirmation}>
-              <span>Cancelar</span>
-            </button>
-            <input type='submit' className='inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-d-dark-dark-purple rounded-lg hover:bg-d-soft-soft-purple hover:text-d-dark-dark-purple focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800' value='Confirmar' />
+            <ButtonCancel text='Cancelar' onClick={handleOperationConfirmation} />
+            <input type='submit' className='btn btn-sm join-item rounded-full bg-d-dark-dark-purple border-none text-d-white hover:bg-d-soft-soft-purple hover:text-d-dark-dark-purple' value='Confirmar' />
           </div>
 
         </div>
