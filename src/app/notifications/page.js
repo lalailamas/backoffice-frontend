@@ -1,6 +1,6 @@
 'use client'
 import React, { useState, useEffect, useRef } from 'react'
-import './App.css'
+// import './App.css'
 
 function App () {
   const [facts, setFacts] = useState([])
