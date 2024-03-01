@@ -3,60 +3,68 @@ import React, { useState, useEffect, useRef } from 'react'
 import './App.css'
 
 function App () {
-  const [facts, setFacts] = useState('qwerty')
+  const [facts, setFacts] = useState([])
+  const factsRef = useRef(facts)
   console.log(facts, 'facts')
   const [listening, setListening] = useState(false)
   const isInitialRender = useRef(true)
 
-  // useEffect(() => {
-  //   if (isInitialRender.current) {
-  //     isInitialRender.current = false
-  //     return
-  //   }
-  //   if (!listening) {
-  //     const events = new EventSource('https://dev.api.despnsa247.com/api/events/4')
+  const [events, setEvents] = useState(null)
+  console.log(events, 'events')
 
-  //     // events.onmessage = (event) => {
-  //     //   const parsedData = JSON.parse(event.data)
-  //     //   console.log(parsedData, 'parsedData')
+  const [counter, setCounter] = useState(0)
+  const counterRef = useRef(counter)
 
-  //     //   if (!facts.some((fact) => fact.id === parsedData.id)) {
-  //     //     // Actualizar facts utilizando el operador spread para evitar arrays de arrays
-  //     //     setFacts((facts) => facts.concat(parsedData))
-  //     //   }
-  //     // }
+  const [clickCounter, setClickCounter] = useState(0)
 
-  //     setListening(true)
-  //   }
-  // }, [facts])
-  // const factsRef = useRef()
-  // useEffect(() => {
-  //   factsRef.current = facts
-  // }, [facts])
+  console.log('Re-Rendered')
 
-  const mockFunc = () => {
-    const events = new EventSource('https://dev.api.despnsa247.com/api/events/4')
-
-    events.onmessage = (event) => {
-      // const parsedData = JSON.parse(event.data)
-      // console.log(factsRef.current, 'factsRef dentro del onmessage')
-      console.log(facts, 'facts dentro del onmessage')
-
-      // if (!facts.some((fact) => fact.id === parsedData.id)) {
-      // Actualizar facts utilizando el operador spread para evitar arrays de arrays
-      setFacts('parsedData')
-      // }
-    }
+  const _setCounter = (newCounter) => {
+    counterRef.current = newCounter
+    setCounter(newCounter)
+  }
+  const _setFacts = (newFacts) => {
+    factsRef.current = newFacts
+    setFacts(newFacts)
   }
 
   useEffect(() => {
-    console.log(facts, 'facts dentro del segundo useEffect')
-  }, [facts])
+    if (!listening) {
+      console.log('Declaring innerEvents')
+      const innerEvents = new EventSource('http://localhost:3500/api/events/4')
+      // console.log(innerEvents, 'innerEvents')
+
+      innerEvents.onmessage = (event) => {
+        const parsedData = JSON.parse(event.data)
+        console.log(parsedData, 'parsedData[0]')
+        console.log('Event Number ' + counterRef.current)
+
+        _setCounter(counterRef.current + 1)
+        const repeated = factsRef.current.find((fact) => fact.id === parsedData.id)
+        if (repeated === undefined) {
+          _setFacts(factsRef.current.concat(parsedData))
+        }
+      }
+      setListening(true)
+      setEvents(innerEvents)
+    }
+  }
+  , [listening]
+  )
+
+  const counterUp = () => {
+    setClickCounter(clickCounter + 1)
+  }
 
   return (
     <div>
+      <pre>{JSON.stringify(factsRef.current, null, 2)}</pre>
+      <pre>{JSON.stringify(counterRef.current, null, 2)}</pre>
       <pre>{JSON.stringify(facts, null, 2)}</pre>
 
+      <div>
+        <button onClick={counterUp}>Contador ({clickCounter})</button>
+      </div>
       {/* <table className='stats-table'>
         <thead>
           <tr>
@@ -75,9 +83,18 @@ function App () {
         }
         </tbody>
       </table> */}
+
+      {/*
       <div>
-        <button onClick={mockFunc}>updateVariable</button>
+
+        <button onClick={mockFunc}>Agregar nuevo</button>
       </div>
+      <div>
+        <button onClick={addTwo}>Agrega los 2 existentes</button>
+      </div>
+      <div>
+        <button onClick={reset}>Reset</button>
+      </div> */}
     </div>
   )
 }
