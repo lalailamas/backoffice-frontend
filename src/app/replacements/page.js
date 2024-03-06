@@ -1,7 +1,7 @@
 'use client'
 import RepositionTable from './repositionTable/page'
 import { getStockOperation } from '@/api/restock'
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect } from 'react'
 import DatePicker from '@/components/admin/common/datepicker/double'
 import dayjs from 'dayjs'
 import useGetStores2 from '@/hooks/useStores2'

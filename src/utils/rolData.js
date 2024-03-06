@@ -19,10 +19,8 @@ export const accessData = [
       // 'Tareas'
     ],
     submenu_pages: [
-      'Reponer tienda',
-      'Stock actual productos',
-      'Stock por maquina',
-      'Listado Tareas'
+      'Reponer tienda V.2',
+      'Reponer tienda V.1'
     ]
   }
 ]
