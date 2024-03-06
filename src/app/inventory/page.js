@@ -1,36 +1,31 @@
 'use client'
-import InsideLayout from '@/components/admin/layouts/inside'
-import useGetProducts from '@/hooks/useProducts'
+// import useGetProducts from '@/hooks/useProducts'
 import { useEffect, useRef, useState } from 'react'
 import ProductsTable from '@/components/admin/tables/products'
 import EditProductModal from '@/components/admin/modals/product/edit'
-import useGetWarehouses from '@/hooks/useWarehouses'
-// import S from '@/lib/storage'
 import { SearchField } from '@/components/admin/common/search'
-import { findProductByEAN, getProduct, updateProductImage, updateProductStock, deleteProduct, createProduct, updateProduct } from '@/api/product'
+import { findProductByEAN, getProduct, updateProductImage, deleteProduct, createProduct, updateProduct, listProducts } from '@/api/product'
+import useGetCategories from '@/hooks/useGetCategories'
+import { swallError } from '@/utils/sweetAlerts'
+import Pager from '@/components/admin/common/pager'
+import MainTitle from '@/components/admin/common/titles/MainTitle'
 
 export default function Inventory () {
   const [cachekey, setCachekey] = useState(0)
   const [searchKey, setSearchKey] = useState('')
-  const [params, setParams] = useState({ limit: 10, page: 1, search: '' })
-  const [warehouseParams] = useState({ limit: 10, page: 1 })
-  const { products } = useGetProducts(params, cachekey)
-  const { warehouses } = useGetWarehouses(warehouseParams, cachekey)
+  const [page, setPage] = useState(1)
+  const [params, setParams] = useState({ limit: 10, search: '' })
+  const [products, setProducts] = useState([])
+  const [meta, setMeta] = useState(null)
+  const { categories } = useGetCategories()
   const [scanMode, setScanMode] = useState(false)
   const [currentEan, setCurrentEan] = useState('')
-
   const scanElement = useRef()
-
   const [showModal, setShowModal] = useState(false)
   const [action, setAction] = useState('create')
-
   const [currentProduct, setCurrentProduct] = useState({})
-  const [currentWarehouse, setCurrentWarehouse] = useState(0)
   const [currentQuantity, setCurrentQuantity] = useState(1)
-
-  const [showTraining, setShowTraining] = useState(false)
   const [showMachines] = useState(false)
-  const [showExpiration, setShowExpiration] = useState(false)
 
   const handleNewProduct = () => {
     setCurrentProduct({})
@@ -53,6 +48,28 @@ export default function Inventory () {
   const handleToggleModal = () => {
     setShowModal(!showModal)
   }
+  const fetchProducts = async () => {
+    try {
+      const response = await listProducts(params.limit, page, params.search)
+
+      if (response) {
+        setProducts(response.data)
+        setMeta({
+          pagination: {
+            page: parseInt(response.meta.pagination.page),
+            pages: response.meta.pagination.pages,
+            total: response.meta.pagination.total,
+            limit: parseInt(response.meta.pagination.limit)
+          }
+        })
+      }
+    } catch (error) {
+      console.error('Error fetching categories', error)
+    }
+  }
+  useEffect(() => {
+    fetchProducts()
+  }, [page, params])
 
   useEffect(
     () => {
@@ -78,16 +95,7 @@ export default function Inventory () {
         Promise.all([responseGet])
         const product = responseGet.data
         console.log(product)
-        let newStock = currentQuantity
 
-        if (product.warehouse_product && product.warehouse_product.length > 0) {
-          const filtered = product.warehouse_product.filter(w => w.warehouse_id === currentWarehouse)[0]
-          if (filtered) {
-            newStock = parseInt(filtered.stock) + currentQuantity
-          }
-        }
-        const update = await updateProductStock({ productId: product.id, warehouseId: currentWarehouse, stock: newStock })
-        Promise.all([update])
         setCurrentQuantity(1)
         scanElement.current.focus()
 
@@ -98,47 +106,63 @@ export default function Inventory () {
       }
     }
   }
-  const handleDelete = (id) => {
-    deleteProduct(id).then(
-      (response) => {
+  const handleDelete = async (id) => {
+    try {
+      const response = await deleteProduct(id)
+      if (response) {
         setCachekey(cachekey + 1)
         setShowModal(false)
+        swallError('Producto eliminado correctamente', true)
+        reloadPage()
       }
-
-    )
+    } catch (error) {
+      console.error('Error al eliminar el producto:', error)
+      swallError('Error al eliminar el producto', false)
+    }
   }
-  const handleSave = (data) => {
+  const reloadPage = () => {
+    window.location.reload()
+  }
+  const handleSave = async (formData, selectedImage) => {
     if (action === 'create') {
-      data.expiration_date = data.expiration_date.startDate
-      data.manufacture_date = data.manufacture_date.startDate
-
-      createProduct(data).then(
-        (response) => {
+      try {
+        const response = await createProduct(formData, selectedImage)
+        if (response) {
           setCachekey(cachekey + 1)
           setShowModal(false)
+          swallError('Producto creado correctamente', true)
+          reloadPage()
         }
-      )
+      } catch (error) {
+        swallError('Error al crear el producto', false)
+        console.log(error)
+      }
     } else {
-      const image = data.image
-      data.expiration_date = data.expiration_date.startDate
-      data.manufacture_date = data.manufacture_date.startDate
-
-      updateProduct(data).then(
-        () => {
-          if (image) {
-            updateProductImage(data.id, image).then(
-              () => {
-                setCachekey(cachekey + 1)
-                setShowModal(false)
-              }
-
-            )
+      try {
+        const response = await updateProduct(formData)
+        console.log(response, 'response updateProduct')
+        if (response) {
+          if (selectedImage) {
+            const updateImage = await updateProductImage(formData.id, selectedImage)
+            console.log(updateImage, 'updateImage')
+            if (updateImage) {
+              setCachekey(cachekey + 1)
+              setShowModal(false)
+              swallError('Producto editado correctamente', true)
+              reloadPage()
+            }
           } else {
             setCachekey(cachekey + 1)
             setShowModal(false)
+            swallError('Producto editado correctamente', true)
+
+            reloadPage()
           }
         }
-      )
+      } catch (error) {
+        swallError('Error al editar el producto', false)
+        console.log(error)
+      }
     }
   }
 
@@ -146,6 +170,7 @@ export default function Inventory () {
     () => {
       const clone = JSON.parse(JSON.stringify(params))
       clone.search = searchKey
+      setPage(1)
       setParams(clone)
     },
     [searchKey]
@@ -162,49 +187,18 @@ export default function Inventory () {
 
   return (
     <>
-      <InsideLayout />
+      <MainTitle>Productos</MainTitle>
+
       <div className='w-full p-8'>
-        <div className='flex flex-col md:flex-row mt-4 gap-y-4 md:gap-y-0 md:gap-x-4 mb-4 min-[430px]:text-center '>
-          <h2 className='text-d-dark-dark-purple text-2xl font-bold'>Productos</h2>
-          <select value={currentWarehouse} onChange={(e) => { setCurrentWarehouse(e.target.value) }} className='select select-sm select-bordered  rounded-full w-full md:max-w-xs'>
-            <option disabled value={0}>Bodega</option>
-            {warehouses && warehouses.map(w =>
-              <option key={w.id} value={w.id}>{w.name}</option>
-            )}
 
-          </select>
-          <div className='rounded-full text-d-dark-dark-purple py-1 min-[430px]:hidden md:block'>
-            <div className='form-control'>
-              <label className='label p-0'>
-                <span className='label-text pr-4 text-d-dark-dark-purple'>Mostrar Entrenamiento</span>
-                <input type='checkbox' className='toggle  toggle-sm  toggle-primary' checked={showTraining} onChange={() => { setShowTraining(!showTraining) }} />
-              </label>
-            </div>
-          </div>
+        <div className='flex flex-col md:flex-row mt-4 gap-y-4 md:gap-y-0 md:gap-x-4 mb-4 min-[430px]:text-center ' />
 
-          <div className='rounded-full  text-d-dark-dark-purple py-1 min-[430px]:hidden md:block'>
-            <div className='form-control'>
-              <label className='label p-0'>
-                <span className='label-text pr-4 text-d-dark-dark-purple'>Mostrar Expiración</span>
-                <input type='checkbox' className='toggle toggle-sm toggle-primary' checked={showExpiration} onChange={() => { setShowExpiration(!showExpiration) }} />
-              </label>
-            </div>
-          </div>
-
-        </div>
         <div className='divider min-[430px]:hidden md:block ' />
         <div className='flex flex-col md:flex-row mt-4 gap-y-4 md:gap-y-0 md:gap-x-4 mb-4 min-[430px]:flex-wrap'>
 
           <div className='join w-full md:max-w-xs '>
             <SearchField type='text' placeholder='Búsqueda' name='search' className='input input-sm input-bordered w-full  bg-d-white join-item rounded-full text-d-dark-dark-purple' onChange={(v) => setSearchKey(v)} />
 
-            <button type='button ' onClick={() => setSearchKey('')} className='btn btn-sm join-item rounded-r-full bg-d-dark-dark-purple border-none text-d-white  hover:bg-d-soft-soft-purple hover:text-d-dark-dark-purple'>
-
-              <svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' strokeWidth={1.5} stroke='currentColor' className='w-6 h-6'>
-                <path strokeLinecap='round' strokeLinejoin='round' d='M6 18L18 6M6 6l12 12' />
-              </svg>
-
-            </button>
           </div>
 
           <button type='submit' onClick={() => handleNewProduct()} className='btn btn-sm join-item rounded-full bg-d-dark-dark-purple border-none text-d-white  hover:bg-d-soft-soft-purple hover:text-d-dark-dark-purple'>
@@ -242,12 +236,18 @@ export default function Inventory () {
             </div>}
         </div>
         <div className='divider' />
-        <ProductsTable products={products} edit={handleEditProduct} showTraining={showTraining} showMachines={showMachines} showExpiration={showExpiration} warehouses={warehouses} />
+        {products && products.length > 0 &&
+
+          <ProductsTable products={products} edit={handleEditProduct} showMachines={showMachines} />}
+
         <div className='w-full flex flex-row mt-4' />
+        <div className='w-full flex flex-row mt-4 justify-center'>
+          <Pager meta={meta} setPage={setPage} />
+        </div>
       </div>
 
       {showModal &&
-        <EditProductModal show={showModal} toggleModal={handleToggleModal} action={action} product={currentProduct} save={handleSave} deleter={handleDelete} />}
+        <EditProductModal categories={categories} show={showModal} toggleModal={handleToggleModal} action={action} product={currentProduct} save={handleSave} deleter={handleDelete} />}
 
     </>
 

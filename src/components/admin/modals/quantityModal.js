@@ -1,7 +1,19 @@
 import React, { useState, useEffect } from 'react'
 import { putStockInventory } from '@/api/stock'
+import ButtonCancel from '../common/buttons/ButtonCancel'
+import ButtonPrimary from '../common/buttons/ButtonPrimary'
 
-function QuantityModal ({ handleOperationConfirmation, title, message, confirmButtonText, cancelButtonText, handleConfirmationModal, showQuantityControls = false, initialQuantity, productId, storeId, updateProductQuantity }) {
+function QuantityModal ({
+  handleOperationConfirmation,
+  title,
+  message,
+  confirmButtonText,
+  cancelButtonText,
+  handleConfirmationModal,
+  showQuantityControls = false,
+  initialQuantity,
+  productId, storeId, updateProductQuantity
+}) {
   const [quantity, setQuantity] = useState(0)
 
   const quantityChangeHandler = async () => {
@@ -109,13 +121,9 @@ function QuantityModal ({ handleOperationConfirmation, title, message, confirmBu
                 </button>
               </div>
             )}
-            <div className='mt-5 sm:mt-4 sm:flex sm:flex-row-reverse'>
-              <button type='button' className='w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-d-dark-dark-purple font-medium hover:bg-d-soft-soft-purple hover:text-d-dark-dark-purple text-white sm:ml-3 sm:w-auto sm:text-sm' onClick={quantityChangeHandler}>
-                {confirmButtonText}
-              </button>
-              <button type='button' databehavior='cancel' className='mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:mt-0 sm:w-auto sm:text-sm' onClick={handleConfirmationModal}>
-                {cancelButtonText}
-              </button>
+            <div className='mt-5 sm:mt-4 sm:flex sm:flex-row-reverse gap-4'>
+              <ButtonPrimary text={confirmButtonText} onClick={quantityChangeHandler} type='submit' />
+              <ButtonCancel onClick={handleConfirmationModal} />
             </div>
 
           </div>

@@ -1,5 +1,4 @@
 'use client'
-import InsideLayout from '@/components/admin/layouts/inside'
 import React, { useEffect, useState } from 'react'
 import FileSaver from 'file-saver'
 import { downloadShopList, downloadStoresStock, getRepositionByStore, getShopList } from '@/api/stock'
@@ -11,6 +10,8 @@ import { swallError, Toast } from '@/utils/sweetAlerts'
 import Swal from 'sweetalert2'
 import TabsComponent from '@/components/admin/common/tabs'
 import RequestedStockTable from './requestedStockTable'
+import ButtonPrimary from '@/components/admin/common/buttons/ButtonPrimary'
+import MainTitle from '@/components/admin/common/titles/MainTitle'
 
 function shopList () {
   const [ids, setIds] = useState([])
@@ -51,11 +52,11 @@ function shopList () {
     try {
       const response = await getShopList(ids)
       handleShopListRequested()
-      if (response.data.length === 0) {
+      if (response.length === 0) {
         swallError('No hay datos para mostrar', false)
       } else {
         setLoading(false)
-        setData(response.data)
+        setData(response)
       }
     } catch (error) {
       swallError('Error al obtener los datos', false)
@@ -82,12 +83,12 @@ function shopList () {
     setLoadingRequested(true)
     try {
       const responseRequested = await getRepositionByStore(ids)
-      console.log(responseRequested.data, 'response.data')
-      if (responseRequested.data.length === 0) {
+      console.log(responseRequested, 'response.data')
+      if (responseRequested.length === 0) {
         swallError('No hay datos para mostrar', false)
       } else {
         setLoadingRequested(false)
-        setDataRequested(responseRequested.data)
+        setDataRequested(responseRequested)
       }
     } catch (error) {
       swallError('Error al obtener los datos', false)
@@ -148,16 +149,15 @@ function shopList () {
   ]
   return (
     <div className='h-screen'>
-
-      <InsideLayout />
-      <div className='flex justify-center text-center p-5 '>
-
+      <MainTitle>Gestión de abastecimiento</MainTitle>
+      <div className='flex justify-center gap-6 '>
         <MultiSelect
+          placeholderSearch='Buscar'
+          placeholder='Selecciona una(s) tienda(s)'
           value={ids}
           onValueChange={handleStoreChange}
           className='data-te-select-init multiple w-1/2'
         >
-
           {stores?.map((store) => (
             store.layoutId
               ? (
@@ -168,47 +168,36 @@ function shopList () {
               : null
           ))}
         </MultiSelect>
+        {/* <div className='pl-3'> */}
         <button
           type='button'
           onClick={() => {
-            // handleOpenStore(selectedStore.storeId)
             handleShopList()
           }}
-          className='inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-d-dark-dark-purple rounded-lg hover:bg-d-soft-soft-purple hover:text-d-dark-dark-purple focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800'
+          className=' items-center px-3 py-2 text-sm font-medium text-center text-white bg-d-dark-dark-purple rounded-lg hover:bg-d-soft-soft-purple hover:text-d-dark-dark-purple focus:ring-4 focus:outline-none '
         >
-          Ver Listado
-          <svg className='w-3.5 h-3.5 ml-2' aria-hidden='true' xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 14 10'>
-            <path stroke='currentColor' strokeLinecap='round' strokeLinejoin='round' strokeWidth='2' d='M1 5h12m0 0L9 1m4 4L9 9' />
+
+          <svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' strokeWidth={1.5} stroke='currentColor' dataslot='icon' className='w-6 h-6'>
+            <path strokeLinecap='round' strokeLinejoin='round' d='m19.5 8.25-7.5 7.5-7.5-7.5' />
           </svg>
+
         </button>
+        {/* </div> */}
+        {ids.length > 0 &&
 
+          <div className='flex justify-end gap-4'>
+
+            <div className=''>
+              <ButtonPrimary text='Descargar Reposición por tienda' onClick={handleExcelDownloadRequested} type='download' />
+            </div>
+            <div className=''>
+              <ButtonPrimary text='Descargar Lista de compras' onClick={handleExcelDownload} type='download' />
+            </div>
+          </div>}
       </div>
-      {ids.length > 0 &&
-
-        <div className='flex justify-end items-start p-5'>
-
-          <div className='flex p-5'>
-            <button onClick={handleExcelDownloadRequested} className='btn btn-sm join-item rounded-full bg-d-dark-dark-purple border-none text-d-white hover:bg-d-soft-soft-purple hover:text-d-dark-dark-purple'>
-              <svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' strokeWidth={1.5} stroke='currentColor' className='w-6 h-6 mr-2'>
-                <path strokeLinecap='round' strokeLinejoin='round' d='M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3' />
-              </svg>
-              Descargar Reposición por tienda
-            </button>
-          </div>
-          <div className='flex p-5'>
-            <button onClick={handleExcelDownload} className='btn btn-sm join-item rounded-full bg-d-dark-dark-purple border-none text-d-white hover:bg-d-soft-soft-purple hover:text-d-dark-dark-purple'>
-              <svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' strokeWidth={1.5} stroke='currentColor' className='w-6 h-6 mr-2'>
-                <path strokeLinecap='round' strokeLinejoin='round' d='M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3' />
-              </svg>
-              Descargar Lista de compras
-            </button>
-          </div>
-        </div>}
-
-      <div className=''>
+      <div className='p-10'>
         <TabsComponent tabs={tabs} />
       </div>
-
     </div>
 
   )

@@ -1,13 +1,14 @@
+'use client'
 import React, { useState } from 'react'
 import Link from 'next/link'
 import DspLoader from '@/components/admin/common/loader'
-import ConfirmationModal from '../restock/confirmationModal'
+import ConfirmationModal from '../../components/admin/modals/confirmationModal'
 import { deleteUser } from '@/api/user'
+import { swallError, swallInfo } from '@/utils/sweetAlerts'
 
-export default function UsersTable ({ data, updateUsers }) {
+export default function UsersTable ({ data }) {
   const [showModal, setShowModal] = useState(false)
   const [selectedUser, setSelectedUser] = useState(null)
-  const [successMessage, setSuccessMessage] = useState('')
 
   const handleDeleteClick = async (e, id, email) => {
     e.preventDefault()
@@ -16,6 +17,7 @@ export default function UsersTable ({ data, updateUsers }) {
       setSelectedUser(user)
       setShowModal(true)
     } catch (error) {
+      swallError('Error al eliminar usuario:', false)
       console.error('Error al eliminar usuario:', error)
     }
   }
@@ -24,11 +26,7 @@ export default function UsersTable ({ data, updateUsers }) {
     try {
       await deleteUser(id, email)
       setShowModal(false)
-      setSuccessMessage('Usuario eliminado exitosamente')
-      setTimeout(() => {
-        setSuccessMessage('')
-        updateUsers()
-      }, 2000)
+      swallInfo('Usuario eliminado exitosamente')
     } catch (error) {
       console.error('Error', error)
     }
@@ -38,6 +36,9 @@ export default function UsersTable ({ data, updateUsers }) {
     return (
       <DspLoader />
     )
+  }
+  const handleConfirmationModal = () => {
+    setShowModal(!showModal)
   }
 
   return (
@@ -56,7 +57,7 @@ export default function UsersTable ({ data, updateUsers }) {
               </tr>
             </thead>
             <tbody>
-              {data.map((user) => (
+              {data.data.map((user) => (
                 <tr key={user.id}>
                   <td />
                   <td>{user.id}</td>
@@ -96,19 +97,16 @@ export default function UsersTable ({ data, updateUsers }) {
               message='¿Estás seguro de eliminar este usuario?'
               cancelButtonText='Cancelar'
               handleOperationConfirmation={() => handleDeleteConfirmation(selectedUser.id, selectedUser.email)}
-              // handleConfirmationModal={handleConfirmationModal}
+              handleConfirmationModal={handleConfirmationModal}
               confirmButtonText='Eliminar usuario'
             />
           )}
         </div>
-        {successMessage && (
-          <p className='p-2 my-4'>{successMessage}</p>
-        )}
       </form>
       {/* MOBILE */}
       <form className='min-[431px]:hidden'>
         <div className='overflow-x-auto'>
-          {data.map((user) => (
+          {data.data.map((user) => (
             <div key={user.fullname} className='pb-2 w-screen'>
               <div className='flex flex-col md:hidden bg-d-soft-purple rounded-md'>
                 <div className='flex justify-end mr-16 mt-2'>

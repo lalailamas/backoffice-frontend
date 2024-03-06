@@ -1,17 +1,16 @@
 import React from 'react'
+import ButtonCancel from '../common/buttons/ButtonCancel'
+import ButtonPrimary from '../common/buttons/ButtonPrimary'
 
 function ConfirmationModal ({ handleOperationConfirmation, title, message, confirmButtonText, cancelButtonText, handleConfirmationModal }) {
   return (
     <div>
       <div id='YOUR_ID' className='fixed z-50 inset-0 overflow-y-auto'>
-        <div className='flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0'>
-
+        <div className='flex items-center justify-center min-h-screen pt-4 px-4 text-center sm:p-0'>
           <div className='fixed inset-0 transition-opacity' aria-hidden='true'>
             <div className='absolute inset-0 bg-gray-500 opacity-75' />
           </div>
-
           <span className='hidden sm:inline-block sm:align-middle sm:h-screen' aria-hidden='true'>&#8203;</span>
-
           <div
             className='inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full sm:p-6'
             role='dialog' aria-modal='true' aria-labelledby='modal-headline'
@@ -41,13 +40,9 @@ function ConfirmationModal ({ handleOperationConfirmation, title, message, confi
                 </div>
               </div>
             </div>
-            <div className='mt-5 sm:mt-4 sm:flex sm:flex-row-reverse'>
-              <button type='button' className='w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-d-dark-dark-purple font-medium hover:bg-d-soft-soft-purple hover:text-d-dark-dark-purple text-white sm:ml-3 sm:w-auto sm:text-sm' onClick={handleOperationConfirmation}>
-                {confirmButtonText}
-              </button>
-              <button type='button' databehavior='cancel' className='mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:mt-0 sm:w-auto sm:text-sm' onClick={handleConfirmationModal}>
-                {cancelButtonText}
-              </button>
+            <div className='mt-5 sm:mt-4 sm:flex sm:flex-row-reverse gap-4'>
+              <ButtonPrimary text={confirmButtonText} onClick={handleOperationConfirmation} />
+              <ButtonCancel text={cancelButtonText} onClick={handleConfirmationModal} />
             </div>
           </div>
         </div>

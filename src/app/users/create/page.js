@@ -1,9 +1,8 @@
 'use client'
-import { useState } from 'react'
-import InsideLayout from '@/components/admin/layouts/inside'
 import { useForm, Controller } from 'react-hook-form'
 import { useRouter } from 'next/navigation'
 import { createUser } from '@/api/user'
+import { swallError, swallInfo } from '@/utils/sweetAlerts'
 
 function CreateUserForm () {
   const { control, handleSubmit, setError, formState, watch } = useForm({
@@ -16,19 +15,17 @@ function CreateUserForm () {
       role: 'restock'
     }
   })
-  const [successMessage, setSuccessMessage] = useState('')
   const router = useRouter()
 
   const onSubmit = handleSubmit((data) => {
     createUser(data)
       .then((response) => {
         console.log(response, 'respuesta de create user')
-        setSuccessMessage('Usuario creado exitosamente')
-        setTimeout(() => {
-          router.push('/users')
-        }, 2000)
+        swallInfo('Usuario creado exitosamente')
+        router.push('/users')
       })
       .catch((error) => {
+        swallError('Error al crear el usuario', false)
         setError('Error al crear la cuenta. Por favor, inténtelo de nuevo', error)
       })
   })
@@ -39,7 +36,6 @@ function CreateUserForm () {
 
   return (
     <>
-      <InsideLayout />
       <div className='flex flex-col p-8 mb-8'>
         <div className='container max-w-sm mx-auto flex-1 flex flex-col items-center justify-center'>
           <div className='bg-white px-6 py-3'>
@@ -262,10 +258,6 @@ function CreateUserForm () {
                 </button>
               </div>
             </form>
-          </div>
-          <div>
-            {successMessage &&
-              <p className='p-2 my-4'>{successMessage}</p>}
           </div>
         </div>
       </div>

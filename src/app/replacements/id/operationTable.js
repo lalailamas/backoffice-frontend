@@ -21,7 +21,7 @@ function OperationTable ({ data }) {
       <div className='overflow-x-auto'>
         {data.products.length > 0
           ? (
-            <table className='table text-d-dark-dark-purple table-zebra w-full max-[431px]:hidden'>
+            <table className='table text-d-dark-dark-purple table-zebra mt-8 p-8 max-[431px]:hidden'>
               <thead>
                 <tr className='bg-d-dark-dark-purple text-d-white'>
                   <th />
@@ -49,13 +49,13 @@ function OperationTable ({ data }) {
                     <td>{item.stockBefore}</td>
                     <td>{item.stockAfter}</td>
                     <td className={stockColorDifference(item.stockBefore, item.stockAfter)}>{stockDifference(item.stockBefore, item.stockAfter)}</td>
-                    {/* Asegúrate de que data.results sea un objeto antes de intentar acceder a sus propiedades */}
                     <td>{data.results?.restocked?.find((restockedItem) => restockedItem.productId === item.productId)?.quantity || 0}</td>
                     <td>{data.results?.purchased?.find((purchasedItem) => purchasedItem.productId === item.productId)?.quantity || 0}</td>
                   </tr>
                 ))}
 
               </tbody>
+
             </table>
             )
           : (
@@ -64,6 +64,50 @@ function OperationTable ({ data }) {
             </div>
             )}
       </div>
+      {data.products.map((item) => (
+        <div key={item.productId} className='pb-2'>
+          <div className='flex justify-between w-full md:hidden bg-d-soft-purple p-2 rounded-md'>
+            <div>
+              <h3>
+                <span className='mr-5 font-bold'>
+                  ID
+                </span>
+                {item.productId}
+              </h3>
+              <h3>
+                <span className='mr-5 font-bold'>
+                  {item.productName}
+                </span>
+
+              </h3>
+              <div className='flex flex-col'>
+                <div className='flex flex-row items-center gap-3'>
+                  <span className='mr-5 font-bold'>Stock BO:</span>
+                  <span>{item.stockBefore}</span>
+                </div>
+                <div className='flex flex-row items-center gap-3'>
+                  <span className='mr-5 font-bold'>Stock Físico:</span>
+                  <span>{item.stockAfter}</span>
+                </div>
+                <div className='flex flex-row items-center gap-3'>
+                  <span className='mr-5 font-bold'>Diferencia Stock:</span>
+                  <div className={stockColorDifference(item.stockBefore, item.stockAfter)}>{stockDifference(item.stockBefore, item.stockAfter)}</div>
+                </div>
+                <div className='flex flex-row items-center gap-3'>
+                  <span className='mr-5 font-bold'>Agregados:</span>
+                  <span>{data.results?.restocked?.find((restockedItem) => restockedItem.productId === item.productId)?.quantity || 0}</span>
+                </div>
+                <div className='flex flex-row items-center gap-3'>
+                  <span className='mr-5 font-bold'>Retirados:</span>
+                  <span>{data.results?.purchased?.find((purchasedItem) => purchasedItem.productId === item.productId)?.quantity || 0}</span>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      ))}
+
     </>
   )
 }

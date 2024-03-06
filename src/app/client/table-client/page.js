@@ -1,5 +1,5 @@
 'use client'
-import InsideLayout from '@/components/admin/layouts/inside'
+
 import { getListClients, downloadClientsExcel } from '@/api/client'
 import { useEffect, useState } from 'react'
 import dayjs from 'dayjs'
@@ -7,6 +7,10 @@ import DatePicker from '@/components/admin/common/datepicker/double'
 import Link from 'next/link'
 import DspLoader from '@/components/admin/common/loader'
 import FileSaver from 'file-saver'
+import Swal from 'sweetalert2'
+import { swallError, Toast } from '@/utils/sweetAlerts'
+import ButtonPrimary from '@/components/admin/common/buttons/ButtonPrimary'
+import MainTitle from '@/components/admin/common/titles/MainTitle'
 
 function TableClient () {
   const [clients, setClients] = useState([])
@@ -26,6 +30,7 @@ function TableClient () {
     if (dateRange.startDate !== null && dateRange.endDate !== null) {
       getListClients(dateRange, searchTerm)
         .then((response) => {
+          // console.log(response, 'response')
           setClients(response)
         })
         .catch((error) => {
@@ -72,22 +77,22 @@ function TableClient () {
 
   const handleExcelDownload = async () => {
     try {
+      Toast('Descargando archivo', 'Espera unos segundos')
       const response = await downloadClientsExcel(dateRange, searchTerm)
-
       const { buffer, filename } = response.data
-
       const blob = new Blob([Buffer.from(buffer)], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' })
       FileSaver.saveAs(blob, filename)
+      Swal.close()
     } catch (error) {
+      swallError('Error al descargar el archivo Excel:', false)
       console.error('Error al descargar el archivo Excel:', error)
     }
   }
 
   return (
     <>
-      <InsideLayout />
       <div className='h-screen'>
-        <h1 className=' my-10 text-d-dark-dark-purple text-2xl font-bold text-center'>Clientes</h1>
+        <MainTitle>Clientes</MainTitle>
         <div className='flex items-center gap-4 px-8 mt-4 max-[431px]:flex-col'>
           <div className='join'>
             <input
@@ -118,18 +123,17 @@ function TableClient () {
             />
           </div>
 
-          <button onClick={handleExcelDownload} className='btn btn-sm join-item rounded-full bg-d-dark-dark-purple border-none text-d-white hover:bg-d-soft-soft-purple hover:text-d-dark-dark-purple'>
-            <svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' strokeWidth={1.5} stroke='currentColor' className='w-6 h-6 mr-2'>
-              <path strokeLinecap='round' strokeLinejoin='round' d='M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3' />
-            </svg>
-            Descargar
-          </button>
+          <ButtonPrimary
+            text='Descargar'
+            onClick={handleExcelDownload}
+            type='download'
+          />
 
         </div>
 
         <div className='overflow-x-auto p-5'>
           {clients && (
-            <table className='table  text-d-dark-dark-purple table-zebra max-[431px]:hidden'>
+            <table className='table  text-d-dark-dark-purple table-zebra mt-8 p-8 max-[431px]:hidden'>
               <thead>
                 <tr className='bg-d-dark-dark-purple text-d-white'>
                   <th />

@@ -1,5 +1,7 @@
 import { getReiteProdByStore } from '@/api/product/reite'
 import { useEffect, useState } from 'react'
+import * as Sentry from '@sentry/nextjs'
+import { withScope } from '@sentry/nextjs'
 
 export default function useGetProdByStore (id) {
   const [state, setState] = useState({
@@ -10,10 +12,10 @@ export default function useGetProdByStore (id) {
   async function fetchAllReiteData () {
     try {
       const productsResponse = await getReiteProdByStore(id)
-      if (productsResponse.data) {
-        console.log(productsResponse.data, 'respuesta productos')
+      if (productsResponse) {
+        // console.log(productsResponse, 'respuesta productos')
         setState({
-          products: productsResponse.data,
+          products: productsResponse,
           loading: false,
           error: null
         })
@@ -23,6 +25,10 @@ export default function useGetProdByStore (id) {
         products: [],
         loading: false,
         error: error.message
+      })
+      withScope((scope) => {
+        scope.setExtras(error.response.data)
+        Sentry.captureException(error)
       })
     }
   }

@@ -1,6 +1,6 @@
 /* eslint-disable multiline-ternary */
 'use client'
-import InsideLayout from '@/components/admin/layouts/inside'
+
 import { useEffect, useState } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { getDetailsClient } from '@/api/client'
@@ -9,7 +9,8 @@ import Link from 'next/link'
 import TabsComponent from '@/components/admin/common/tabs'
 import CreditCardDisplay from './creditcard'
 import useGetStores2 from '@/hooks/useStores2'
-import SimpleModal from '@/app/restock/simpleModal'
+import SimpleModal from '@/components/admin/modals/simpleModal'
+import MainTitle from '@/components/admin/common/titles/MainTitle'
 
 function DetailsClient () {
   const searchParams = useSearchParams()
@@ -36,8 +37,8 @@ function DetailsClient () {
     if (id) {
       getDetailsClient(id)
         .then((response) => {
-          console.log(response.data.data, 'respuesta get')
-          setClientData(response.data.data)
+          console.log(response.data, 'respuesta get')
+          setClientData(response.data)
         })
         .catch((error) => {
           console.error('Error fetching client details:', error)
@@ -48,7 +49,6 @@ function DetailsClient () {
   if (!clientData) {
     return (
       <div>
-        <InsideLayout />
         <DspLoader />
       </div>
     )
@@ -306,11 +306,10 @@ function DetailsClient () {
   ]
   return (
     <>
-      <InsideLayout />
       <div className='flex justify-center'>
         <div className='mt-4 p-4 m-2 border rounded-xl shadow-lg '>
-          <h1 className='mb-10 text-d-dark-dark-purple text-2xl font-bold text-center'>Información Cliente</h1>
-          <button className='mt-8'>
+          <MainTitle>Información del Cliente</MainTitle>
+          <button>
             <Link href='/client/table-client'>
               <div className='flex flex-row text-d-gray border-none  hover:text-d-purple'>
                 <svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' strokeWidth='1.5' stroke='currentColor' className='w-6 h-6'>

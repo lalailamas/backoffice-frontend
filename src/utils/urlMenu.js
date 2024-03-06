@@ -9,18 +9,24 @@ export const menuItems = [
     ]
   },
   {
-    label: 'Inventario',
+    label: 'Productos',
     icon: 'rotate-180',
     subMenuLinks: [
-      { label: 'Productos', href: '/inventory' }
+      { label: 'Categorías', href: '/categories' },
+
+      { label: 'Productos', href: '/inventory' },
       // { label: 'Órdenes de reabastecimiento', href: '/replenishment_orders' }
+      { label: 'Registro de compras', href: '/purchase_register' }
+
     ]
   },
   {
     label: 'Reposiciones',
     icon: 'rotate-180',
     subMenuLinks: [
-      { label: 'Reponer tienda', href: '/restock' },
+      { label: 'Reponer tienda V.2', href: '/restock' },
+      { label: 'Reponer tienda V.1', href: '/restock_copy' },
+
       { label: 'Historial de reposiciones', href: '/replacements' },
       { label: 'Lista de compras y reposición', href: '/shop_list' }
     ]
@@ -29,8 +35,18 @@ export const menuItems = [
     label: 'Tiendas',
     icon: 'rotate-180',
     subMenuLinks: [
-      { label: 'Stock por máquina', href: '/stock_request' },
-      { label: 'Ajuste de stock', href: '/stock_adjustment' }
+      // { label: 'Stock por máquina', href: '/stock_request' },
+      { label: 'Ajuste de Stock y Precios', href: '/stock_adjustment' },
+      // { label: 'Informe de Inventario', href: '/stock_overview' },
+      { label: 'Ver detalle de tiendas', href: '/stores' }
+
+    ]
+  },
+  {
+    label: 'Layout',
+    icon: 'rotate-180',
+    subMenuLinks: [
+      { label: 'Crear/Editar layout', href: '/layout' }
 
     ]
   },

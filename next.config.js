@@ -1,6 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  reactStrictMode: true,
+  reactStrictMode: false,
   images: {
     domains: ['despnsa247-public-files.s3.amazonaws.com']
   }
@@ -12,34 +12,23 @@ module.exports = nextConfig
 
 const { withSentryConfig } = require('@sentry/nextjs')
 
-module.exports = withSentryConfig(
-  module.exports,
-  {
-    // For all available options, see:
-    // https://github.com/getsentry/sentry-webpack-plugin#options
+const sentryWebpackPluginOptions = {
+  // Additional config options for the Sentry webpack plugin. Keep in mind that
+  // the following options are set automatically, and overriding them is not
+  // recommended:
+  //   release, url, configFile, stripPrefix, urlPrefix, include, ignore
 
-    // Suppresses source map uploading logs during build
-    silent: true,
-    org: 'despnsa247',
-    project: 'javascript-nextjs'
-  },
-  {
-    // For all available options, see:
-    // https://docs.sentry.io/platforms/javascript/guides/nextjs/manual-setup/
+  // org: 'despnsa247',
+  // project: 'despnsa-frontend',
 
-    // Upload a larger set of source maps for prettier stack traces (increases build time)
-    widenClientFileUpload: true,
+  // // An auth token is required for uploading source maps.
+  // authToken: process.env.SENTRY_AUTH_TOKEN,
 
-    // Transpiles SDK to be compatible with IE11 (increases bundle size)
-    transpileClientSDK: true,
+  // silent: true // Suppresses all logs
 
-    // Routes browser requests to Sentry through a Next.js rewrite to circumvent ad-blockers (increases server load)
-    tunnelRoute: '/monitoring',
+  // For all available options, see:
+  // https://github.com/getsentry/sentry-webpack-plugin#options.
+}
 
-    // Hides source maps from generated client bundles
-    hideSourceMaps: true,
-
-    // Automatically tree-shake Sentry logger statements to reduce bundle size
-    disableLogger: true
-  }
-)
+// Make sure adding Sentry options is the last code to run before exporting
+module.exports = withSentryConfig(nextConfig, sentryWebpackPluginOptions)

@@ -12,24 +12,26 @@ export const authOptions = {
 
       },
       authorize: async (credentials) => {
-        // console.log(credentials)
+        console.log(credentials)
         try {
           const response = await loginUser(credentials)
+          console.log(response, 'respuestaaaaaa')
           // console.log(response.data, 'este es el response')
           // const data = await response.json();
 
           // console.log(data);
 
-          if (response.data && response.data.appUser) {
+          if (response && response.appUser) {
             // Obtén el rol real del usuario desde la respuesta
-            const user = response.data.appUser
-            // console.log(user, 'user dentro de authorize')
-
+            const user = response.appUser
+            console.log(user, 'usuario')
             // Agrega el rol a la respuesta
             credentials.role = user.role
-            credentials.fullname = user.fullname
+            credentials.first_name = user.first_name
+            credentials.first_lastname = user.first_lastname
             credentials.callbackUrl = 'http://localhost:3000/'
-            // console.log(credentials, 'credentials dentro de authorize')
+            credentials.id = user.id
+            console.log(credentials, 'credentials dentro de authorize')
 
             return Promise.resolve(credentials)
           } else {

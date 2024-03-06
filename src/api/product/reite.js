@@ -1,16 +1,25 @@
-import { getReiteData, getReiteDataById, getReiteDataByStore } from '@/utils/fetchData'
+import { getDataOnly, patchData } from '@/utils/fetchData'
 
 export const getAllReiteData = async () => {
-  const response = await getReiteData('', 'product/list', 'multipart/form-data')
+  const url = 'reite/product/list'
+  const response = await getDataOnly(url, 'multipart/form-data')
   return response.data
 }
 
 export const getReiteProdData = async (id) => {
-  const response = await getReiteDataById(id, 'product', 'multipart/form-data')
+  const url = 'reite/product/' + id
+  const response = await getDataOnly(url, 'multipart/form-data')
   return response.data
 }
 
 export const getReiteProdByStore = async (storeId) => {
-  const response = await getReiteDataByStore(storeId, 'stores/', '/products', 'multipart/form-data')
+  const url = 'reite/stores/' + storeId + '/products'
+  const response = await getDataOnly(url, 'multipart/form-data')
+  return response.data
+}
+
+export const patchReitePrices = async (data, productId) => {
+  const url = `reite/product/${productId}`
+  const response = await patchData(data, url, 'application/x-www-form-urlencoded')
   return response.data
 }

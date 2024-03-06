@@ -4,6 +4,16 @@ const Seasons = {
   transversal: 'Transversal'
 
 }
+const proxy_duration = { // eslint-disable-line camelcase
+  noPerecible: 'No Perecible',
+  corta: 'Corta',
+  media: 'Media'
+}
+const measure_unit = { // eslint-disable-line camelcase
+  gr: 'gramos',
+  un: 'unidades',
+  ml: 'mililitros'
+}
 
 const Categories = {
   desayuno: 'Desayuno',
@@ -16,4 +26,4 @@ const Categories = {
   snack: 'Snack'
 }
 
-export { Seasons, Categories }
+export { Seasons, Categories, proxy_duration, measure_unit } // eslint-disable-line camelcase

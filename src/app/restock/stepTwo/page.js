@@ -4,21 +4,20 @@ import DspLoader from '@/components/admin/common/loader'
 import AccordeonCard from '../acordeonCard'
 import { useSearchParams, useRouter } from 'next/navigation'
 import StepLayout from '../stepLayout'
-import InsideLayout from '@/components/admin/layouts/inside'
 import useGetInventory from '@/hooks/useGetInventory'
 import useGetLayout from '@/hooks/useGetLayout'
 import useGetProdByStore from '@/hooks/useGetProdByStore'
 import { postRestockInventory } from '@/api/restock'
-import ConfirmationModal from '../confirmationModal'
+import ConfirmationModal from '../../../components/admin/modals/confirmationModal'
 import useFlattenLayout from '@/hooks/useFlattenLayout'
 import { swallError } from '@/utils/sweetAlerts'
 import { errorHandler } from '@/utils/errors/errors'
-
-// import useGetReiteProd from '@/hooks/useGetReiteProd'
+import ButtonPrimary from '@/components/admin/common/buttons/ButtonPrimary'
 
 function StepTwo () {
   const searchParams = useSearchParams()
   const externalId = searchParams.get('external_id')
+  // console.log(externalId, 'external ID en steptwo')
   const layoutId = searchParams.get('layout_id')
   const storeName = searchParams.get('store_name')
   const externalTransactionId = searchParams.get('externalTransactionId')
@@ -30,6 +29,14 @@ function StepTwo () {
   const [modalVisible, setModalVisible] = useState(false)
   const [loaderVisible, setLoaderVisible] = useState(false)
   const { flattenedLayout } = useFlattenLayout(layoutId)
+
+  const [collapsedRows, setCollapsedRows] = useState({})
+  console.log(collapsedRows, 'collapsedRows')
+  const [allCheckboxesChecked, setAllCheckboxesChecked] = useState(false)
+  console.log(allCheckboxesChecked, 'casillas checks')
+  // console.log(inventory, 'inventory')
+  // console.log(layout, 'layout')
+  // console.log(products, 'products')
 
   const router = useRouter()
 
@@ -82,6 +89,7 @@ function StepTwo () {
     }
     return mergedOccurrenceQuantity
   }
+
   const setHandleStock = async () => {
     const flatOccInventory = await flattenData(occInventory)
     const mergedOccurrence = await mergeOccurrence(flatOccInventory)
@@ -106,11 +114,9 @@ function StepTwo () {
     })
 
     try {
-      console.log('Step 2: stockData to Confirm Inventory', stockData)
       setLoaderVisible(true)
       const response = await postRestockInventory(externalId, transactionId, stockData)
-      console.log('Step 2: inventory response', response)
-      if (response.status === 200) {
+      if (response.result.successful) {
         swallError('Stock confirmado', true)
         router.push(
           'stepThree' +
@@ -119,124 +125,190 @@ function StepTwo () {
       }
     } catch (error) {
       errorHandler(error, stockData)
-      // swallError('Ocurrió un error, lo sentimos mucho', false)
     }
   }
 
-  const handleConfirmationModal = () => {
-    setModalVisible(!modalVisible)
+  const handleCheckboxChange = (index) => {
+    // Actualiza el estado collapsedRows y verifica después de la actualización
+    setCollapsedRows((prevCollapsedRows) => {
+      const updatedCollapsedRows = {
+        ...prevCollapsedRows,
+        [index]: !prevCollapsedRows[index]
+      }
+      const allChecked = Object.values(updatedCollapsedRows).every((value) => value)
+      setAllCheckboxesChecked(allChecked)
+      console.log(allChecked, 'allChecked')
+      return updatedCollapsedRows
+    })
   }
+
   if (loaderVisible) {
     return <DspLoader />
   }
 
+  // const getStatus = (currentQuantity, maxQuantity) => {
+  //   const threshold = 0.25 // Umbral del 25% como ejemplo, puedes ajustarlo según tus necesidades
+
+  //   const percentage = (currentQuantity / maxQuantity)
+
+  //   if (percentage >= 1) {
+  //     return 'OK'
+  //   } else if (percentage >= threshold) {
+  //     return 'Reponer'
+  //   } else {
+  //     return 'Crítico'
+  //   }
+  // }
+
+  const handleConfirmationModal = () => {
+    if (!allCheckboxesChecked) {
+      swallError('Por favor, haz clic en todas las casillas para continuar', false)
+      return
+    }
+    setModalVisible(!modalVisible)
+  }
+
   return (
     <div>
-      {/* <div><pre>{JSON.stringify(occInventory, null, 2)}</pre></div> */}
       {(loading || inventoryLoad || layoutLoad)
         ? (<DspLoader />)
         : (
           <div className='text-center'>
-            <InsideLayout />
             <StepLayout />
-            <div className='px-4 md:px-6 lg:px-8'>
-              {externalId && (
-                <div className='text-center mb-4 md:mb-8'>
-                  <h1 className='text-d-dark-dark-purple text-2x2 font-bold'>Confirma el inventario de {storeName}</h1>
+            {/* <div className='px-4 md:px-6 lg:px-8'> */}
+            {externalId && (
+              <div className='text-center mb-4 md:mb-8'>
+                <h1 className='text-d-dark-dark-purple text-2x2 font-bold'>{storeName}</h1>
+                <h1 className='text-d-dark-dark-purple text-2x2'>Cuenta la cantidad por producto y clickea la casilla</h1>
+              </div>
+            )}
+            {layout && layout.trays && (
+
+              <div className='flex flex-row gap-2 items-center justify-center overflow-x-auto'>
+
+                <div className=' sm:px-6 md:px-8 lg:px-10'>
+                  <table className=' w-full'>
+                    <thead>
+                      <tr>
+                        <th className='border border-gray-300 p-2'>Producto</th>
+                        <th className='border border-gray-300 p-4 '>Stock consolidado</th>
+                        <th className='border border-gray-300 p-4'>Máximo stock permitido</th>
+                        {/* <th className='border border-gray-300 p-4'>Status</th> */}
+                        <th className='border border-gray-300 p-4'>Revisado OK</th>
+
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {layout && layout.trays && layout.trays.map((tray) => {
+                        const displayedProducts = new Set()
+
+                        return tray.columns.map((column, index) => {
+                          // Verificar si el producto ya fue mostrado, si es así, omitir
+                          if (displayedProducts.has(column.productId)) {
+                            return null
+                          }
+                          // Si el producto no ha sido mostrado, agregarlo al conjunto
+                          displayedProducts.add(column.productId)
+                          const product = products?.find((product) => product.productId === column.productId)
+                          const quantityProd = inventory.products.find((prod) => prod.productId === column.productId)
+                          // console.log(layout.maxQuantities, 'maxQuanities')
+                          const maxQuantity = layout.maxQuantities[column.productId]
+                          const multipleOccurrences = tray.columns.filter((c) => c.productId === column.productId).length > 1
+                          // const status = getStatus(quantityProd?.quantity || 0, maxQuantity)
+
+                          return (
+                            <tr key={column.productId + index} className={`border-b border-gray-300 ${collapsedRows[column.productId + index] ? 'bg-gray-300' : ''}`}>
+                              <td className='border border-gray-300 px-6'>
+                                {product
+                                  ? (
+                                    <div className='flex items-center max-w-[200px] h-[80px]'>
+                                      <img
+                                        className='w-auto max-w-[50px] h-[50px]'
+                                        src={product.metadata?.imageUrl}
+                                        width={120}
+                                        height={120}
+                                        alt='Product'
+                                      />
+                                      <div className='ml-4'>
+                                        <h1 className='text-d-title-purple font-bold mb-1 line-clamp-2'>
+                                          {product.productName || 'Producto faltante'}
+                                        </h1>
+                                      </div>
+                                    </div>
+                                    )
+                                  : (
+                                    <p>Producto no encontrado</p>
+                                    )}
+                              </td>
+                              <td className='border border-gray-300 py-3'>
+                                <AccordeonCard
+                                  quantityChangeHandler={quantityChangeHandler}
+                                  step={2}
+                                  index={column.productId + index}
+                                  productId={column.productId}
+                                  initialQuantity={multipleOccurrences ? 0 : quantityProd ? quantityProd.quantity : 0}
+                                  occurrence={multipleOccurrences ? quantityProd?.quantity : false}
+                                      // maxQuantity={maxQuantity}
+                                  header={<div />}
+                                />
+
+                              </td>
+                              <td className='border border-gray-300 py-3'>
+                                <p className='text-black-500 font-bold text-sm'>{maxQuantity} unidades</p>
+
+                              </td>
+                              {/* <td className='border border-gray-300 p-5'>
+                                <div className={`rounded-full w-20 h-8 flex items-center justify-center
+                          ${status === 'Crítico' ? 'bg-red-200 text-red-500' : status === 'OK' ? 'bg-green-300 text-green-800' : 'bg-blue-200 text-blue-500'}`}
+                                >
+                                  <span className=''>{status}</span>
+                                </div>
+                              </td> */}
+                              <td className='border border-gray-300'>
+                                <input
+                                  type='checkbox'
+                                  className='form-checkbox h-6 w-6 rounded border border-d-purple'
+                                  onChange={() => handleCheckboxChange(column.productId + index)}
+                                  // checked={collapsedRows[column.productId + index] || false}
+                                />
+                              </td>
+                            </tr>
+                          )
+                        })
+                      })}
+                    </tbody>
+                  </table>
                 </div>
-              )}
-              {layout && layout.trays && layout.trays.map((tray, index) => {
-                return (
-                  <div key={index} className='text-center border-b-2 border-gray-300 pb-5 mb-5 md:mb-8'>
-                    <div className='bg-d-dark-dark-purple'>
-                      <h2 className='text-d-soft-purple text-medium font-bold py-2 mb-2 md:mb-8'>BANDEJA {index + 1}</h2>
-                    </div>
-                    {/* <div className='flex flex-col md:flex-row gap-4 items-center md:items-start'> */}
-                    <div className='flex flex-row gap-2 items-center overflow-x-auto'>
+              </div>
 
-                      {
-                  tray
-                    ? tray.columns.map((column, index) => {
-                      const product = products?.filter((product) => product.productId === column.productId)
-                      const quantityProd = inventory.products.find((prod) => prod.productId === column.productId)
-                      const maxQuantity = column.maxQuantity
-                      const multipleOccurrences = tray.columns.filter(
-                        (c) => c.productId === column.productId
-                      ).length > 1
+            )}
 
-                      return (
-
-                        <AccordeonCard
-                          quantityChangeHandler={quantityChangeHandler}
-                          step={2}
-                          key={index}
-                          index={column.productId + index}
-                          productId={column.productId}
-                          initialQuantity={multipleOccurrences ? 0 : quantityProd ? quantityProd.quantity : 0}
-                          occurrence={multipleOccurrences ? quantityProd?.quantity : false}
-                          maxQuantity={maxQuantity}
-                          header={<div>
-                            {product[0] &&
-
-                              <div className='flex flex-col items-center align-start'>
-                                <div className=''>
-                                  <img
-                                    className='w-auto max-w-[50px] h-[50px]'
-                                    src={product[0].metadata?.imageUrl}
-                                    width={120}
-                                    height={120}
-                                    alt='Product'
-                                  />
-                                </div>
-                                <div className='flex justify-center'>
-                                  <h1 className='flex justify-center items-center text-center text-d-title-purple font-bold m-1 w-full line-clamp-2'>{product[0]?.productName || 'product missing'}</h1>
-
-                                </div>
-                                <h1 className='flex justify-center items-center text-black-500 font-bold m-1 text-xs'>(Máximo: {maxQuantity} unidades)</h1>
-                              </div>}
-
-                                  </div>}//eslint-disable-line
-                        />
-                      )
-                    })
-                    : null
-                }
-                    </div>
-
-                  </div>
-
-                )
-              })}
-
-            </div>
-            <div className='pb-10'>
-              <button
-                type='button'
-                onClick={() => {
-                  handleConfirmationModal()
-                }}
-                className='inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-d-dark-dark-purple rounded-lg hover:bg-d-soft-soft-purple hover:text-d-dark-dark-purple focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800'
-              >
-                Confirmar Stock
+            {/* </div> */}
+            <div className='p-10'>
+              <ButtonPrimary onClick={() => handleConfirmationModal()} text='Confirmar stock'>
                 <svg className='w-3.5 h-3.5 ml-2' aria-hidden='true' xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 14 10'>
                   <path stroke='currentColor' strokeLinecap='round' strokeLinejoin='round' strokeWidth='2' d='M1 5h12m0 0L9 1m4 4L9 9' />
                 </svg>
-              </button>
+              </ButtonPrimary>
             </div>
           </div>
 
           )}
       {modalVisible && (
-        <ConfirmationModal
-          handleConfirmationModal={handleConfirmationModal}
-          handleOperationConfirmation={setHandleStock}
-          title='¿Deseas confirmar el inventario?'
-          message={(
-            <a>Una vez confirmado el inventario de <strong>{storeName}</strong> no podrás realizar cambios</a>
+        <div className='fixed z-50 flex items-center justify-center'>
+
+          <ConfirmationModal
+            handleConfirmationModal={handleConfirmationModal}
+            handleOperationConfirmation={setHandleStock}
+            title='¿Deseas confirmar el inventario?'
+            message={(
+              <a>Una vez confirmado el inventario de <strong>{storeName}</strong> no podrás realizar cambios</a>
           )}
-          confirmButtonText='Confirmar'
-          cancelButtonText='Cancelar'
-        />
+            confirmButtonText='Confirmar'
+            cancelButtonText='Cancelar'
+          />
+        </div>
+
       )}
     </div>
   )

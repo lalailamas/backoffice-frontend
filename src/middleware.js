@@ -2,7 +2,7 @@ import { getToken } from 'next-auth/jwt'
 import { NextResponse } from 'next/server'
 
 export default async function middleware (req, res, next) {
-  console.log(req.nextUrl.pathname, 'req.nextUrl.pathname')
+  // console.log(req.nextUrl.pathname, 'req.nextUrl.pathname')
   const session = await getToken({ req, secret: process.env.NEXTAUTH_SECRET })
 
   const redirectTo = (path) => {
@@ -23,7 +23,9 @@ export default async function middleware (req, res, next) {
     '/marketing',
     '/replenishment_orders',
     '/replacements',
-    '/users/**'
+    '/users/**',
+    '/purchase_register'
+
   ]
   const isAdminPage = adminRequiredPages.some((page) => req.nextUrl.pathname.startsWith(page))
 
@@ -34,4 +36,16 @@ export default async function middleware (req, res, next) {
   return NextResponse.next()
 }
 
-export const config = { matcher: ['/inventory', '/tasks', '/users', '/replacements', '/replenishment_orders', '/restock', '/stock', '/stock_request', '/dashboard', '/marketing'] }
+export const config = {
+  matcher: ['/inventory',
+    '/tasks',
+    '/users',
+    '/replacements',
+    '/replenishment_orders',
+    '/restock',
+    '/stock',
+    '/stock_request',
+    '/dashboard',
+    '/marketing',
+    '/purchase_register']
+}
