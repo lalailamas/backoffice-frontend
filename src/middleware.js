@@ -22,7 +22,6 @@ export default async function middleware (req, res, next) {
     '/marketing',
     '/replenishment_orders',
     '/replacements',
-    '/users/*',
     '/purchase_register',
     '/stock_adjustment',
     '/stores',
@@ -44,7 +43,6 @@ export default async function middleware (req, res, next) {
 export const config = {
   matcher: ['/inventory',
     '/users',
-    '/users/*',
     '/replacements',
     '/replenishment_orders',
     '/restock',
