@@ -7,6 +7,7 @@ import { deleteUser } from '@/api/user'
 import { swallError, swallInfo } from '@/utils/sweetAlerts'
 
 export default function UsersTable ({ data }) {
+  console.log(data, 'data')
   const [showModal, setShowModal] = useState(false)
   const [selectedUser, setSelectedUser] = useState(null)
 
@@ -57,7 +58,7 @@ export default function UsersTable ({ data }) {
               </tr>
             </thead>
             <tbody>
-              {data.data.map((user) => (
+              {data.map((user) => (
                 <tr key={user.id}>
                   <td />
                   <td>{user.id}</td>
@@ -106,7 +107,7 @@ export default function UsersTable ({ data }) {
       {/* MOBILE */}
       <form className='min-[431px]:hidden'>
         <div className='overflow-x-auto'>
-          {data.data.map((user) => (
+          {data.map((user) => (
             <div key={user.fullname} className='pb-2 w-screen'>
               <div className='flex flex-col md:hidden bg-d-soft-purple rounded-md'>
                 <div className='flex justify-end mr-16 mt-2'>

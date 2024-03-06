@@ -6,7 +6,6 @@ import Navbar from '@/components/admin/common/navbar'
 import { useState } from 'react'
 import { usePathname } from 'next/navigation'
 import Footer from '@/components/admin/common/footer'
-import Bell from '@/components/admin/common/bell'
 
 export default function RootLayout ({ children }) {
   const [showDrawer, setShowDrawer] = useState(false)
