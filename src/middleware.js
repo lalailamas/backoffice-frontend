@@ -17,14 +17,18 @@ export default async function middleware (req, res, next) {
 
   const adminRequiredPages = [
     '/inventory',
-    '/tasks',
     '/users',
     '/dashboard',
     '/marketing',
     '/replenishment_orders',
     '/replacements',
-    '/users/**',
-    '/purchase_register'
+    '/purchase_register',
+    '/stock_adjustment',
+    '/stores',
+    '/layout',
+    '/client/table-client',
+    '/categories',
+    '/shop_list'
 
   ]
   const isAdminPage = adminRequiredPages.some((page) => req.nextUrl.pathname.startsWith(page))
@@ -38,7 +42,6 @@ export default async function middleware (req, res, next) {
 
 export const config = {
   matcher: ['/inventory',
-    '/tasks',
     '/users',
     '/replacements',
     '/replenishment_orders',
@@ -47,5 +50,12 @@ export const config = {
     '/stock_request',
     '/dashboard',
     '/marketing',
-    '/purchase_register']
+    '/purchase_register',
+    '/stock_adjustment',
+    '/stores',
+    '/layout',
+    '/client/table-client',
+    '/categories',
+    '/restock_copy',
+    '/shop_list']
 }

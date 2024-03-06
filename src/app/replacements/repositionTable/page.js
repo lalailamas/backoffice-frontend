@@ -9,8 +9,6 @@ import MobileTableLoader from '@/app/loader_mobile'
 import { useMediaQuery } from '@react-hook/media-query'
 
 export default function RepositionTable ({ data, stores }) {
-  console.log(data, 'data')
-  console.log(stores, 'stores')
   const pathname = usePathname()
   const [expandedRows, setExpandedRows] = useState([])
 
