@@ -13,7 +13,7 @@ function Replacements () {
   const { stores } = useGetStores2()
   const [dateRange, setDateRange] = useState({
     startDate: dayjs().subtract(1, 'week').startOf('week'),
-    endDate: dayjs().subtract(1, 'week').endOf('week')
+    endDate: dayjs().subtract(1, 'day').endOf('day')
   })
 
   useEffect(() => {
