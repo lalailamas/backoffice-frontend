@@ -6,6 +6,7 @@ import { usePathname } from 'next/navigation'
 import RepositionTableLoader from '@/app/loader_desktop'
 import { useState } from 'react'
 import MobileTableLoader from '@/app/loader_mobile'
+import { useMediaQuery } from '@react-hook/media-query'
 
 export default function RepositionTable ({ data, stores }) {
   console.log(data, 'data')
@@ -66,14 +67,17 @@ export default function RepositionTable ({ data, stores }) {
     return count
   }
 
+  // Usa useMediaQuery para detectar el tamaño de la pantalla
+  const isMobile = useMediaQuery('(max-width: 431px)')
+
   return (
     <>
-      {window.innerWidth <= 431 ? (
+      {isMobile ? (
         <div className='md:hidden m-2'>
           {data && data.length === 0 ? (
             <MobileTableLoader />
           ) : (
-            data.map((item) => (
+            data?.map((item) => (
               <div key={item.external_transaction_id} className='pb-2 h-screen'>
                 <div className='flex justify-between w-full md:hidden bg-d-soft-purple p-2 rounded-md'>
                   <div>
@@ -156,7 +160,7 @@ export default function RepositionTable ({ data, stores }) {
 
               </thead>
               <tbody>
-                {data.map((item) => (
+                {data?.map((item) => (
                   <tr key={item.external_transaction_id}>
                     <td />
                     <td>{item.external_transaction_id}</td>

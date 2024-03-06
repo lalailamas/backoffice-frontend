@@ -3,7 +3,6 @@ import React, { useState } from 'react'
 import { Camera } from 'react-html5-camera-photo'
 import 'react-html5-camera-photo/build/css/index.css'
 import Comments from './comments'
-import ButtonCancel from '@/components/admin/common/buttons/ButtonCancel'
 
 function CameraModal ({
   step,
