@@ -11,20 +11,12 @@ import MainTitle from '@/components/admin/common/titles/MainTitle'
 function Replacements () {
   const [restockData, setRestockData] = useState([])
   const { stores } = useGetStores2()
-  // const [isData, setIsData] = useState(true)
   const [dateRange, setDateRange] = useState({
     startDate: dayjs().subtract(1, 'week').startOf('week'),
     endDate: dayjs().subtract(1, 'week').endOf('week')
   })
-  const isInitialRender = useRef(true)
 
   useEffect(() => {
-    // Skip the initial render
-    if (isInitialRender.current) {
-      isInitialRender.current = false
-      return
-    }
-
     if (dateRange.startDate !== null && dateRange.endDate !== null) {
       getStockOperation(dateRange)
         .then((response) => {
@@ -58,19 +50,8 @@ function Replacements () {
           handleDateChange={handleDateChange}
         />
       </div>
-      {/* <div><pre>{JSON.stringify(restockData, null, 2)}</pre></div> */}
-      {/* {restockData.length > 0 || !isData
-          ? (
-
-            <div className='overflow-x-auto p-10 '>
-              <RepositionTable data={restockData} stores={stores} />
-            </div>
-            )
-          : ( */}
 
       <RepositionTable data={restockData} stores={stores} />
-
-      {/* )} */}
     </div>
 
   )
