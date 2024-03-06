@@ -139,8 +139,8 @@ export default function RepositionTable ({ data, stores }) {
       ) : (
         <div className='overflow-x-auto p-4'>
           {data && data.length === 0 ? (
-
-            <RepositionTableLoader />
+            // null
+            <RepositionTableLoader key={1} id={1} />
 
           ) : (
             <table className='table text-d-dark-dark-purple table-zebra mt-8 p-8 max-[431px]:hidden'>

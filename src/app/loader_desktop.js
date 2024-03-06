@@ -8,6 +8,7 @@ const RepositionTableLoader = props => (
     viewBox='0 0 1000 500'
     backgroundColor='#eaeced'
     foregroundColor='#ffffff'
+    uniqueKey='replacement-table-loader'
     {...props}
   >
     <rect x='51' y='45' rx='3' ry='3' width='906' height='17' />
