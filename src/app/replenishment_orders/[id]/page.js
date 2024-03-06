@@ -1,5 +1,4 @@
 'use client'
-import InsideLayout from '@/components/admin/layouts/inside'
 import { useEffect, useState } from 'react'
 import { DspApi } from '@/utils/fetchData'
 import useGetWarehouses from '@/hooks/useWarehouses'
@@ -147,6 +146,6 @@ export default function Inventory () {
 
 Inventory.getLayout = function getLayout (page) {
   return (
-    <InsideLayout>{page}</InsideLayout>
+    { page }
   )
 }

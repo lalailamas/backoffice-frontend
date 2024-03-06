@@ -1,13 +1,10 @@
 'use client'
-// import { Inter } from 'next/font/google'
-import InsideLayout from '@/components/admin/layouts/inside'
 import useGetROrders from '@/hooks/useROrders'
 import { useEffect, useRef, useState } from 'react'
 import ROrdersTable from '@/components/admin/tables/replenishment-orders'
 import Pager from '@/components/admin/common/pager'
 import { DspApi } from '@/utils/fetchData'
 import EditROrderModal from '@/components/admin/modals/replenishment-orders/edit/page'
-// import useGetWarehouses from '@/hooks/useWarehouses'
 import { SearchField } from '@/components/admin/common/search'
 import Datepicker from 'react-tailwindcss-datepicker'
 
@@ -125,7 +122,6 @@ export default function Inventory () {
 
   return (
     <>
-      <InsideLayout />
       <div className='w-full p-8'>
         <div className='flex flex-col md:flex-row mt-4 gap-y-4 md:gap-y-0 md:gap-x-4 mb-4'>
           <div className='join  w-full md:max-w-md'>
