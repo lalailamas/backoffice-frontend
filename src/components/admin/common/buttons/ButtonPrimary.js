@@ -9,7 +9,7 @@ function ButtonPrimary ({ text, onClick, type }) {
       )
     : null
   return (
-    <button onClick={onClick} className='btn rounded-full bg-d-dark-dark-purple border-none text-d-white hover:bg-d-soft-soft-purple hover:text-d-dark-dark-purple'>{svg}{text}</button>
+    <button onClick={onClick} className='btn btn-sm rounded-full bg-d-dark-dark-purple border-none text-d-white hover:bg-d-soft-soft-purple hover:text-d-dark-dark-purple'>{svg}{text}</button>
   )
 }
 
