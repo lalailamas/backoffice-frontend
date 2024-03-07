@@ -185,16 +185,15 @@ function StepTwo () {
             {layout && layout.trays && (
 
               <div className='flex flex-row gap-2 items-center justify-center overflow-x-auto'>
-
-                <div className=' sm:px-6 md:px-8 lg:px-10'>
-                  <table className=' w-full'>
+                <div className=' '>
+                  <table className=''>
                     <thead>
                       <tr>
-                        <th className='border border-gray-300 p-2'>Producto</th>
-                        <th className='border border-gray-300 p-4 '>Stock consolidado</th>
-                        <th className='border border-gray-300 p-4'>Máximo stock permitido</th>
+                        <th className='border border-gray-300'>Producto</th>
+                        <th className='border border-gray-300 p-4 '>Stock</th>
+                        <th className='border border-gray-300 p-2'>Stock máx.</th>
                         {/* <th className='border border-gray-300 p-4'>Status</th> */}
-                        <th className='border border-gray-300 p-4'>Revisado OK</th>
+                        <th className='border border-gray-300 p-4'>OK</th>
 
                       </tr>
                     </thead>
@@ -218,19 +217,19 @@ function StepTwo () {
 
                           return (
                             <tr key={column.productId + index} className={`border-b border-gray-300 ${collapsedRows[column.productId + index] ? 'bg-gray-300' : ''}`}>
-                              <td className='border border-gray-300 px-6'>
+                              <td className='border border-gray-300 '>
                                 {product
                                   ? (
                                     <div className='flex items-center max-w-[200px] h-[80px]'>
                                       <img
-                                        className='w-auto max-w-[50px] h-[50px]'
+                                        className='w-auto max-w-[40px] h-[40px]'
                                         src={product.metadata?.imageUrl}
                                         width={120}
                                         height={120}
                                         alt='Product'
                                       />
-                                      <div className='ml-4'>
-                                        <h1 className='text-d-title-purple font-bold mb-1 line-clamp-2'>
+                                      <div className='ml-2 mr-1'>
+                                        <h1 className='text-d-title-purple font-bold text-sm'>
                                           {product.productName || 'Producto faltante'}
                                         </h1>
                                       </div>
@@ -254,7 +253,7 @@ function StepTwo () {
 
                               </td>
                               <td className='border border-gray-300 py-3'>
-                                <p className='text-black-500 font-bold text-sm'>{maxQuantity} unidades</p>
+                                <p className='text-black-500 font-bold text-sm'>{maxQuantity} und</p>
 
                               </td>
                               {/* <td className='border border-gray-300 p-5'>
@@ -267,7 +266,7 @@ function StepTwo () {
                               <td className='border border-gray-300'>
                                 <input
                                   type='checkbox'
-                                  className='form-checkbox h-6 w-6 rounded border border-d-purple'
+                                  className='h-4 w-4 rounded border border-d-purple '
                                   onChange={() => handleCheckboxChange(column.productId + index)}
                                   // checked={collapsedRows[column.productId + index] || false}
                                 />
