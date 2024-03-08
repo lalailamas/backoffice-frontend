@@ -10,7 +10,7 @@ import MainTitle from '@/components/admin/common/titles/MainTitle'
 
 function Replacements () {
   const [restockData, setRestockData] = useState([])
-  const { stores } = useGetStores2()
+  const { stores } = useGetStores2(false)
   const [dateRange, setDateRange] = useState({
     startDate: dayjs().subtract(1, 'week').startOf('week'),
     endDate: dayjs().subtract(1, 'day').endOf('day')

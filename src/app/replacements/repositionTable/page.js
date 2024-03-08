@@ -34,6 +34,7 @@ export default function RepositionTable ({ data, stores }) {
   }
   function findStoreName (storeId) {
     const store = stores.find((store) => store.storeId === storeId)
+    if (store === undefined) return 'No store'
     return store.name
   }
   function cutDate (date) {
