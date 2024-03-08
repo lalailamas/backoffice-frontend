@@ -28,7 +28,7 @@ function RestockOld () {
   useEffect(() => {
     const fetchStores = async () => {
       try {
-        const response = await getStores('active')
+        const response = await getStores(true)
         setStores(response)
         // console.log('response', response.data)
       } catch (error) {
