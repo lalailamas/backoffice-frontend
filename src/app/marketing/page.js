@@ -11,7 +11,7 @@ import { chartdata, dataFormatter, valueFormatter, cities, chartdata2, dataForma
 import MainTitle from '@/components/admin/common/titles/MainTitle'
 
 function Marketing () {
-  const { stores, error } = useGetStores2()
+  const { stores, error } = useGetStores2(false)
 
   const [selectedStores, setSelectedStores] = useState([])
   //   const [selectedStoreId, setSelectedStoreId] = useState(null)

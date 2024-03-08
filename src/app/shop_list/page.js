@@ -15,7 +15,7 @@ import MainTitle from '@/components/admin/common/titles/MainTitle'
 
 function shopList () {
   const [ids, setIds] = useState([])
-  const { stores } = useGetStores2()
+  const { stores } = useGetStores2(false)
   const [data, setData] = useState([])
   const [loading, setLoading] = useState(false)
   const [dataRequested, setDataRequested] = useState([])

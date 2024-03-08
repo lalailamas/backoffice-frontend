@@ -14,7 +14,7 @@ function page () {
   const searchParams = useSearchParams()
   const id = searchParams.get('id')
   const externalTransactionId = searchParams.get('external_transactionId')
-  const { stores } = useGetStores2()
+  const { stores } = useGetStores2(false)
 
   const { OperationStock, loading } = getTransactionsById(id, externalTransactionId)
   console.log('OperationStock', OperationStock)
