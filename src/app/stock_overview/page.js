@@ -9,7 +9,7 @@ import { swallError } from '@/utils/sweetAlerts'
 import useGetLayout from '@/hooks/useGetLayout'
 
 function StockOverview () {
-  const { stores } = useGetStores2()
+  const { stores } = useGetStores2(true)
   const [selectedStore, setSelectedStore] = useState(null)
   const [products, setProducts] = useState([])
   const [inventory, setInventory] = useState([])

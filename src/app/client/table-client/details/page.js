@@ -15,7 +15,7 @@ import MainTitle from '@/components/admin/common/titles/MainTitle'
 function DetailsClient () {
   const searchParams = useSearchParams()
   const id = searchParams.get('clientId')
-  const { stores } = useGetStores2()
+  const { stores } = useGetStores2(false)
   const [clientData, setClientData] = useState(null)
   const [modalVisible, setModalVisible] = useState(false)
 

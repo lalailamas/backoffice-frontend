@@ -88,7 +88,7 @@ function Categories () {
                       />
                     </div>
                   </div>
-                  <div className='mt-5 sm:mt-4 sm:flex sm:flex-row-reverse gap-4'>
+                  <div className='flex items-center mt-5 sm:mt-4 sm:flex sm:flex-row-reverse gap-4'>
                     <ButtonPrimary text='Crear' onClick={() => onSubmit()} />
                     <ButtonCancel onClick={closeModal} />
                   </div>

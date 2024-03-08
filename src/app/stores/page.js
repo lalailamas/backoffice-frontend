@@ -6,7 +6,7 @@ import { SearchField } from '@/components/admin/common/search'
 import MainTitle from '@/components/admin/common/titles/MainTitle'
 
 function Stores () {
-  const { stores } = useGetStores2()
+  const { stores } = useGetStores2(false)
 
   const [searchTerm, setSearchTerm] = useState('')
 

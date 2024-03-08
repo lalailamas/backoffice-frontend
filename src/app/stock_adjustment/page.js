@@ -13,7 +13,7 @@ import ButtonPrimary from '@/components/admin/common/buttons/ButtonPrimary'
 import MainTitle from '@/components/admin/common/titles/MainTitle'
 
 function StockAdjustment () {
-  const { stores } = useGetStores2()
+  const { stores } = useGetStores2(true)
   const [selectedStore, setSelectedStore] = useState(null)
   const [products, setProducts] = useState([])
   const [inventory, setInventory] = useState([])
