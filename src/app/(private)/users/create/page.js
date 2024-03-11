@@ -22,7 +22,7 @@ function CreateUserForm () {
       .then((response) => {
         console.log(response, 'respuesta de create user')
         swallInfo('Usuario creado exitosamente')
-        router.push('/users')
+        router.push('/private/users')
       })
       .catch((error) => {
         swallError('Error al crear el usuario', false)
@@ -31,7 +31,7 @@ function CreateUserForm () {
   })
 
   const handleCancel = () => {
-    router.push('/users')
+    router.push('/private/users')
   }
 
   return (

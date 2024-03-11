@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import Link from 'next/link'
 import DspLoader from '@/components/admin/common/loader'
-import ConfirmationModal from '../../components/admin/modals/confirmationModal'
+import ConfirmationModal from '@/components/admin/modals/confirmationModal'
 import { swallError, swallInfo } from '@/utils/sweetAlerts'
 import { deleteCategory } from '@/api/categories'
 
@@ -12,7 +12,6 @@ export default function CategoriesTable ({ data, updateCategories }) {
 
   const handleDeleteClick = async (e, id) => {
     e.preventDefault()
-
     try {
       const category = { id }
       setSelectedCategory(category)
@@ -24,11 +23,14 @@ export default function CategoriesTable ({ data, updateCategories }) {
   }
 
   const handleDeleteConfirmation = async (id) => {
+    // console.log('entre aquiii', id)
     try {
-      await deleteCategory(id)
-      setShowModal(false)
-      swallInfo('Categoría eliminada exitosamente')
-      updateCategories()
+      const response = await deleteCategory(id)
+      if (response.successful) {
+        setShowModal(false)
+        swallInfo('Categoría eliminada exitosamente')
+        updateCategories()
+      }
     } catch (error) {
       console.error('Error', error)
     }
