@@ -41,7 +41,7 @@ function LayoutDetail ({ storeId, products, layout, layoutId }) {
         swallError('Layout actualizado correctamente', true)
         setShowPriceModal(false)
         // setTimeout(() => reloadPage(), 2000)
-        router.push(`/stores/detail?storeId=${storeId}&layoutId=${selectedLayout}&storeName=${storeName}`)
+        router.push(`stores/detail?storeId=${storeId}&layoutId=${selectedLayout}&storeName=${storeName}`)
       }
     } catch (error) {
       swallError('Error al actualizar el layout', false)

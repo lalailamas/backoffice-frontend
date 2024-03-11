@@ -169,7 +169,7 @@ export default function EditUserForm () {
                 />
 
                 <div className='flex gap-4'>
-                  <button type='button' className='btn border-none mt-4 rounded-2xl bg-d-soft-soft-purple text-d-dark-dark-purple hover:bg-d-dark-dark-purple hover:text-d-white' onClick={() => router.push('/users')}>Cancelar</button>
+                  <button type='button' className='btn border-none mt-4 rounded-2xl bg-d-soft-soft-purple text-d-dark-dark-purple hover:bg-d-dark-dark-purple hover:text-d-white' onClick={() => router.push('/private/users')}>Cancelar</button>
                   <button type='submit' className='btn border-none mt-4 rounded-2xl bg-d-dark-dark-purple text-d-white hover:bg-d-soft-soft-purple hover:text-d-dark-dark-purple disabled:text-d-white'>Guardar cambios</button>
                 </div>
               </form>
