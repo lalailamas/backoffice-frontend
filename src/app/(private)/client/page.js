@@ -28,8 +28,8 @@ export default function LoginClient () {
   useEffect(() => {
     if (session !== null && session !== undefined) {
       // console.log(session, 'session del useEffect')
-      if (session.user.role === 'admin') router.push('/private/dashboard')
-      if (session.user.role === 'restock') router.push('/private/restock')
+      if (session.user.role === 'admin') router.push('/dashboard')
+      if (session.user.role === 'restock') router.push('/restock')
     }
   }, [session])
 
