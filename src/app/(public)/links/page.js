@@ -2,11 +2,10 @@
 import ButtonPrimary from '@/components/admin/common/buttons/ButtonPrimary'
 import { GoogleTagManager, sendGTMEvent } from '@next/third-parties/google'
 import React, { useEffect } from 'react'
-
-useEffect(() => {
-  sendGTMEvent({ event: 'page_view', value: 'links' })
-}, [])
 function Links () {
+  useEffect(() => {
+    sendGTMEvent({ event: 'page_view', value: 'links' })
+  }, [])
   return (
 
     <div className="flex flex-col justify-center p-10  bg-[url('/img/bg-new.svg')] bg-cover bg-center bg-no-repeat h-screen text-white">
