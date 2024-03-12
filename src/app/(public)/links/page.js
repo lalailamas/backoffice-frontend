@@ -1,9 +1,12 @@
 import ButtonPrimary from '@/components/admin/common/buttons/ButtonPrimary'
+import { GoogleTagManager } from '@next/third-parties/google'
 import React from 'react'
 
 function Links () {
   return (
+
     <div className="flex flex-col justify-center p-10  bg-[url('/img/bg-new.svg')] bg-cover bg-center bg-no-repeat h-screen text-white">
+      <GoogleTagManager gtmId='GTM-WK457DPP' />
       <div className=' flex flex-col bg-d-soft-white rounded-3xl gap-4 p-8'>
         <div className='flex justify-center'>
           <img src='/img/logo.svg' className='mb-5 w-full ' />
