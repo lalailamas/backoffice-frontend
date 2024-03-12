@@ -1,7 +1,11 @@
+'use client'
 import ButtonPrimary from '@/components/admin/common/buttons/ButtonPrimary'
-import { GoogleTagManager } from '@next/third-parties/google'
-import React from 'react'
+import { GoogleTagManager, sendGTMEvent } from '@next/third-parties/google'
+import React, { useEffect } from 'react'
 
+useEffect(() => {
+  sendGTMEvent({ event: 'page_view', value: 'links' })
+}, [])
 function Links () {
   return (
 
