@@ -1,9 +1,19 @@
+'use client'
 import ButtonPrimary from '@/components/admin/common/buttons/ButtonPrimary'
-import React from 'react'
+// import { sendGTMEvent } from '@next/third-parties/google'
+import { GoogleTagManager } from '@next/third-parties/google'
 
+import React from 'react'
 function Links () {
+  // useEffect(() => {
+  //   console.log('page view')
+  //   sendGTMEvent({ event: 'page_view' })
+  // }, [])
   return (
+
     <div className="flex flex-col justify-center p-10  bg-[url('/img/bg-new.svg')] bg-cover bg-center bg-no-repeat h-screen text-white">
+      <GoogleTagManager gtmId='GTM-WK457DPP' />
+
       <div className='flex flex-col bg-d-soft-white rounded-3xl gap-4 p-2  mx-auto'>
         <div className='flex justify-center'>
           <img src='/img/logo.svg' className='mb-4 w-full p-2' />

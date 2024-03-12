@@ -92,7 +92,7 @@ function EditCategory () {
             </label>
           </div>
           <div className='flex gap-3 p-5'>
-            <ButtonCancel text='Cancelar' onClick={() => router.push('/private/categories')} />
+            <ButtonCancel text='Cancelar' onClick={() => router.push('/categories')} />
             <ButtonPrimary text='Guardar cambios' onClick={handleSave} />
 
           </div>
