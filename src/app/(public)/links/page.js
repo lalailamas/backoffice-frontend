@@ -1,7 +1,7 @@
 'use client'
 import ButtonPrimary from '@/components/admin/common/buttons/ButtonPrimary'
 // import { sendGTMEvent } from '@next/third-parties/google'
-import { GoogleTagManager } from '@next/third-parties/google'
+import { GoogleTagManager, GoogleAnalytics } from '@next/third-parties/google'
 
 import React from 'react'
 function Links () {
@@ -13,6 +13,7 @@ function Links () {
 
     <div className="flex flex-col justify-center p-10  bg-[url('/img/bg-new.svg')] bg-cover bg-center bg-no-repeat h-screen text-white">
       <GoogleTagManager gtmId='GTM-WK457DPP' />
+      <GoogleAnalytics gaId='G-PGEKXJBD2R' />
 
       <div className=' flex flex-col bg-d-soft-white rounded-3xl gap-4 p-8'>
         <div className='flex justify-center'>
