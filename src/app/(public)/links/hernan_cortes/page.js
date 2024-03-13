@@ -4,11 +4,6 @@ import { GoogleTagManager, sendGAEvent, GoogleAnalytics } from '@next/third-part
 
 import React from 'react'
 function Links () {
-  // useEffect(() => {
-  //   console.log('page view')
-  //   sendGTMEvent({ event: 'page_view' })
-  // }, [])
-
   function handleLinkClick (event) {
     console.log(event, 'eventito')
     const linkText = event.target.innerText
@@ -20,6 +15,7 @@ function Links () {
 
     <div className="flex flex-col justify-center p-10  bg-[url('/img/bg-new.svg')] bg-cover bg-center bg-no-repeat h-screen text-white">
       <GoogleTagManager gtmId='GTM-WK457DPP' />
+      <GoogleTagManager gtmId='G-PGEKXJBD2R' />
       <GoogleAnalytics gaId='G-PGEKXJBD2R' />
 
       <div className='flex flex-col bg-d-soft-white rounded-3xl gap-4 p-2  mx-auto'>
