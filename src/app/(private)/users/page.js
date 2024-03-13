@@ -1,7 +1,7 @@
 'use client'
 import React, { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { listUsers, downloadExcel } from '../../api/user'
+import { listUsers, downloadExcel } from '@/api/user'
 import UsersTable from './list'
 import FileSaver from 'file-saver'
 import { swallError, Toast } from '@/utils/sweetAlerts'
