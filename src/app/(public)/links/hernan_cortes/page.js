@@ -9,7 +9,7 @@ function Links () {
     console.log(linkText, 'link text')
     sendGTMEvent({ event: linkText, value: linkText })
 
-    sendGAEvent({ event, value: linkText })
+    sendGAEvent({ event: 'link_href', value: linkText })
   }
 
   return (

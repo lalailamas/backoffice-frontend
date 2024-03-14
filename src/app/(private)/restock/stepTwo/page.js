@@ -29,17 +29,16 @@ function StepTwo () {
   const [modalVisible, setModalVisible] = useState(false)
   const [loaderVisible, setLoaderVisible] = useState(false)
   const { flattenedLayout } = useFlattenLayout(layoutId)
-
+  console.log(inventory, 'inventory')
+  console.log(layout, 'layout')
   const [collapsedRows, setCollapsedRows] = useState({})
-  console.log(collapsedRows, 'collapsedRows')
+  // console.log(collapsedRows, 'collapsedRows')
   const [allCheckboxesChecked, setAllCheckboxesChecked] = useState(false)
-  console.log(allCheckboxesChecked, 'casillas checks')
-  // console.log(inventory, 'inventory')
-  // console.log(layout, 'layout')
-  // console.log(products, 'products')
+  // console.log(allCheckboxesChecked, 'casillas checks')
 
   const router = useRouter()
 
+  // aca recibimos el index del producto y el id del producto
   const quantityChangeHandler = (index, productId, differential, occurrence) => {
     if (occurrence !== false) {
       setOccInventory({
@@ -50,6 +49,7 @@ function StepTwo () {
       })
     }
   }
+  // aca sumamos la cantidad de productos repetidos
   const flattenData = (data) => {
     const flatData = Object.values(data).reduce((acc, curr) => {
       Object.entries(curr).forEach(([productId, quantity]) => {
@@ -60,6 +60,7 @@ function StepTwo () {
 
     return flatData
   }
+  // uno los productos repetidos y sumo la cantidad
   const mergeOccurrence = async (data) => {
     const mergedOccurrenceQuantity = {}
     if (Object.keys(data).length === 0) {
@@ -90,6 +91,7 @@ function StepTwo () {
     return mergedOccurrenceQuantity
   }
 
+  // envía la confirmación de stock
   const setHandleStock = async () => {
     const flatOccInventory = await flattenData(occInventory)
     const mergedOccurrence = await mergeOccurrence(flatOccInventory)
@@ -146,20 +148,6 @@ function StepTwo () {
     return <DspLoader />
   }
 
-  // const getStatus = (currentQuantity, maxQuantity) => {
-  //   const threshold = 0.25 // Umbral del 25% como ejemplo, puedes ajustarlo según tus necesidades
-
-  //   const percentage = (currentQuantity / maxQuantity)
-
-  //   if (percentage >= 1) {
-  //     return 'OK'
-  //   } else if (percentage >= threshold) {
-  //     return 'Reponer'
-  //   } else {
-  //     return 'Crítico'
-  //   }
-  // }
-
   const handleConfirmationModal = () => {
     if (!allCheckboxesChecked) {
       swallError('Por favor, haz clic en todas las casillas para continuar', false)
@@ -211,8 +199,10 @@ function StepTwo () {
                           const product = products?.find((product) => product.productId === column.productId)
                           const quantityProd = inventory.products.find((prod) => prod.productId === column.productId)
                           // console.log(layout.maxQuantities, 'maxQuanities')
+                          // console.log(quantityProd, 'quantityProd')
                           const maxQuantity = layout.maxQuantities[column.productId]
                           const multipleOccurrences = tray.columns.filter((c) => c.productId === column.productId).length > 1
+                          console.log(multipleOccurrences, 'multipleOccurrences', quantityProd, 'quantityProd')
                           // const status = getStatus(quantityProd?.quantity || 0, maxQuantity)
 
                           return (
@@ -245,7 +235,7 @@ function StepTwo () {
                                   step={2}
                                   index={column.productId + index}
                                   productId={column.productId}
-                                  initialQuantity={multipleOccurrences ? 0 : quantityProd ? quantityProd.quantity : 0}
+                                  initialQuantity={quantityProd ? quantityProd.quantity : 0}
                                   occurrence={multipleOccurrences ? quantityProd?.quantity : false}
                                       // maxQuantity={maxQuantity}
                                   header={<div />}
