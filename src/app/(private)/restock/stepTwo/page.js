@@ -29,8 +29,8 @@ function StepTwo () {
   const [modalVisible, setModalVisible] = useState(false)
   const [loaderVisible, setLoaderVisible] = useState(false)
   const { flattenedLayout } = useFlattenLayout(layoutId)
-  console.log(inventory, 'inventory')
-  console.log(layout, 'layout')
+  // console.log(inventory, 'inventory')
+  // console.log(layout, 'layout')
   const [collapsedRows, setCollapsedRows] = useState({})
   // console.log(collapsedRows, 'collapsedRows')
   const [allCheckboxesChecked, setAllCheckboxesChecked] = useState(false)
@@ -202,7 +202,7 @@ function StepTwo () {
                           // console.log(quantityProd, 'quantityProd')
                           const maxQuantity = layout.maxQuantities[column.productId]
                           const multipleOccurrences = tray.columns.filter((c) => c.productId === column.productId).length > 1
-                          console.log(multipleOccurrences, 'multipleOccurrences', quantityProd, 'quantityProd')
+                          // console.log(multipleOccurrences, 'multipleOccurrences', quantityProd, 'quantityProd')
                           // const status = getStatus(quantityProd?.quantity || 0, maxQuantity)
 
                           return (
