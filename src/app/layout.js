@@ -1,6 +1,8 @@
 // import Analytics from '@/components/admin/analitics/analytics'
 
+import DspLoader from '@/components/admin/common/loader'
 import SessionAuthProvider from '@/context/SessionAuthProvider'
+import { Suspense } from 'react'
 import 'tailwindcss/tailwind.css'
 
 export default function RootLayout ({ children }) {
@@ -9,8 +11,12 @@ export default function RootLayout ({ children }) {
       <body data-theme='light' className='bg-d-white'>
 
         <SessionAuthProvider>
-          {children}
+          <Suspense fallback={<DspLoader />}>
+
+            {children}
+          </Suspense>
         </SessionAuthProvider>
+
       </body>
     </html>
   )

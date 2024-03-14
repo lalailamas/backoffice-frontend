@@ -39,7 +39,6 @@ export default function RootLayout ({ children }) {
       </div>
 
       <div className='flex-grow'>
-
         {children}
       </div>
 
