@@ -16,7 +16,7 @@ function Products ({ loader, products, inventory, storeId, layout, expandedRows,
       const maxQuantity = column.maxQuantity
       if (quantityProd && maxQuantity) {
         if (quantityMap[quantityProd.productId] && maxQuantityMap[column.productId]) {
-          quantityMap[quantityProd.productId] += quantityProd.quantity
+          quantityMap[quantityProd.productId] = quantityProd.quantity
           maxQuantityMap[column.productId] += maxQuantity
         } else {
           quantityMap[quantityProd.productId] = quantityProd.quantity

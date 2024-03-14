@@ -39,7 +39,7 @@ function Detail () {
           setInventory(store.data.products)
           setLoader(false)
         } catch (error) {
-          console.log(error)
+          // console.log(error)
           swallError('Ocurrió un error inesperado', false)
         }
       }

@@ -22,7 +22,7 @@ function ConfirmPriceModal ({
         data[ID] = productPrice
       })
     })
-    console.log(data, 'data')
+    // console.log(data, 'data')
     setPrices(data)
   }
 
