@@ -8,14 +8,14 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import ProductCard from './productCard'
 
 function LayoutDetail ({ storeId, products, layout, layoutId }) {
-  console.log(layout, 'layout del layoutDetail')
+  // console.log(layout, 'layout del layoutDetail')
   const router = useRouter()
   const searchParams = useSearchParams()
 
   const storeName = searchParams.get('storeName')
   const [layouts, setLayouts] = useState([])
   const [selectedLayout, setSelectedLayout] = useState(layoutId)
-  console.log(selectedLayout, 'selectedLayout')
+  // console.log(selectedLayout, 'selectedLayout')
   const [showLayout, setShowLayout] = useState(layout)
   // const [loader, setLoader] = useState(false)
   const [showPriceModal, setShowPriceModal] = useState(false)
@@ -24,7 +24,7 @@ function LayoutDetail ({ storeId, products, layout, layoutId }) {
   //   window.location.reload()
   // }
   const handleUpdateStoreLayout = async (prices) => {
-    console.log(prices, 'prices')
+    // console.log(prices, 'prices')
     Object.keys(prices).forEach((productId) => {
       const productPrice = prices[productId]
       if (productPrice === 0) {
@@ -36,7 +36,7 @@ function LayoutDetail ({ storeId, products, layout, layoutId }) {
       setShowPriceModal(false)
       // setLoader(true)
       const response = await updateLayout(storeId, selectedLayout, prices)
-      console.log(response)
+      // console.log(response)
       if (response.successful) {
         swallError('Layout actualizado correctamente', true)
         setShowPriceModal(false)
