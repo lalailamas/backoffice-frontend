@@ -1,5 +1,5 @@
 'use client'
-import { GoogleTagManager, sendGAEvent, GoogleAnalytics } from '@next/third-parties/google'
+import { GoogleTagManager, sendGAEvent, GoogleAnalytics, sendGTMEvent } from '@next/third-parties/google'
 
 import React from 'react'
 function Links () {
@@ -7,6 +7,8 @@ function Links () {
     console.log(event, 'eventito')
     const linkText = event.target.innerText
     console.log(linkText, 'link text')
+    sendGTMEvent({ event: linkText, value: linkText })
+
     sendGAEvent({ event, value: linkText })
   }
 
@@ -14,6 +16,7 @@ function Links () {
 
     <div className="flex flex-col justify-center p-10  bg-[url('/img/bg-new.svg')] bg-cover bg-center bg-no-repeat h-screen text-white">
       <GoogleTagManager gtmId='GTM-WK457DPP' />
+      {/* <GoogleTagManager gtmId='G-PGEKXJBD2R' /> */}
       <GoogleAnalytics gaId='G-PGEKXJBD2R' />
 
       <div className='flex flex-col bg-d-soft-white rounded-3xl gap-4 p-2  mx-auto'>
