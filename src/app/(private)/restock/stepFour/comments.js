@@ -37,7 +37,7 @@ function Comments ({ SendSnapshotComment, handleOperationConfirmation }) {
           </div>
           <div className='flex flex-row justify-end gap-6 w-full p-4 mt-4'>
             <ButtonCancel text='Cancelar' onClick={handleOperationConfirmation} />
-            <input type='submit' className='btn btn-sm join-item rounded-full bg-d-dark-dark-purple border-none text-d-white hover:bg-d-soft-soft-purple hover:text-d-dark-dark-purple' value='Confirmar' />
+            <input type='submit' className='btn text-xs rounded-full bg-d-dark-dark-purple border-none text-d-white hover:bg-d-soft-soft-purple hover:text-d-dark-dark-purple' value='Confirmar' />
           </div>
 
         </div>
