@@ -15,9 +15,8 @@ function Links () {
   return (
 
     <div className="flex flex-col justify-center p-10  bg-[url('/img/bg-new.svg')] bg-cover bg-center bg-no-repeat h-screen text-white">
-      <GoogleTagManager gtmId='GTM-WK457DPP' />
-      {/* <GoogleTagManager gtmId='G-PGEKXJBD2R' /> */}
-      <GoogleAnalytics gaId='G-PGEKXJBD2R' />
+      <GoogleTagManager gtmId={process.env.NEXT_PUBLIC_GTM_ID} />
+      <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID} />
 
       <div className='flex flex-col bg-d-soft-white rounded-3xl gap-4 p-2  mx-auto'>
         <div className='flex justify-center'>

@@ -12,7 +12,6 @@ export default function RootLayout ({ children }) {
 
         <SessionAuthProvider>
           <Suspense fallback={<DspLoader />}>
-
             {children}
           </Suspense>
         </SessionAuthProvider>
