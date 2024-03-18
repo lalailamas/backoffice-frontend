@@ -26,6 +26,7 @@ function StepTwo () {
   const { layout, layoutLoad } = useGetLayout(layoutId)
   const { products, loading } = useGetProdByStore(externalId)
   const [occInventory, setOccInventory] = useState({})
+  // console.log(occInventory, 'occInventory')
   const [modalVisible, setModalVisible] = useState(false)
   const [loaderVisible, setLoaderVisible] = useState(false)
   const { flattenedLayout } = useFlattenLayout(layoutId)
@@ -39,15 +40,13 @@ function StepTwo () {
   const router = useRouter()
 
   // aca recibimos el index del producto y el id del producto
-  const quantityChangeHandler = (index, productId, differential, occurrence) => {
-    if (occurrence !== false) {
-      setOccInventory({
-        ...occInventory,
-        [index]: {
-          [productId]: differential
-        }
-      })
-    }
+  const quantityChangeHandler = (index, productId, differential) => {
+    setOccInventory({
+      ...occInventory,
+      [index]: {
+        [productId]: differential
+      }
+    })
   }
   // aca sumamos la cantidad de productos repetidos
   const flattenData = (data) => {
@@ -117,7 +116,10 @@ function StepTwo () {
 
     try {
       setLoaderVisible(true)
+      console.log('Step 2: stockData to Confirm Inventory V2', stockData)
+
       const response = await postRestockInventory(externalId, transactionId, stockData)
+      console.log(response, 'response')
       if (response.result.successful) {
         swallError('Stock confirmado', true)
         router.push(
@@ -164,6 +166,7 @@ function StepTwo () {
           <div className='text-center'>
             <StepLayout />
             {/* <div className='px-4 md:px-6 lg:px-8'> */}
+            <pre>{JSON.stringify(occInventory, null, 2)}</pre>
             {externalId && (
               <div className='text-center mb-4 md:mb-8'>
                 <h1 className='text-d-dark-dark-purple text-2x2 font-bold'>{storeName}</h1>
@@ -180,7 +183,6 @@ function StepTwo () {
                         <th className='border border-gray-300'>Producto</th>
                         <th className='border border-gray-300 p-4 '>Stock</th>
                         <th className='border border-gray-300 p-2'>Stock máx.</th>
-                        {/* <th className='border border-gray-300 p-4'>Status</th> */}
                         <th className='border border-gray-300 p-4'>OK</th>
 
                       </tr>
@@ -198,12 +200,7 @@ function StepTwo () {
                           displayedProducts.add(column.productId)
                           const product = products?.find((product) => product.productId === column.productId)
                           const quantityProd = inventory.products.find((prod) => prod.productId === column.productId)
-                          // console.log(layout.maxQuantities, 'maxQuanities')
-                          // console.log(quantityProd, 'quantityProd')
                           const maxQuantity = layout.maxQuantities[column.productId]
-                          const multipleOccurrences = tray.columns.filter((c) => c.productId === column.productId).length > 1
-                          // console.log(multipleOccurrences, 'multipleOccurrences', quantityProd, 'quantityProd')
-                          // const status = getStatus(quantityProd?.quantity || 0, maxQuantity)
 
                           return (
                             <tr key={column.productId + index} className={`border-b border-gray-300 ${collapsedRows[column.productId + index] ? 'bg-gray-300' : ''}`}>
@@ -236,8 +233,6 @@ function StepTwo () {
                                   index={column.productId + index}
                                   productId={column.productId}
                                   initialQuantity={quantityProd ? quantityProd.quantity : 0}
-                                  occurrence={multipleOccurrences ? quantityProd?.quantity : false}
-                                      // maxQuantity={maxQuantity}
                                   header={<div />}
                                 />
 
@@ -246,19 +241,11 @@ function StepTwo () {
                                 <p className='text-black-500 font-bold text-sm'>{maxQuantity} und</p>
 
                               </td>
-                              {/* <td className='border border-gray-300 p-5'>
-                                <div className={`rounded-full w-20 h-8 flex items-center justify-center
-                          ${status === 'Crítico' ? 'bg-red-200 text-red-500' : status === 'OK' ? 'bg-green-300 text-green-800' : 'bg-blue-200 text-blue-500'}`}
-                                >
-                                  <span className=''>{status}</span>
-                                </div>
-                              </td> */}
                               <td className='border border-gray-300'>
                                 <input
                                   type='checkbox'
                                   className='h-4 w-4 rounded border border-d-purple '
                                   onChange={() => handleCheckboxChange(column.productId + index)}
-                                  // checked={collapsedRows[column.productId + index] || false}
                                 />
                               </td>
                             </tr>
@@ -272,7 +259,6 @@ function StepTwo () {
 
             )}
 
-            {/* </div> */}
             <div className='p-10'>
               <ButtonPrimary onClick={() => handleConfirmationModal()} text='Confirmar stock'>
                 <svg className='w-3.5 h-3.5 ml-2' aria-hidden='true' xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 14 10'>
