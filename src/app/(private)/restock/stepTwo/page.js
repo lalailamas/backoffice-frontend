@@ -119,7 +119,7 @@ function StepTwo () {
       console.log('Step 2: stockData to Confirm Inventory V2', stockData)
 
       const response = await postRestockInventory(externalId, transactionId, stockData)
-      console.log(response, 'response')
+      console.log(response, 'response V2')
       if (response.result.successful) {
         swallError('Stock confirmado', true)
         router.push(
@@ -166,7 +166,7 @@ function StepTwo () {
           <div className='text-center'>
             <StepLayout />
             {/* <div className='px-4 md:px-6 lg:px-8'> */}
-            <pre>{JSON.stringify(occInventory, null, 2)}</pre>
+            {/* <pre>{JSON.stringify(occInventory, null, 2)}</pre> */}
             {externalId && (
               <div className='text-center mb-4 md:mb-8'>
                 <h1 className='text-d-dark-dark-purple text-2x2 font-bold'>{storeName}</h1>
