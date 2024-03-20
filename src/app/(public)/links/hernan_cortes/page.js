@@ -1,5 +1,5 @@
 'use client'
-import { GoogleTagManager, sendGAEvent, GoogleAnalytics, sendGTMEvent } from '@next/third-parties/google'
+import { GoogleTagManager, GoogleAnalytics } from '@next/third-parties/google'
 
 import React from 'react'
 function Links () {
@@ -7,9 +7,9 @@ function Links () {
     console.log(event, 'eventito')
     const linkText = event.target.innerText
     console.log(linkText, 'link text')
-    sendGTMEvent({ event: linkText, value: linkText })
+    // sendGTMEvent({ event: linkText, value: linkText })
 
-    sendGAEvent({ event: 'link_href', value: linkText })
+    // sendGAEvent({ event: 'link_href', value: linkText })
   }
 
   return (

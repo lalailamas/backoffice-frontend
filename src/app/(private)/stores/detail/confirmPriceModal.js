@@ -10,7 +10,7 @@ function ConfirmPriceModal ({
 
 }) {
   const [prices, setPrices] = useState({})
-  // console.log(price, 'price')
+  // console.log(prices, 'price')
 
   const createPriceLayout = async () => {
     const data = {}
@@ -81,7 +81,7 @@ function ConfirmPriceModal ({
                         type='number'
                         placeholder='Precio'
                         value={prices[productId]}
-                        onChange={(e) => setPrices({ ...prices, [productId]: e.target.value })}
+                        onChange={(e) => setPrices({ ...prices, [productId]: parseInt(e.target.value) })}
                         className='w-full'
                       />
                     </div>
