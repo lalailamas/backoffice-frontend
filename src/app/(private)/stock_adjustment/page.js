@@ -133,6 +133,8 @@ function StockAdjustment () {
       Toast('Descargando archivo', 'Espera unos segundos')
       const response = await downloadInventoryExcel(selectedStore)
       const { buffer, filename } = response.data
+      console.log(buffer, 'buffer')
+      console.log(filename, 'filename')
       const blob = new Blob([Buffer.from(buffer)], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' })
       FileSaver.saveAs(blob, filename)
       Swal.close()
