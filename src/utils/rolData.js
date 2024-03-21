@@ -19,7 +19,7 @@ export const accessData = [
       'Layout'
     ],
     submenu_pages: [
-      'Reponer tienda V.2',
+      'Reponer tienda',
       'Generar Flejes'
     ]
   }
