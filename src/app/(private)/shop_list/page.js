@@ -63,12 +63,11 @@ function shopList () {
   }, [ids])
 
   return (
-    <div className='h-screen'>
+    <div>
       <MainTitle>Gestión de abastecimiento</MainTitle>
       <div className='flex justify-center gap-6 '>
         <MultiSelect
           placeholderSearch='Buscar'
-          placeholder='Selecciona una(s) tienda(s)'
           value={ids}
           onValueChange={handleStoreChange}
           className='data-te-select-init multiple w-1/2'
@@ -111,13 +110,9 @@ function shopList () {
         ? <DspLoader />
         : (
           <div className='p-10'>
-            <div>
-
-              <div>
-                <RequestedStockTable data={dataRequested} />
-              </div>
-            </div>
-          </div>)}
+            <RequestedStockTable data={dataRequested} />
+          </div>
+          )}
     </div>
 
   )
