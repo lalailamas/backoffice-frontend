@@ -112,6 +112,11 @@ export const getDataForExcel = (relativeUrl) => {
   return axios.get(fullUrl)
 }
 
+export const getDataForPDF = (relativeUrl, contentType) => {
+  const fullUrl = baseUrl + relativeUrl
+  return axios.get(fullUrl, { responseType: 'blob' })
+}
+
 export const postProduct = async (product, image, url, contentType) => {
   const data = new FormData()
   for (const key of Object.keys(product)) {

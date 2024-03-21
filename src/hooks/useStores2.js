@@ -11,7 +11,7 @@ const useGetStores2 = (active) => {
       setLoading(true)
       getStores(active).then(
         (response) => {
-          console.log(response, 'respuesta getStores2')
+          // console.log(response, 'respuesta getStores2')
           setStores(response)
         }
       ).catch((err) => {

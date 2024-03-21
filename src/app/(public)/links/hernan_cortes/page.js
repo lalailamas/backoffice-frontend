@@ -26,6 +26,7 @@ function Links () {
         <a
           href='https://app.despnsa247.com/catalog/CNV_008'
           onClick={(e) => { handleLinkClick(e) }}
+          id='catalogo-hernan-cortes'
           className='btn text-xs rounded-full bg-d-dark-dark-purple border-none text-d-white hover:bg-d-soft-soft-purple hover:text-d-dark-dark-purple'
         >Catálogo Hernán Cortés
         </a>
@@ -38,11 +39,13 @@ function Links () {
 
         <a
           href='#'
+          id='faq-hernan-cortes'
           onClick={(e) => { handleLinkClick(e) }}
           className='btn text-xs rounded-full bg-d-dark-dark-purple border-none text-d-white hover:bg-d-soft-soft-purple hover:text-d-dark-dark-purple'
         >FAQ
         </a>
         <a
+          id='sugerir-producto-hernan-cortes'
           href='https://forms.office.com/pages/responsepage.aspx?id=xGIHpa3FOkGgXp_-FXUognIJVBkk_DJOm3bBkqA7WBdUM0xIWldMV1QzNzlONDFKTlJYNlJGOTRMVCQlQCN0PWcu'
           onClick={(e) => { handleLinkClick(e) }}
           className='btn text-xs rounded-full bg-d-dark-dark-purple border-none text-d-white hover:bg-d-soft-soft-purple hover:text-d-dark-dark-purple'
@@ -61,6 +64,7 @@ function Links () {
           </a>
         </div>
         <a
+          id='proponer-lugar-despnsa'
           href='https://forms.office.com/pages/responsepage.aspx?id=xGIHpa3FOkGgXp_-FXUognIJVBkk_DJOm3bBkqA7WBdURDFQOE9BNkZTSjVWMjFPRFk4MEw1TjQxSCQlQCN0PWcu'
           className='btn text-xs rounded-full bg-d-dark-dark-purple border-none text-d-white hover:bg-d-soft-soft-purple hover:text-d-dark-dark-purple'
           onClick={(e) => { handleLinkClick(e) }}

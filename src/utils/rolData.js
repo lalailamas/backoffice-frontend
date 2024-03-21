@@ -8,19 +8,19 @@ export const accessData = [
       'Tiendas',
       'Usuarios',
       'Tareas',
-      'Ajuste de stock'
+      'Ajuste de stock',
+      'Layout'
     ]
   },
   {
     role: 'restock',
     menuItems_label: [
-      'Reposiciones'
-      // 'Tiendas',
-      // 'Tareas'
+      'Reposiciones',
+      'Layout'
     ],
     submenu_pages: [
-      'Reponer tienda V.2',
-      'Reponer tienda V.1'
+      'Reponer tienda',
+      'Generar Flejes'
     ]
   }
 ]

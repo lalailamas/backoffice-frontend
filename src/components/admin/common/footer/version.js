@@ -37,7 +37,7 @@ function VersionTag () {
 
   return (
     <>
-      <h1>Versión {version} </h1>
+      <h1 className='text-sm'>Versión {version} </h1>
     </>
   )
 }

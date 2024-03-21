@@ -24,8 +24,8 @@ export const menuItems = [
     label: 'Reposiciones',
     icon: 'rotate-180',
     subMenuLinks: [
-      { label: 'Reponer tienda V.2', href: '/restock' },
-      { label: 'Reponer tienda V.1', href: '/restock_copy' },
+      { label: 'Reponer tienda', href: '/restock' },
+      // { label: 'Reponer tienda V.1', href: '/restock_copy' },
 
       { label: 'Historial de reposiciones', href: '/replacements' },
       { label: 'Lista de compras y reposición', href: '/shop_list' }
@@ -46,8 +46,8 @@ export const menuItems = [
     label: 'Layout',
     icon: 'rotate-180',
     subMenuLinks: [
-      { label: 'Crear/Editar layout', href: '/layout' }
-
+      { label: 'Crear/Editar layout', href: '/layout' },
+      { label: 'Generar Flejes', href: '/strap' }
     ]
   },
   {
