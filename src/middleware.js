@@ -57,5 +57,7 @@ export const config = {
     '/client/table-client',
     '/categories',
     '/restock_copy',
-    '/shop_list']
+    '/shop_list',
+    '/strap'
+  ]
 }
