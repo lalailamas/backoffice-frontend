@@ -26,8 +26,16 @@ function Strap () {
   const handlePDFDownload = async (storeId, style) => {
     try {
       Toast('Descargando archivo', 'Espera unos segundos')
-      const pdfData = await downloadTrapsPDF(storeId, style)
-      const filename = 'precios.pdf'
+      const { data: pdfData, headers } = await downloadTrapsPDF(storeId, style)
+      const contentDisposition = headers['content-disposition']
+      let filename = 'default_filename.pdf'
+      if (contentDisposition) {
+        const matches = contentDisposition.match(/filename="?([^"]+)"?/)
+        if (matches && matches.length === 2) {
+          filename = matches[1]
+        }
+      }
+
       FileSaver.saveAs(pdfData, filename)
       Swal.close()
     } catch (error) {

@@ -1,5 +1,5 @@
 'use client'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import DspLoader from '@/components/admin/common/loader'
 import AccordeonCard from '../acordeonCard'
 import { useSearchParams, useRouter } from 'next/navigation'
@@ -12,7 +12,6 @@ import ConfirmationModal from '@/components/admin/modals/confirmationModal'
 import useFlattenLayout from '@/hooks/useFlattenLayout'
 import { swallError } from '@/utils/sweetAlerts'
 import { errorHandler } from '@/utils/errors/errors'
-import ButtonPrimary from '@/components/admin/common/buttons/ButtonPrimary'
 
 function StepTwo () {
   const searchParams = useSearchParams()
@@ -30,12 +29,12 @@ function StepTwo () {
   const [modalVisible, setModalVisible] = useState(false)
   const [loaderVisible, setLoaderVisible] = useState(false)
   const { flattenedLayout } = useFlattenLayout(layoutId)
-  // console.log(inventory, 'inventory')
-  // console.log(layout, 'layout')
   const [collapsedRows, setCollapsedRows] = useState({})
-  // console.log(collapsedRows, 'collapsedRows')
+  console.log(collapsedRows, 'collapsedRows')
   const [allCheckboxesChecked, setAllCheckboxesChecked] = useState(false)
-  // console.log(allCheckboxesChecked, 'casillas checks')
+  console.log(allCheckboxesChecked, 'allCheckboxesChecked')
+  const [disabledCheckboxes, setDisabledCheckboxes] = useState({})
+  console.log(disabledCheckboxes, 'disabledCheckboxes')
 
   const router = useRouter()
 
@@ -132,6 +131,15 @@ function StepTwo () {
     }
   }
 
+  useEffect(() => {
+    const initialCollapsedRows = products.reduce((acc, product) => {
+      acc[product.productId] = false
+      return acc
+    }, {})
+
+    setCollapsedRows(initialCollapsedRows)
+  }, [products]) // Asegúrate de que este efecto se ejecute cada vez que la lista de productos cambie
+
   const handleCheckboxChange = (index) => {
     // Actualiza el estado collapsedRows y verifica después de la actualización
     setCollapsedRows((prevCollapsedRows) => {
@@ -144,6 +152,11 @@ function StepTwo () {
       console.log(allChecked, 'allChecked')
       return updatedCollapsedRows
     })
+    // Marca el checkbox como deshabilitado
+    setDisabledCheckboxes((prevDisabledCheckboxes) => ({
+      ...prevDisabledCheckboxes,
+      [index]: true
+    }))
   }
 
   if (loaderVisible) {
@@ -203,7 +216,7 @@ function StepTwo () {
                           const maxQuantity = layout.maxQuantities[column.productId]
 
                           return (
-                            <tr key={column.productId + index} className={`border-b border-gray-300 ${collapsedRows[column.productId + index] ? 'bg-gray-300' : ''}`}>
+                            <tr key={column.productId + index} className={`border-b border-gray-300 ${collapsedRows[column.productId] ? 'bg-gray-300 opacity-30' : ''}`}>
                               <td className='border border-gray-300 '>
                                 {product
                                   ? (
@@ -245,7 +258,8 @@ function StepTwo () {
                                 <input
                                   type='checkbox'
                                   className='h-4 w-4 rounded border border-d-purple '
-                                  onChange={() => handleCheckboxChange(column.productId + index)}
+                                  onChange={() => handleCheckboxChange(column.productId)}
+
                                 />
                               </td>
                             </tr>
@@ -260,11 +274,17 @@ function StepTwo () {
             )}
 
             <div className='p-10'>
-              <ButtonPrimary onClick={() => handleConfirmationModal()} text='Confirmar stock'>
+              <button
+                onClick={() => handleConfirmationModal()}
+                className='btn text-xs rounded-full bg-d-dark-dark-purple border-none text-d-white hover:bg-d-soft-soft-purple hover:text-d-dark-dark-purple'
+                disabled={!allCheckboxesChecked}
+              >
+                Confirmar stock
                 <svg className='w-3.5 h-3.5 ml-2' aria-hidden='true' xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 14 10'>
                   <path stroke='currentColor' strokeLinecap='round' strokeLinejoin='round' strokeWidth='2' d='M1 5h12m0 0L9 1m4 4L9 9' />
                 </svg>
-              </ButtonPrimary>
+
+              </button>
             </div>
           </div>
 
