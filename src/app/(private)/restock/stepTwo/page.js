@@ -1,5 +1,5 @@
 'use client'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import DspLoader from '@/components/admin/common/loader'
 import AccordeonCard from '../acordeonCard'
 import { useSearchParams, useRouter } from 'next/navigation'
@@ -12,12 +12,10 @@ import ConfirmationModal from '@/components/admin/modals/confirmationModal'
 import useFlattenLayout from '@/hooks/useFlattenLayout'
 import { swallError } from '@/utils/sweetAlerts'
 import { errorHandler } from '@/utils/errors/errors'
-import ButtonPrimary from '@/components/admin/common/buttons/ButtonPrimary'
 
 function StepTwo () {
   const searchParams = useSearchParams()
   const externalId = searchParams.get('external_id')
-  // console.log(externalId, 'external ID en steptwo')
   const layoutId = searchParams.get('layout_id')
   const storeName = searchParams.get('store_name')
   const externalTransactionId = searchParams.get('externalTransactionId')
@@ -26,16 +24,11 @@ function StepTwo () {
   const { layout, layoutLoad } = useGetLayout(layoutId)
   const { products, loading } = useGetProdByStore(externalId)
   const [occInventory, setOccInventory] = useState({})
-  // console.log(occInventory, 'occInventory')
   const [modalVisible, setModalVisible] = useState(false)
   const [loaderVisible, setLoaderVisible] = useState(false)
   const { flattenedLayout } = useFlattenLayout(layoutId)
-  // console.log(inventory, 'inventory')
-  // console.log(layout, 'layout')
   const [collapsedRows, setCollapsedRows] = useState({})
-  // console.log(collapsedRows, 'collapsedRows')
   const [allCheckboxesChecked, setAllCheckboxesChecked] = useState(false)
-  // console.log(allCheckboxesChecked, 'casillas checks')
 
   const router = useRouter()
 
@@ -132,16 +125,26 @@ function StepTwo () {
     }
   }
 
+  // inicializa `collapsedRows` con claves de ID de producto y valores en `false`.
+  useEffect(() => {
+    const initialCollapsedRows = products.reduce((acc, product) => {
+      acc[product.productId] = false
+      return acc
+    }, {})
+
+    setCollapsedRows(initialCollapsedRows)
+  }, [products])
+
   const handleCheckboxChange = (index) => {
-    // Actualiza el estado collapsedRows y verifica después de la actualización
+    // actualiza el estado `collapsedRows`, cambiando el estado de marcado del checkbox identificado por `index` al valor opuesto al que tenía.
     setCollapsedRows((prevCollapsedRows) => {
       const updatedCollapsedRows = {
         ...prevCollapsedRows,
         [index]: !prevCollapsedRows[index]
       }
+      // `allChecked` cambia de `false` a `true` sólo cuando todos los checkbox estan checkeados
       const allChecked = Object.values(updatedCollapsedRows).every((value) => value)
       setAllCheckboxesChecked(allChecked)
-      console.log(allChecked, 'allChecked')
       return updatedCollapsedRows
     })
   }
@@ -151,10 +154,6 @@ function StepTwo () {
   }
 
   const handleConfirmationModal = () => {
-    if (!allCheckboxesChecked) {
-      swallError('Por favor, haz clic en todas las casillas para continuar', false)
-      return
-    }
     setModalVisible(!modalVisible)
   }
 
@@ -165,7 +164,6 @@ function StepTwo () {
         : (
           <div className='text-center'>
             <StepLayout />
-            {/* <div className='px-4 md:px-6 lg:px-8'> */}
             {/* <pre>{JSON.stringify(occInventory, null, 2)}</pre> */}
             {externalId && (
               <div className='text-center mb-4 md:mb-8'>
@@ -203,7 +201,7 @@ function StepTwo () {
                           const maxQuantity = layout.maxQuantities[column.productId]
 
                           return (
-                            <tr key={column.productId + index} className={`border-b border-gray-300 ${collapsedRows[column.productId + index] ? 'bg-gray-300' : ''}`}>
+                            <tr key={column.productId + index} className={`border-b border-gray-300 ${collapsedRows[column.productId] ? 'bg-gray-300 opacity-30' : ''}`}>
                               <td className='border border-gray-300 '>
                                 {product
                                   ? (
@@ -245,7 +243,8 @@ function StepTwo () {
                                 <input
                                   type='checkbox'
                                   className='h-4 w-4 rounded border border-d-purple '
-                                  onChange={() => handleCheckboxChange(column.productId + index)}
+                                  onChange={() => handleCheckboxChange(column.productId)}
+
                                 />
                               </td>
                             </tr>
@@ -256,22 +255,25 @@ function StepTwo () {
                   </table>
                 </div>
               </div>
-
             )}
-
             <div className='p-10'>
-              <ButtonPrimary onClick={() => handleConfirmationModal()} text='Confirmar stock'>
+              <button
+                onClick={() => handleConfirmationModal()}
+                className='btn text-xs rounded-full bg-d-dark-dark-purple border-none text-d-white hover:bg-d-soft-soft-purple hover:text-d-dark-dark-purple'
+                disabled={!allCheckboxesChecked}
+              >
+                Confirmar stock
                 <svg className='w-3.5 h-3.5 ml-2' aria-hidden='true' xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 14 10'>
                   <path stroke='currentColor' strokeLinecap='round' strokeLinejoin='round' strokeWidth='2' d='M1 5h12m0 0L9 1m4 4L9 9' />
                 </svg>
-              </ButtonPrimary>
+
+              </button>
             </div>
           </div>
 
           )}
       {modalVisible && (
         <div className='fixed z-50 flex items-center justify-center'>
-
           <ConfirmationModal
             handleConfirmationModal={handleConfirmationModal}
             handleOperationConfirmation={setHandleStock}
@@ -283,7 +285,6 @@ function StepTwo () {
             cancelButtonText='Cancelar'
           />
         </div>
-
       )}
     </div>
   )
