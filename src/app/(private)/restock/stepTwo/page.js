@@ -16,7 +16,6 @@ import { errorHandler } from '@/utils/errors/errors'
 function StepTwo () {
   const searchParams = useSearchParams()
   const externalId = searchParams.get('external_id')
-  // console.log(externalId, 'external ID en steptwo')
   const layoutId = searchParams.get('layout_id')
   const storeName = searchParams.get('store_name')
   const externalTransactionId = searchParams.get('externalTransactionId')
@@ -25,16 +24,11 @@ function StepTwo () {
   const { layout, layoutLoad } = useGetLayout(layoutId)
   const { products, loading } = useGetProdByStore(externalId)
   const [occInventory, setOccInventory] = useState({})
-  // console.log(occInventory, 'occInventory')
   const [modalVisible, setModalVisible] = useState(false)
   const [loaderVisible, setLoaderVisible] = useState(false)
   const { flattenedLayout } = useFlattenLayout(layoutId)
   const [collapsedRows, setCollapsedRows] = useState({})
-  console.log(collapsedRows, 'collapsedRows')
   const [allCheckboxesChecked, setAllCheckboxesChecked] = useState(false)
-  console.log(allCheckboxesChecked, 'allCheckboxesChecked')
-  const [disabledCheckboxes, setDisabledCheckboxes] = useState({})
-  console.log(disabledCheckboxes, 'disabledCheckboxes')
 
   const router = useRouter()
 
@@ -131,6 +125,7 @@ function StepTwo () {
     }
   }
 
+  // inicializa `collapsedRows` con claves de ID de producto y valores en `false`.
   useEffect(() => {
     const initialCollapsedRows = products.reduce((acc, product) => {
       acc[product.productId] = false
@@ -138,25 +133,20 @@ function StepTwo () {
     }, {})
 
     setCollapsedRows(initialCollapsedRows)
-  }, [products]) // Asegúrate de que este efecto se ejecute cada vez que la lista de productos cambie
+  }, [products])
 
   const handleCheckboxChange = (index) => {
-    // Actualiza el estado collapsedRows y verifica después de la actualización
+    // actualiza el estado `collapsedRows`, cambiando el estado de marcado del checkbox identificado por `index` al valor opuesto al que tenía.
     setCollapsedRows((prevCollapsedRows) => {
       const updatedCollapsedRows = {
         ...prevCollapsedRows,
         [index]: !prevCollapsedRows[index]
       }
+      // `allChecked` cambia de `false` a `true` sólo cuando todos los checkbox estan checkeados
       const allChecked = Object.values(updatedCollapsedRows).every((value) => value)
       setAllCheckboxesChecked(allChecked)
-      console.log(allChecked, 'allChecked')
       return updatedCollapsedRows
     })
-    // Marca el checkbox como deshabilitado
-    setDisabledCheckboxes((prevDisabledCheckboxes) => ({
-      ...prevDisabledCheckboxes,
-      [index]: true
-    }))
   }
 
   if (loaderVisible) {
@@ -164,10 +154,6 @@ function StepTwo () {
   }
 
   const handleConfirmationModal = () => {
-    if (!allCheckboxesChecked) {
-      swallError('Por favor, haz clic en todas las casillas para continuar', false)
-      return
-    }
     setModalVisible(!modalVisible)
   }
 
@@ -178,7 +164,6 @@ function StepTwo () {
         : (
           <div className='text-center'>
             <StepLayout />
-            {/* <div className='px-4 md:px-6 lg:px-8'> */}
             {/* <pre>{JSON.stringify(occInventory, null, 2)}</pre> */}
             {externalId && (
               <div className='text-center mb-4 md:mb-8'>
@@ -270,9 +255,7 @@ function StepTwo () {
                   </table>
                 </div>
               </div>
-
             )}
-
             <div className='p-10'>
               <button
                 onClick={() => handleConfirmationModal()}
@@ -291,7 +274,6 @@ function StepTwo () {
           )}
       {modalVisible && (
         <div className='fixed z-50 flex items-center justify-center'>
-
           <ConfirmationModal
             handleConfirmationModal={handleConfirmationModal}
             handleOperationConfirmation={setHandleStock}
@@ -303,7 +285,6 @@ function StepTwo () {
             cancelButtonText='Cancelar'
           />
         </div>
-
       )}
     </div>
   )
