@@ -48,7 +48,8 @@ export default function Home () {
     } else if (status === 'unauthenticated') { setPreviousLoading(false) }
     if (session !== null && session !== undefined) {
       // console.log(session, 'session del useEffect')
-      if (session.user.role === 'admin') router.push('/dashboard')
+      // if (session.user.role === 'admin') router.push('/dashboard')
+      if (session.user.role === 'admin') router.push('/stores')
       if (session.user.role === 'restock') router.push('/restock')
     }
   }, [session, status])
