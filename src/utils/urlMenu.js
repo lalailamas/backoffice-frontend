@@ -1,13 +1,13 @@
 export const menuItems = [
-  {
-    label: 'Inicio',
-    icon: 'rotate-180',
-    subMenuLinks: [
-      { label: 'Dashboard', href: '/dashboard' },
-      { label: 'Marketing', href: '/marketing' }
+  // {
+  //   label: 'Inicio',
+  //   icon: 'rotate-180',
+  //   subMenuLinks: [
+  //     { label: 'Dashboard', href: '/dashboard' },
+  //     { label: 'Marketing', href: '/marketing' }
 
-    ]
-  },
+  //   ]
+  // },
   {
     label: 'Productos',
     icon: 'rotate-180',
