@@ -1,91 +1,67 @@
-import { loginUser } from '../api/user'
-
-import CredentialsProvider from 'next-auth/providers/credentials'
+import { loginUser } from '@/api/user'
+import NextAuth from 'next-auth'
+import CognitoProvider from 'next-auth/providers/cognito'
 
 export const authOptions = {
   providers: [
-    CredentialsProvider({
-      name: 'Credentials',
-      credentials: {
-        email: { label: 'Username', type: 'email', placeholder: 'jsmith' },
-        password: { label: 'Password', type: 'password' }
-
-      },
-      authorize: async (credentials) => {
-        console.log(credentials)
-        try {
-          const response = await loginUser(credentials)
-          // console.log(response, 'respuestaaaaaa')
-          // console.log(response.data, 'este es el response')
-          // const data = await response.json();
-
-          // console.log(data);
-
-          if (response && response.appUser) {
-            // Obtén el rol real del usuario desde la respuesta
-            const user = response.appUser
-            console.log(user, 'usuario')
-            // Agrega el rol a la respuesta
-            credentials.role = user.role
-            credentials.first_name = user.first_name
-            credentials.first_lastname = user.first_lastname
-            credentials.callbackUrl = 'http://localhost:3000/'
-            credentials.id = user.id
-            // console.log(credentials, 'credentials dentro de authorize')
-
-            return Promise.resolve(credentials)
-          } else {
-            // Si la autenticación falla, devuelve null
-            return Promise.resolve(null)
-          }
-        } catch (error) {
-          console.error('Error de autenticación:', error)
-          return Promise.resolve(null)
-        }
-      }
+    CognitoProvider({
+      clientId: process.env.COGNITO_CLIENT_ID,
+      issuer: process.env.COGNITO_DOMAIN,
+      idToken: true,
+      name: 'Cognito',
+      checks: 'nonce'
     })
   ],
-
-  // secret: 'TuClaveSecretaAqui',
   callbacks: {
-    // async signIn (user, account, profile) {
-    // // Determina la URL de inicio de sesión basada en el rol del usuario
-    //   console.log(user, 'user dentro de signIn')
+    async jwt ({ token, user, account, profile }) {
+      console.log('Iniciando callback JWT con los datos del usuario y la cuenta...')
+      if (account && user) {
+        if (account.provider === 'cognito') {
+          console.log('Procesando datos de usuario autenticado con Cognito...')
 
-    //   user.role = 'valor personalizado' // Puedes personalizar este valor
+          // Se actualiza el token con la información de Cognito
+          token.accessToken = account?.access_token
+          const tokenParsed = JSON.parse(Buffer.from(account.id_token.split('.')[1], 'base64').toString())
+          token.username = tokenParsed['cognito:username']
+          token.refreshToken = account?.refresh_token
+          token.accessTokenExpires = account.expires_at * 1000
 
-    //   // Retorna la respuesta modificada
-    //   return user
-    // },
-    async jwt ({ token, user }) {
-      // if (user) {
-      //   // console.log(user, 'user dentro de jwt')
-      //   token.role = user.role
-      //   token.sub = user.role
-      //   token.username = user.fullname
-      //   token.id = user.id
-      //   // console.log('token ===========');
-      //   console.log(token)
-      // }
-      // return token
-      return { ...token, ...user }
+          console.log(`Datos del usuario Cognito procesados: username=${token.username}`)
+
+          // Llamada a loginUser para obtener y guardar el nombre y el rol del usuario
+          try {
+            console.log('Llamando a loginUser para obtener datos adicionales del usuario...')
+            const userData = await loginUser({ username: token.username })
+            if (userData) {
+              console.log('Datos del usuario obtenidos de loginUser', userData)
+              token.name = userData.name // Asumiendo que loginUser devuelve un objeto con el nombre y el rol
+              token.role = userData.role
+            }
+          } catch (error) {
+            console.error('Error al obtener los datos del usuario con loginUser:', error)
+          }
+        }
+      }
+      // Return previous token if the access token has not expired yet
+      if ((Date.now()) < (token.accessTokenExpires ?? 0)) {
+        console.log('Token todavía válido, retornando token existente...')
+        return token
+      }
+      console.log('Token expirado, intentando actualizar...')
+
+      // Access token has expired, try to update it
+      return refreshAccessToken(token)
     },
     async session ({ session, token }) {
-      // Personaliza los datos que se almacenan en la sesión
-      // console.log(token, 'token dentro de session')
-      // session.user = {
-      //   id: token.id,
-      //   email: token.email,
-      //   username: token.username,
-      //   role: token.role,
-      //   token: token.accessToken
-      //   // Agrega otros datos según tus necesidades
-      // }
-      session.user = token
+      console.log('Iniciando callback de sesión...')
+      session.accessToken = token.accessToken
+      session.username = token.username
+      session.refreshToken = token.refreshToken
+      session.accessTokenExpires = token.accessTokenExpires
+      console.log('Sesión actualizada con los datos del usuario:', session.user)
       return session
     }
   },
-
   pages: {
     signIn: '/',
     signOut: '/auth/signout',
@@ -93,8 +69,46 @@ export const authOptions = {
     verifyRequest: '/auth/verify-request', // (used for check email message)
     newUser: '/auth/new-user' // New users will be directed here on first sign in (leave the property out if not of interest)
   },
-  session: {
-    // Configuración de la sesión, incluido el tiempo de expiración
-    maxAge: 30 * 24 * 60 * 60 // 30 días en segundos
+  debug: process.env.NODE_ENV === 'development'
+}
+
+async function refreshAccessToken (token) {
+  try {
+    const refreshedTokensResponse = await fetch('https://cognito-idp.us-west-2.amazonaws.com', {
+      headers: {
+        'X-Amz-Target': 'AWSCognitoIdentityProviderService.InitiateAuth',
+        'Content-Type': 'application/x-amz-json-1.1'
+      },
+      method: 'POST',
+      body: JSON.stringify({
+        AuthFlow: 'REFRESH_TOKEN_AUTH',
+        ClientId: process.env.COGNITO_CLIENT_ID,
+        AuthParameters: {
+          REFRESH_TOKEN: token.refreshToken,
+          SECRET_HASH: process.env.COGNITO_CLIENT_SECRET
+        }
+      })
+    })
+
+    const refreshedTokens = await refreshedTokensResponse.json()
+
+    if (!refreshedTokensResponse.ok) {
+      throw refreshedTokens
+    }
+
+    return {
+      ...token,
+      accessToken: refreshedTokens.AuthenticationResult.AccessToken,
+      accessTokenExpires: Date.now() + refreshedTokens.AuthenticationResult.ExpiresIn * 1000,
+      refreshToken: refreshedTokens.AuthenticationResult.RefreshToken ?? token.refreshToken
+    }
+  } catch (error) {
+    console.error('Error refreshing access token: ', error)
+    return {
+      ...token,
+      error: 'RefreshAccessTokenError'
+    }
   }
 }
+
+export default NextAuth(authOptions)
