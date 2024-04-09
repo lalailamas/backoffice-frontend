@@ -30,7 +30,7 @@ export const swallInfo = (message) => {
 }
 export const Toast = async (message, html) => {
   try {
-    const result = await Swal.fire({
+    await Swal.fire({
       title: message,
       html,
       showConfirmButton: false,
@@ -38,11 +38,6 @@ export const Toast = async (message, html) => {
         Swal.showLoading()
       }
     })
-
-    // Puedes ajustar esta lógica según tus necesidades
-    if (result.dismiss === Swal.DismissReason.timer) {
-      console.log('I was closed by the timer')
-    }
   } catch (error) {
     console.error('Error mostrando el Toast:', error)
   }

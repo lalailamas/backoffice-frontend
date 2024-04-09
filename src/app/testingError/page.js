@@ -7,10 +7,8 @@ function testError () {
   const [errorCode, setErrorCode] = useState('')
   const handleSendError = async () => {
     try {
-      const response = await testingError(errorCode)
-      console.log(response)
+      await testingError(errorCode)
     } catch (error) {
-      console.log(error)
       errorHandler(error)
     }
   }

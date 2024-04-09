@@ -21,12 +21,11 @@ function LayoutMachine () {
   const handleLayout = async (layoutId) => {
     try {
       const result = await getLayout(layoutId)
-      console.log(layoutId, ' layout id ')
       if (result) {
         setLayout(result)
       }
     } catch (error) {
-      console.log(error, 'ERROR')
+      console.error(error, 'ERROR')
     }
   }
 
@@ -34,7 +33,6 @@ function LayoutMachine () {
     try {
       const storesResponse = await getStores()
       if (!storesResponse.error) {
-        console.log(storesResponse, 'storesResponse')
         const storeResponse = storesResponse.filter((store) => store.storeId === storeId)
         if (storeResponse.length === 0) {
           return
@@ -43,7 +41,7 @@ function LayoutMachine () {
         handleLayout(storeResponse[0].layoutId)
       }
     } catch (error) {
-      console.log(error)
+      console.error(error)
     }
   }
 

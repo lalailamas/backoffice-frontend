@@ -21,9 +21,7 @@ function StockRequest () {
       try {
         const response = await getStores()
         setStores(response)
-        console.log(response, 'response')
         if (response.length > 0) {
-          console.log(response[0].storeId, 'response[0].storeId')
           handleStoreChange(response[0].storeId)
         }
       } catch (error) {
