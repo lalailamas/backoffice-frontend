@@ -25,14 +25,17 @@ export default function Home () {
   const performLogin = async () => {
     setLoading(true)
     setLoginError(false)
-    setLoading(true)
+    console.log('Iniciando sesión para el usuario:', email)
 
     const result = await signIn('credentials', {
       email,
       password,
       redirect: false
-    }, { callbackUrl: '' })
-    if (result?.error) { setLoginError(true); setLoading(false) }
+    })
+    console.log('Resultado del inicio de sesión:', result)
+    if (result?.error) {
+      setLoginError(true); setLoading(false); console.log('Error de inicio de sesión:', result.error)
+    }
   }
 
   useEffect(() => {
@@ -46,11 +49,12 @@ export default function Home () {
       console.log('entré al if loading')
       setPreviousLoading(true)
     } else if (status === 'unauthenticated') { setPreviousLoading(false) }
-    if (session !== null && session !== undefined) {
+    if (session) {
+      console.log('Sesión activa, redireccionando basado en el rol del usuario:', session.user.role)
       // console.log(session, 'session del useEffect')
       // if (session.user.role === 'admin') router.push('/dashboard')
-      if (session.user.role === 'admin') router.push('/stores')
-      if (session.user.role === 'restock') router.push('/restock')
+      // if (session.user.role === 'admin') router.push('/stores')
+      // if (session.user.role === 'restock') router.push('/restock')
     }
   }, [session, status])
   if (previousLoading) {
