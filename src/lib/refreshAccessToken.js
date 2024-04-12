@@ -1,6 +1,6 @@
 export async function refreshAccessToken (token) {
   try {
-    const refreshedTokensResponse = await fetch('https://cognito-idp.us-west-2.amazonaws.com', {
+    const refreshedTokensResponse = await fetch('https://cognito-idp.us-east-1.amazonaws.com', {
       headers: {
         'X-Amz-Target': 'AWSCognitoIdentityProviderService.InitiateAuth',
         'Content-Type': 'application/x-amz-json-1.1'
@@ -10,8 +10,7 @@ export async function refreshAccessToken (token) {
         AuthFlow: 'REFRESH_TOKEN_AUTH',
         ClientId: process.env.COGNITO_CLIENT_ID,
         AuthParameters: {
-          REFRESH_TOKEN: token.refreshToken,
-          SECRET_HASH: process.env.COGNITO_CLIENT_SECRET
+          REFRESH_TOKEN: token
         }
       })
     })
@@ -23,10 +22,9 @@ export async function refreshAccessToken (token) {
     }
 
     return {
-      ...token,
       accessToken: refreshedTokens.AuthenticationResult.AccessToken,
       accessTokenExpires: Date.now() + refreshedTokens.AuthenticationResult.ExpiresIn * 1000,
-      refreshToken: refreshedTokens.AuthenticationResult.RefreshToken ?? token.refreshToken
+      refreshToken: refreshedTokens.AuthenticationResult.RefreshToken ?? token
     }
   } catch (error) {
     console.error('Error refreshing access token: ', error)

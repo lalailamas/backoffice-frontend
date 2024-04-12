@@ -24,7 +24,7 @@ export const authOptions = {
               refreshToken: cognitoUser.AuthenticationResult.RefreshToken,
               accessTokenExpires: Date.now() + cognitoUser.AuthenticationResult.ExpiresIn * 1000 // Asumiendo que ExpiresIn está en segundos
             }
-            console.log(user, 'user dentro de authorize')
+            // console.log(user, 'user dentro de authorize')
 
             return user
           } else {
@@ -51,7 +51,10 @@ export const authOptions = {
       } else if (token.accessTokenExpires - 10000 < Date.now()) {
       // Aquí asumimos que quieres verificar la expiración un poco antes de que realmente expire
       // Renovar el token usando refreshToken aquí
+        console.log(Date.now(), 'Date.now()', token.accessTokenExpires, 'token.accessTokenExpires')
+        // console.log('Renovando el token', token.refreshToken)
         const refreshedTokens = await refreshAccessToken(token.refreshToken)
+        console.log(refreshedTokens, 'refreshedTokens')
         if (refreshedTokens.accessToken) {
           token.accessToken = refreshedTokens.accessToken
           token.accessTokenExpires = Date.now() + refreshedTokens.expiresIn * 1000
@@ -66,8 +69,8 @@ export const authOptions = {
     },
     async session ({ session, token, user }) {
       // Personaliza los datos que se almacenan en la sesión
-      console.log(token, 'token dentro de session')
-      console.log(session, 'session dentro de session')
+      // console.log(token, 'token dentro de session')
+      // console.log(session, 'session dentro de session')
       session.user.name = token.fullname || `${token.first_name} ${token.first_lastname}`
       session.user.email = token.email // Ya parece estar correctamente asignado
       session.user.role = token.role
@@ -85,6 +88,6 @@ export const authOptions = {
     error: '/auth/error', // Error code passed in query string as ?error=
     verifyRequest: '/auth/verify-request', // (used for check email message)
     newUser: '/auth/new-user' // New users will be directed here on first sign in (leave the property out if not of interest)
-  },
-  debug: true
+  }
+  // debug: true
 }
