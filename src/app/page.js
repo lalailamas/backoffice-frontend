@@ -50,8 +50,9 @@ export default function Home () {
       setPreviousLoading(true)
     } else if (status === 'unauthenticated') { setPreviousLoading(false) }
     if (session) {
-      console.log('Sesión activa, redireccionando basado en el rol del usuario:', session.user.role)
-      // console.log(session, 'session del useEffect')
+      // console.log('Sesión activa, redireccionando basado en el rol del usuario:', session.user.role)
+      setPreviousLoading(false)
+      console.log(session, 'session del useEffect')
       // if (session.user.role === 'admin') router.push('/dashboard')
       // if (session.user.role === 'admin') router.push('/stores')
       // if (session.user.role === 'restock') router.push('/restock')
