@@ -79,16 +79,12 @@ export const authOptions = {
       return session
     }
   },
-
-  pages: {
-    signIn: '/',
-    signOut: '/auth/signout',
-    error: '/auth/error', // Error code passed in query string as ?error=
-    verifyRequest: '/auth/verify-request', // (used for check email message)
-    newUser: '/auth/new-user' // New users will be directed here on first sign in (leave the property out if not of interest)
-  },
-  session: {
-    // Configuración de la sesión, incluido el tiempo de expiración
-    maxAge: 30 * 24 * 60 * 60 // 30 días en segundos
-  }
+  // pages: {
+  //   signIn: '/',
+  //   signOut: '/auth/signout',
+  //   error: '/auth/error', // Error code passed in query string as ?error=
+  //   verifyRequest: '/auth/verify-request', // (used for check email message)
+  //   newUser: '/auth/new-user' // New users will be directed here on first sign in (leave the property out if not of interest)
+  // },
+  debug: process.env.NODE_ENV === 'development'
 }
