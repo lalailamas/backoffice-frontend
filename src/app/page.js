@@ -26,9 +26,8 @@ export default function Home () {
     setLoading(true)
     setLoginError(false)
     console.log('Iniciando sesión para el usuario:', email)
-    console.log('Iniciando sesión para el usuario:', email)
 
-    const result = await signIn('Cognito', {
+    const result = await signIn('credentials', {
       redirect: false,
       email,
       password

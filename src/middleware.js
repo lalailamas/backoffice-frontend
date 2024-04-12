@@ -4,6 +4,7 @@ import { NextResponse } from 'next/server'
 export default async function middleware (req, res, next) {
   // console.log(req.nextUrl.pathname, 'req.nextUrl.pathname')
   const session = await getToken({ req, secret: process.env.NEXTAUTH_SECRET })
+  console.log(session, 'session')
 
   const redirectTo = (path) => {
     const url = req.nextUrl.clone()
