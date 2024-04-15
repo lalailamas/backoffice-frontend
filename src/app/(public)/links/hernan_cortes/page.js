@@ -3,14 +3,12 @@ import { GoogleTagManager, GoogleAnalytics } from '@next/third-parties/google'
 
 import React from 'react'
 function Links () {
-  function handleLinkClick (event) {
-    console.log(event, 'eventito')
-    const linkText = event.target.innerText
-    console.log(linkText, 'link text')
-    // sendGTMEvent({ event: linkText, value: linkText })
+  // function handleLinkClick (event) {
+  //   const linkText = event.target.innerText
 
-    // sendGAEvent({ event: 'link_href', value: linkText })
-  }
+  //   // sendGTMEvent({ event: linkText, value: linkText });
+  //   // sendGAEvent({ event: 'link_href', value: linkText });
+  // }
 
   return (
 

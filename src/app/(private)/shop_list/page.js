@@ -59,7 +59,7 @@ function shopList () {
     }
   }
   useEffect(() => {
-    console.log(ids, 'ids')
+
   }, [ids])
 
   return (

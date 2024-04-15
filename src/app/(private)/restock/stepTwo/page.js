@@ -109,10 +109,7 @@ function StepTwo () {
 
     try {
       setLoaderVisible(true)
-      console.log('Step 2: stockData to Confirm Inventory V2', stockData)
-
       const response = await postRestockInventory(externalId, transactionId, stockData)
-      console.log(response, 'response V2')
       if (response.result.successful) {
         swallError('Stock confirmado', true)
         router.push(

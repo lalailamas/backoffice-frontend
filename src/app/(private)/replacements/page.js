@@ -20,7 +20,6 @@ function Replacements () {
     if (dateRange.startDate !== null && dateRange.endDate !== null) {
       getStockOperation(dateRange)
         .then((response) => {
-          console.log(response)
           if (response.length === 0) {
             swallInfo('No hay datos para el rango de fechas seleccionado')
             // setIsData(false)

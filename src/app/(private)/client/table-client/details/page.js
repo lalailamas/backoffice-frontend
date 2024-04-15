@@ -37,7 +37,6 @@ function DetailsClient () {
     if (id) {
       getDetailsClient(id)
         .then((response) => {
-          console.log(response.data, 'respuesta get')
           setClientData(response.data)
         })
         .catch((error) => {

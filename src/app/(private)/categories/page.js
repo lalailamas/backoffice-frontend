@@ -51,8 +51,7 @@ function Categories () {
 
   const onSubmit = async () => {
     try {
-      const response = await createCategory({ name: categoryName })
-      console.log(response, 'respuesta createCategory')
+      await createCategory({ name: categoryName })
       swallInfo('Categoría creada exitosamente')
       closeModal()
     } catch (error) {
