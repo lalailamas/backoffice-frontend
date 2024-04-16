@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation'
 import { signIn, useSession } from 'next-auth/react'
 import { hotjar } from 'react-hotjar'
 import DspLoader from '@/components/admin/common/loader'
+import { swallError } from '@/utils/sweetAlerts'
 
 // const inter = Inter({ subsets: ['latin'] })
 
@@ -25,32 +26,26 @@ export default function Home () {
   const performLogin = async () => {
     setLoading(true)
     setLoginError(false)
-    console.log('Iniciando sesión para el usuario:', email)
 
     const result = await signIn('credentials', {
       redirect: false,
       email,
       password
     })
-    console.log('Resultado del inicio de sesión:', result)
     if (result?.error) {
-      setLoginError(true); setLoading(false); console.log('Error de inicio de sesión:', result.error)
+      setLoginError(true); setLoading(false); swallError('Error de inicio de sesión:', false)
     }
   }
 
   useEffect(() => {
-    console.log('hotjar init')
     hotjar.initialize(HJID, HJSV)
   }, [])
 
   useEffect(() => {
-    console.log(status, 'status del useEffect')
     if (status === 'loading') {
-      console.log('entré al if loading')
       setPreviousLoading(true)
     } else if (status === 'unauthenticated') { setPreviousLoading(false) }
     if (session) {
-      // console.log('Sesión activa, redireccionando basado en el rol del usuario:', session.user.role)
       setPreviousLoading(false)
       // console.log(session, 'session del useEffect')
       // if (session.user.role === 'admin') router.push('/dashboard')
