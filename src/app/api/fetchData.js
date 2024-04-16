@@ -31,8 +31,31 @@ const sendData = async (method, url, data, contentType, options = {}) => {
   }
 }
 
+const sendNoAuthData = async (method, url, data, contentType, options = {}) => {
+  try {
+    const config = {
+      method,
+      url: baseUrl + url,
+      headers: {
+        'content-type': contentType
+      },
+      ...options
+    }
+
+    if (data !== null) {
+      config.data = data
+    }
+
+    const response = await axios(config)
+    return response.data
+  } catch (error) {
+    console.error(error)
+    throw error
+  }
+}
+
 // Ejemplos de uso
-export const postData = (data, url, contentType) => sendData('post', url, data, contentType)
+export const postData = (data, url, contentType) => sendNoAuthData('post', url, data, contentType)
 export const putData = (data, url, contentType) => sendData('put', url, data, contentType)
 export const patchData = (data, url, contentType) => sendData('patch', url, data, contentType)
 export const deleteData = (id, url, contentType) => sendData('delete', url, { id }, contentType)
