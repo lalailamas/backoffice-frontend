@@ -1,14 +1,14 @@
 import { getToken } from 'next-auth/jwt'
 import { NextResponse } from 'next/server'
 
-export default async function middleware (req, res, next) {
+export default async function middleware (request) {
   // console.log(req.nextUrl.pathname, 'req.nextUrl.pathname')
   // console.log(req, 'req')
-  const session = await getToken({ req, secret: process.env.NEXTAUTH_SECRET })
+  const session = await getToken({ req: request, secret: process.env.NEXTAUTH_SECRET })
   // console.log(session, 'session')
 
   const redirectTo = (path) => {
-    const url = req.nextUrl.clone()
+    const url = request.nextUrl.clone()
     url.pathname = path
     return NextResponse.redirect(url)
   }
@@ -33,7 +33,7 @@ export default async function middleware (req, res, next) {
     '/shop_list'
 
   ]
-  const isAdminPage = adminRequiredPages.some((page) => req.nextUrl.pathname.startsWith(page))
+  const isAdminPage = adminRequiredPages.some((page) => request.nextUrl.pathname.startsWith(page))
 
   if (isAdminPage && session.role !== 'admin') {
     return redirectTo('/restock')

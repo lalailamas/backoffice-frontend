@@ -5,7 +5,7 @@ import Datepicker from 'react-tailwindcss-datepicker'
 import useGetStores from '@/hooks/useStores'
 import useGetWarehouses from '@/hooks/useWarehouses'
 // import useGetProducts from '@/hooks/useProducts'
-import { DspApi } from '@/utils/fetchData'
+import { DspApi } from '@/app/api/fetchData'
 
 export default function EditROrderModal (props) {
   const { rorder, show, toggleModal, action, save, deleter } = props
