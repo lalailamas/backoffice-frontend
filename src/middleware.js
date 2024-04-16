@@ -3,7 +3,7 @@ import { NextResponse } from 'next/server'
 
 export default async function middleware (req, res, next) {
   // console.log(req.nextUrl.pathname, 'req.nextUrl.pathname')
-  console.log(req, 'req')
+  // console.log(req, 'req')
   const session = await getToken({ req, secret: process.env.NEXTAUTH_SECRET })
   // console.log(session, 'session')
 
