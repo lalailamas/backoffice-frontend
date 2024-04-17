@@ -85,7 +85,7 @@ function LayoutDetail ({ storeId, products, layout, layoutId }) {
         <div className='p-3'>
           <button
             onClick={() => handleShowPriceModal()}
-            className={`${selectedLayout !== layoutId ? 'flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-d-dark-dark-purple rounded-lg hover:bg-d-soft-soft-purple hover:text-d-dark-dark-purple focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800' : 'hidden'}`}
+            className={`${selectedLayout !== layoutId ? 'btn text-xs rounded-full bg-d-dark-dark-purple border-none text-d-white hover:bg-d-soft-soft-purple hover:text-d-dark-dark-purple' : 'hidden'}`}
           >
             Asignar este layout a la tienda
           </button>

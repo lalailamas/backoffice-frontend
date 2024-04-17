@@ -20,13 +20,8 @@ function StockAdjustment () {
   const [modalVisible, setModalVisible] = useState(false)
   const [newQuantity, setNewQuantity] = useState(null)
   const [isEditingPrice, setIsEditingPrice] = useState(false)
-
   const [selectedProduct, setSelectedProduct] = useState(null)
-  // console.log(selectedProduct, 'selectedProduct')
   const [loader, setLoader] = useState(false)
-  // console.log('inventory', inventory)
-  // console.log(isEditingPrice, 'is editing price')
-  // console.log(newQuantity, 'new quantity')
 
   const handleStoreChange = (e) => {
     setProducts([])
@@ -39,16 +34,13 @@ function StockAdjustment () {
         setLoader(true)
         try {
           const products = await getReiteProdByStore(selectedStore)
-          console.log('products', products)
           const store = await getInventoryByStore(selectedStore)
-          console.log('store', store)
           setNewQuantity(null)
           setIsEditingPrice(null)
           setProducts(products)
           setInventory(store.data.products)
           setLoader(false)
         } catch (error) {
-          console.log(error)
           swallError('Ocurrió un error inesperado', false)
         }
       }
@@ -133,8 +125,6 @@ function StockAdjustment () {
       Toast('Descargando archivo', 'Espera unos segundos')
       const response = await downloadInventoryExcel(selectedStore)
       const { buffer, filename } = response.data
-      console.log(buffer, 'buffer')
-      console.log(filename, 'filename')
       const blob = new Blob([Buffer.from(buffer)], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' })
       FileSaver.saveAs(blob, filename)
       Swal.close()

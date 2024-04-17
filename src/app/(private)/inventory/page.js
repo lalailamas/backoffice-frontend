@@ -94,7 +94,7 @@ export default function Inventory () {
         const responseGet = await getProduct(foundProduct.id)
         Promise.all([responseGet])
         const product = responseGet.data
-        console.log(product)
+        // console.log(product)
 
         setCurrentQuantity(1)
         scanElement.current.focus()
@@ -102,7 +102,7 @@ export default function Inventory () {
         setCachekey(cachekey + 1)
       } else {
         handleNewProductWithEAN(ean)
-        console.log('NO product')
+        // console.log('NO product')
       }
     }
   }
@@ -135,16 +135,13 @@ export default function Inventory () {
         }
       } catch (error) {
         swallError('Error al crear el producto', false)
-        console.log(error)
       }
     } else {
       try {
         const response = await updateProduct(formData)
-        console.log(response, 'response updateProduct')
         if (response) {
           if (selectedImage) {
             const updateImage = await updateProductImage(formData.id, selectedImage)
-            console.log(updateImage, 'updateImage')
             if (updateImage) {
               setCachekey(cachekey + 1)
               setShowModal(false)
@@ -161,7 +158,6 @@ export default function Inventory () {
         }
       } catch (error) {
         swallError('Error al editar el producto', false)
-        console.log(error)
       }
     }
   }

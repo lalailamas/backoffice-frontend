@@ -16,10 +16,7 @@ function StockOverview () {
   const [newQuantity, setNewQuantity] = useState(null)
   const [loader, setLoader] = useState(false)
   const layoutId = stores && stores.find(store => store.storeId === selectedStore)?.layoutId
-  console.log(layoutId, 'layout id ')
-  console.log(products, 'products')
   const { layout } = useGetLayout(layoutId)
-  console.log(layout, 'layout')
   const [expandedRows, setExpandedRows] = useState([])
 
   const handleStoreChange = (e) => {
@@ -39,7 +36,6 @@ function StockOverview () {
           setInventory(store.data.products)
           setLoader(false)
         } catch (error) {
-          console.log(error)
           swallError('Ocurrió un error inesperado', false)
         }
       }

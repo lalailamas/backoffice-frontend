@@ -36,19 +36,17 @@ export default function Home () {
   }
 
   useEffect(() => {
-    console.log('hotjar init')
     hotjar.initialize(HJID, HJSV)
   }, [])
 
   useEffect(() => {
-    console.log(status, 'status del useEffect')
     if (status === 'loading') {
-      console.log('entré al if loading')
       setPreviousLoading(true)
     } else if (status === 'unauthenticated') { setPreviousLoading(false) }
     if (session !== null && session !== undefined) {
       // console.log(session, 'session del useEffect')
-      if (session.user.role === 'admin') router.push('/dashboard')
+      // if (session.user.role === 'admin') router.push('/dashboard')
+      if (session.user.role === 'admin') router.push('/stores')
       if (session.user.role === 'restock') router.push('/restock')
     }
   }, [session, status])

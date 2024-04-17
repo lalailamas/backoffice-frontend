@@ -5,7 +5,6 @@ const urlApi = process.env.NEXT_PUBLIC_DSP_API_BASE
 export const DspApi = {
 
   listReplenishmentOrders: (limit, page, search) => {
-    console.log('entré')
     if (search !== '') {
       return axios.get(urlApi + `replenishment-order/?limit=${limit}&page=${page}&search=${search}`, { headers: { 'content-type': 'application/x-www-form-urlencoded' } })
     } else {

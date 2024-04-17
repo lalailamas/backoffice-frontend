@@ -35,16 +35,14 @@ function QuantityModal ({
       })
     }
     try {
-      console.log(stockData, 'stockData')
       const response = await putStockInventory(storeId, stockData)
       if (response) {
         setQuantity(quantity)
         handleConfirmationModal()
         updateProductQuantity(productId, quantity)
       }
-      console.log(response, 'respuesta put')
     } catch (error) {
-      console.log(error)
+      console.error(error)
     }
   }
 

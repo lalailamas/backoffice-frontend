@@ -49,7 +49,6 @@ function RestockOld () {
     try {
       setLoaderVisible(true)
       const openStore = await OpenStore(selectedStore.storeId, snapshot)
-      console.log('Step 1: openStore response', openStore)
       if (openStore) {
         swallError('Abriendo tienda', true)
         router.push(

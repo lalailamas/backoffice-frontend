@@ -20,7 +20,6 @@ function CreateUserForm () {
   const onSubmit = handleSubmit((data) => {
     createUser(data)
       .then((response) => {
-        console.log(response, 'respuesta de create user')
         swallInfo('Usuario creado exitosamente')
         router.push('/users')
       })

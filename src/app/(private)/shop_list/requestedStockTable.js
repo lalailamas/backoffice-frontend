@@ -1,7 +1,6 @@
 import React from 'react'
 
 function RequestedStockTable ({ data }) {
-  console.log(data, 'data')
   // Obtener una lista única de nombres de tiendas
   const storeNames = data.map((store) => store.storeName)
 
@@ -20,7 +19,6 @@ function RequestedStockTable ({ data }) {
     }
     return table
   }, {})
-  console.log(tableData, 'tableData')
   // Obtener las filas y celdas de la tabla
   const rows = Object.keys(tableData).map((productName) => {
     const cells = storeNames.map((storeName) => (

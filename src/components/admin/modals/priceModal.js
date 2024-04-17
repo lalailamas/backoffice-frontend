@@ -20,14 +20,12 @@ function PriceModal ({
   const [price, setPrice] = useState(initialPrice !== undefined ? initialPrice : 0)
 
   useEffect(() => {
-    console.log('initialPrice en useEffect:', initialPrice)
     if (initialPrice !== undefined) {
       setPrice(price)
     }
   }, [initialPrice])
 
   const priceChangeHandler = async () => {
-    console.log('Precio actual antes de la actualización:', price)
     const priceData = {
       brand,
       name,
@@ -36,10 +34,7 @@ function PriceModal ({
     }
 
     try {
-      console.log(priceData, 'priceData')
       const response = await patchReitePrices(priceData, productId)
-      console.log(response, 'respuesta patch')
-
       if (response) {
         setPrice(price)
         handleConfirmationModal()
@@ -48,7 +43,7 @@ function PriceModal ({
         console.error('Error en la actualización de precio:', response.message)
       }
     } catch (error) {
-      console.log(error)
+      console.error(error)
     }
   }
 
