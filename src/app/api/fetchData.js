@@ -1,14 +1,44 @@
 import axios from 'axios'
+import { getSession } from 'next-auth/react'
 
 const baseUrl = process.env.NEXT_PUBLIC_DSP_API_BASE
 
 // Luego, utiliza apiConfig.baseUrl y apiConfig.reiteUrl en lugar de repetir las URL en cada función.
 const sendData = async (method, url, data, contentType, options = {}) => {
+  const session = await getSession() // Get session on the client-side
+  const token = session?.user.accessToken // Assume you store the accessToken in session
+  if (!session) throw new Error('No session found')
   try {
     const config = {
       method,
       url: baseUrl + url,
-      headers: { 'content-type': contentType },
+      headers: {
+        'content-type': contentType,
+        Authorization: `Bearer ${token}`
+      },
+      ...options
+    }
+
+    if (data !== null) {
+      config.data = data
+    }
+
+    const response = await axios(config)
+    return response.data
+  } catch (error) {
+    console.error(error)
+    throw error
+  }
+}
+
+const sendNoAuthData = async (method, url, data, contentType, options = {}) => {
+  try {
+    const config = {
+      method,
+      url: baseUrl + url,
+      headers: {
+        'content-type': contentType
+      },
       ...options
     }
 
@@ -25,7 +55,7 @@ const sendData = async (method, url, data, contentType, options = {}) => {
 }
 
 // Ejemplos de uso
-export const postData = (data, url, contentType) => sendData('post', url, data, contentType)
+export const postData = (data, url, contentType) => sendNoAuthData('post', url, data, contentType)
 export const putData = (data, url, contentType) => sendData('put', url, data, contentType)
 export const patchData = (data, url, contentType) => sendData('patch', url, data, contentType)
 export const deleteData = (id, url, contentType) => sendData('delete', url, { id }, contentType)
