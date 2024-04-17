@@ -59,9 +59,7 @@ export default function stepFour () {
   const updateRestock = async () => {
     try {
       if (snapshot) {
-        const response = await putStockImageUpdate(transactionId, snapshot, comment)
-
-        console.log(response)
+        await putStockImageUpdate(transactionId, snapshot, comment)
       }
     } catch (error) {
       // console.log(error)

@@ -18,7 +18,6 @@ import { errorHandler } from '@/utils/errors/errors'
 function StepTwo () {
   const searchParams = useSearchParams()
   const externalId = searchParams.get('external_id')
-  console.log(externalId, 'external ID en steptwo')
   const layoutId = searchParams.get('layout_id')
   const storeName = searchParams.get('store_name')
   const externalTransactionId = searchParams.get('externalTransactionId')
@@ -30,9 +29,6 @@ function StepTwo () {
   const [modalVisible, setModalVisible] = useState(false)
   const [loaderVisible, setLoaderVisible] = useState(false)
   const { flattenedLayout } = useFlattenLayout(layoutId)
-  console.log(inventory, 'inventory')
-  console.log(layout, 'layout')
-  console.log(products, 'products')
 
   const router = useRouter()
 
@@ -109,10 +105,8 @@ function StepTwo () {
     })
 
     try {
-      console.log('Step 2: stockData to Confirm Inventory', stockData)
       setLoaderVisible(true)
       const response = await postRestockInventory(externalId, transactionId, stockData)
-      console.log('Step 2: inventory response', response)
       if (response.result.successful) {
         swallError('Stock confirmado', true)
         router.push(

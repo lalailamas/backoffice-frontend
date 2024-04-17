@@ -14,7 +14,6 @@ function Users () {
   const fetchUsers = async () => {
     try {
       const response = await listUsers()
-      console.log(response, 'list usuarios')
       setUsers(response.data)
     } catch (error) {
       console.error('Error fetching users', error)

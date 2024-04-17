@@ -88,8 +88,7 @@ export default function EditROrderModal (props) {
         DspApi.listWarehouseProducts(value).then((response) => {
           setWarehousesProducts(current => { return { ...current, ...{ [value]: response.data } } })
         })
-          .catch(
-            (error) => console.log(error.message)
+          .catch((error) => console.error(error.message)
 
           )
       }
@@ -236,7 +235,7 @@ export default function EditROrderModal (props) {
                 setWarehousesProducts(current => { return { ...current, ...{ [po.origin_warehouse_id]: response.data } } })
               })
                 .catch(
-                  (error) => console.log(error.message)
+                  (error) => console.error(error.message)
 
                 )
             }

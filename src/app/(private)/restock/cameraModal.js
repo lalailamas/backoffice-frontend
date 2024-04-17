@@ -20,7 +20,6 @@ function CameraModal ({
   const [selectedFile, setSelectedFile] = useState(null)
   const cameraRef = React.useRef()
   const handleShowBack = () => {
-    console.log('handleShowBack')
     setShowCamera(false)
     setShowInput(false)
     setSelectedFile(null)
@@ -41,7 +40,7 @@ function CameraModal ({
   }
 
   function handleCameraError (error) {
-    console.log('handleCameraError', error)
+    console.error('handleCameraError', error)
   }
 
   const handleFileInputChange = (e) => {
@@ -52,7 +51,6 @@ function CameraModal ({
         setImage(reader.result)
         setShowCamera(false)
         setSelectedFile(file)
-        console.log(reader.result, 'reader.result')
       }
       reader.readAsDataURL(file)
     }

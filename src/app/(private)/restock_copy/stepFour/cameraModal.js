@@ -50,7 +50,7 @@ function CameraModal ({
   }
 
   function handleCameraError (error) {
-    console.log('handleCameraError', error)
+    console.error('handleCameraError', error)
   }
 
   // function handleCameraStart (stream) {
@@ -68,8 +68,6 @@ function CameraModal ({
         setImage(reader.result)
         setShowCamera(false)
         setSelectedFile(file)
-
-        console.log(reader.result, 'reader.result')
       }
       reader.readAsDataURL(file)
     }

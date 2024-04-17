@@ -116,7 +116,6 @@ function Layout () {
     })
 
     setSelectedLayoutDetails(newLayout)
-    console.log(newLayout, 'newLayout')
     setShowProductModal(false)
   }
 
@@ -131,7 +130,6 @@ function Layout () {
       try {
         const response = await createLayout(data)
         swallInfo('Layout creado exitosamente')
-        console.log(response.id, 'id')
 
         // Actualizar la lista de diseños después de la creación exitosa
         const updatedLayouts = await getAllLayouts()
@@ -157,7 +155,6 @@ function Layout () {
           top: 0,
           behavior: 'auto'
         })
-        console.log(response, 'respuesta crear layout')
       } catch (error) {
         swallError('Error al crear Layout')
         console.error(error, 'Error al crear Layout')
@@ -201,7 +198,6 @@ function Layout () {
             document.getElementById('DivId').scrollIntoView({ behavior: 'smooth' })
           }, 500)
         }
-        console.log(response, 'respuesta editar layout')
         // swallInfo('Layout editado exitosamente')
       } catch (error) {
         swallError('Error al editar Layout')
@@ -259,7 +255,6 @@ function Layout () {
 
   // mover los productos de lugar
   const handleDragEnd = (result) => {
-    console.log('Drag End Result:', result)
     const updatedLayoutDetails = { ...selectedLayoutDetails }
 
     if (!result.destination) {
@@ -293,7 +288,7 @@ function Layout () {
       }
 
       setSelectedLayoutDetails(updatedLayoutDetails)
-      console.log('Updated Layout Details:', updatedLayoutDetails)
+      // console.log('Updated Layout Details:', updatedLayoutDetails)
       return
     }
 

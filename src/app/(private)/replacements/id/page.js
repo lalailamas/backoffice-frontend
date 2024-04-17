@@ -15,10 +15,7 @@ function page () {
   const id = searchParams.get('id')
   const externalTransactionId = searchParams.get('external_transactionId')
   const { stores } = useGetStores2(false)
-
   const { OperationStock, loading } = getTransactionsById(id, externalTransactionId)
-  console.log('OperationStock', OperationStock)
-
   function formatTimeDifference (start, end) {
     const startTime = new Date(start)
     const endTime = new Date(end)
