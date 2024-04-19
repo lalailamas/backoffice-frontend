@@ -16,7 +16,7 @@ function Links () {
       <GoogleTagManager gtmId={process.env.NEXT_PUBLIC_GTM_ID} />
       <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID} />
 
-      <div className='flex flex-col bg-d-soft-white rounded-3xl gap-4 p-2  mx-auto'>
+      <div className='flex flex-col bg-d-soft-white rounded-3xl gap-4 p-4  mx-auto'>
         <div className='flex justify-center'>
           <img src='/img/logo.svg' className='mb-6 w-full p-2' />
         </div>
@@ -34,7 +34,7 @@ function Links () {
         </a>
 
         <a
-          href='#'
+          href='https://despnsa247.com/preguntas-frecuentes'
           id='faq-hernan-cortes'
           className='btn text-xs rounded-full bg-d-dark-dark-purple border-none text-d-white hover:bg-d-soft-soft-purple hover:text-d-dark-dark-purple'
         >FAQ
