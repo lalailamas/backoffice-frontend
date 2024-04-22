@@ -80,6 +80,18 @@ export const authOptions = {
       session.user.refreshToken = token.refreshToken
       session.user.accessTokenExpires = token.accessTokenExpires
       return session
+    },
+    // Configura las cookies para que sean seguras y HttpOnly
+    cookies: {
+      sessionToken: {
+        name: '__Secure-next-auth.session-token',
+        options: {
+          httpOnly: true,
+          secure: true,
+          sameSite: 'lax' // Puedes elegir 'strict' para una protección aún mayor
+        }
+      }
+    // Asegúrate de que todas las cookies que definas sigan este patrón
     }
   },
   pages: {
