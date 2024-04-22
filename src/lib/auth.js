@@ -58,8 +58,8 @@ export const authOptions = {
           }
         } catch (error) {
           console.error('Error al renovar el accessToken y/o refreshToken:', error)
-          token.error = 'Session expired'
-          return token // Retorna el token modificado con un error marcado
+          // token.error = 'Session expired'
+          return null // Retorna el token modificado con un error marcado
         }
       }
 
@@ -68,6 +68,9 @@ export const authOptions = {
     },
     async session ({ session, token, user }) {
       // Personaliza los datos que se almacenan en la sesión
+      if (!token) { // Verifica si el token fue anulado
+        throw new Error('Session has expired, please login again.')
+      }
       session.user.name = token.fullname || `${token.first_name} ${token.first_lastname}`
       session.user.email = token.email // Ya parece estar correctamente asignado
       session.user.role = token.role
