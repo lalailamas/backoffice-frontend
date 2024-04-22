@@ -3,49 +3,35 @@ import { getSession } from 'next-auth/react'
 
 const baseUrl = process.env.NEXT_PUBLIC_DSP_API_BASE
 
-// Luego, utiliza apiConfig.baseUrl y apiConfig.reiteUrl en lugar de repetir las URL en cada función.
-const sendData = async (method, url, data, contentType, options = {}) => {
-  const session = await getSession() // Get session on the client-side
-  const token = session?.user.accessToken // Assume you store the accessToken in session
+const authenticatedRequest = async (method, url, data = null, contentType) => {
+  const session = await getSession() // Obtener sesión en el lado del cliente
+  const token = session?.user.accessToken // Asumir que el accessToken está almacenado en la sesión
   if (!session) throw new Error('No session found')
-  try {
-    const config = {
-      method,
-      url: baseUrl + url,
-      headers: {
-        'content-type': contentType,
-        Authorization: `Bearer ${token}`
-      },
-      ...options
-    }
 
-    if (data !== null) {
-      config.data = data
-    }
-
-    const response = await axios(config)
-    return response.data
-  } catch (error) {
-    console.error(error)
-    throw error
+  const headers = {
+    'content-type': contentType,
+    Authorization: `Bearer ${token}`
   }
+
+  return await makeRequest(method, url, data, headers)
 }
 
-const sendNoAuthData = async (method, url, data, contentType, options = {}) => {
+const simpleRequest = async (method, url, data = null, contentType) => {
+  const headers = {
+    'content-type': contentType
+  }
+
+  return await makeRequest(method, url, data, headers)
+}
+const makeRequest = async (method, url, data, headers) => {
+  const config = {
+    method,
+    url: baseUrl + url,
+    headers,
+    data
+  }
+
   try {
-    const config = {
-      method,
-      url: baseUrl + url,
-      headers: {
-        'content-type': contentType
-      },
-      ...options
-    }
-
-    if (data !== null) {
-      config.data = data
-    }
-
     const response = await axios(config)
     return response.data
   } catch (error) {
@@ -55,14 +41,15 @@ const sendNoAuthData = async (method, url, data, contentType, options = {}) => {
 }
 
 // Ejemplos de uso
-export const postData = (data, url, contentType) => sendNoAuthData('post', url, data, contentType)
-export const putData = (data, url, contentType) => sendData('put', url, data, contentType)
-export const patchData = (data, url, contentType) => sendData('patch', url, data, contentType)
-export const deleteData = (id, url, contentType) => sendData('delete', url, { id }, contentType)
-export const getDataOnly = (url, contentType) => sendData('get', url, null, contentType)
-export const deleteDataUsers = (id, email, url, contentType) => sendData('delete', url, { id, email }, contentType)
+export const postLoginData = (data, url, contentType) => simpleRequest('post', url, data, contentType)
+export const postData = (data, url, contentType) => authenticatedRequest('post', url, data, contentType)
+export const putData = (data, url, contentType) => authenticatedRequest('put', url, data, contentType)
+export const patchData = (data, url, contentType) => authenticatedRequest('patch', url, data, contentType)
+export const deleteData = (id, url, contentType) => authenticatedRequest('delete', url, { id }, contentType)
+export const getDataOnly = (url, contentType) => authenticatedRequest('get', url, null, contentType)
+export const deleteDataUsers = (id, email, url, contentType) => authenticatedRequest('delete', url, { id, email }, contentType)
 
-const createFormData = async ({ snapshot, comment, storeId }, contentType, method, url) => {
+const createFormData = async ({ snapshot, comment, storeId }, contentType, method, url, useAuth = true) => {
   const formData = new FormData()
 
   if (comment) {
@@ -81,21 +68,8 @@ const createFormData = async ({ snapshot, comment, storeId }, contentType, metho
     formData.append('image', snapshotBlob, fileName)
   }
 
-  try {
-    const response = await axios({
-      method,
-      url: baseUrl + url,
-      data: formData,
-      headers: {
-        'content-type': contentType
-      }
-    })
-
-    return response.data
-  } catch (error) {
-    console.error(error)
-    throw error
-  }
+  const requestFunction = useAuth ? authenticatedRequest : simpleRequest
+  return await requestFunction(method, url, formData, contentType)
 }
 function base64toBlob (base64, type) {
   const binary = atob(base64)
@@ -109,7 +83,7 @@ function base64toBlob (base64, type) {
 // Uso de la función
 export const putImageData = async (snapshot, url, contentType) => {
   try {
-    const response = await createFormData({ snapshot }, contentType, 'put', url)
+    const response = await createFormData({ snapshot }, contentType, 'put', url, true)
     return response
   } catch (error) {
     console.error(error)
@@ -119,7 +93,7 @@ export const putImageData = async (snapshot, url, contentType) => {
 
 export const putImageUpdate = async (snapshot, url, contentType, comment) => {
   try {
-    const response = await createFormData({ snapshot, comment }, contentType, 'put', url)
+    const response = await createFormData({ snapshot, comment }, contentType, 'put', url, true)
     return response
   } catch (error) {
     console.error(error)
@@ -129,7 +103,7 @@ export const putImageUpdate = async (snapshot, url, contentType, comment) => {
 
 export const postDataByStore = async (storeId, snapshot, url, contentType) => {
   try {
-    const response = await createFormData({ snapshot, storeId }, contentType, 'post', url)
+    const response = await createFormData({ snapshot, storeId }, contentType, 'post', url, true)
     return response
   } catch (error) {
     console.error(error)
@@ -138,13 +112,16 @@ export const postDataByStore = async (storeId, snapshot, url, contentType) => {
 }
 
 export const getDataForExcel = (relativeUrl) => {
-  const fullUrl = baseUrl + relativeUrl
-  return axios.get(fullUrl)
+  return authenticatedRequest('get', relativeUrl, null, 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
 }
 
 export const getDataForPDF = (relativeUrl, contentType) => {
-  const fullUrl = baseUrl + relativeUrl
-  return axios.get(fullUrl, { responseType: 'blob' })
+  const options = {
+    responseType: 'blob' // Necesario para manejar la respuesta como un archivo binario
+  }
+  return authenticatedRequest('get', relativeUrl, null, contentType, options)
+  // const fullUrl = baseUrl + relativeUrl
+  // return axios.get(fullUrl, { responseType: 'blob' })
 }
 
 export const postProduct = async (product, image, url, contentType) => {
@@ -156,19 +133,5 @@ export const postProduct = async (product, image, url, contentType) => {
     const fileName = `image_${product.ean}.png`
     data.append('primary_image', image, fileName)
   }
-  try {
-    const response = await axios({
-      method: 'post',
-      url: baseUrl + url,
-      data,
-      headers: {
-        'content-type': contentType
-      }
-    })
-
-    return response.data
-  } catch (error) {
-    console.error(error)
-    throw error
-  }
+  return authenticatedRequest('post', url, data, contentType)
 }
