@@ -41,26 +41,25 @@ export const authOptions = {
   // secret: 'TuClaveSecretaAqui',
   callbacks: {
     async jwt ({ token, user, account }) {
-      // Si es el primer inicio de sesión, se establece el tiempo de expiración del token
-      // console.log(account, 'account del callback jwt')
-      // console.log(user, 'user del callback jwt')
-      // console.log(token, 'token del callback jwt')
-      // Si user existe, significa que estamos en el proceso de sign-in o en la creación del token
       if (user) {
         token = user
       } else if (token.accessTokenExpires - 10000 < Date.now()) {
       // Aquí asumimos que quieres verificar la expiración un poco antes de que realmente expire
-      // Renovar el token usando refreshToken aquí
-        // console.log(Date.now(), 'Date.now()', token.accessTokenExpires, 'token.accessTokenExpires')
-        // console.log('Renovando el token', token.refreshToken)
-        const refreshedTokens = await refreshAccessToken(token.refreshToken)
-        // console.log(refreshedTokens, 'refreshedTokens')
-        if (refreshedTokens.accessToken) {
-          token.accessToken = refreshedTokens.accessToken
-          token.accessTokenExpires = Date.now() + refreshedTokens.expiresIn * 1000
-          token.refreshToken = refreshedTokens.refreshToken ?? token.refreshToken // Actualiza si es nuevo, sino mantiene el anterior
-        } else {
-          throw new Error('Error al renovar el accessToken y/o refreshToken')
+        try {
+          console.log('Renovando accessToken y refreshToken')
+          const refreshedTokens = await refreshAccessToken(token.refreshToken)
+
+          if (refreshedTokens.accessToken) {
+            token.accessToken = refreshedTokens.accessToken
+            token.accessTokenExpires = Date.now() + refreshedTokens.expiresIn * 1000
+            token.refreshToken = refreshedTokens.refreshToken ?? token.refreshToken // Actualiza si es nuevo, sino mantiene el anterior
+          } else {
+            throw new Error('Error al renovar el accessToken y/o refreshToken')
+          }
+        } catch (error) {
+          console.error('Error al renovar el accessToken y/o refreshToken:', error)
+          token.error = 'Session expired'
+          return token // Retorna el token modificado con un error marcado
         }
       }
 
@@ -69,8 +68,6 @@ export const authOptions = {
     },
     async session ({ session, token, user }) {
       // Personaliza los datos que se almacenan en la sesión
-      // console.log(token, 'token dentro de session')
-      // console.log(session, 'session dentro de session')
       session.user.name = token.fullname || `${token.first_name} ${token.first_lastname}`
       session.user.email = token.email // Ya parece estar correctamente asignado
       session.user.role = token.role
