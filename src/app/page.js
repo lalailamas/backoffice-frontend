@@ -46,7 +46,6 @@ export default function Home () {
       setPreviousLoading(true)
     } else if (status === 'unauthenticated') { setPreviousLoading(false) }
     if (session) {
-      setPreviousLoading(false)
       // console.log(session, 'session del useEffect')
       // if (session.user.role === 'admin') router.push('/dashboard')
       if (session.user.role === 'admin') router.push('/stores')
