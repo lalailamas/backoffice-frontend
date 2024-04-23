@@ -35,7 +35,7 @@ const makeRequest = async (method, url, data, headers) => {
     const response = await axios(config)
     return response.data
   } catch (error) {
-    console.error(error)
+    console.error(error.response)
     throw error
   }
 }
