@@ -7,11 +7,12 @@ import DspLoader from '@/components/admin/common/loader'
 import useGetInventory from '@/hooks/useGetInventory'
 import useGetProdByStore from '@/hooks/useGetProdByStore'
 import ConfirmationModal from '@/components/admin/modals/confirmationModal'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import CameraModal from './cameraModal'
 import { putStockImageUpdate } from '@/api/stock'
 import { errorHandler } from '@/utils/errors/errors'
 import ButtonPrimary from '@/components/admin/common/buttons/ButtonPrimary'
+import { swallError } from '@/utils/sweetAlerts'
 
 export default function stepFour () {
   const searchParams = useSearchParams()
@@ -21,50 +22,67 @@ export default function stepFour () {
   const storeName = searchParams.get('store_name')
   const transactionId = searchParams.get('transactionId')
   const { inventory, inventoryLoad } = useGetInventory(externalId)
+  const [loader, setLoader] = useState(false)
   // const { store, loading: storeLoad } = useGetStoreData(externalId)
   const { layout, layoutLoad } = useGetLayout(layoutId)
   // const { products, loading } = useGetReiteProd()
   const { products, loading } = useGetProdByStore(externalId)
   const [modalVisible, setModalVisible] = useState(false)
   const [modalCameraVisible, setModalCameraVisible] = useState(false)
-  const [snapshot, setSnapshot] = useState(null)
   const [comment, setComment] = useState('Sin comentarios')
 
   const handleComment = async (comment) => {
     setComment(comment)
   }
-
-  const handleConfirmationModal = () => {
+  const handleChangeModal = () => {
     setModalVisible(!modalVisible)
   }
+  const handleOperationConfirmation = () => {
+    router.push('/restock')
+  }
 
-  const handleOperationConfirmation = async () => {
-    await updateRestock()
-
-    router.push(
-      '/restock'
-    )
+  const handleConfirmationModal = async (base64Content) => {
+    console.log('handleConfirmationModal')
+    try {
+      await updateRestock(base64Content)
+    } catch (error) {
+      setLoader(false)
+      swallError('Ha ocurrido un error al tomar la foto, vuelve a intentarlo', false)
+      setModalVisible(!modalVisible)
+    }
   }
   const handleCameraModal = () => {
     setModalCameraVisible(!modalCameraVisible)
   }
   const takeSnapshot = async (img) => {
-    const base64Content = img.split(';base64,').pop()
-
-    setSnapshot(base64Content)
-    handleCameraModal()
-    handleConfirmationModal()
+    try {
+      const base64Content = await img.split(';base64,').pop()
+      handleCameraModal()
+      await handleConfirmationModal(base64Content)
+    } catch (error) {
+    // console.log(error)
+      swallError('Ha ocurrido un error al tomar la foto, vuelve a intentarlo', false)
+      setModalCameraVisible(!modalCameraVisible)
+    }
   }
 
-  const updateRestock = async () => {
+  const updateRestock = async (base64Content) => {
     try {
-      if (snapshot) {
-        await putStockImageUpdate(transactionId, snapshot, comment)
+      if (base64Content) {
+        setLoader(true)
+        const response = await putStockImageUpdate(transactionId, base64Content, comment)
+        return response
       }
     } catch (error) {
-      // console.log(error)
-      errorHandler(error, { transactionId, snapshot, comment })
+      setLoader(false)
+      errorHandler(error)
     }
+  }
+  useEffect(() => {
+    console.log(loader)
+  }, [loader])
+  if (loader) {
+    return <DspLoader />
   }
 
   return (
@@ -169,7 +187,7 @@ export default function stepFour () {
         <div className='fixed z-50 flex items-center justify-center'>
 
           <ConfirmationModal
-            handleConfirmationModal={handleConfirmationModal}
+            handleConfirmationModal={handleChangeModal}
             handleOperationConfirmation={handleOperationConfirmation}
             title='La reposición ha sido confirmada'
             message='¡Muchas gracias! ya puedes cerrar la página'

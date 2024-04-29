@@ -3,13 +3,6 @@ import { GoogleTagManager, GoogleAnalytics } from '@next/third-parties/google'
 
 import React from 'react'
 function Links () {
-  // function handleLinkClick (event) {
-  //   const linkText = event.target.innerText
-
-  //   // sendGTMEvent({ event: linkText, value: linkText });
-  //   // sendGAEvent({ event: 'link_href', value: linkText });
-  // }
-
   return (
 
     <div className="flex flex-col justify-center p-10  bg-[url('/img/bg-new.svg')] bg-cover bg-center bg-no-repeat h-screen text-white">
