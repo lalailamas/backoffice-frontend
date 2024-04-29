@@ -44,7 +44,11 @@ export default function stepFour () {
   const handleConfirmationModal = async (base64Content) => {
     console.log('handleConfirmationModal')
     try {
-      await updateRestock(base64Content)
+      const response = await updateRestock(base64Content)
+      if (response) {
+        setLoader(false)
+        setModalVisible(!modalVisible)
+      }
     } catch (error) {
       setLoader(false)
       swallError('Ha ocurrido un error al tomar la foto, vuelve a intentarlo', false)
