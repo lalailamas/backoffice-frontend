@@ -7,12 +7,13 @@ import DspLoader from '@/components/admin/common/loader'
 import useGetInventory from '@/hooks/useGetInventory'
 import useGetProdByStore from '@/hooks/useGetProdByStore'
 import ConfirmationModal from '@/components/admin/modals/confirmationModal'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import CameraModal from './cameraModal'
 import { putStockImageUpdate } from '@/api/stock'
 import { errorHandler } from '@/utils/errors/errors'
 import ButtonPrimary from '@/components/admin/common/buttons/ButtonPrimary'
-import { swallError } from '@/utils/sweetAlerts'
+import { swallError, Toast } from '@/utils/sweetAlerts'
+import Swal from 'sweetalert2'
 
 export default function stepFour () {
   const searchParams = useSearchParams()
@@ -22,8 +23,6 @@ export default function stepFour () {
   const storeName = searchParams.get('store_name')
   const transactionId = searchParams.get('transactionId')
   const { inventory, inventoryLoad } = useGetInventory(externalId)
-  const [loader, setLoader] = useState(false)
-  // const { store, loading: storeLoad } = useGetStoreData(externalId)
   const { layout, layoutLoad } = useGetLayout(layoutId)
   // const { products, loading } = useGetReiteProd()
   const { products, loading } = useGetProdByStore(externalId)
@@ -46,11 +45,11 @@ export default function stepFour () {
     try {
       const response = await updateRestock(base64Content)
       if (response) {
-        setLoader(false)
+        Swal.close()
         setModalVisible(!modalVisible)
       }
     } catch (error) {
-      setLoader(false)
+      Swal.close()
       swallError('Ha ocurrido un error al tomar la foto, vuelve a intentarlo', false)
       setModalVisible(!modalVisible)
     }
@@ -65,6 +64,7 @@ export default function stepFour () {
       await handleConfirmationModal(base64Content)
     } catch (error) {
     // console.log(error)
+
       swallError('Ha ocurrido un error al tomar la foto, vuelve a intentarlo', false)
       setModalCameraVisible(!modalCameraVisible)
     }
@@ -73,20 +73,18 @@ export default function stepFour () {
   const updateRestock = async (base64Content) => {
     try {
       if (base64Content) {
-        setLoader(true)
+        Toast('Actualizando', 'Por favor espera un momento')
+
         const response = await putStockImageUpdate(transactionId, base64Content, comment)
+        Swal.close()
+
         return response
       }
     } catch (error) {
-      setLoader(false)
+      Swal.close()
+
       errorHandler(error)
     }
-  }
-  useEffect(() => {
-    console.log(loader)
-  }, [loader])
-  if (loader) {
-    return <DspLoader />
   }
 
   return (
