@@ -32,6 +32,14 @@ export const errorHandler = (error, data) => {
       // Captura la excepción en Sentry con el contexto adicional
       Sentry.captureException(error)
       swallError('La solicitud no se pudo procesar', false)
+    } else if (error.response && error.response.status === 404) {
+      // Captura la excepción en Sentry con el contexto adicional
+      Sentry.captureException(error)
+      swallError('No se encontró la solicitud', false)
+    } else if (error.response && error.response.status === 401) {
+      // Captura la excepción en Sentry con el contexto adicional
+      Sentry.captureException(error)
+      swallError('Solicitud no autorizada', false)
     } else {
       // Captura la excepción en Sentry con el contexto adicional
       Sentry.captureException(error)

@@ -3,6 +3,7 @@ import React, { useState } from 'react'
 import { Camera } from 'react-html5-camera-photo'
 import 'react-html5-camera-photo/build/css/index.css'
 import Comments from './comments'
+import { swallError } from '@/utils/sweetAlerts'
 
 function CameraModal ({
   step,
@@ -58,17 +59,22 @@ function CameraModal ({
       reader.readAsDataURL(file)
     }
   }
-  const SendSnapshotComment = (comment) => {
-    handleComment(comment)
-    takeSnapshot(image)
-    handleConfirmationModal()
+  const SendSnapshotComment = async (comment) => {
+    try {
+      console.log(image.length, 'image')
+      if (image.length < 7) {
+        handleOperationConfirmation()
+        return swallError('Ha ocurrido un error al tomar la foto, vuelve a intentarlo', false)
+      }
+      await handleComment(comment)
+      await takeSnapshot(image)
+      return handleConfirmationModal()
+    } catch (e) {
+      console.log(e)
+      swallError('Ha ocurrido un error al tomar la foto, vuelve a intentarlo', false)
+      handleOperationConfirmation()
+    }
   }
-  // const handleNext = () => {
-  //   return () => {
-  //     handleConfirmationModal()
-  //     handleOperationConfirmation()
-  //   }
-  // }
 
   return (
     <div>
