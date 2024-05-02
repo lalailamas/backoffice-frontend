@@ -28,7 +28,7 @@ function Links () {
         >Catálogo Hernán Cortés
         </a>
         <a
-          href='https://youtu.be/GS9rHsi8Eps'
+          href='https://www.youtube.com/watch?v=LEsZLd1iKTY'
           className='btn text-xs rounded-full bg-d-dark-dark-purple border-none text-d-white hover:bg-d-soft-soft-purple hover:text-d-dark-dark-purple'
         >Cómo funciona Despnsa
         </a>
