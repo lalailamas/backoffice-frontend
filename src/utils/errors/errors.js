@@ -2,21 +2,13 @@
 import { datadogLogs } from '@datadog/browser-logs'
 import { swallError } from '../sweetAlerts'
 
-// Asegúrate de inicializar datadogLogs en algún lugar apropiado de tu código, como en el punto de entrada de tu aplicación.
-
-// datadogLogs.logger.log('Log de prueba desde el frontend para verificar la conexión')
-
 export const errorHandler = (error, data) => {
-  // Enviar error a Datadog
-  // console.error('Logging error to Datadog: ', error)
   datadogLogs.logger.error('Error captured', {
     error: error.message,
     stack: error.stack,
     data,
     statusCode: error.response ? error.response.status : 'No HTTP response'
   })
-
-  // Determinar qué mensaje mostrar basado en el tipo de error o estado de la respuesta
   if (error instanceof ValidationError) {
     swallError(error.message, false)
   } else if (error instanceof ConnectionError) {

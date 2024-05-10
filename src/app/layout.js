@@ -1,5 +1,3 @@
-// import Analytics from '@/components/admin/analitics/analytics'
-
 import DspLoader from '@/components/admin/common/loader'
 import SessionAuthProvider from '@/context/SessionAuthProvider'
 import { Suspense } from 'react'
