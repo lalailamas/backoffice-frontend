@@ -8,6 +8,11 @@ import ButtonPrimary from '@/components/admin/common/buttons/ButtonPrimary'
 import ButtonCancel from '@/components/admin/common/buttons/ButtonCancel'
 import MainTitle from '@/components/admin/common/titles/MainTitle'
 
+/**
+ * Categories component for managing categories in an admin panel.
+ *
+ * @returns {JSX.Element} The Categories component.
+ */
 function Categories () {
   const [categories, setCategories] = useState([])
   const [showModal, setShowModal] = useState(false)
@@ -17,6 +22,10 @@ function Categories () {
   const [search] = useState('')
   const [meta, setMeta] = useState(null)
 
+  /**
+   * Fetches the list of categories from the API.
+   * Updates the state with the fetched categories and pagination metadata.
+   */
   const fetchCategories = async () => {
     try {
       const response = await listCategories(limit, page, search)
@@ -36,19 +45,28 @@ function Categories () {
     }
   }
 
+  // Fetch categories on component mount and when limit, page, or search change
   useEffect(() => {
     fetchCategories()
   }, [limit, page, search])
 
+  /**
+   * Opens the modal to create a new category.
+   */
   const openModal = () => {
     setShowModal(true)
   }
-
+  /**
+   * Closes the modal and resets the category name input.
+   */
   const closeModal = () => {
     setShowModal(false)
     setCategoryName('')
   }
-
+  /**
+   * Submits the new category to the API.
+   * Displays success or error messages based on the API response.
+   */
   const onSubmit = async () => {
     try {
       await createCategory({ name: categoryName })
