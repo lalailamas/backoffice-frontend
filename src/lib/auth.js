@@ -1,4 +1,5 @@
 import { loginUser } from '../api/user'
+import { refreshAccessToken } from './refreshAccessToken'
 
 import CredentialsProvider from 'next-auth/providers/credentials'
 
@@ -12,35 +13,26 @@ export const authOptions = {
 
       },
       authorize: async (credentials) => {
-        console.log(credentials)
         try {
-          const response = await loginUser(credentials)
-          // console.log(response, 'respuestaaaaaa')
-          // console.log(response.data, 'este es el response')
-          // const data = await response.json();
+          const response = await loginUser(credentials) // loginUser debe comunicarse con Cognito
 
-          // console.log(data);
+          if (response && response.cognitoUser) {
+            const { cognitoUser } = response
+            const user = {
+              ...response.appUser,
+              accessToken: cognitoUser.AuthenticationResult.AccessToken,
+              refreshToken: cognitoUser.AuthenticationResult.RefreshToken,
+              accessTokenExpires: Date.now() + cognitoUser.AuthenticationResult.ExpiresIn * 1000 // Asumiendo que ExpiresIn está en segundos
+            }
+            // console.log(user, 'user dentro de authorize')
 
-          if (response && response.appUser) {
-            // Obtén el rol real del usuario desde la respuesta
-            const user = response.appUser
-            console.log(user, 'usuario')
-            // Agrega el rol a la respuesta
-            credentials.role = user.role
-            credentials.first_name = user.first_name
-            credentials.first_lastname = user.first_lastname
-            credentials.callbackUrl = 'http://localhost:3000/'
-            credentials.id = user.id
-            // console.log(credentials, 'credentials dentro de authorize')
-
-            return Promise.resolve(credentials)
+            return user
           } else {
-            // Si la autenticación falla, devuelve null
-            return Promise.resolve(null)
+            return null
           }
         } catch (error) {
           console.error('Error de autenticación:', error)
-          return Promise.resolve(null)
+          return null
         }
       }
     })
@@ -48,53 +40,67 @@ export const authOptions = {
 
   // secret: 'TuClaveSecretaAqui',
   callbacks: {
-    // async signIn (user, account, profile) {
-    // // Determina la URL de inicio de sesión basada en el rol del usuario
-    //   console.log(user, 'user dentro de signIn')
+    async jwt ({ token, user, account }) {
+      if (user) {
+        token = user
+      } else if (token.accessTokenExpires - 10000 < Date.now()) {
+      // Aquí asumimos que quieres verificar la expiración un poco antes de que realmente expire
+        try {
+          console.log('Renovando accessToken y refreshToken')
+          const refreshedTokens = await refreshAccessToken(token.refreshToken)
 
-    //   user.role = 'valor personalizado' // Puedes personalizar este valor
+          if (refreshedTokens.accessToken) {
+            token.accessToken = refreshedTokens.accessToken
+            token.accessTokenExpires = Date.now() + refreshedTokens.expiresIn * 1000
+            token.refreshToken = refreshedTokens.refreshToken ?? token.refreshToken // Actualiza si es nuevo, sino mantiene el anterior
+          } else {
+            throw new Error('Error al renovar el accessToken y/o refreshToken')
+          }
+        } catch (error) {
+          console.error('Error al renovar el accessToken y/o refreshToken:', error)
+          // token.error = 'Session expired'
+          return null // Retorna el token modificado con un error marcado
+        }
+      }
 
-    //   // Retorna la respuesta modificada
-    //   return user
-    // },
-    async jwt ({ token, user }) {
-      // if (user) {
-      //   // console.log(user, 'user dentro de jwt')
-      //   token.role = user.role
-      //   token.sub = user.role
-      //   token.username = user.fullname
-      //   token.id = user.id
-      //   // console.log('token ===========');
-      //   console.log(token)
-      // }
-      // return token
-      return { ...token, ...user }
+      // Siempre devuelve el token ya sea actualizado o no
+      return token
     },
-    async session ({ session, token }) {
+    async session ({ session, token, user }) {
       // Personaliza los datos que se almacenan en la sesión
-      // console.log(token, 'token dentro de session')
-      // session.user = {
-      //   id: token.id,
-      //   email: token.email,
-      //   username: token.username,
-      //   role: token.role,
-      //   token: token.accessToken
-      //   // Agrega otros datos según tus necesidades
-      // }
-      session.user = token
-      return session
-    }
-  },
+      if (!token) { // Verifica si el token fue anulado
+        throw new Error('Session has expired, please login again.')
+      }
+      session.user.name = token.fullname || `${token.first_name} ${token.first_lastname}`
+      session.user.email = token.email // Ya parece estar correctamente asignado
+      session.user.role = token.role
+      session.user.id = token.id
 
-  pages: {
-    signIn: '/',
-    signOut: '/auth/signout',
-    error: '/auth/error', // Error code passed in query string as ?error=
-    verifyRequest: '/auth/verify-request', // (used for check email message)
-    newUser: '/auth/new-user' // New users will be directed here on first sign in (leave the property out if not of interest)
-  },
-  session: {
-    // Configuración de la sesión, incluido el tiempo de expiración
-    maxAge: 30 * 24 * 60 * 60 // 30 días en segundos
+      session.user.accessToken = token.accessToken
+      session.user.refreshToken = token.refreshToken
+      session.user.accessTokenExpires = token.accessTokenExpires
+      return session
+    },
+    // Configura las cookies para que sean seguras y HttpOnly
+    cookies: {
+      sessionToken: {
+        name: '__Secure-next-auth.session-token',
+        options: {
+          httpOnly: true,
+          secure: true,
+          sameSite: 'lax' // Puedes elegir 'strict' para una protección aún mayor
+        }
+      }
+    // Asegúrate de que todas las cookies que definas sigan este patrón
+    }
   }
+  // ,
+  // pages: {
+  //   signIn: '/',
+  //   signOut: '/',
+  //   error: '/auth/error', // Error code passed in query string as ?error=
+  //   verifyRequest: '/auth/verify-request', // (used for check email message)
+  //   newUser: '/auth/new-user' // New users will be directed here on first sign in (leave the property out if not of interest)
+  // }
+  // debug: true
 }

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { DspApi } from '@/utils/fetchData'
+import { DspApi } from '@/app/api/fetchData'
 
 const useGetStores = (params, cachekey) => {
   const [stores, setStores] = useState(null)
