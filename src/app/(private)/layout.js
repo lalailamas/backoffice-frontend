@@ -8,9 +8,11 @@ import { usePathname } from 'next/navigation'
 import Footer from '@/components/admin/common/footer'
 
 export default function RootLayout ({ children }) {
+  const apiUrl = process.env.NEXTAUTH_URL
   const [showDrawer, setShowDrawer] = useState(false)
   const pathname = usePathname()
   const isLoginPage = pathname === '/'
+  console.log(`NextAuth URL: ${apiUrl}`)
 
   return (
   // <html lang='es'>
