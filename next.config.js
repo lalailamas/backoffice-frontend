@@ -2,7 +2,7 @@ const dotenv = require('dotenv')
 dotenv.config()
 
 console.log('NODE_ENV:', process.env.NODE_ENV)
-console.log('NEXTAUTH_URL_DEV:', process.env.NEXTAUTH_URL_DEV)
+console.log('NEXTAUTH_URL:', process.env.NEXTAUTH_URL)
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -11,8 +11,7 @@ const nextConfig = {
     domains: ['despnsa247-public-files.s3.amazonaws.com']
   },
   env: {
-    NEXTAUTH_URL: process.env.NODE_ENV === 'development' ? process.env.NEXTAUTH_URL_DEV : process.env.NEXTAUTH_URL_PROD
+    NEXTAUTH_URL: process.env.NEXTAUTH_URL
   }
 }
-console.log('NEXTAUTH_URL:', nextConfig.env.NEXTAUTH_URL)
 module.exports = nextConfig
