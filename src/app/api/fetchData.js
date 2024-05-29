@@ -40,7 +40,6 @@ const makeRequest = async (method, url, data, headers) => {
   }
 }
 
-// Ejemplos de uso
 export const postLoginData = (data, url, contentType) => simpleRequest('post', url, data, contentType)
 export const postData = (data, url, contentType) => authenticatedRequest('post', url, data, contentType)
 export const putData = (data, url, contentType) => authenticatedRequest('put', url, data, contentType)
