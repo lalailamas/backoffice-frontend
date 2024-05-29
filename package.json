@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "build:dev": "cross-env NODE_ENV=development npm run build --dev",
     "start": "next start",
     "lint": "next lint",
     "test:puppeteer": "node tests/e2e/runRestock.test.js"
@@ -22,6 +23,7 @@
     "@tremor/react": "^3.11.1",
     "autoprefixer": "10.4.16",
     "axios": "^1.5.1",
+    "cross-env": "^7.0.3",
     "date-fns": "^2.30.0",
     "dayjs": "^1.11.10",
     "dotenv": "^16.4.5",
