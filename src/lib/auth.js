@@ -75,7 +75,6 @@ export const authOptions = {
       session.user.email = token.email // Ya parece estar correctamente asignado
       session.user.role = token.role
       session.user.id = token.id
-
       session.user.accessToken = token.accessToken
       session.user.refreshToken = token.refreshToken
       session.user.accessTokenExpires = token.accessTokenExpires
