@@ -24,6 +24,7 @@
     "axios": "^1.5.1",
     "date-fns": "^2.30.0",
     "dayjs": "^1.11.10",
+    "dotenv": "^16.4.5",
     "eslint-config-next": "^14.0.4",
     "exceljs": "^4.4.0",
     "file-saver": "^2.0.5",
