@@ -33,7 +33,7 @@ yarn-error.log*
 next-env.d.ts
 
 # env PROD
-.env.production
+.env.local
 
 # package-lock.json
 package-lock.json
