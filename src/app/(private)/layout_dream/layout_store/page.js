@@ -7,10 +7,9 @@ import DspLoader from '@/components/admin/common/loader'
 import { useEffect, useState } from 'react'
 import { getLayout } from '@/api/layout'
 import ErrorMessage from '@/components/admin/common/error'
+import ButtonPrimary from '@/components/admin/common/buttons/ButtonPrimary'
 
-function LayoutMachine () {
-  // https://admin.despnsa247.com/public/layout?id=CNV_004
-  // http://localhost:3000/public/layout?id=DEV_CNV_005
+function LayoutStore () {
   const searchParams = useSearchParams()
   const storeId = searchParams.get('id')
   const [store, setStore] = useState()
@@ -61,6 +60,10 @@ function LayoutMachine () {
           )
         : (
           <div>
+            <div className='flex justify-end p-4'>
+              <ButtonPrimary text='Crear nuevo' />
+            </div>
+
             <div className='p-10 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700'>
               <h5 className='text-2xl text-center mb-3 font-bold  text-gray-900 dark:text-white'>{store?.name}</h5>
 
@@ -108,4 +111,4 @@ function LayoutMachine () {
   )
 }
 
-export default LayoutMachine
+export default LayoutStore
