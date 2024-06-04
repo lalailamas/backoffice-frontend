@@ -12,6 +12,8 @@ import CameraModal from './cameraModal'
 import { putStockImageUpdate } from '@/api/stock'
 import { errorHandler } from '@/utils/errors/errors'
 import ButtonPrimary from '@/components/admin/common/buttons/ButtonPrimary'
+import { swallError, Toast } from '@/utils/sweetAlerts'
+import Swal from 'sweetalert2'
 
 export default function stepFour () {
   const searchParams = useSearchParams()
@@ -21,49 +23,67 @@ export default function stepFour () {
   const storeName = searchParams.get('store_name')
   const transactionId = searchParams.get('transactionId')
   const { inventory, inventoryLoad } = useGetInventory(externalId)
-  // const { store, loading: storeLoad } = useGetStoreData(externalId)
   const { layout, layoutLoad } = useGetLayout(layoutId)
   // const { products, loading } = useGetReiteProd()
   const { products, loading } = useGetProdByStore(externalId)
   const [modalVisible, setModalVisible] = useState(false)
   const [modalCameraVisible, setModalCameraVisible] = useState(false)
-  const [snapshot, setSnapshot] = useState(null)
   const [comment, setComment] = useState('Sin comentarios')
 
   const handleComment = async (comment) => {
     setComment(comment)
   }
-
-  const handleConfirmationModal = () => {
+  const handleChangeModal = () => {
     setModalVisible(!modalVisible)
   }
+  const handleOperationConfirmation = () => {
+    router.push('/restock')
+  }
 
-  const handleOperationConfirmation = async () => {
-    await updateRestock()
-
-    router.push(
-      '/restock'
-    )
+  const handleConfirmationModal = async (base64Content) => {
+    console.log('handleConfirmationModal')
+    try {
+      const response = await updateRestock(base64Content)
+      if (response) {
+        Swal.close()
+        setModalVisible(!modalVisible)
+      }
+    } catch (error) {
+      Swal.close()
+      swallError('Ha ocurrido un error al tomar la foto, vuelve a intentarlo', false)
+      setModalVisible(!modalVisible)
+    }
   }
   const handleCameraModal = () => {
     setModalCameraVisible(!modalCameraVisible)
   }
   const takeSnapshot = async (img) => {
-    const base64Content = img.split(';base64,').pop()
+    try {
+      const base64Content = await img.split(';base64,').pop()
+      handleCameraModal()
+      await handleConfirmationModal(base64Content)
+    } catch (error) {
+    // console.log(error)
 
-    setSnapshot(base64Content)
-    handleCameraModal()
-    handleConfirmationModal()
+      swallError('Ha ocurrido un error al tomar la foto, vuelve a intentarlo', false)
+      setModalCameraVisible(!modalCameraVisible)
+    }
   }
 
-  const updateRestock = async () => {
+  const updateRestock = async (base64Content) => {
     try {
-      if (snapshot) {
-        await putStockImageUpdate(transactionId, snapshot, comment)
+      if (base64Content) {
+        Toast('Actualizando', 'Por favor espera un momento')
+
+        const response = await putStockImageUpdate(transactionId, base64Content, comment)
+        Swal.close()
+
+        return response
       }
     } catch (error) {
-      // console.log(error)
-      errorHandler(error, { transactionId, snapshot, comment })
+      Swal.close()
+
+      errorHandler(error)
     }
   }
 
@@ -169,7 +189,7 @@ export default function stepFour () {
         <div className='fixed z-50 flex items-center justify-center'>
 
           <ConfirmationModal
-            handleConfirmationModal={handleConfirmationModal}
+            handleConfirmationModal={handleChangeModal}
             handleOperationConfirmation={handleOperationConfirmation}
             title='La reposición ha sido confirmada'
             message='¡Muchas gracias! ya puedes cerrar la página'

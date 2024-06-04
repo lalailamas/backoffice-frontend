@@ -1,4 +1,4 @@
-import { getDataOnly, patchData } from '@/utils/fetchData'
+import { getDataOnly, patchData } from '@/app/api/fetchData'
 
 export const getAllReiteData = async () => {
   const url = 'reite/product/list'

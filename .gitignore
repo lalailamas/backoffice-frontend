@@ -24,8 +24,6 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# local env files
-#.env*.local
 
 # vercel
 .vercel
@@ -35,7 +33,7 @@ yarn-error.log*
 next-env.d.ts
 
 # env PROD
-.env.production
+.env.local
 
 # package-lock.json
 package-lock.json

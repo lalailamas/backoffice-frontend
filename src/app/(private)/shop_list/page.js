@@ -48,7 +48,7 @@ function shopList () {
     try {
       const response = await downloadStoresStock(ids)
 
-      const { buffer, filename } = response.data
+      const { buffer, filename } = response
 
       const blob = new Blob([Buffer.from(buffer)], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' })
       FileSaver.saveAs(blob, filename)

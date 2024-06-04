@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation'
 import { signIn, useSession } from 'next-auth/react'
 import { hotjar } from 'react-hotjar'
 import DspLoader from '@/components/admin/common/loader'
+import { swallError } from '@/utils/sweetAlerts'
 
 // const inter = Inter({ subsets: ['latin'] })
 
@@ -25,14 +26,15 @@ export default function Home () {
   const performLogin = async () => {
     setLoading(true)
     setLoginError(false)
-    setLoading(true)
 
     const result = await signIn('credentials', {
+      redirect: false,
       email,
-      password,
-      redirect: false
-    }, { callbackUrl: '' })
-    if (result?.error) { setLoginError(true); setLoading(false) }
+      password
+    })
+    if (result?.error) {
+      setLoginError(true); setLoading(false); swallError('Error de inicio de sesión:', false)
+    }
   }
 
   useEffect(() => {
@@ -43,7 +45,7 @@ export default function Home () {
     if (status === 'loading') {
       setPreviousLoading(true)
     } else if (status === 'unauthenticated') { setPreviousLoading(false) }
-    if (session !== null && session !== undefined) {
+    if (session) {
       // console.log(session, 'session del useEffect')
       // if (session.user.role === 'admin') router.push('/dashboard')
       if (session.user.role === 'admin') router.push('/stores')

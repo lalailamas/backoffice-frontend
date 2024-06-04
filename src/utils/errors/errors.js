@@ -1,43 +1,45 @@
 'use client'
-
+import { datadogLogs } from '@datadog/browser-logs'
 import { swallError } from '../sweetAlerts'
-import * as Sentry from '@sentry/nextjs'
-import { withScope } from '@sentry/nextjs'
 
 export const errorHandler = (error, data) => {
-  withScope((scope) => {
-    // Agrega información adicional al contexto de Sentry
-    // if (data) {
-    // const serializedData = JSON.stringify(data)
-    scope.setExtras(data)
-    // }
-
-    if (error instanceof ValidationError) {
-      swallError(error.message, false)
-    } else if (error instanceof ConnectionError) {
-      swallError(error.message, false)
-    } else if (error.response && error.response.status === 403) {
-      // Captura la excepción en Sentry con el contexto adicional
-      Sentry.captureException(error)
-      swallError('La transacción ya fue validada', false)
-    } else if (error.response && error.response.status === 400) {
-      // Captura la excepción en Sentry con el contexto adicional
-      Sentry.captureException(error)
-      swallError('Solicitud incorrecta', false)
-    } else if (error.response && error.response.status === 500) {
-      // Captura la excepción en Sentry con el contexto adicional
-      Sentry.captureException(error)
-      swallError('Error en el servidor', false)
-    } else if (error.response && error.response.status === 422) {
-      // Captura la excepción en Sentry con el contexto adicional
-      Sentry.captureException(error)
-      swallError('La solicitud no se pudo procesar', false)
-    } else {
-      // Captura la excepción en Sentry con el contexto adicional
-      Sentry.captureException(error)
-      swallError(`Ocurrió un error, lo sentimos mucho ${error}`, false)
-    }
+  datadogLogs.logger.error('Error captured', {
+    error: error.message,
+    stack: error.stack,
+    data,
+    statusCode: error.response ? error.response.status : 'No HTTP response'
   })
+  if (error instanceof ValidationError) {
+    swallError(error.message, false)
+  } else if (error instanceof ConnectionError) {
+    swallError(error.message, false)
+  } else if (error.response) {
+    switch (error.response.status) {
+      case 403:
+        swallError('La transacción ya fue validada', false)
+        break
+      case 400:
+        swallError('Solicitud incorrecta', false)
+        break
+      case 500:
+        swallError('Error en el servidor', false)
+        break
+      case 422:
+        swallError('La solicitud no se pudo procesar', false)
+        break
+      case 404:
+        swallError('No se encontró la solicitud', false)
+        break
+      case 401:
+        swallError('Solicitud no autorizada', false)
+        break
+      default:
+        swallError(`Ocurrió un error, lo sentimos mucho ${error.message}`, false)
+        break
+    }
+  } else {
+    swallError(`Ocurrió un error inesperado: ${error.message}`, false)
+  }
 }
 
 const createErrorFactory = function (name) {
