@@ -3,7 +3,6 @@ import React, { useState } from 'react'
 import { SearchField } from '@/components/admin/common/search'
 import MainTitle from '@/components/admin/common/titles/MainTitle'
 import useGetStores2 from '@/hooks/useStores2'
-import { Button } from '@tremor/react'
 import { useRouter } from 'next/navigation'
 import ButtonPrimary from '@/components/admin/common/buttons/ButtonPrimary'
 
@@ -22,6 +21,7 @@ const NewScreen = () => {
     setSearchTerm(value)
   }
   const handleViewLayout = (storeId) => {
+    console.log(storeId, 'storeId desde newScreen')
     router.push(`/layout_dream/layout_store?id=${storeId}`)
   }
 
