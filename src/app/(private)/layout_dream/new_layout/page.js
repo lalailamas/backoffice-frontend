@@ -1,216 +1,32 @@
 'use client'
+import { getTransitionData } from '@/api/layout'
 import ButtonPrimary from '@/components/admin/common/buttons/ButtonPrimary'
 import { useRouter, useSearchParams } from 'next/navigation'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 
 function NewLayout () {
   const searchParams = useSearchParams()
   const storeId = searchParams.get('id')
   const router = useRouter()
+  const layoutId = 'TRANS_ASDDGBsdfdsfdsdsH'
+  const [layout, setLayout] = useState(null)
+  const [products, setProducts] = useState([])
 
-  const layout = {
-    trays: [
-      {
-        columns: [
-          {
-            productId: 1
-          },
-          {
-            productId: 2
-          },
-          {
-            productId: 3
-          }
-        ]
-      },
-      {
-        columns: [
-          {
-            productId: 4
-          },
-          {
-            productId: 5
-          },
-          {
-            productId: 6
-          },
-          {
-            productId: 7
-          }
-        ]
-      },
-      {
-        columns: [
-          {
-            productId: 8
-          },
-          {
-            productId: 9
-          },
-          {
-            productId: 10
-          },
-          {
-            productId: 11
-          }
-        ]
-      },
-      {
-        columns: [
-          {
-            productId: 12
-          },
-          {
-            productId: 13
-          },
-          {
-            productId: 14
-          },
-          {
-            productId: 15
-          },
-          {
-            productId: 16
-          },
-          {
-            productId: 17
-          },
-          {
-            productId: 18
-          }
-        ]
-      }
-    ]
-  }
-
-  const products = [
-    {
-      productId: 1,
-      productName: 'Product 1',
-      metadata: {
-        imageUrl: '/img/favicon.ico'
-      }
-    },
-    {
-      productId: 2,
-      productName: 'Product 2',
-      metadata: {
-        imageUrl: '/img/favicon.ico'
-      }
-    },
-    {
-      productId: 3,
-      productName: 'Product 3',
-      metadata: {
-        imageUrl: '/img/favicon.ico'
-      }
-    },
-    {
-      productId: 4,
-      productName: 'Product 4',
-      metadata: {
-        imageUrl: '/img/favicon.ico'
-      }
-    },
-    {
-      productId: 5,
-      productName: 'Product 5',
-      metadata: {
-        imageUrl: '/img/favicon.ico'
-      }
-    },
-    {
-      productId: 6,
-      productName: 'Product 6',
-      metadata: {
-        imageUrl: '/img/favicon.ico'
-      }
-    },
-    {
-      productId: 7,
-      productName: 'Product 7',
-      metadata: {
-        imageUrl: '/img/favicon.ico'
-      }
-    },
-    {
-      productId: 8,
-      productName: 'Product 8',
-      metadata: {
-        imageUrl: '/img/favicon.ico'
-      }
-    },
-    {
-      productId: 9,
-      productName: 'Product 9',
-      metadata: {
-        imageUrl: '/img/favicon.ico'
-      }
-    },
-    {
-      productId: 10,
-      productName: 'Product 10',
-      metadata: {
-        imageUrl: '/img/favicon.ico'
-      }
-    },
-    {
-      productId: 11,
-      productName: 'Product 11',
-      metadata: {
-        imageUrl: '/img/favicon.ico'
-      }
-    },
-    {
-      productId: 12,
-      productName: 'Product 12',
-      metadata: {
-        imageUrl: '/img/favicon.ico'
-      }
-    },
-    {
-      productId: 13,
-      productName: 'Product 13',
-      metadata: {
-        imageUrl: '/img/favicon.ico'
-      }
-    },
-    {
-      productId: 14,
-      productName: 'Product 14',
-      metadata: {
-        imageUrl: '/img/favicon.ico'
-      }
-    },
-    {
-      productId: 15,
-      productName: 'Product 15',
-      metadata: {
-        imageUrl: '/img/favicon.ico'
-      }
-    },
-    {
-      productId: 16,
-      productName: 'Product 16',
-      metadata: {
-        imageUrl: '/img/favicon.ico'
-      }
-    },
-    {
-      productId: 17,
-      productName: 'Product 17',
-      metadata: {
-        imageUrl: '/img/favicon.ico'
-      }
-    },
-    {
-      productId: 18,
-      productName: 'Product 18',
-      metadata: {
-        imageUrl: '/img/favicon.ico'
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await getTransitionData(storeId, layoutId)
+        console.log(data, 'data')
+        setLayout(data.targetLayout)
+        setProducts(data.products)
+      } catch (error) {
+        console.error('Error fetching transition data:', error)
       }
     }
-  ]
+    if (storeId) {
+      fetchData()
+    }
+  }, [storeId, layoutId])
 
   const handleSaveNewLayout = () => {
     console.log(`Redirecting to storeId: ${storeId}`)
@@ -225,6 +41,9 @@ function NewLayout () {
       <h5 className='text-2xl text-center mb-3 font-bold text-gray-900 dark:text-white'>
         Tienda 1
       </h5>
+      <div><pre>{JSON.stringify(storeId, null, 2)}</pre></div>
+      <div><pre>{JSON.stringify(layout, null, 2)}</pre></div>
+      <div><pre>{JSON.stringify(products, null, 2)}</pre></div>
 
       {layout && layout.trays && layout.trays.map((tray, index) => (
         <div key={index} className='text-center border-gray-300'>

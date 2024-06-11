@@ -17,6 +17,11 @@ function Detail () {
   const searchParams = useSearchParams()
   const storeId = searchParams.get('storeId')
   const layoutId = searchParams.get('layoutId')
+  // console.log(layoutId, 'layoutId')
+  // corroborar si este layoutId es el de transición.
+  // crear una hook validateTransition
+  // en caso de que sea transicion que salga un warning que lo diga
+
   const storeName = searchParams.get('storeName')
   const [loader, setLoader] = useState(false)
   const { products, loading } = useGetReiteProd()
@@ -34,7 +39,6 @@ function Detail () {
           const store = await getInventoryByStore(storeId)
           const response = await getStockRequest(storeId)
           setStockRequest(response)
-
           setNewQuantity(null)
           setInventory(store.data.products)
           setLoader(false)

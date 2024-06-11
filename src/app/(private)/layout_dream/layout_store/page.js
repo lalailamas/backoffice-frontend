@@ -7,7 +7,7 @@ import { useEffect, useState } from 'react'
 import { getLayout } from '@/api/layout'
 import ErrorMessage from '@/components/admin/common/error'
 import ButtonPrimary from '@/components/admin/common/buttons/ButtonPrimary'
-import StoreLayout from '../storelayout'
+import StoreLayout from '../../stores/detail/storeLayout'
 
 function LayoutStore () {
   const searchParams = useSearchParams()
