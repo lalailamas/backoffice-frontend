@@ -81,7 +81,7 @@ export default function Home () {
 
                   </label>
                   <div className='join'>
-                    <input value={password} onChange={(e) => setPassword(e.target.value)} type={showPassword ? 'text' : 'password'} placeholder='122344842-K' className='input input-bordered w-full bg-d-white rounded-l-2xl join-item text-d-dark-dark-purple' />
+                    <input value={password} onChange={(e) => setPassword(e.target.value)} type={showPassword ? 'text' : 'password'} placeholder='*******' className='input input-bordered w-full bg-d-white rounded-l-2xl join-item text-d-dark-dark-purple' />
                     <div className='rounded-2xl join-item'>
                       <button className='btn join-item bg-d-dark-dark-purple border-none text-d-white hover:bg-d-soft-soft-purple hover:text-d-dark-dark-purple' onClick={() => setShowPassword(!showPassword)}>
                         {!showPassword &&

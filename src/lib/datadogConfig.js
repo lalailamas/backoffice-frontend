@@ -13,7 +13,7 @@ export default function InitDataDog () {
         forwardConsoleLogs: ['error', 'info'],
         forwardErrorsToLogs: true,
         sessionSampleRate: 100,
-        service: 'frontend_admin'
+        service: 'frontend_admin' + `_${process.env.NODE_ENV || 'development'}`
       })
     }
     initDD()
