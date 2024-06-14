@@ -66,7 +66,7 @@ const LayoutComparison = () => {
           <div className='p-4'>
             <div className='flex p-4 overflow-auto'>
               <div className='w-1/3 p-2'>
-                <h2>Real Layout</h2>
+                <h2 className='text-center font-bold tracking-wider'>ANTIGUO LAYOUT</h2>
                 {stores && oldLayout && products && (
                   <StoreLayout store={stores} layout={oldLayout} products={products} />
                 )}
@@ -77,7 +77,7 @@ const LayoutComparison = () => {
                 </svg>
               </div>
               <div className='w-1/3 p-2'>
-                <h2>New Layout</h2>
+                <h2 className='text-center font-bold tracking-wider'>NEW LAYOUT</h2>
                 {stores && targetLayout && products && (
                   <StoreLayout store={{ ...stores }} layout={targetLayout} products={products} />
                 )}
