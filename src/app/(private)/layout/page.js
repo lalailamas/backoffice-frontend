@@ -15,6 +15,7 @@ import ButtonPrimary from '@/components/admin/common/buttons/ButtonPrimary'
 function Layout () {
   const [layouts, setLayouts] = useState([])
   const [selectedLayout, setSelectedLayout] = useState('')
+  console.log(selectedLayout, 'selectedLayout')
   const [selectedLayoutDetails, setSelectedLayoutDetails] = useState(null)
   const [products, setProducts] = useState([])
   const [newProductTrayIndex, setNewProductTrayIndex] = useState(null)
@@ -245,9 +246,17 @@ function Layout () {
     setShowLayoutModal(false)
   }
 
-  const handleLayoutChange = (e) => {
-    setSelectedLayout(e)
+  // const handleLayoutChange = (e) => {
+  //   setSelectedLayout(e)
+  // }
+  const handleLayoutChange = (layoutName) => {
+    setSelectedLayout(layoutName)
+    const selectedLayout = layouts.find(layout => layout.name === layoutName)
+    if (selectedLayout) {
+      console.log(selectedLayout.id)
+    }
   }
+
   const handleShowProductModal = (trayIndex) => {
     setNewProductTrayIndex(trayIndex)
     return setShowProductModal(!showProductModal)

@@ -14,6 +14,7 @@ function Users () {
   const fetchUsers = async () => {
     try {
       const response = await listUsers()
+      console.log(response, 'responseListUsers')
       setUsers(response.data)
     } catch (error) {
       console.error('Error fetching users', error)
@@ -32,7 +33,7 @@ function Users () {
     try {
       Toast('Descargando archivo', 'Espera unos segundos')
       const response = await downloadExcel()
-      const { buffer, filename } = response.data
+      const { buffer, filename } = response
       const blob = new Blob([Buffer.from(buffer)], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' })
       FileSaver.saveAs(blob, filename)
       Swal.close()

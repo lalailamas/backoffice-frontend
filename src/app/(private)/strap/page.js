@@ -26,17 +26,17 @@ function Strap () {
   const handlePDFDownload = async (storeId, style) => {
     try {
       Toast('Descargando archivo', 'Espera unos segundos')
-      const { data: pdfData, headers } = await downloadTrapsPDF(storeId, style)
-      const contentDisposition = headers['content-disposition']
-      let filename = 'default_filename.pdf'
-      if (contentDisposition) {
-        const matches = contentDisposition.match(/filename="?([^"]+)"?/)
-        if (matches && matches.length === 2) {
-          filename = matches[1]
-        }
-      }
+      const response = await downloadTrapsPDF(storeId, style)
+      const pdfBlob = new Blob([response.data], { type: 'application/pdf' })
 
-      FileSaver.saveAs(pdfData, filename)
+      // Definir el nombre del archivo
+      const date = new Date()
+      const day = date.getDate().toString().padStart(2, '0')
+      const month = (date.getMonth() + 1).toString().padStart(2, '0')
+      const year = date.getFullYear()
+      const filename = `${year}${month}${day}_${storeId}_${style}.pdf`
+
+      FileSaver.saveAs(pdfBlob, filename)
       Swal.close()
     } catch (error) {
       swallError('Error al descargar el archivo PDF:', false)

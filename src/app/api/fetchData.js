@@ -16,6 +16,32 @@ const authenticatedRequest = async (method, url, data = null, contentType) => {
   return await makeRequest(method, url, data, headers)
 }
 
+const authenticatedRequestWithBlob = async (method, url, data = null, contentType = 'application/pdf') => {
+  const session = await getSession() // Obtener sesión en el lado del cliente
+  const token = session?.user?.accessToken // Asumir que el accessToken está almacenado en la sesión
+  if (!session) throw new Error('No session found')
+
+  const headers = {
+    'Content-Type': contentType,
+    Authorization: `Bearer ${token}`
+  }
+
+  const config = {
+    method,
+    url: baseUrl + url,
+    headers,
+    data,
+    responseType: 'blob' // Asegúrate de que las respuestas se manejen como blobs
+  }
+
+  try {
+    const response = await axios(config)
+    return response
+  } catch (error) {
+    console.error('Error in authenticatedRequestWithBlob:', error.response)
+    throw error
+  }
+}
 const simpleRequest = async (method, url, data = null, contentType) => {
   const headers = {
     'content-type': contentType
@@ -118,7 +144,7 @@ export const getDataForPDF = (relativeUrl, contentType) => {
   const options = {
     responseType: 'blob' // Necesario para manejar la respuesta como un archivo binario
   }
-  return authenticatedRequest('get', relativeUrl, null, contentType, options)
+  return authenticatedRequestWithBlob('get', relativeUrl, null, contentType, options)
   // const fullUrl = baseUrl + relativeUrl
   // return axios.get(fullUrl, { responseType: 'blob' })
 }
