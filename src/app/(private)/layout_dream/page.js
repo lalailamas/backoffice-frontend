@@ -21,7 +21,7 @@ const NewScreen = () => {
     setSearchTerm(value)
   }
   const handleViewLayout = (storeId) => {
-    console.log(storeId, 'storeId desde newScreen')
+    // console.log(storeId, 'storeId desde newScreen')
     router.push(`/layout_dream/layout_store?id=${storeId}`)
   }
 

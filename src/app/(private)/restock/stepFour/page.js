@@ -41,7 +41,7 @@ export default function stepFour () {
   }
 
   const handleConfirmationModal = async (base64Content) => {
-    console.log('handleConfirmationModal')
+    // console.log('handleConfirmationModal')
     try {
       const response = await updateRestock(base64Content)
       if (response) {

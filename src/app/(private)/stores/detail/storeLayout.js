@@ -5,11 +5,10 @@ const truncateProductName = (name, maxLength) => {
   return name
 }
 
-const StoreLayout = ({ store, layout, products }) => {
+const StoreLayout = ({ layout, products }) => {
   return (
     <div className='bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700'>
-      <h5 className='text-2xl text-center mb-3 font-bold text-gray-900 dark:text-white'>{store?.name}</h5>
-
+      <h5 className='text-xl text-center mb-3  text-gray-900 dark:text-white'>{layout.name}</h5>
       {layout && layout.trays && layout.trays.map((tray, index) => (
         <div key={index} className='text-center border-gray-300'>
           <div className='bg-d-dark-dark-purple rounded-md'>
@@ -38,7 +37,7 @@ const StoreLayout = ({ store, layout, products }) => {
                           </span>
                         </div>
                         )
-                      : null}
+                      : <div className='flex flex-col p-1 items-center w-[70px] h-[100px] border border-gray-200 rounded-lg shadow text-xs'> <div className='text-red-500 text-xs'>Producto no encontrado</div></div>}
                   </li>
                 )
               })}
