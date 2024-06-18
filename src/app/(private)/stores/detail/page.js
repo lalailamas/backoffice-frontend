@@ -12,16 +12,12 @@ import LayoutDetail from './layoutDetail'
 import useGetReiteProd from '@/hooks/useGetReiteProd'
 import StockRequestTable from '@/components/admin/tables/stock_request'
 import { getStockRequest } from '@/api/stock'
+import GoBack from '@/components/admin/common/goback'
 
 function Detail () {
   const searchParams = useSearchParams()
   const storeId = searchParams.get('storeId')
   const layoutId = searchParams.get('layoutId')
-  // console.log(layoutId, 'layoutId')
-  // corroborar si este layoutId es el de transición.
-  // crear una hook validateTransition
-  // en caso de que sea transicion que salga un warning que lo diga
-
   const storeName = searchParams.get('storeName')
   const [loader, setLoader] = useState(false)
   const { products, loading } = useGetReiteProd()
@@ -94,7 +90,7 @@ function Detail () {
       <div className='flex justify-center text-center p-5'>
         <h2 className='text-d-dark-dark-purple text-2xl font-bold '>Detalle de tienda {storeName}</h2>
       </div>
-
+      <GoBack />
       <TabsComponent tabs={tabs} />
 
     </div>

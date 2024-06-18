@@ -16,7 +16,7 @@ function NewLayout () {
     const fetchData = async () => {
       try {
         const data = await getTransitionData(storeId, layoutId)
-        console.log(data, 'data')
+        // console.log(data, 'data')
         setLayout(data.targetLayout)
         setProducts(data.products)
       } catch (error) {
@@ -29,7 +29,7 @@ function NewLayout () {
   }, [storeId, layoutId])
 
   const handleSaveNewLayout = () => {
-    console.log(`Redirecting to storeId: ${storeId}`)
+    // console.log(`Redirecting to storeId: ${storeId}`)
     router.push(`/layout_dream/layout_comparison?id=${storeId}&layout=${encodeURIComponent(JSON.stringify(layout))}&products=${encodeURIComponent(JSON.stringify(products))}`)
   }
 
