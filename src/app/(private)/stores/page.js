@@ -82,12 +82,34 @@ function Stores () {
     setSearchTerm(value)
   }
 
-  const calculateStockPercentage = (inventory, layout) => {
+  const calculateStockDetails = (inventory, layout) => {
     const totalQuantity = inventory.reduce((sum, prod) => sum + (prod.quantity || 0), 0)
     const maxQuantities = layout.maxQuantities || {}
     const maxQuantity = Object.values(maxQuantities).reduce((sum, qty) => sum + (qty || 0), 0)
-    return maxQuantity ? (totalQuantity / maxQuantity) * 100 : 0
+    const stockPercentage = maxQuantity ? (totalQuantity / maxQuantity) * 100 : 0
+    return { stockPercentage, totalQuantity, maxQuantity }
   }
+
+  const SymbolLegend = () => (
+    <div className='flex flex-wrap gap-2 mb-4'>
+      <div className='flex items-center w-full sm:w-auto'>
+        <span className='w-4 h-4 bg-purple-500 rounded-full inline-block' />
+        <span className='ml-2 text-sm'> Sobrestock </span>
+      </div>
+      <div className='flex items-center w-full sm:w-auto'>
+        <span className='w-4 h-4 bg-green-500 rounded-full inline-block' />
+        <span className='ml-2 text-sm'> Suficiente stock</span>
+      </div>
+      <div className='flex items-center w-full sm:w-auto'>
+        <span className='w-4 h-4 bg-yellow-500 rounded-full inline-block' />
+        <span className='ml-2 text-sm'>Reponer stock</span>
+      </div>
+      <div className='flex items-center w-full sm:w-auto'>
+        <span className='w-4 h-4 bg-red-500 rounded-full inline-block' />
+        <span className='ml-2 text-sm'> Stock crítico</span>
+      </div>
+    </div>
+  )
 
   return (
     <>
@@ -103,7 +125,7 @@ function Stores () {
               <ToggleSwitch isChecked={showActiveStores} onToggle={handleToggle} />
               {showActiveStores && (
                 <span className='ml-2'>
-                  Mostrar Solo Tiendas Activas
+                  Tiendas Activas
                 </span>
               )}
             </div>
@@ -113,15 +135,18 @@ function Stores () {
               <DspLoader />
             </div>
           ) : (
+
             <section className='py-4 flex flex-col gap-2 text-sm m-2'>
+              <SymbolLegend />
               {(showActiveStores ? activeStores : filteredStores).map((store) => {
                 const inventory = inventoryData[store.storeId] || []
                 const layout = layoutData[store.storeId] || {}
-                const stockPercentage = calculateStockPercentage(inventory, layout)
+                const { stockPercentage, totalQuantity, maxQuantity } = calculateStockDetails(inventory, layout)
 
-                // Determinar el color de fondo según el porcentaje
                 let bgColor
-                if (stockPercentage > 50) {
+                if (stockPercentage > 100) {
+                  bgColor = 'bg-purple-500'
+                } else if (stockPercentage > 50) {
                   bgColor = 'bg-green-500'
                 } else if (stockPercentage >= 20) {
                   bgColor = 'bg-yellow-500'
@@ -146,6 +171,9 @@ function Stores () {
                           >
                             {store.name}
                           </h4>
+                          <span className='px-2 py-1 rounded-lg bg-gray-50 text-black-500 text-xs'>
+                            Capacidad: {totalQuantity}/{maxQuantity}
+                          </span>
                         </div>
                         <div className='overflow-hidden bg-blue-50 h-3.5 rounded-full w-full'>
                           <span
