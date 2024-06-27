@@ -12,6 +12,7 @@ import LayoutDetail from './layoutDetail'
 import useGetReiteProd from '@/hooks/useGetReiteProd'
 import StockRequestTable from '@/components/admin/tables/stock_request'
 import { getStockRequest } from '@/api/stock'
+import GoBack from '@/components/admin/common/goback'
 
 function Detail () {
   const searchParams = useSearchParams()
@@ -34,7 +35,6 @@ function Detail () {
           const store = await getInventoryByStore(storeId)
           const response = await getStockRequest(storeId)
           setStockRequest(response)
-
           setNewQuantity(null)
           setInventory(store.data.products)
           setLoader(false)
@@ -90,7 +90,7 @@ function Detail () {
       <div className='flex justify-center text-center p-5'>
         <h2 className='text-d-dark-dark-purple text-2xl font-bold '>Detalle de tienda {storeName}</h2>
       </div>
-
+      <GoBack />
       <TabsComponent tabs={tabs} />
 
     </div>

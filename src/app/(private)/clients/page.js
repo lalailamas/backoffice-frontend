@@ -1,3 +1,4 @@
+/* eslint-disable multiline-ternary */
 'use client'
 
 import { getListClients, downloadClientsExcel } from '@/api/client'
@@ -16,12 +17,11 @@ function TableClient () {
   const [clients, setClients] = useState([])
   const [expandedRows, setExpandedRows] = useState([])
   const [searchTerm, setSearchTerm] = useState('')
-
+  // Filtro por 3 meses hacia atrás hasta el día actual
   const [dateRange, setDateRange] = useState({
-    startDate: dayjs('2022-01-01'),
+    startDate: dayjs().subtract(3, 'months').startOf('month'),
     endDate: dayjs()
   })
-
   const handleDateChange = (newDateRange) => {
     setDateRange(newDateRange)
   }
@@ -30,7 +30,6 @@ function TableClient () {
     if (dateRange.startDate !== null && dateRange.endDate !== null) {
       getListClients(dateRange, searchTerm)
         .then((response) => {
-          // console.log(response, 'response')
           setClients(response)
         })
         .catch((error) => {
@@ -128,74 +127,51 @@ function TableClient () {
             onClick={handleExcelDownload}
             type='download'
           />
-
         </div>
 
         <div className='overflow-x-auto p-5'>
-          {clients && (
-            <table className='table  text-d-dark-dark-purple table-zebra mt-8 p-8 max-[431px]:hidden'>
-              <thead>
-                <tr className='bg-d-dark-dark-purple text-d-white'>
-                  <th />
-                  <th>Nombre</th>
-                  <th>Correo electrónico</th>
-                  <th>Teléfono</th>
-                  <th>Fecha Creación</th>
-                  <th />
-
-                </tr>
-              </thead>
-              <tbody>
-                {clients.map((item) => {
-                  // const date = new Date(item.creation.timestamp * 1000)
-                  // console.log(date, 'fecha')
-                  // console.log(item.creation.timestamp, 'desde reite')
-                  return (
+          {clients.length > 0
+            ? (
+              <table className='table  text-d-dark-dark-purple table-zebra mt-8 p-8 max-[431px]:hidden'>
+                <thead>
+                  <tr className='bg-d-dark-dark-purple text-d-white'>
+                    <th />
+                    <th>Nombre</th>
+                    <th>Correo electrónico</th>
+                    <th>Teléfono</th>
+                    <th>Fecha Creación</th>
+                    <th />
+                  </tr>
+                </thead>
+                <tbody>
+                  {clients.map((item) => (
                     <tr key={item.id}>
                       <td />
                       <td>{item.name}</td>
                       <td>{item.email}</td>
                       <td>{item.phone?.areaCode} {item.phone?.number || 'Sin información'}</td>
-                      {/* <td>{date.toLocaleString()} </td> */}
                       <td>{formatTimestampToDate(item.creation.timestamp)}</td>
                       <td className='flex justify-center'>
                         <button className='mt-2'>
-                          <Link href={`/client/table-client/details?clientId=${item.id}`}>
+                          <Link href={`/clients/table-client/details?clientId=${item.id}`}>
                             <span className='hover:underline'>Ver más</span>
                           </Link>
                         </button>
                       </td>
                     </tr>
-                  )
-                })}
-
-              </tbody>
-
-            </table>
-          )}
-
+                  ))}
+                </tbody>
+              </table>
+              )
+            : (
+              <p className='pt-10 text-center text-d-dark-dark-purple'>No hay clientes en el rango de fechas seleccionado</p>
+              )}
         </div>
+
         {/* MOBILE */}
-        {/* <h1 className='mb-10 text-d-dark-dark-purple text-2xl font-bold text-center md:hidden'>Clientes</h1> */}
-        {/* <div className='md:hidden join w-full m-2 mb-5'> */}
-
-        {/* <SearchField
-            type='text' placeholder='Búsqueda' name='search' className='input input-sm input-bordered bg-d-white join-item rounded-full text-d-dark-dark-purple '
-            onChange={(v) => handleSearchChange(v)}
-          /> */}
-        {/*
-          <button type='button ' onClick={() => handleSearchChange('')} className='btn btn-sm join-item rounded-r-full  bg-d-dark-dark-purple border-none text-d-white  hover:bg-d-soft-soft-purple hover:text-d-dark-dark-purple'>
-            <svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' strokeWidth={1.5} stroke='currentColor' className='w-6 h-6'>
-              <path strokeLinecap='round' strokeLinejoin='round' d='M6 18L18 6M6 6l12 12' />
-            </svg>
-          </button> */}
-        {/* </div> */}
-
         <div className='md:hidden m-2'>
-          {clients && clients.map((item) => (
-
+          {clients.length > 0 ? clients.map((item) => (
             <div key={item.id} className='pb-2'>
-
               <div className='flex justify-between w-full md:hidden bg-d-soft-purple p-2 rounded-md'>
                 <div className=''>
                   <h3>
@@ -203,7 +179,6 @@ function TableClient () {
                       Cliente
                     </span>
                     {item.name}
-
                   </h3>
                 </div>
                 <button
@@ -223,9 +198,7 @@ function TableClient () {
                       <path id='Vector' d='M9.24372 7.31144C8.52431 7.31144 7.8049 7.08182 7.26021 6.6311L0.559468 1.08641C0.261427 0.839788 0.261427 0.431587 0.559468 0.184966C0.857508 -0.0616553 1.35082 -0.0616553 1.64886 0.184966L8.3496 5.72966C8.84291 6.13786 9.64453 6.13786 10.1378 5.72966L16.8386 0.184966C17.1367 -0.0616553 17.63 -0.0616553 17.928 0.184966C18.226 0.431587 18.226 0.839788 17.928 1.08641L11.2272 6.6311C10.6825 7.08182 9.96313 7.31144 9.24372 7.31144Z' fill='#292D32' />
                     </g>
                   </svg>
-
                 </button>
-
               </div>
               {/* Detalles colapsables */}
               {expandedRows.includes(item) && (
@@ -241,21 +214,20 @@ function TableClient () {
 
                     <h2 className='font-semibold'>Fecha creación</h2>
                     <span>{new Date(item.creation.timestamp * 1000).toLocaleString()}</span>
-
                   </div>
                   <div className='flex justify-center'>
                     <button className='btn mt-5'>
-                      <Link href={`/client/table-client/details?clientId=${item.id}`}>
+                      <Link href={`/clients/table-client/details?clientId=${item.id}`}>
                         <span className='hover:underline'>Ver más</span>
                       </Link>
                     </button>
                   </div>
                 </div>
-
               )}
             </div>
-          ))}
-
+          )) : (
+            <p className='max-[431px]:hidden text-center text-d-dark-dark-purple'>No hay clientes en el rango de fechas seleccionado</p>
+          )}
         </div>
       </div>
     </>

@@ -7,6 +7,7 @@ import { deleteUser } from '@/api/user'
 import { swallError, swallInfo } from '@/utils/sweetAlerts'
 
 export default function UsersTable ({ data }) {
+  console.log(data, 'dataUserTable')
   const [showModal, setShowModal] = useState(false)
   const [selectedUser, setSelectedUser] = useState(null)
 

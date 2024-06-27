@@ -15,21 +15,21 @@ export default async function middleware (request) {
   }
 
   const adminRequiredPages = [
-    '/inventory',
-    '/users',
+    '/categories',
+    '/clients',
     '/dashboard',
+    '/inventory',
+    '/layout',
+    '/layout_dream',
     '/marketing',
-    '/replenishment_orders',
-    '/replacements',
     '/purchase_register',
+    '/replacements',
+    '/shop_list',
     '/stock_adjustment',
     '/stores',
-    '/layout',
-    '/client/table-client',
-    '/categories',
-    '/shop_list'
-
+    '/users'
   ]
+
   const isAdminPage = adminRequiredPages.some((page) => request.nextUrl.pathname.startsWith(page))
 
   if (isAdminPage && session.role !== 'admin') {
@@ -40,22 +40,25 @@ export default async function middleware (request) {
 }
 
 export const config = {
-  matcher: ['/inventory',
-    '/users',
-    '/replacements',
-    '/replenishment_orders',
-    '/restock',
-    '/stock',
-    '/stock_request',
-    '/dashboard',
-    '/marketing',
-    '/purchase_register',
-    '/stock_adjustment',
-    '/stores',
-    '/layout',
-    '/client/table-client',
-    '/categories',
-    '/shop_list',
-    '/strap'
+  matcher: [
+    '/categories/:path*',
+    '/clients/:path*',
+    '/dashboard/:path*',
+    '/inventory/:path*',
+    '/layout/:path*',
+    '/layout_dream/:path*',
+    '/marketing/:path*',
+    '/purchase_register/:path*',
+    '/replacements/:path*',
+    '/replenishment_orders/:path*',
+    '/restock/:path*',
+    '/restock_copy/:path*',
+    '/shop_list/:path*',
+    '/stock_adjustment/:path*',
+    '/stock_overview/:path*',
+    '/stock_request/:path*',
+    '/stores/:path*',
+    '/strap/:path*',
+    '/users/:path*'
   ]
 }

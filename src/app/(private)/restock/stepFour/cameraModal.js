@@ -61,7 +61,7 @@ function CameraModal ({
   }
   const SendSnapshotComment = async (comment) => {
     try {
-      console.log(image.length, 'image')
+      // console.log(image.length, 'image')
       if (image.length < 7) {
         handleOperationConfirmation()
         return swallError('Ha ocurrido un error al tomar la foto, vuelve a intentarlo', false)
