@@ -46,7 +46,6 @@ export const authOptions = {
       } else if (token.accessTokenExpires - 10000 < Date.now()) {
       // Aquí asumimos que quieres verificar la expiración un poco antes de que realmente expire
         try {
-          console.log('Renovando accessToken y refreshToken')
           const refreshedTokens = await refreshAccessToken(token.refreshToken)
 
           if (refreshedTokens.accessToken) {
