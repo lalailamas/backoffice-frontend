@@ -142,7 +142,6 @@ function Stores () {
                 const inventory = inventoryData[store.storeId] || []
                 const layout = layoutData[store.storeId] || {}
                 const { stockPercentage, totalQuantity, maxQuantity } = calculateStockDetails(inventory, layout)
-
                 let bgColor
                 if (stockPercentage > 100) {
                   bgColor = 'bg-purple-500'
@@ -153,6 +152,8 @@ function Stores () {
                 } else {
                   bgColor = 'bg-red-500'
                 }
+
+                const barWidth = stockPercentage > 0 ? `${stockPercentage}%` : '40px'
 
                 return (
                   <Link href={`/stores/detail?storeId=${store.storeId}&layoutId=${store.layoutId}&storeName=${store.name}`} key={store.storeId}>
@@ -177,14 +178,15 @@ function Stores () {
                         </div>
                         <div className='overflow-hidden bg-blue-50 h-3.5 rounded-full w-full'>
                           <span
-                            className={`h-full ${bgColor} w-full block rounded-full relative`}
-                            style={{ width: `${stockPercentage}%` }}
+                            className={`h-full ${bgColor} block rounded-full relative`}
+                            style={{ width: barWidth }}
                           >
                             <span className='absolute inset-0 flex items-center justify-center text-white font-bold'>
                               {Math.round(stockPercentage)}%
                             </span>
                           </span>
                         </div>
+
                       </div>
                     </div>
                   </Link>
