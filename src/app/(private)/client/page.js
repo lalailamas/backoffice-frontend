@@ -13,23 +13,26 @@ export default function LoginClient () {
 
   const performLogin = async () => {
     setLoginError(false)
-
     const result = await signIn('credentials', {
       email,
       password,
       redirect: false
     }, { callbackUrl: '' })
-    // console.log(result, 'SOY EL RESULTADO')
-    // console.log(session, 'SOY EL SESSION')
     if (result?.error) { setLoginError(true) }
     // router.push('/inventory')
   }
 
+  /**
+   * Redirects the user based on their role if they are already logged in.
+   */
   useEffect(() => {
-    if (session !== null && session !== undefined) {
-      // console.log(session, 'session del useEffect')
-      if (session.user.role === 'admin') router.push('/dashboard')
-      if (session.user.role === 'restock') router.push('/restock')
+    if (session != null) {
+      // Esto cubre tanto null como undefined
+      if (session.user.role === 'admin') {
+        router.push('/dashboard')
+      } else if (session.user.role === 'restock') {
+        router.push('/restock')
+      }
     }
   }, [session])
 
