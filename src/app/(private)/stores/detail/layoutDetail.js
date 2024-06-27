@@ -1,6 +1,6 @@
 'use client'
 import { getAllLayouts } from '@/api/layout'
-import { updateLayout } from '@/api/store'
+import { saveLayout } from '@/api/store'
 import React, { useEffect, useState } from 'react'
 import ConfirmPriceModal from './confirmPriceModal'
 import { swallError } from '@/utils/sweetAlerts'
@@ -15,16 +15,10 @@ function LayoutDetail ({ storeId, products, layout, layoutId }) {
   const storeName = searchParams.get('storeName')
   const [layouts, setLayouts] = useState([])
   const [selectedLayout, setSelectedLayout] = useState(layoutId)
-  // console.log(selectedLayout, 'selectedLayout')
   const [showLayout, setShowLayout] = useState(layout)
-  // const [loader, setLoader] = useState(false)
   const [showPriceModal, setShowPriceModal] = useState(false)
 
-  // const reloadPage = () => {
-  //   window.location.reload()
-  // }
   const handleUpdateStoreLayout = async (prices) => {
-    // console.log(prices, 'prices')
     Object.keys(prices).forEach((productId) => {
       const productPrice = prices[productId]
       if (productPrice === 0) {
@@ -34,13 +28,10 @@ function LayoutDetail ({ storeId, products, layout, layoutId }) {
 
     try {
       setShowPriceModal(false)
-      // setLoader(true)
-      const response = await updateLayout(storeId, selectedLayout, prices)
-      // console.log(response)
+      const response = await saveLayout(storeId, layoutId, selectedLayout, prices)
       if (response.successful) {
         swallError('Layout actualizado correctamente', true)
         setShowPriceModal(false)
-        // setTimeout(() => reloadPage(), 2000)
         router.push(`/stores/detail?storeId=${storeId}&layoutId=${selectedLayout}&storeName=${storeName}`)
       }
     } catch (error) {
