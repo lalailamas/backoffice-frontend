@@ -11,8 +11,6 @@ function ConfirmPriceModal ({
 
 }) {
   const [prices, setPrices] = useState({})
-  // console.log(prices, 'price')
-
   const createPriceLayout = async () => {
     const data = {}
     showLayout.trays.forEach((tray) => {
@@ -23,7 +21,6 @@ function ConfirmPriceModal ({
         data[ID] = productPrice
       })
     })
-    // console.log(data, 'data')
     setPrices(data)
   }
 

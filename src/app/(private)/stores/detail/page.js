@@ -14,6 +14,9 @@ import StockRequestTable from '@/components/admin/tables/stock_request'
 import { getStockRequest } from '@/api/stock'
 import GoBack from '@/components/admin/common/goback'
 
+/**
+ * Detail component to display the detailed view of a store, including products, layout, and stock requests.
+ */
 function Detail () {
   const searchParams = useSearchParams()
   const storeId = searchParams.get('storeId')
@@ -39,14 +42,14 @@ function Detail () {
           setInventory(store.data.products)
           setLoader(false)
         } catch (error) {
-          // console.log(error)
           swallError('Ocurrió un error inesperado', false)
         }
       }
     }
-
     updateProductsInventory()
   }, [storeId, layoutId])
+
+  // Define the tabs for the component
   const tabs = [
     {
       id: 'products',

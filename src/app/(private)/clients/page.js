@@ -53,7 +53,12 @@ function TableClient () {
     )
   }
 
-  // Format timestamp
+  /**
+   * Formats a timestamp to a readable date string.
+   *
+   * @param {number} timestamp - The timestamp to format.
+   * @returns {string} The formatted date string.
+   */
   function formatTimestampToDate (timestamp) {
     const milliseconds = timestamp * 1000
 

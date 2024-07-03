@@ -4,12 +4,24 @@ import DspLoader from '@/components/admin/common/loader'
 import ConfirmationModal from '@/components/admin/modals/confirmationModal'
 import { swallError, swallInfo } from '@/utils/sweetAlerts'
 import { deleteCategory } from '@/api/categories'
-
+/**
+ * CategoriesTable component for displaying and managing a list of categories.
+ *
+ * @param {Object} props - The component props.
+ * @param {Array} props.data - The list of categories.
+ * @param {Function} props.updateCategories - Function to refresh the categories list.
+ * @returns {JSX.Element} The CategoriesTable component.
+ */
 export default function CategoriesTable ({ data, updateCategories }) {
   const [showModal, setShowModal] = useState(false)
   const [selectedCategory, setSelectedCategory] = useState(null)
   const [checkedStates, setCheckedStates] = useState({})
-
+  /**
+   * Handles the click event to delete a category.
+   *
+   * @param {Event} e - The click event.
+   * @param {number} id - The ID of the category to delete.
+   */
   const handleDeleteClick = async (e, id) => {
     e.preventDefault()
     try {
@@ -21,9 +33,12 @@ export default function CategoriesTable ({ data, updateCategories }) {
       console.error('Error al eliminar usuario:', error)
     }
   }
-
+  /**
+   * Handles the confirmation to delete a category.
+   *
+   * @param {number} id - The ID of the category to delete.
+   */
   const handleDeleteConfirmation = async (id) => {
-    // console.log('entre aquiii', id)
     try {
       const response = await deleteCategory(id)
       if (response.successful) {
@@ -41,21 +56,40 @@ export default function CategoriesTable ({ data, updateCategories }) {
       <DspLoader />
     )
   }
+  /**
+   * Toggles the visibility of the confirmation modal.
+   */
   const handleConfirmationModal = () => {
     setShowModal(!showModal)
   }
-
+  /**
+   * Handles the change event for the category's active state.
+   *
+   * @param {number} categoryId - The ID of the category.
+   */
   const handleChange = (categoryId) => {
     setCheckedStates((prevStates) => ({
       ...prevStates,
       [categoryId]: !prevStates[categoryId]
     }))
   }
+  /**
+   * Returns the CSS classes for the switch based on the active state.
+   *
+   * @param {boolean} isActive - The active state of the switch.
+   * @returns {string} The CSS classes.
+   */
   const switchClasses = (isActive) =>
   `relative inline-block w-12 h-6 rounded-full transition-colors ${
     isActive ? 'bg-green-400' : 'bg-red-400'
   }`
 
+  /**
+   * Returns the CSS classes for the knob based on the active state.
+   *
+   * @param {boolean} isActive - The active state of the knob.
+   * @returns {string} The CSS classes.
+   */
   const knobClasses = (isActive) =>
   `absolute inset-0 w-6 h-6 bg-white rounded-full shadow-md transform transition-transform ${
     isActive ? 'translate-x-6' : 'translate-x-0'

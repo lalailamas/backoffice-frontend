@@ -12,6 +12,9 @@ import PriceModal from '@/components/admin/modals/priceModal'
 import ButtonPrimary from '@/components/admin/common/buttons/ButtonPrimary'
 import MainTitle from '@/components/admin/common/titles/MainTitle'
 
+/**
+ * StockAdjustment component allows users to adjust the stock and prices of products in selected stores.
+ */
 function StockAdjustment () {
   const { stores } = useGetStores2(true)
   const [selectedStore, setSelectedStore] = useState(null)
@@ -99,7 +102,7 @@ function StockAdjustment () {
         return item
       })
 
-      // Actualizar localmente el precio
+      // Update the price locally
       setProducts((prevProducts) => {
         return prevProducts.map((product) => {
           if (product.productId === productId) {

@@ -7,7 +7,6 @@ import { swallInfo, swallError } from '@/utils/sweetAlerts'
 import ButtonPrimary from '@/components/admin/common/buttons/ButtonPrimary'
 import ButtonCancel from '@/components/admin/common/buttons/ButtonCancel'
 import MainTitle from '@/components/admin/common/titles/MainTitle'
-
 function Categories () {
   const [categories, setCategories] = useState([])
   const [showModal, setShowModal] = useState(false)
@@ -43,12 +42,14 @@ function Categories () {
   const openModal = () => {
     setShowModal(true)
   }
-
   const closeModal = () => {
     setShowModal(false)
     setCategoryName('')
   }
-
+  /**
+   * Submits the new category to the API.
+   * Displays success or error messages based on the API response.
+   */
   const onSubmit = async () => {
     try {
       await createCategory({ name: categoryName })

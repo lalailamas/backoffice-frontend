@@ -1,3 +1,10 @@
+/**
+ * Truncate the product name if it exceeds the specified maximum length.
+ *
+ * @param {string} name - The name of the product.
+ * @param {number} maxLength - The maximum allowed length for the product name.
+ * @returns {string} - The truncated product name with '...' appended if it exceeds the max length.
+ */
 const truncateProductName = (name, maxLength) => {
   if (name.length > maxLength) {
     return name.substring(0, maxLength) + '...'
@@ -5,6 +12,13 @@ const truncateProductName = (name, maxLength) => {
   return name
 }
 
+/**
+ * StoreLayout component to display the store layout with trays and products.
+ *
+ * @param {Object} layout - The layout data for the store.
+ * @param {Array} products - List of products available in the store.
+ * @returns {JSX.Element} - The rendered StoreLayout component.
+ */
 const StoreLayout = ({ layout, products }) => {
   return (
     <div className='bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700'>

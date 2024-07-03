@@ -8,6 +8,14 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import ProductCard from './productCard'
 import useGetTransitionLayout from '@/hooks/useGetTransitionLayout'
 
+/**
+ * LayoutDetail component to display and manage store layouts.
+ *
+ * @param {string} storeId - The ID of the store.
+ * @param {Array} products - List of products available in the store.
+ * @param {Object} layout - The current layout of the store.
+ * @param {string} layoutId - The ID of the current layout.
+ */
 function LayoutDetail ({ storeId, products, layout, layoutId }) {
   const router = useRouter()
   const searchParams = useSearchParams()

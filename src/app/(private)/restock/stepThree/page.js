@@ -13,6 +13,11 @@ import { swallError } from '@/utils/sweetAlerts'
 import { errorHandler } from '@/utils/errors/errors'
 import ButtonPrimary from '@/components/admin/common/buttons/ButtonPrimary'
 
+/**
+ * Page component handles the restocking process for a specific store layout.
+ * It fetches inventory, layout, and product data, allows for quantity adjustments,
+ * and confirms the restock data.
+ */
 export default function page () {
   const searchParams = useSearchParams()
   const router = useRouter()
@@ -25,15 +30,18 @@ export default function page () {
   const { layout, layoutLoad } = useGetLayout(layoutId)
   const [loaderVisible, setLoaderVisible] = useState(false)
   const nextRoute = 'stepFour' + `?external_id=${externalId}&layout_id=${layoutId}&store_name=${storeName}&externalTransactionId=${externalTransactionId}&transactionId=${transactionId}`
-
-  // const { products, loading } = useGetReiteProd()
   const { products, loading } = useGetProdByStore(externalId)
-  // const [comments, setComments] = useState('Sin comentarios')
-
   const [tempPurchased, setTempPurchased] = useState({})
   const [tempRestocked, setTempRestocked] = useState({})
   const [modalVisible, setModalVisible] = useState(false)
 
+  /**
+   * Updates the quantity of products for either purchased or restocked items.
+   * @param {number} index - The index of the product.
+   * @param {string} productId - The ID of the product.
+   * @param {number} quantity - The quantity to update.
+   * @param {string} type - The type of update ('purchased' or 'restocked').
+   */
   const updateProductQuantity = (index, productId, quantity, type) => {
     if (type === 'purchased') {
       setTempPurchased({

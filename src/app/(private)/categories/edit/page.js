@@ -7,7 +7,11 @@ import { swallError, swallInfo } from '@/utils/sweetAlerts'
 import MainTitle from '@/components/admin/common/titles/MainTitle'
 import ButtonPrimary from '@/components/admin/common/buttons/ButtonPrimary'
 import ButtonCancel from '@/components/admin/common/buttons/ButtonCancel'
-
+/**
+ * EditCategory component for editing an existing category.
+ *
+ * @returns {JSX.Element} The EditCategory component.
+ */
 function EditCategory () {
   const searchParams = useSearchParams()
   const categoryId = searchParams.get('id')
@@ -15,7 +19,9 @@ function EditCategory () {
   const [categoryName, setCategoryName] = useState('')
   const [isActive, setIsActive] = useState(false)
   const router = useRouter()
-
+  /**
+   * Fetches the category details from the API and updates the state.
+   */
   useEffect(() => {
     const fetchCategory = async () => {
       try {
@@ -30,15 +36,24 @@ function EditCategory () {
 
     fetchCategory()
   }, [categoryId])
-
+  /**
+   * Handles the change event for the category name input.
+   *
+   * @param {React.ChangeEvent<HTMLInputElement>} e - The change event.
+   */
   const handleNameChange = (e) => {
     setCategoryName(e.target.value)
   }
-
+  /**
+   * Toggles the active state of the category.
+   */
   const handleActiveChange = () => {
     setIsActive((prevIsActive) => !prevIsActive)
   }
-
+  /**
+   * Handles the save event for updating the category.
+   * Sends the updated category data to the API and redirects to the categories page.
+   */
   const handleSave = async () => {
     try {
       if (!categoryId) {

@@ -1,6 +1,5 @@
 /* eslint-disable multiline-ternary */
 'use client'
-
 import { useEffect, useState } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { getDetailsClient } from '@/api/client'
@@ -62,7 +61,6 @@ function DetailsClient () {
       active: true,
       content: (
         <div className='flex flex-col gap-4'>
-          {/* <h2 className='font-semibold mb-3 underline'>Datos personales</h2> */}
           <div className='flex-1'>
             <h2 className='font-semibold'>Nombre</h2>
             <span>{name}</span>
@@ -87,7 +85,6 @@ function DetailsClient () {
       content: (
         <div className=''>
           <div className='flex-1'>
-            {/* <h2 className='font-semibold mb-5 underline'>Métodos de pago</h2> */}
             <ul className='grid grid-cols-1 gap-4 overflow-x-auto'>
               {payments.map((payment, index) => (
                 <li key={index} className='bg-white border p-4 rounded-lg shadow-md'>
@@ -132,14 +129,12 @@ function DetailsClient () {
                     )}
                     {payment.type === 'balance' && (
                       <div className='relative'>
-                        {/* <div className='absolute bottom-35 right-0 p-4'> */}
                         <img
                           style={{ position: 'absolute', right: 0, top: -50 }}
                           src='/img/wallet.svg'
                           width={100}
                           height={60}
                         />
-                        {/* </div> */}
                         <h2 className='font-semibold'>Saldo</h2>
                         <span>
                           {payment.currentBalance !== undefined

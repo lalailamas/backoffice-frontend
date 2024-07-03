@@ -3,9 +3,19 @@ import { getSession } from 'next-auth/react'
 
 const baseUrl = process.env.NEXT_PUBLIC_DSP_API_BASE
 
+/**
+ * Makes an authenticated request with JWT token from the user's session.
+ *
+ * @param {string} method - HTTP method (e.g., 'get', 'post').
+ * @param {string} url - The endpoint URL.
+ * @param {object} [data=null] - Request payload.
+ * @param {string} contentType - The content type of the request.
+ * @returns {Promise<object>} - The response data.
+ * @throws {Error} - If no session is found or the request fails.
+ */
 const authenticatedRequest = async (method, url, data = null, contentType) => {
-  const session = await getSession() // Obtener sesión en el lado del cliente
-  const token = session?.user.accessToken // Asumir que el accessToken está almacenado en la sesión
+  const session = await getSession()
+  const token = session?.user.accessToken
   if (!session) throw new Error('No session found')
 
   const headers = {
@@ -16,9 +26,19 @@ const authenticatedRequest = async (method, url, data = null, contentType) => {
   return await makeRequest(method, url, data, headers)
 }
 
+/**
+ * Makes an authenticated request and expects a blob response.
+ *
+ * @param {string} method - HTTP method (e.g., 'get', 'post').
+ * @param {string} url - The endpoint URL.
+ * @param {object} [data=null] - Request payload.
+ * @param {string} contentType - The content type of the request.
+ * @returns {Promise<object>} - The response.
+ * @throws {Error} - If no session is found or the request fails.
+ */
 const authenticatedRequestWithBlob = async (method, url, data = null, contentType = 'application/pdf') => {
-  const session = await getSession() // Obtener sesión en el lado del cliente
-  const token = session?.user?.accessToken // Asumir que el accessToken está almacenado en la sesión
+  const session = await getSession()
+  const token = session?.user?.accessToken
   if (!session) throw new Error('No session found')
 
   const headers = {
@@ -31,7 +51,7 @@ const authenticatedRequestWithBlob = async (method, url, data = null, contentTyp
     url: baseUrl + url,
     headers,
     data,
-    responseType: 'blob' // Asegúrate de que las respuestas se manejen como blobs
+    responseType: 'blob'
   }
 
   try {
@@ -42,6 +62,16 @@ const authenticatedRequestWithBlob = async (method, url, data = null, contentTyp
     throw error
   }
 }
+
+/**
+ * Makes a simple HTTP request without authentication.
+ *
+ * @param {string} method - HTTP method (e.g., 'get', 'post').
+ * @param {string} url - The endpoint URL.
+ * @param {object} [data=null] - Request payload.
+ * @param {string} contentType - The content type of the request.
+ * @returns {Promise<object>} - The response data.
+ */
 const simpleRequest = async (method, url, data = null, contentType) => {
   const headers = {
     'content-type': contentType
@@ -49,6 +79,16 @@ const simpleRequest = async (method, url, data = null, contentType) => {
 
   return await makeRequest(method, url, data, headers)
 }
+
+/**
+ * Make an API request with the provided configuration.
+ * @param {string} method - HTTP method (e.g., 'get', 'post').
+ * @param {string} url - API endpoint.
+ * @param {object} data - Request payload.
+ * @param {object} headers - Request headers.
+ * @returns {Promise<object>} - API response.
+ */
+
 const makeRequest = async (method, url, data, headers) => {
   const config = {
     method,
@@ -66,6 +106,7 @@ const makeRequest = async (method, url, data, headers) => {
   }
 }
 
+// Exported API functions
 export const postLoginData = (data, url, contentType) => simpleRequest('post', url, data, contentType)
 export const postData = (data, url, contentType) => authenticatedRequest('post', url, data, contentType)
 export const putData = (data, url, contentType) => authenticatedRequest('put', url, data, contentType)
@@ -105,7 +146,6 @@ function base64toBlob (base64, type) {
   return new Blob([new Uint8Array(array)], { type })
 }
 
-// Uso de la función
 export const putImageData = async (snapshot, url, contentType) => {
   try {
     const response = await createFormData({ snapshot }, contentType, 'put', url, true)
@@ -142,11 +182,9 @@ export const getDataForExcel = (relativeUrl) => {
 
 export const getDataForPDF = (relativeUrl, contentType) => {
   const options = {
-    responseType: 'blob' // Necesario para manejar la respuesta como un archivo binario
+    responseType: 'blob'
   }
   return authenticatedRequestWithBlob('get', relativeUrl, null, contentType, options)
-  // const fullUrl = baseUrl + relativeUrl
-  // return axios.get(fullUrl, { responseType: 'blob' })
 }
 
 export const postProduct = async (product, image, url, contentType) => {

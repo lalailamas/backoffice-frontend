@@ -11,6 +11,9 @@ import { getLayout } from '@/api/layout'
 import ToggleSwitch from '@/components/admin/common/toggleswitch/ToogleSwitch'
 import DspLoader from '@/components/admin/common/loader'
 
+/**
+ * Component to display the list of stores with inventory and stock information.
+ */
 function Stores () {
   const { stores } = useGetStores2(false)
   const [searchTerm, setSearchTerm] = useState('')

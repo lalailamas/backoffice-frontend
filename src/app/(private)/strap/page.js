@@ -9,7 +9,13 @@ import Swal from 'sweetalert2'
 import { downloadTrapsPDF } from '@/api/product'
 import { SearchField } from '@/components/admin/common/search'
 
+/**
+ * Strap component for downloading PDFs for selected stores.
+ *
+ * @returns {JSX.Element} The rendered component.
+ */
 function Strap () {
+  // Retrieve the list of stores using a custom hook
   const { stores } = useGetStores2(false)
   const [searchTerm, setSearchTerm] = useState('')
 
@@ -28,8 +34,7 @@ function Strap () {
       Toast('Descargando archivo', 'Espera unos segundos')
       const response = await downloadTrapsPDF(storeId, style)
       const pdfBlob = new Blob([response.data], { type: 'application/pdf' })
-
-      // Definir el nombre del archivo
+      // Define the file name
       const date = new Date()
       const day = date.getDate().toString().padStart(2, '0')
       const month = (date.getMonth() + 1).toString().padStart(2, '0')

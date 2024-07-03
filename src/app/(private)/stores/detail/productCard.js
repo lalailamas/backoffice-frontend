@@ -1,7 +1,3 @@
-// ProductCard.js
-
-import React from 'react'
-
 function ProductCard ({ product, maxQuantity }) {
   return (
     <section className='w-[150px] h-[200px] flex flex-col items-center align-center  rounded shadow-lg'>
