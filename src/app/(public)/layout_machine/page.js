@@ -1,6 +1,5 @@
 'use client'
 import { useSearchParams } from 'next/navigation'
-// import useGetLayout from '@/hooks/useGetLayout'
 import { getStores } from '@/api/store'
 import useGetProdByStore from '@/hooks/useGetProdByStore'
 import DspLoader from '@/components/admin/common/loader'
@@ -8,6 +7,11 @@ import { useEffect, useState } from 'react'
 import { getLayout } from '@/api/layout'
 import ErrorMessage from '@/components/admin/common/error'
 
+/**
+ * LayoutMachine component to display the layout and products of a specific store.
+ *
+ * @returns {JSX.Element} The rendered LayoutMachine component.
+ */
 function LayoutMachine () {
   // https://admin.despnsa247.com/public/layout?id=CNV_004
   // http://localhost:3000/public/layout?id=DEV_CNV_005

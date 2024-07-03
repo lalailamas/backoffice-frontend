@@ -1,10 +1,9 @@
-import React from 'react'
-
+/**
+ * RequestedStockTable component renders a table showing the requested stock for each store.
+ * @param {Object[]} data - The data containing store and product information.
+ */
 function RequestedStockTable ({ data }) {
-  // Obtener una lista única de nombres de tiendas
   const storeNames = data.map((store) => store.storeName)
-
-  // Construir la estructura de datos para la tabla
   const tableData = data.reduce((table, store) => {
     if (store.products) {
       store.products.forEach((product) => {
@@ -19,7 +18,7 @@ function RequestedStockTable ({ data }) {
     }
     return table
   }, {})
-  // Obtener las filas y celdas de la tabla
+
   const rows = Object.keys(tableData).map((productName) => {
     const cells = storeNames.map((storeName) => (
       <td key={storeName}>{tableData[productName][storeName] || 0}</td>

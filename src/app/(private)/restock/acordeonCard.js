@@ -1,5 +1,19 @@
-const { useState } = require('react')
+import React, { useState } from 'react'
 
+/**
+ * A component representing an accordion card for displaying product information and managing quantities.
+ *
+ * @param {number} initialQuantity - The initial quantity of the product.
+ * @param {number} maxQuantity - The maximum quantity allowed for the product.
+ * @param {string} header - The header text for the accordion card.
+ * @param {number} price - The price of the product.
+ * @param {number} step - The step value for the quantity change.
+ * @param {string} productId - The ID of the product.
+ * @param {function} quantityChangeHandler - The handler function for changing the quantity.
+ * @param {number} index - The index of the product in the list.
+ * @param {function} updateProductQuantity - The handler function for updating the product quantity.
+ * @param {number} maxPurchasedQuantity - The maximum purchased quantity allowed.
+ */
 const AccordeonCard = ({
   initialQuantity,
   maxQuantity,
@@ -9,24 +23,30 @@ const AccordeonCard = ({
   const [quantity, setQuantity] = useState(initialQuantity || 0) // Estado local para la cantidad
   const [quantityPurchased, setQuantityPurchased] = useState(0) // Estado local para la cantidad
 
+  /**
+   * Increases the restocked quantity by one and updates the quantity change handler.
+   */
   const handleIncrease = () => {
-    // Lógica para aumentar la cantidad
-
     setQuantity(quantity + 1)
     if (step === 2) {
       quantityChangeHandler(index, productId, ((quantity + 1) - initialQuantity))
     } else { updateProductQuantity(index, productId, (quantity + 1), 'restocked') }
   }
+
+  /**
+   * Increases the purchased quantity by one if it is less than the max purchased quantity.
+   */
   const handleIncreasePurchased = () => {
-    // Lógica para aumentar la cantidad
     if (quantityPurchased < maxPurchasedQuantity) {
       setQuantityPurchased(quantityPurchased + 1)
       updateProductQuantity(index, productId, (quantityPurchased + 1), 'purchased')
     }
   }
 
+  /**
+   * Decreases the restocked quantity by one if it is greater than zero and updates the quantity change handler.
+   */
   const handleDecrease = () => {
-    // Lógica para disminuir la cantidad
     if (quantity > 0) {
       setQuantity(quantity - 1)
       if (step === 2) {
@@ -35,8 +55,10 @@ const AccordeonCard = ({
     }
   }
 
+  /**
+   * Decreases the purchased quantity by one if it is greater than zero.
+   */
   const handleDecreasePurchased = () => {
-    // Lógica para disminuir la cantidad
     if (quantityPurchased > 0) {
       setQuantityPurchased(quantityPurchased - 1)
       updateProductQuantity(index, productId, (quantityPurchased - 1), 'purchased')

@@ -10,6 +10,10 @@ import DspLoader from '@/components/admin/common/loader'
 import { errorHandler } from '@/utils/errors/errors'
 import ButtonPrimary from '@/components/admin/common/buttons/ButtonPrimary'
 
+/**
+ * Component for managing the restock process of a store.
+ * Allows selection of a store, opening the store, and taking a snapshot before opening.
+ */
 function Restock () {
   const [stores, setStores] = useState([])
   const [selectedStore, setSelectedStore] = useState(null)
@@ -20,6 +24,10 @@ function Restock () {
 
   const router = useRouter()
 
+  /**
+   * Handle store selection change.
+   * @param {string} id - The store ID.
+   */
   const handleStoreChange = (id) => {
     const store = stores.find((store) => store.storeId === id)
     setSelectedStore(store)
@@ -30,17 +38,18 @@ function Restock () {
       try {
         const response = await getStores(true)
         setStores(response)
-        // console.log('response', response.data)
       } catch (error) {
         errorHandler(error, { storeId: selectedStore.storeId })
-        // swallError('Error fetching stores:', false)
-        // console.error('Error fetching stores:', error)
       }
     }
 
     fetchStores()
   }, [])
 
+  /**
+   * Handle opening the store.
+   * Performs validation, opens the store, and redirects to the next step.
+   */
   const handleOpenStore = async () => {
     if (selectedStore.layoutId === null) {
       swallError('Hubo un error con la tienda, contacta al administrador', false)
@@ -49,7 +58,6 @@ function Restock () {
     try {
       setLoaderVisible(true)
       const openStore = await OpenStore(selectedStore.storeId, snapshot)
-      // console.log('Step 1: openStore response', openStore)
       if (openStore) {
         swallError('Abriendo tienda', true)
         router.push(
@@ -67,9 +75,13 @@ function Restock () {
   const handleCameraModal = () => {
     setModalCameraVisible(!modalCameraVisible)
   }
+
+  /**
+   * Handle taking a snapshot and set it in the state.
+   * @param {string} img - The base64 image string.
+   */
   const takeSnapshot = async (img) => {
     const base64Content = img.split(';base64,').pop()
-
     setSnapshot(base64Content)
     handleCameraModal()
     handleConfirmationModal()
@@ -94,12 +106,9 @@ function Restock () {
               </option>
             ))}
           </select>
-
           <div className={`${selectedStore ? 'flex items-center flex-col m-4 p-4' : 'hidden'}`}>
             <div className=' max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700'>
-
               <h5 className='mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white'>{selectedStore ? selectedStore.name : null}</h5>
-
               <ButtonPrimary text='Abrir tienda' onClick={handleCameraModal} />
             </div>
             {modalVisible && (
@@ -117,7 +126,6 @@ function Restock () {
                   cancelButtonText='Cancelar'
                 />
               </div>
-
             )}
             {modalCameraVisible && (
               <div className='fixed z-50 flex items-center justify-center'>
@@ -136,11 +144,9 @@ function Restock () {
                 />
               </div>
             )}
-
           </div>
           {/* <div><pre>{JSON.stringify(selectedStore, null, 2)}</pre></div> */}
         </div>
-
       </div>
     </div>
   )

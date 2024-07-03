@@ -9,7 +9,13 @@ import Swal from 'sweetalert2'
 import { downloadTrapsPDF } from '@/api/product'
 import { SearchField } from '@/components/admin/common/search'
 
+/**
+ * Strap component for downloading PDFs for selected stores.
+ *
+ * @returns {JSX.Element} The rendered component.
+ */
 function Strap () {
+  // Retrieve the list of stores using a custom hook
   const { stores } = useGetStores2(false)
   const [searchTerm, setSearchTerm] = useState('')
 
@@ -26,17 +32,16 @@ function Strap () {
   const handlePDFDownload = async (storeId, style) => {
     try {
       Toast('Descargando archivo', 'Espera unos segundos')
-      const { data: pdfData, headers } = await downloadTrapsPDF(storeId, style)
-      const contentDisposition = headers['content-disposition']
-      let filename = 'default_filename.pdf'
-      if (contentDisposition) {
-        const matches = contentDisposition.match(/filename="?([^"]+)"?/)
-        if (matches && matches.length === 2) {
-          filename = matches[1]
-        }
-      }
+      const response = await downloadTrapsPDF(storeId, style)
+      const pdfBlob = new Blob([response.data], { type: 'application/pdf' })
+      // Define the file name
+      const date = new Date()
+      const day = date.getDate().toString().padStart(2, '0')
+      const month = (date.getMonth() + 1).toString().padStart(2, '0')
+      const year = date.getFullYear()
+      const filename = `${year}${month}${day}_${storeId}_${style}.pdf`
 
-      FileSaver.saveAs(pdfData, filename)
+      FileSaver.saveAs(pdfBlob, filename)
       Swal.close()
     } catch (error) {
       swallError('Error al descargar el archivo PDF:', false)

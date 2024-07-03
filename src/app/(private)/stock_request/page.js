@@ -5,12 +5,14 @@ import { getStockRequest } from '@/api/stock'
 import StockRequestTable from '@/components/admin/tables/stock_request'
 import DspLoader from '@/components/admin/common/loader'
 
+/**
+ * StockRequest component fetches and displays the stock request information for selected stores.
+ */
 function StockRequest () {
   const [stores, setStores] = useState([])
   const [data, setData] = useState([])
 
   const handleStoreChange = async (id) => {
-    // console.log(id, 'id')
     setData([])
     const response = await getStockRequest(id)
     setData(response)
@@ -28,7 +30,6 @@ function StockRequest () {
         console.error('Error fetching stores:', error)
       }
     }
-
     fetchStores()
   }, [])
 
@@ -52,7 +53,6 @@ function StockRequest () {
             </select>
           </div>
         </div>
-
         {data.length === 0
           ? <DspLoader />
           : <StockRequestTable data={data} />}

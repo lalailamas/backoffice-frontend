@@ -15,6 +15,10 @@ import ButtonPrimary from '@/components/admin/common/buttons/ButtonPrimary'
 import { swallError, Toast } from '@/utils/sweetAlerts'
 import Swal from 'sweetalert2'
 
+/**
+ * StepFour component handles the final step of the restocking process.
+ * It allows users to confirm the restock by verifying quantities and taking a final snapshot.
+ */
 export default function stepFour () {
   const searchParams = useSearchParams()
   const router = useRouter()
@@ -24,7 +28,6 @@ export default function stepFour () {
   const transactionId = searchParams.get('transactionId')
   const { inventory, inventoryLoad } = useGetInventory(externalId)
   const { layout, layoutLoad } = useGetLayout(layoutId)
-  // const { products, loading } = useGetReiteProd()
   const { products, loading } = useGetProdByStore(externalId)
   const [modalVisible, setModalVisible] = useState(false)
   const [modalCameraVisible, setModalCameraVisible] = useState(false)
@@ -41,7 +44,6 @@ export default function stepFour () {
   }
 
   const handleConfirmationModal = async (base64Content) => {
-    console.log('handleConfirmationModal')
     try {
       const response = await updateRestock(base64Content)
       if (response) {
@@ -63,8 +65,6 @@ export default function stepFour () {
       handleCameraModal()
       await handleConfirmationModal(base64Content)
     } catch (error) {
-    // console.log(error)
-
       swallError('Ha ocurrido un error al tomar la foto, vuelve a intentarlo', false)
       setModalCameraVisible(!modalCameraVisible)
     }
@@ -74,15 +74,12 @@ export default function stepFour () {
     try {
       if (base64Content) {
         Toast('Actualizando', 'Por favor espera un momento')
-
         const response = await putStockImageUpdate(transactionId, base64Content, comment)
         Swal.close()
-
         return response
       }
     } catch (error) {
       Swal.close()
-
       errorHandler(error)
     }
   }
@@ -187,7 +184,6 @@ export default function stepFour () {
 
       {modalVisible && (
         <div className='fixed z-50 flex items-center justify-center'>
-
           <ConfirmationModal
             handleConfirmationModal={handleChangeModal}
             handleOperationConfirmation={handleOperationConfirmation}
@@ -201,7 +197,6 @@ export default function stepFour () {
       )}
       {modalCameraVisible && (
         <div className='fixed z-50 flex items-center justify-center'>
-
           <CameraModal
             step={4}
             handleConfirmationModal={handleConfirmationModal}

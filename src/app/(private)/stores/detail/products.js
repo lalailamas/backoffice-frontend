@@ -3,13 +3,29 @@ import DspLoader from '@/components/admin/common/loader'
 import React, { useState } from 'react'
 import { SearchField } from '@/components/admin/common/search'
 
+/**
+ * Products component to display and manage the product list for a store.
+ *
+ * @param {boolean} loader - Indicates if data is loading.
+ * @param {Array} products - List of products available in the store.
+ * @param {Array} inventory - Inventory data for the products in the store.
+ * @param {string} storeId - The ID of the store.
+ * @param {Object} layout - Layout data for the store.
+ * @param {Array} expandedRows - List of expanded rows for mobile view.
+ * @param {Function} setExpandedRows - Function to set the expanded rows for mobile view.
+ */
 function Products ({ loader, products, inventory, storeId, layout, expandedRows, setExpandedRows }) {
   const [searchTerm, setSearchTerm] = useState('')
+
+  // Maps to store the quantity and max quantity of each product
   const quantityMap = {}
-  const shownProductsTable = {}
-  const shownProductsMobile = {}
   const maxQuantityMap = {}
 
+  // To keep track of shown products for desktop and mobile views
+  const shownProductsTable = {}
+  const shownProductsMobile = {}
+
+  // Fill quantityMap and maxQuantityMap with data from the layout and inventory
   layout?.trays?.forEach((tray) => {
     tray.columns.forEach((column) => {
       const quantityProd = inventory.find((prod) => prod.productId === column.productId)

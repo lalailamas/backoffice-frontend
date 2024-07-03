@@ -2,6 +2,10 @@
 import ButtonCancel from '@/components/admin/common/buttons/ButtonCancel'
 import React, { useState } from 'react'
 
+/**
+ * Comments component allows users to add comments before confirming an operation.
+ * It includes a textarea for entering comments and buttons for canceling or confirming.
+ */
 function Comments ({ SendSnapshotComment, handleOperationConfirmation }) {
   const [comment, setComment] = useState('')
   const maxLength = 300

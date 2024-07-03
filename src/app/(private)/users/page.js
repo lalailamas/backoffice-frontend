@@ -8,6 +8,11 @@ import { swallError, Toast } from '@/utils/sweetAlerts'
 import Swal from 'sweetalert2'
 import ButtonPrimary from '@/components/admin/common/buttons/ButtonPrimary'
 
+/**
+ * Users component for managing and downloading a list of users.
+ *
+ * @returns {JSX.Element} The rendered component.
+ */
 function Users () {
   const [users, setUsers] = useState([])
 
@@ -28,11 +33,10 @@ function Users () {
     if (!users || users.length === 0) {
       return
     }
-
     try {
       Toast('Descargando archivo', 'Espera unos segundos')
       const response = await downloadExcel()
-      const { buffer, filename } = response.data
+      const { buffer, filename } = response
       const blob = new Blob([Buffer.from(buffer)], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' })
       FileSaver.saveAs(blob, filename)
       Swal.close()

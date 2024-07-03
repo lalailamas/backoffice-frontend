@@ -12,7 +12,11 @@ import LayoutDetail from './layoutDetail'
 import useGetReiteProd from '@/hooks/useGetReiteProd'
 import StockRequestTable from '@/components/admin/tables/stock_request'
 import { getStockRequest } from '@/api/stock'
+import GoBack from '@/components/admin/common/goback'
 
+/**
+ * Detail component to display the detailed view of a store, including products, layout, and stock requests.
+ */
 function Detail () {
   const searchParams = useSearchParams()
   const storeId = searchParams.get('storeId')
@@ -34,19 +38,18 @@ function Detail () {
           const store = await getInventoryByStore(storeId)
           const response = await getStockRequest(storeId)
           setStockRequest(response)
-
           setNewQuantity(null)
           setInventory(store.data.products)
           setLoader(false)
         } catch (error) {
-          // console.log(error)
           swallError('Ocurrió un error inesperado', false)
         }
       }
     }
-
     updateProductsInventory()
   }, [storeId, layoutId])
+
+  // Define the tabs for the component
   const tabs = [
     {
       id: 'products',
@@ -90,7 +93,7 @@ function Detail () {
       <div className='flex justify-center text-center p-5'>
         <h2 className='text-d-dark-dark-purple text-2xl font-bold '>Detalle de tienda {storeName}</h2>
       </div>
-
+      <GoBack />
       <TabsComponent tabs={tabs} />
 
     </div>
