@@ -4,6 +4,14 @@ import { swallError, swallInfo } from '@/utils/sweetAlerts'
 import DatePicker from '@/components/admin/common/datepicker/double'
 import dayjs from 'dayjs'
 
+/**
+ * LayoutHistory component displays the history of layouts for a given store.
+ * It allows users to filter the history by date range and view details of products in each layout.
+ *
+ * @param {string} storeId - The ID of the store.
+ * @param {Array} products - The list of products.
+ * @returns {JSX.Element} The rendered LayoutHistory component.
+ */
 function LayoutHistory ({ storeId, products }) {
   const [layouts, setLayouts] = useState([])
   const [allLayouts, setAllLayouts] = useState({})
@@ -40,10 +48,8 @@ function LayoutHistory ({ storeId, products }) {
     if (dateRange.startDate !== null && dateRange.endDate !== null) {
       const formattedStartDate = dayjs(dateRange.startDate).format('YYYY-MM-DD')
       const formattedEndDate = dayjs(dateRange.endDate).format('YYYY-MM-DD')
-      console.log('Fetching layout history with dates:', formattedStartDate, formattedEndDate)
       getLayoutHistory(storeId, formattedStartDate, formattedEndDate, 1, 1000)
         .then((response) => {
-          console.log(response.rows.length, 'respuesta')
           if (response.rows.length === 0) {
             swallInfo('No hay datos para el rango de fechas seleccionado')
           }
@@ -71,13 +77,12 @@ function LayoutHistory ({ storeId, products }) {
   const handleDateChange = (newDateRange) => {
     const formattedStartDate = dayjs(newDateRange.startDate).format('YYYY-MM-DD')
     const formattedEndDate = dayjs(newDateRange.endDate).format('YYYY-MM-DD')
-    console.log('New date range selected:', { startDate: formattedStartDate, endDate: formattedEndDate })
     setLayouts([]) // Reset data
     setDateRange({ startDate: formattedStartDate, endDate: formattedEndDate })
   }
 
   return (
-    <div className='overflow-x-auto'>
+    <div className='overflow-x-auto h-screen'>
       <div className='w-full px-10 mt-2'>
         <DatePicker
           startDate={dateRange.startDate}
@@ -86,7 +91,7 @@ function LayoutHistory ({ storeId, products }) {
         />
       </div>
       <div className='p-2'>
-        <table className='table text-d-dark-dark-purple table-zebra mt-8 p-8'>
+        <table className='table text-d-dark-dark-purple table-zebra mt-8 p-8 overflow-x-auto'>
           <thead>
             <tr className='bg-d-dark-dark-purple text-d-white'>
               <th className='px-4 py-2'>ID</th>
