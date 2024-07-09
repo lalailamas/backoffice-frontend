@@ -13,6 +13,7 @@ import useGetReiteProd from '@/hooks/useGetReiteProd'
 import StockRequestTable from '@/components/admin/tables/stock_request'
 import { getStockRequest } from '@/api/stock'
 import GoBack from '@/components/admin/common/goback'
+import LayoutHistory from './layoutHistory'
 
 /**
  * Detail component to display the detailed view of a store, including products, layout, and stock requests.
@@ -81,6 +82,18 @@ function Detail () {
       content: (
         <div className='overflow-x-auto'>
           {stockRequest.length === 0 ? <DspLoader /> : <StockRequestTable data={stockRequest} />}
+
+        </div>
+      )
+
+    },
+    {
+      id: 'historial',
+      name: 'Historial de Layout',
+      active: false,
+      content: (
+        <div className='overflow-x-auto'>
+          {stockRequest.length === 0 ? <DspLoader /> : <LayoutHistory storeId={storeId} products={products} layout={layout} layoutId={layoutId} />}
 
         </div>
       )
