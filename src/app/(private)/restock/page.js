@@ -1,6 +1,6 @@
 'use client'
 import React, { useEffect, useState } from 'react'
-import { OpenStore, getStores } from '@/api/store'
+import { OpenStore, getStoreTransitionLayout, getStores } from '@/api/store'
 import { useRouter } from 'next/navigation'
 import StepLayout from './stepLayout'
 import ConfirmationModal from '@/components/admin/modals/confirmationModal'
@@ -21,6 +21,9 @@ function Restock () {
   const [modalCameraVisible, setModalCameraVisible] = useState(false)
   const [snapshot, setSnapshot] = useState(null)
   const [loaderVisible, setLoaderVisible] = useState(false)
+  const [showStepIntermediate, setShowStepIntermediate] = useState(false)
+  const [targetLayout, setTargetLayout] = useState(null)
+  const [oldLayout, setOldLayout] = useState(null)
 
   const router = useRouter()
 
@@ -28,9 +31,18 @@ function Restock () {
    * Handle store selection change.
    * @param {string} id - The store ID.
    */
-  const handleStoreChange = (id) => {
+  const handleStoreChange = async (id) => {
     const store = stores.find((store) => store.storeId === id)
     setSelectedStore(store)
+    try {
+      const response = await getStoreTransitionLayout(store.storeId, store.layoutId)
+      console.log(response, 'response')
+      setShowStepIntermediate(true)
+      setTargetLayout(response.targetLayout)
+      setOldLayout(response.oldLayout)
+    } catch (error) {
+      errorHandler(error, { storeId: selectedStore.storeId })
+    }
   }
 
   useEffect(() => {
@@ -60,8 +72,9 @@ function Restock () {
       const openStore = await OpenStore(selectedStore.storeId, snapshot)
       if (openStore) {
         swallError('Abriendo tienda', true)
+        const nextPage = 'restock/stepTwo'
         router.push(
-          'restock/stepTwo' + `?external_id=${selectedStore.storeId}&layout_id=${selectedStore.layoutId}&store_name=${selectedStore.name}&externalTransactionId=${openStore.external_transaction_id}&transactionId=${openStore.transaction_id}`
+          `${nextPage}?external_id=${selectedStore.storeId}&layout_id=${selectedStore.layoutId}&store_name=${selectedStore.name}&externalTransactionId=${openStore.external_transaction_id}&transactionId=${openStore.transaction_id}&show_step_intermediate=${showStepIntermediate}&old_layout=${oldLayout}&target_layout=${targetLayout}`
         )
       }
     } catch (error) {
@@ -93,7 +106,7 @@ function Restock () {
   return (
     <div className='h-screen'>
       <div className='text-center'>
-        <StepLayout />
+        <StepLayout showStepIntermediate={showStepIntermediate} />
         <div className='flex-col m-4 p-4'>
           <select
             onChange={(e) => handleStoreChange(e.target.value)}
