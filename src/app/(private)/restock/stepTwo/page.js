@@ -25,6 +25,9 @@ function StepTwo () {
   const storeName = searchParams.get('store_name')
   const externalTransactionId = searchParams.get('externalTransactionId')
   const transactionId = searchParams.get('transactionId')
+  const showStepIntermediate = searchParams.get('show_step_intermediate') === 'true'
+  const targetLayout = searchParams.get('target_layout')
+  const oldLayout = searchParams.get('old_layout')
   const { inventory, inventoryLoad } = useGetInventory(externalId)
   const { layout, layoutLoad } = useGetLayout(layoutId)
   const { products, loading } = useGetProdByStore(externalId)
@@ -132,9 +135,9 @@ function StepTwo () {
       const response = await postRestockInventory(externalId, transactionId, stockData)
       if (response.result.successful) {
         swallError('Stock confirmado', true)
+        const nextPage = showStepIntermediate ? 'stepIntermediate/deleteProducts' : 'stepThree'
         router.push(
-          'stepThree' +
-          `?external_id=${externalId}&layout_id=${layoutId}&store_name=${storeName}&externalTransactionId=${externalTransactionId}&transactionId=${transactionId}`
+          `${nextPage}?external_id=${externalId}&layout_id=${layoutId}&store_name=${storeName}&externalTransactionId=${externalTransactionId}&transactionId=${transactionId}&show_step_intermediate=${showStepIntermediate}&old_layout=${oldLayout}&target_layout=${targetLayout}`
         )
       }
     } catch (error) {
@@ -184,7 +187,7 @@ function StepTwo () {
         ? (<DspLoader />)
         : (
           <div className='text-center'>
-            <StepLayout />
+            <StepLayout showStepIntermediate={showStepIntermediate} />
             {/* <pre>{JSON.stringify(occInventory, null, 2)}</pre> */}
             {externalId && (
               <div className='text-center mb-4 md:mb-8'>
