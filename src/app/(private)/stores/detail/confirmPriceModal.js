@@ -91,9 +91,9 @@ function ConfirmPriceModal ({
             }
             </div>
 
-            <div className='mt-5 sm:mt-4 sm:flex sm:flex-row-reverse flex gap-4'>
-              <ButtonPrimary onClick={() => handleUpdateStoreLayout(prices)} text='Confirmar' />
+            <div className='mt-5 flex gap-4 justify-end'>
               <ButtonCancel onClick={handleShowPriceModal} />
+              <ButtonPrimary onClick={() => handleUpdateStoreLayout(prices)} text='Confirmar' />
             </div>
           </div>
         </div>
