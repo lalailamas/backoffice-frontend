@@ -7,6 +7,7 @@ import { swallError } from '@/utils/sweetAlerts'
 import { useRouter, useSearchParams } from 'next/navigation'
 import ProductCard from './productCard'
 import useGetTransitionLayout from '@/hooks/useGetTransitionLayout'
+import DspLoader from '@/components/admin/common/loader'
 
 /**
  * LayoutDetail component to display and manage store layouts.
@@ -24,6 +25,7 @@ function LayoutDetail ({ storeId, products, layout, layoutId }) {
   const [selectedLayout, setSelectedLayout] = useState(layoutId)
   const [showLayout, setShowLayout] = useState(layout)
   const [showPriceModal, setShowPriceModal] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
   const { layout: transitionLayout, layoutLoad, error } = useGetTransitionLayout(storeId, layoutId)
 
   const handleUpdateStoreLayout = async (prices) => {
@@ -36,6 +38,7 @@ function LayoutDetail ({ storeId, products, layout, layoutId }) {
 
     try {
       setShowPriceModal(false)
+      setIsLoading(true)
       const response = await saveLayout(storeId, layoutId, selectedLayout, prices)
       if (response.successful) {
         swallError('Layout actualizado correctamente', true)
@@ -44,6 +47,8 @@ function LayoutDetail ({ storeId, products, layout, layoutId }) {
       }
     } catch (error) {
       swallError('Error al actualizar el layout', false)
+    } finally {
+      setIsLoading(false)
     }
   }
 
@@ -95,7 +100,7 @@ function LayoutDetail ({ storeId, products, layout, layoutId }) {
           </button>
         </div>
       </div>
-      {layoutLoad ? <p>Cargando...</p> : null}
+      {layoutLoad || isLoading ? <DspLoader /> : null}
       {error && <p className='text-red-500'>{error}</p>}
       {transitionLayout && transitionLayout.transitionLayouts
         ? (
