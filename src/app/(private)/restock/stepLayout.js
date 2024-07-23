@@ -13,7 +13,7 @@ function StepLayout ({ showStepIntermediate }) {
         <li className={`step ${pathname === '/restock' ? 'step-primary' : ''}`}>Elige la tienda</li>
         <li className={`step ${pathname === '/restock/stepTwo' ? 'step-primary' : ''}`}>Confirma inventario</li>
         {showStepIntermediate && (
-          <li className={`step ${pathname === '/restock/stepIntermediate' ? 'step-primary' : ''}`}>Transición Layout</li>
+          <li className={`step ${pathname === '/restock/stepIntermediate/deleteProducts' || pathname === '/restock/stepIntermediate/addProducts' ? 'step-primary' : ''}`}>Transición Layout</li>
         )}
         <li className={`step ${pathname === '/restock/stepThree' ? 'step-primary' : ''}`}>Agrega o quita productos</li>
         <li className={`step ${pathname === '/restock/stepFour' ? 'step-primary' : ''}`}>Revisión final</li>

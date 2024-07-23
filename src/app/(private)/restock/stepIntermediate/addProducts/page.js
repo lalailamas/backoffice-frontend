@@ -1,23 +1,36 @@
 'use client'
 import React, { useEffect, useState } from 'react'
-import StepLayout from '../stepLayout'
-import { useSearchParams } from 'next/navigation'
+import StepLayout from '../../stepLayout'
+import { useRouter, useSearchParams } from 'next/navigation'
 import SimpleModal from '@/components/admin/modals/simpleModal'
 import { compareLayouts } from '@/api/layout'
 import DspLoader from '@/components/admin/common/loader'
 import useGetReiteProd from '@/hooks/useGetReiteProd'
 import useGetLayout from '@/hooks/useGetLayout'
-
-function StepIntermediate () {
+import ButtonPrimary from '@/components/admin/common/buttons/ButtonPrimary'
+/**
+ * AddProducts Component
+ *
+ * This component is responsible for displaying and managing the product layout for a given transition.
+ * It interacts with various hooks and API functions to retrieve and display data, manage state,
+ * and handle user interactions.
+ */
+function AddProducts () {
   const searchParams = useSearchParams()
   const showStepIntermediate = searchParams.get('show_step_intermediate') === 'true'
   const oldLayout = searchParams.get('old_layout')
   const transitionLayout = searchParams.get('layout_id')
+  const externalId = searchParams.get('external_id')
+  const layoutId = searchParams.get('layout_id')
+  const storeName = searchParams.get('store_name')
+  const externalTransactionId = searchParams.get('externalTransactionId')
+  const transactionId = searchParams.get('transactionId')
+  const targetLayout = searchParams.get('target_layout')
+  const router = useRouter()
   const { products, loading } = useGetReiteProd()
   const [modalVisible, setModalVisible] = useState(false)
   const [layoutComparison, setLayoutComparison] = useState(null)
-  const { layout } = useGetLayout(oldLayout)
-  console.log(layout, 'layout')
+  const { layout } = useGetLayout(transitionLayout)
 
   useEffect(() => {
     setModalVisible(true)
@@ -27,12 +40,16 @@ function StepIntermediate () {
     setModalVisible(!modalVisible)
   }
 
+  const handleConfirmChanges = () => {
+    router.push('/restock/stepThree' + `?external_id=${externalId}&layout_id=${layoutId}&store_name=${storeName}&externalTransactionId=${externalTransactionId}&transactionId=${transactionId}&show_step_intermediate=${showStepIntermediate}&old_layout=${oldLayout}&target_layout=${targetLayout}`)
+  }
+
+  // Fetch layout comparison data when oldLayout or transitionLayout changes
   useEffect(() => {
     const fetchComparison = async () => {
       try {
         const response = await compareLayouts(oldLayout, transitionLayout)
         setLayoutComparison(response)
-        console.log(response, 'respuesta')
       } catch (error) {
         console.error('Error al comparar los layouts:', error)
       }
@@ -60,7 +77,8 @@ function StepIntermediate () {
         )}
         <div className='px-4 md:px-6 lg:px-8'>
           <div>
-            <h3 className='text-d-soft-purple text-xl font-bold p-2'>PRODUCTOS A ELIMINAR</h3>
+            <h3 className='text-d-soft-purple text-xl font-bold p-2'>PRODUCTOS A AGREGAR</h3>
+            <h4 className='p-4 text-xl'>Agrega a la máquina los productos <strong className='text-green-500'>resaltados en verde</strong> de cada bandeja</h4>
             {layout.trays.map((tray, trayIndex) => (
               <div key={trayIndex} className='text-center border-b-2 border-gray-300 pb-5 mb-5 md:mb-8'>
                 <div className='bg-d-dark-dark-purple'>
@@ -69,12 +87,12 @@ function StepIntermediate () {
                 <div className='flex flex-row gap-2 items-center overflow-x-auto'>
                   {tray.columns.map((column, columnIndex) => {
                     const productData = products.find(p => p.productId === column.productId)
-                    const isToRemove = layoutComparison.productsToRemove.some(p => p.productId === column.productId)
+                    const isToAdd = layoutComparison.productsToAdd.some(p => p.productId === column.productId)
                     return (
                       <div
                         key={columnIndex}
                         className={`w-[230px] h-[200px] flex flex-col items-center py-4 align-center rounded shadow-lg ${
-                          isToRemove ? 'bg-red-300' : ''
+                            isToAdd ? 'bg-green-300' : ''
                         }`}
                       >
                         <figure className='flex justify-center'>
@@ -97,8 +115,19 @@ function StepIntermediate () {
           </div>
         </div>
       </div>
+      <div className='flex justify-center pb-10'>
+        <button
+          onClick={() => handleConfirmChanges()}
+          className='btn text-xs rounded-full bg-d-dark-dark-purple border-none text-d-white hover:bg-d-soft-soft-purple hover:text-d-dark-dark-purple'
+        >
+          Confirmar cambios
+          <svg className='w-3.5 h-3.5 ml-2' aria-hidden='true' xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 14 10'>
+            <path stroke='currentColor' strokeLinecap='round' strokeLinejoin='round' strokeWidth='2' d='M1 5h12m0 0L9 1m4 4L9 9' />
+          </svg>
+        </button>
+      </div>
     </>
   )
 }
 
-export default StepIntermediate
+export default AddProducts

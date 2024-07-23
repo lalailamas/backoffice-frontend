@@ -135,7 +135,7 @@ function StepTwo () {
       const response = await postRestockInventory(externalId, transactionId, stockData)
       if (response.result.successful) {
         swallError('Stock confirmado', true)
-        const nextPage = showStepIntermediate ? 'stepIntermediate' : 'stepThree'
+        const nextPage = showStepIntermediate ? 'stepIntermediate/deleteProducts' : 'stepThree'
         router.push(
           `${nextPage}?external_id=${externalId}&layout_id=${layoutId}&store_name=${storeName}&externalTransactionId=${externalTransactionId}&transactionId=${transactionId}&show_step_intermediate=${showStepIntermediate}&old_layout=${oldLayout}&target_layout=${targetLayout}`
         )

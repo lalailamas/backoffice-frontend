@@ -91,7 +91,7 @@ export default function stepFour () {
         : (
           <div>
             <div className='text-center'>
-              <StepLayout showStepIntermediate={showStepIntermediate} />
+              <StepLayout />
             </div>
             <div className='px-4 md:px-6 lg:px-8'>
               {externalId && (
