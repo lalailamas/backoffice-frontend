@@ -1,6 +1,6 @@
 'use client'
 import { getAllLayouts } from '@/api/layout'
-import { saveLayout } from '@/api/store'
+import { updateLayout } from '@/api/store'
 import React, { useEffect, useState } from 'react'
 import ConfirmPriceModal from './confirmPriceModal'
 import { swallError } from '@/utils/sweetAlerts'
@@ -39,7 +39,7 @@ function LayoutDetail ({ storeId, products, layout, layoutId }) {
     try {
       setShowPriceModal(false)
       setIsLoading(true)
-      const response = await saveLayout(storeId, layoutId, selectedLayout, prices)
+      const response = await updateLayout(storeId, selectedLayout, prices, layoutId)
       if (response.successful) {
         swallError('Layout actualizado correctamente', true)
         setShowPriceModal(false)

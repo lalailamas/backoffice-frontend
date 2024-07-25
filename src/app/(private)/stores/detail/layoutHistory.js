@@ -1,6 +1,6 @@
 import { getLayoutHistory, getAllLayouts } from '@/api/layout'
 import React, { useEffect, useState } from 'react'
-import { swallError, swallInfo } from '@/utils/sweetAlerts'
+import { swallError } from '@/utils/sweetAlerts'
 import DatePicker from '@/components/admin/common/datepicker/double'
 import dayjs from 'dayjs'
 
@@ -50,9 +50,6 @@ function LayoutHistory ({ storeId, products }) {
       const formattedEndDate = dayjs(dateRange.endDate).format('YYYY-MM-DD')
       getLayoutHistory(storeId, formattedStartDate, formattedEndDate, 1, 1000)
         .then((response) => {
-          if (response.rows.length === 0) {
-            swallInfo('No hay datos para el rango de fechas seleccionado')
-          }
           setLayouts(response.rows)
         })
         .catch((error) => {
