@@ -23,6 +23,7 @@ function LayoutDetail ({ storeId, products, layout, layoutId }) {
   const storeName = searchParams.get('storeName')
   const [layouts, setLayouts] = useState([])
   const [selectedLayout, setSelectedLayout] = useState(layoutId)
+  console.log(selectedLayout, 'selectedLayout')
   const [showLayout, setShowLayout] = useState(layout)
   const [showPriceModal, setShowPriceModal] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
@@ -40,7 +41,6 @@ function LayoutDetail ({ storeId, products, layout, layoutId }) {
       setShowPriceModal(false)
       setIsLoading(true)
       const response = await updateLayout(storeId, selectedLayout, prices, layoutId)
-      console.log(response, 'response')
       if (response.successful) {
         swallError('Layout actualizado correctamente', true)
         setShowPriceModal(false)
