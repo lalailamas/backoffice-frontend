@@ -40,6 +40,7 @@ function LayoutDetail ({ storeId, products, layout, layoutId }) {
       setShowPriceModal(false)
       setIsLoading(true)
       const response = await updateLayout(storeId, selectedLayout, prices, layoutId)
+      console.log(response, 'response')
       if (response.successful) {
         swallError('Layout actualizado correctamente', true)
         setShowPriceModal(false)
