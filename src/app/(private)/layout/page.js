@@ -104,8 +104,6 @@ function Layout () {
   }
 
   const handleSaveNewProduct = (newProduct, quantity) => {
-    console.log(newProduct, 'newProduct')
-    console.log(quantity, 'quantity newProduct')
     const quantityNumber = parseInt(quantity)
     const productLayout = {
       productId: newProduct,
@@ -390,7 +388,7 @@ function Layout () {
         trays: [...prevDetails.trays, newTray],
         traysQuantity: prevDetails.traysQuantity + 1
       }
-      console.log(updatedDetails, 'updatedDetails')
+
       // Ensure that the new tray has the required information
       setSelectedTrayToDelete({ tray: newTray, index: updatedDetails.trays.length - 1 })
       return updatedDetails
