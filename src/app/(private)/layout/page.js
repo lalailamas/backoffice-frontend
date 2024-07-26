@@ -91,6 +91,7 @@ function Layout () {
     const newLayout = { ...selectedLayoutDetails }
     newLayout.trays.forEach((tray, index) => {
       if (index === trayIndex) {
+        tray.columnsQuantity -= 1
         tray.columns = tray.columns.filter((column, colIndex) => {
           if (column.productId === productId && colIndex === columnIndex) {
             return false
@@ -112,6 +113,7 @@ function Layout () {
     newLayout.trays.forEach((tray, index) => {
       if (index === newProductTrayIndex) {
         tray.columns.push(productLayout)
+        tray.columnsQuantity += 1
       }
     })
 
@@ -366,30 +368,34 @@ function Layout () {
       updatedTrays.splice(selectedTrayToDelete.index, 1)
       setSelectedLayoutDetails({
         ...selectedLayoutDetails,
-        trays: updatedTrays
+        trays: updatedTrays,
+        traysQuantity: selectedLayoutDetails.traysQuantity - 1
       })
       setSelectedTrayToDelete(null)
     }
   }
 
-  /**
-   * Handles adding a new tray.
-   */
   const handleAddTray = () => {
     const newTray = {
+      columnsQuantity: 0, // Initially, the new tray has no
       columns: []
 
     }
+
     setSelectedLayoutDetails((prevDetails) => {
       const updatedDetails = {
         ...prevDetails,
-        trays: [...prevDetails.trays, newTray]
+        trays: [...prevDetails.trays, newTray],
+        traysQuantity: prevDetails.traysQuantity + 1
       }
+
       // Ensure that the new tray has the required information
       setSelectedTrayToDelete({ tray: newTray, index: updatedDetails.trays.length - 1 })
       return updatedDetails
     })
   }
+
+  const isAddTrayDisabled = !selectedLayoutDetails || !selectedLayoutDetails.trays
 
   /**
    * Handles changing tabs.
@@ -490,7 +496,8 @@ function Layout () {
         </div>
         <button
           onClick={handleAddTray}
-          className='w-full px-4'
+          className={`w-full px-4 ${isAddTrayDisabled ? 'cursor-not-allowed opacity-50' : ''}`}
+          disabled={isAddTrayDisabled}
         >
           <div className='flex flex-row text-xs items-center justify-center text-center p-2 mb-4 border border-gray-200 rounded-lg shadow  bg-white hover:bg-d-soft-soft-purple gap-4'>
             <svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' strokeWidth={1.5} stroke='currentColor' className='w-6 h-6'>

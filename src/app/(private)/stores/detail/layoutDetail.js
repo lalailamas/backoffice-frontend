@@ -23,7 +23,6 @@ function LayoutDetail ({ storeId, products, layout, layoutId }) {
   const storeName = searchParams.get('storeName')
   const [layouts, setLayouts] = useState([])
   const [selectedLayout, setSelectedLayout] = useState(layoutId)
-  console.log(selectedLayout, 'selectedLayout')
   const [showLayout, setShowLayout] = useState(layout)
   const [showPriceModal, setShowPriceModal] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
