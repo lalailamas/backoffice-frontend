@@ -133,6 +133,7 @@ function StepTwo () {
     try {
       setLoaderVisible(true)
       const response = await postRestockInventory(externalId, transactionId, stockData)
+      console.log(response, 'response')
       if (response.result.successful) {
         swallError('Stock confirmado', true)
         const nextPage = showStepIntermediate ? 'stepIntermediate/deleteProducts' : 'stepThree'
