@@ -36,9 +36,11 @@ function Restock () {
     setSelectedStore(store)
     try {
       const response = await getStoreTransitionLayout(store.storeId, store.layoutId)
-      setShowStepIntermediate(true)
-      setTargetLayout(response.targetLayout)
-      setOldLayout(response.oldLayout)
+      if (response && response.targetLayout && response.oldLayout) {
+        setShowStepIntermediate(true)
+        setTargetLayout(response.targetLayout)
+        setOldLayout(response.oldLayout)
+      }
     } catch (error) {
       errorHandler(error, { storeId: selectedStore.storeId })
     }
