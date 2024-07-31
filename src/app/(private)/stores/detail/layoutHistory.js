@@ -18,8 +18,8 @@ function LayoutHistory ({ storeId, products }) {
   const [selectedProducts, setSelectedProducts] = useState([])
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [dateRange, setDateRange] = useState({
-    startDate: dayjs().subtract(1, 'month').startOf('month').toDate(),
-    endDate: dayjs().subtract(1, 'month').endOf('month').toDate()
+    startDate: dayjs().startOf('month').toDate(),
+    endDate: dayjs().endOf('month').toDate()
   })
 
   const productMap = products.reduce((map, product) => {
@@ -60,9 +60,13 @@ function LayoutHistory ({ storeId, products }) {
   }, [dateRange])
 
   const openModal = (products) => {
-    const productNames = products.map((productId) => productMap[productId] || productId)
-    productNames.sort()
-    setSelectedProducts(productNames)
+    if (!products || products.length === 0) {
+      setSelectedProducts(['No hay productos para mostrar'])
+    } else {
+      const productNames = products.map((productId) => productMap[productId] || productId)
+      productNames.sort()
+      setSelectedProducts(productNames)
+    }
     setIsModalOpen(true)
   }
 
