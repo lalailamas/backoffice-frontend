@@ -173,7 +173,7 @@ function Layout () {
    * Handles editing an existing layout.
    */
   const handleEditLayout = async () => {
-    await selectedLayoutDetails.trays.forEach((tray) => {
+    selectedLayoutDetails.trays.forEach((tray) => {
       tray.columnsQuantity = tray.columns.length
     })
 
@@ -186,7 +186,6 @@ function Layout () {
 
       try {
         const response = await editLayout(data, selectedLayoutDetails.id)
-
         if (response) {
           setTabsState([
             { id: 'tabs-home', name: 'Crear Layout', active: false },
@@ -195,12 +194,8 @@ function Layout () {
           setSelectedLayout(response.name)
           const updatedLayoutDetails = await getLayout(response.id)
           setSelectedLayoutDetails(updatedLayoutDetails)
-
-          // Wait 500 milliseconds (0.5 seconds) before scrolling the page up.
-          setTimeout(() => {
-            document.getElementById('DivId').scrollIntoView({ behavior: 'smooth' })
-          }, 500)
         }
+        swallInfo('Layout editado exitosamente')
       } catch (error) {
         swallError('Error al editar Layout')
         console.error(error, 'Error al editar Layout')
