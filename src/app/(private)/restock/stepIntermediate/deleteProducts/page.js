@@ -7,7 +7,7 @@ import { compareLayouts } from '@/api/layout'
 import DspLoader from '@/components/admin/common/loader'
 import useGetReiteProd from '@/hooks/useGetReiteProd'
 import useGetLayout from '@/hooks/useGetLayout'
-import ButtonPrimary from '@/components/admin/common/buttons/ButtonPrimary'
+
 /**
  * StepIntermediate Component
  *
@@ -76,7 +76,7 @@ function StepIntermediate () {
         )}
         <div className='px-4 md:px-6 lg:px-8'>
           <div>
-            <h3 className='text-d-soft-purple text-xl font-bold p-2'>PRODUCTOS A ELIMINAR</h3>
+            <h3 className='text-d-soft-purple text-xl font-bold p-2'>PRODUCTOS A CAMBIAR</h3>
             <h4 className='p-4 text-xl'>Quita de la máquina los productos <strong className='text-red-500'>resaltados en rojo</strong> de cada bandeja</h4>
             {layout.trays.map((tray, trayIndex) => (
               <div key={trayIndex} className='text-center border-b-2 border-gray-300 pb-5 mb-5 md:mb-8'>
@@ -86,7 +86,7 @@ function StepIntermediate () {
                 <div className='flex flex-row gap-2 items-center overflow-x-auto'>
                   {tray.columns.map((column, columnIndex) => {
                     const productData = products.find(p => p.productId === column.productId)
-                    const isToRemove = layoutComparison.productsToRemove.some(p => p.productId === column.productId)
+                    const isToRemove = layoutComparison.productsPositionChanged.some(p => p.productId === column.productId)
                     return (
                       <div
                         key={columnIndex}

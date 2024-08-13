@@ -11,6 +11,7 @@ import { putRestockResult } from '@/api/restock'
 import ConfirmationModal from '@/components/admin/modals/confirmationModal'
 import { swallError } from '@/utils/sweetAlerts'
 import { errorHandler } from '@/utils/errors/errors'
+import { updateLayoutHistory } from '@/api/layout'
 
 /**
  * Page component handles the restocking process for a specific store layout.
@@ -101,13 +102,23 @@ export default function Page () {
     try {
       setLoaderVisible(true)
       const response = await putRestockResult(externalTransactionId, stockData)
+      console.log('response putRestockResult', response)
       if (response.successful) {
-        swallError('Restock Confirmado', true)
-        router.push(nextRoute)
+        const data = { change_position: false }
+        const response = await updateLayoutHistory(data, externalId, layoutId)
+
+        if (response) {
+          swallError('Restock Confirmado', true)
+          router.push(nextRoute)
+        } else {
+          throw new Error('Error al actualizar el layout history')
+        }
+      } else {
+        throw new Error('Error en la confirmación del restock')
       }
     } catch (error) {
       errorHandler(error, stockData)
-      if (error.response.status === 403) {
+      if (error.response?.status === 403) {
         router.push(nextRoute)
       }
       setLoaderVisible(false)

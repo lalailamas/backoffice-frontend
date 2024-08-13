@@ -1,6 +1,6 @@
 'use client'
 import React, { useEffect, useState } from 'react'
-import { OpenStore, getStoreTransitionLayout, getStores } from '@/api/store'
+import { OpenStore, getStores } from '@/api/store'
 import { useRouter } from 'next/navigation'
 import StepLayout from './stepLayout'
 import ConfirmationModal from '@/components/admin/modals/confirmationModal'
@@ -9,6 +9,7 @@ import { swallError } from '@/utils/sweetAlerts'
 import DspLoader from '@/components/admin/common/loader'
 import { errorHandler } from '@/utils/errors/errors'
 import ButtonPrimary from '@/components/admin/common/buttons/ButtonPrimary'
+import { getLayoutHistoryById } from '@/api/layout'
 
 /**
  * Component for managing the restock process of a store.
@@ -22,8 +23,8 @@ function Restock () {
   const [snapshot, setSnapshot] = useState(null)
   const [loaderVisible, setLoaderVisible] = useState(false)
   const [showStepIntermediate, setShowStepIntermediate] = useState(false)
-  const [targetLayout, setTargetLayout] = useState(null)
   const [oldLayout, setOldLayout] = useState(null)
+  const [targetLayout, setTargetLayout] = useState(null)
 
   const router = useRouter()
 
@@ -33,13 +34,19 @@ function Restock () {
    */
   const handleStoreChange = async (id) => {
     const store = stores.find((store) => store.storeId === id)
+    console.log(store, 'store')
     setSelectedStore(store)
     try {
-      const response = await getStoreTransitionLayout(store.storeId, store.layoutId)
-      if (response && response.targetLayout && response.oldLayout) {
-        setShowStepIntermediate(true)
-        setTargetLayout(response.targetLayout)
-        setOldLayout(response.oldLayout)
+      const response = await getLayoutHistoryById(store.storeId, store.layoutId)
+      console.log(response, 'response getLayoutHistoryById')
+      if (response) {
+        setTargetLayout(response.actualLayout.layout_id)
+        setOldLayout(response.previousLayout.layout_id)
+        if (response.actualLayout.change_position === true) {
+          setShowStepIntermediate(true)
+        } else {
+          setShowStepIntermediate(false)
+        }
       }
     } catch (error) {
       errorHandler(error, { storeId: selectedStore.storeId })

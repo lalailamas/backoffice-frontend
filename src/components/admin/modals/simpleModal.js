@@ -38,7 +38,7 @@ function SimpleModal ({ title, message, cancelButtonText, handleConfirmationModa
               </div>
             </div>
             <div className='mt-5 sm:mt-4 sm:flex sm:flex-row-reverse'>
-              <ButtonCancel onClick={handleConfirmationModal} />
+              <ButtonCancel onClick={handleConfirmationModal} text='Continuar' />
             </div>
           </div>
         </div>

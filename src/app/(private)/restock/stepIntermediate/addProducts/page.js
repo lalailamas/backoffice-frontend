@@ -7,7 +7,6 @@ import { compareLayouts } from '@/api/layout'
 import DspLoader from '@/components/admin/common/loader'
 import useGetReiteProd from '@/hooks/useGetReiteProd'
 import useGetLayout from '@/hooks/useGetLayout'
-import ButtonPrimary from '@/components/admin/common/buttons/ButtonPrimary'
 /**
  * AddProducts Component
  *
@@ -87,7 +86,7 @@ function AddProducts () {
                 <div className='flex flex-row gap-2 items-center overflow-x-auto'>
                   {tray.columns.map((column, columnIndex) => {
                     const productData = products.find(p => p.productId === column.productId)
-                    const isToAdd = layoutComparison.productsToAdd.some(p => p.productId === column.productId)
+                    const isToAdd = layoutComparison.productsPositionChanged.some(p => p.productId === column.productId)
                     return (
                       <div
                         key={columnIndex}
