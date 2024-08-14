@@ -5,12 +5,13 @@ import 'react-html5-camera-photo/build/css/index.css'
 import Comments from './comments'
 import { swallError } from '@/utils/sweetAlerts'
 
+/**
+ * CameraModal component handles the camera functionality to take photos or upload images.
+ * It also manages the comments for the image and handles confirmation actions.
+ */
 function CameraModal ({
   step,
   title,
-  message,
-  confirmButtonText,
-  cancelButtonText,
   handleOperationConfirmation,
   handleConfirmationModal,
   takeSnapshot,
@@ -39,7 +40,6 @@ function CameraModal ({
   }
 
   function handleTakePhotoAnimationDone (dataUri) {
-    // console.log(dataUri, 'takePhoto')
     setImage(dataUri)
   }
 
@@ -61,7 +61,6 @@ function CameraModal ({
   }
   const SendSnapshotComment = async (comment) => {
     try {
-      console.log(image.length, 'image')
       if (image.length < 7) {
         handleOperationConfirmation()
         return swallError('Ha ocurrido un error al tomar la foto, vuelve a intentarlo', false)

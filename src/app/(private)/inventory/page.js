@@ -27,6 +27,9 @@ export default function Inventory () {
   // const [currentQuantity, setCurrentQuantity] = useState(1)
   const [showMachines] = useState(false)
 
+  /**
+   * Handles the creation of a new product by opening the modal.
+   */
   const handleNewProduct = () => {
     setCurrentProduct({})
     setAction('create')
@@ -120,6 +123,13 @@ export default function Inventory () {
   const reloadPage = () => {
     window.location.reload()
   }
+
+  /**
+   * Handles the saving of a product (either creation or update).
+   *
+   * @param {Object} formData - The product data.
+   * @param {File} selectedImage - The image file for the product.
+   */
   const handleSave = async (formData, selectedImage) => {
     if (action === 'create') {
       try {
@@ -159,8 +169,13 @@ export default function Inventory () {
     }
   }
 
+  /**
+ * Updates the search parameters and resets the page to the first one
+ * whenever the search term changes.
+ */
   useEffect(
     () => {
+      // Create a deep copy of the 'params' object
       const clone = JSON.parse(JSON.stringify(params))
       clone.search = searchKey
       setPage(1)

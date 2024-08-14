@@ -13,6 +13,11 @@ import useFlattenLayout from '@/hooks/useFlattenLayout'
 import { swallError } from '@/utils/sweetAlerts'
 import { errorHandler } from '@/utils/errors/errors'
 
+/**
+ * StepTwo component handles the second step in the restock process.
+ * It fetches and displays inventory, layout, and product data,
+ * allows for quantity adjustments, and confirms the stock.
+ */
 function StepTwo () {
   const searchParams = useSearchParams()
   const externalId = searchParams.get('external_id')
@@ -20,6 +25,9 @@ function StepTwo () {
   const storeName = searchParams.get('store_name')
   const externalTransactionId = searchParams.get('externalTransactionId')
   const transactionId = searchParams.get('transactionId')
+  const showStepIntermediate = searchParams.get('show_step_intermediate') === 'true'
+  const targetLayout = searchParams.get('target_layout')
+  const oldLayout = searchParams.get('old_layout')
   const { inventory, inventoryLoad } = useGetInventory(externalId)
   const { layout, layoutLoad } = useGetLayout(layoutId)
   const { products, loading } = useGetProdByStore(externalId)
@@ -32,7 +40,12 @@ function StepTwo () {
 
   const router = useRouter()
 
-  // aca recibimos el index del producto y el id del producto
+  /**
+   * Handles quantity changes for products.
+   * @param {number} index - The index of the product.
+   * @param {string} productId - The ID of the product.
+   * @param {number} differential - The quantity differential.
+   */
   const quantityChangeHandler = (index, productId, differential) => {
     setOccInventory({
       ...occInventory,
@@ -41,7 +54,12 @@ function StepTwo () {
       }
     })
   }
-  // aca sumamos la cantidad de productos repetidos
+
+  /**
+   * Flattens the data by summing quantities of repeated products.
+   * @param {Object} data - The data to flatten.
+   * @returns {Object} The flattened data.
+   */
   const flattenData = (data) => {
     const flatData = Object.values(data).reduce((acc, curr) => {
       Object.entries(curr).forEach(([productId, quantity]) => {
@@ -52,7 +70,11 @@ function StepTwo () {
 
     return flatData
   }
-  // uno los productos repetidos y sumo la cantidad
+  /**
+   * Merges occurrences and adjusts quantities based on inventory and layout.
+   * @param {Object} data - The data to merge.
+   * @returns {Object} The merged occurrence quantity.
+   */
   const mergeOccurrence = async (data) => {
     const mergedOccurrenceQuantity = {}
     if (Object.keys(data).length === 0) {
@@ -65,7 +87,6 @@ function StepTwo () {
     } else {
       Object.entries(data).forEach(([productId, quantity]) => {
         mergedOccurrenceQuantity[productId] = quantity
-
         if (flattenedLayout.includes(productId)) {
           const inventoryProd = inventory.products.find(prod => prod.productId === productId)
           if (inventoryProd) {
@@ -83,7 +104,9 @@ function StepTwo () {
     return mergedOccurrenceQuantity
   }
 
-  // envía la confirmación de stock
+  /**
+   * Sends the stock confirmation.
+   */
   const setHandleStock = async () => {
     const flatOccInventory = await flattenData(occInventory)
     const mergedOccurrence = await mergeOccurrence(flatOccInventory)
@@ -112,9 +135,9 @@ function StepTwo () {
       const response = await postRestockInventory(externalId, transactionId, stockData)
       if (response.result.successful) {
         swallError('Stock confirmado', true)
+        const nextPage = showStepIntermediate ? 'stepIntermediate/deleteProducts' : 'stepThree'
         router.push(
-          'stepThree' +
-          `?external_id=${externalId}&layout_id=${layoutId}&store_name=${storeName}&externalTransactionId=${externalTransactionId}&transactionId=${transactionId}`
+          `${nextPage}?external_id=${externalId}&layout_id=${layoutId}&store_name=${storeName}&externalTransactionId=${externalTransactionId}&transactionId=${transactionId}&show_step_intermediate=${showStepIntermediate}&old_layout=${oldLayout}&target_layout=${targetLayout}`
         )
       }
     } catch (error) {
@@ -122,7 +145,9 @@ function StepTwo () {
     }
   }
 
-  // inicializa `collapsedRows` con claves de ID de producto y valores en `false`.
+  /**
+   * Initializes collapsedRows state with product IDs and false values.
+   */
   useEffect(() => {
     const initialCollapsedRows = products.reduce((acc, product) => {
       acc[product.productId] = false
@@ -132,14 +157,16 @@ function StepTwo () {
     setCollapsedRows(initialCollapsedRows)
   }, [products])
 
+  /**
+   * Handles checkbox changes for product rows.
+   * @param {number} index - The index of the checkbox.
+   */
   const handleCheckboxChange = (index) => {
-    // actualiza el estado `collapsedRows`, cambiando el estado de marcado del checkbox identificado por `index` al valor opuesto al que tenía.
     setCollapsedRows((prevCollapsedRows) => {
       const updatedCollapsedRows = {
         ...prevCollapsedRows,
         [index]: !prevCollapsedRows[index]
       }
-      // `allChecked` cambia de `false` a `true` sólo cuando todos los checkbox estan checkeados
       const allChecked = Object.values(updatedCollapsedRows).every((value) => value)
       setAllCheckboxesChecked(allChecked)
       return updatedCollapsedRows
@@ -160,7 +187,7 @@ function StepTwo () {
         ? (<DspLoader />)
         : (
           <div className='text-center'>
-            <StepLayout />
+            <StepLayout showStepIntermediate={showStepIntermediate} />
             {/* <pre>{JSON.stringify(occInventory, null, 2)}</pre> */}
             {externalId && (
               <div className='text-center mb-4 md:mb-8'>

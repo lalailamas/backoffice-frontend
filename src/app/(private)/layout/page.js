@@ -12,6 +12,11 @@ import MainTitle from '@/components/admin/common/titles/MainTitle'
 import ButtonCancel from '@/components/admin/common/buttons/ButtonCancel'
 import ButtonPrimary from '@/components/admin/common/buttons/ButtonPrimary'
 
+/**
+ * Layout component that allows for creating, editing, and deleting layouts.
+ *
+ * @returns {JSX.Element} The Layout component.
+ */
 function Layout () {
   const [layouts, setLayouts] = useState([])
   const [selectedLayout, setSelectedLayout] = useState('')
@@ -23,12 +28,10 @@ function Layout () {
   const [showLayoutModal, setShowLayoutModal] = useState(false)
   const [selectedTrayToDelete, setSelectedTrayToDelete] = useState(null)
   const [editingLayoutName, setEditingLayoutName] = useState('')
-  // const titleRef = useRef(null)
   const [tabsState, setTabsState] = useState([
     { id: 'tabs-home', name: 'Crear Layout', active: true },
     { id: 'tabs-message', name: 'Editar Layout', active: false }
   ])
-  // console.log('Updated tabs state:', tabsState)
 
   useEffect(() => {
     const fetchLayouts = async () => {
@@ -56,6 +59,7 @@ function Layout () {
     fetchProducts()
   }, [])
 
+  // Update selected layout details whenever selectedLayout or layouts change
   useEffect(() => {
     const layoutDetails = layouts.find(layout => layout.name === selectedLayout)
     setSelectedLayoutDetails(layoutDetails || null)
@@ -84,12 +88,10 @@ function Layout () {
   const handleDeleteProduct = (productId, combinedIndex) => {
     const columnIndex = (combinedIndex % 10)
     const trayIndex = (Math.floor((combinedIndex / 10) % 10)) - 1
-    // console.log(trayIndex, 'trayIndex')
-    // console.log(columnIndex, 'columnIndex')
-
     const newLayout = { ...selectedLayoutDetails }
     newLayout.trays.forEach((tray, index) => {
       if (index === trayIndex) {
+        tray.columnsQuantity -= 1
         tray.columns = tray.columns.filter((column, colIndex) => {
           if (column.productId === productId && colIndex === columnIndex) {
             return false
@@ -99,7 +101,6 @@ function Layout () {
       }
     })
     setSelectedLayoutDetails(newLayout)
-    // console.log('Updated Layout Details:', newLayout)
   }
 
   const handleSaveNewProduct = (newProduct, quantity) => {
@@ -112,6 +113,7 @@ function Layout () {
     newLayout.trays.forEach((tray, index) => {
       if (index === newProductTrayIndex) {
         tray.columns.push(productLayout)
+        tray.columnsQuantity += 1
       }
     })
 
@@ -119,7 +121,9 @@ function Layout () {
     setShowProductModal(false)
   }
 
-  // Crear nuevo layout
+  /**
+   * Handles saving a new layout.
+   */
   const handleSaveNewLayout = async () => {
     if (newLayoutName.length > 0) {
       const data = {
@@ -131,26 +135,26 @@ function Layout () {
         const response = await createLayout(data)
         swallInfo('Layout creado exitosamente')
 
-        // Actualizar la lista de diseños después de la creación exitosa
+        // Refresh the list of designs after successful creation
         const updatedLayouts = await getAllLayouts()
         setLayouts(updatedLayouts)
 
-        // Actualizar el estado de las pestañas y el diseño seleccionado
+        // Update the status of the tabs and the selected layout
         setTabsState([
           { id: 'tabs-home', name: 'Crear Layout', active: false },
           { id: 'tabs-message', name: 'Editar Layout', active: true }
         ])
 
-        // Establecer el nuevo diseño como el diseño seleccionado
+        // Set the new design as the selected design
         setSelectedLayout(response.name)
-        setNewLayoutName(response.name) // También puedes establecer el nombre en el input directamente si es necesario
+        setNewLayoutName(response.name) // You can also set the name in the input directly if needed
 
-        // Obtener los detalles actualizados del diseño creado
+        // Get updated details of the created design
         const updatedLayoutDetails = await getLayout(response.id)
 
-        // Actualizar el estado selectedLayoutDetails con los nuevos detalles
+        // Update selectedLayoutDetails status with new details
         setSelectedLayoutDetails(updatedLayoutDetails)
-        // Desplazar la página hacia la parte superior
+        // Scroll the page to the top
         window.scrollTo({
           top: 0,
           behavior: 'auto'
@@ -165,9 +169,11 @@ function Layout () {
     }
   }
 
-  // Editar layout
+  /**
+   * Handles editing an existing layout.
+   */
   const handleEditLayout = async () => {
-    await selectedLayoutDetails.trays.forEach((tray) => {
+    selectedLayoutDetails.trays.forEach((tray) => {
       tray.columnsQuantity = tray.columns.length
     })
 
@@ -180,25 +186,16 @@ function Layout () {
 
       try {
         const response = await editLayout(data, selectedLayoutDetails.id)
-
         if (response) {
           setTabsState([
             { id: 'tabs-home', name: 'Crear Layout', active: false },
             { id: 'tabs-message', name: 'Editar Layout', active: true }
           ])
           setSelectedLayout(response.name)
-          // Obtener los detalles actualizados del diseño creado
           const updatedLayoutDetails = await getLayout(response.id)
-
-          // Actualizar el estado selectedLayoutDetails con los nuevos detalles
           setSelectedLayoutDetails(updatedLayoutDetails)
-
-          // Esperar 500 milisegundos (0.5 segundos) antes de desplazar la página hacia arriba
-          setTimeout(() => {
-            document.getElementById('DivId').scrollIntoView({ behavior: 'smooth' })
-          }, 500)
         }
-        // swallInfo('Layout editado exitosamente')
+        swallInfo('Layout editado exitosamente')
       } catch (error) {
         swallError('Error al editar Layout')
         console.error(error, 'Error al editar Layout')
@@ -206,34 +203,35 @@ function Layout () {
     }
   }
 
-  // Eliminar layout
   const handleDeleteClick = () => {
     setShowLayoutModal(true)
   }
-  // delete layout
+  /**
+   * Handles confirming the deletion of a layout.
+   */
   const handleDeleteConfirmation = async () => {
     try {
       await deleteLayout(selectedLayoutDetails.id)
       swallInfo('Layout eliminado exitosamente')
       setShowLayoutModal(false)
 
-      // Actualizar la lista de diseños después de la eliminación exitosa
+      // Refresh the list of designs after successful deletion
       const updatedLayouts = await getAllLayouts()
       setLayouts(updatedLayouts)
 
-      // Limpiar el input del nombre del tab editar layout
+      // Clear the tab name input edit layout
       setEditingLayoutName('')
 
-      // Actualizar el estado para que el tab de crear esté activo
+      // Update status to make the create tab active
       setTabsState([
         { id: 'tabs-home', name: 'Crear Layout', active: true },
         { id: 'tabs-message', name: 'Editar Layout', active: false }
       ])
 
-      // Establecer el layout seleccionado como vacío
+      // Set the selected layout as empty
       setSelectedLayout('')
 
-      // Limpiar los detalles del layout seleccionado
+      // Clear the details of the selected layout
       setSelectedLayoutDetails(null)
     } catch (error) {
       swallError('Error al eliminar layout', false)
@@ -245,15 +243,23 @@ function Layout () {
     setShowLayoutModal(false)
   }
 
-  const handleLayoutChange = (e) => {
-    setSelectedLayout(e)
+  const handleLayoutChange = (layoutName) => {
+    setSelectedLayout(layoutName)
+    const selectedLayout = layouts.find(layout => layout.name === layoutName)
+    if (selectedLayout) {
+      console.log(selectedLayout.id)
+    }
   }
+
   const handleShowProductModal = (trayIndex) => {
     setNewProductTrayIndex(trayIndex)
     return setShowProductModal(!showProductModal)
   }
 
-  // mover los productos de lugar
+  /**
+   * Handles the drag end event to reorder products within trays.
+   * @param {Object} result - The result object from the drag end event.
+   */
   const handleDragEnd = (result) => {
     const updatedLayoutDetails = { ...selectedLayoutDetails }
 
@@ -288,7 +294,6 @@ function Layout () {
       }
 
       setSelectedLayoutDetails(updatedLayoutDetails)
-      // console.log('Updated Layout Details:', updatedLayoutDetails)
       return
     }
 
@@ -340,50 +345,58 @@ function Layout () {
     }
   }
 
-  // const handleNewLayoutNameChange = (value) => {
-  //   setNewLayoutName(value)
-  // }
-
-  // Elimina bandeja
+  /**
+   * Handles deleting a tray.
+   * @param {number} trayIndex - The index of the tray to delete.
+   */
   const handleDeleteTray = (trayIndex) => {
     const trayToDelete = selectedLayoutDetails?.trays?.[trayIndex]
     setSelectedTrayToDelete({ tray: trayToDelete, index: trayIndex })
   }
 
-  // Confirmación Eliminar bandeja
+  /**
+   * Confirms the deletion of a tray.
+   */
   const handleDeleteTrayConfirmed = () => {
     if (selectedTrayToDelete) {
       const updatedTrays = [...selectedLayoutDetails.trays]
       updatedTrays.splice(selectedTrayToDelete.index, 1)
       setSelectedLayoutDetails({
         ...selectedLayoutDetails,
-        trays: updatedTrays
+        trays: updatedTrays,
+        traysQuantity: selectedLayoutDetails.traysQuantity - 1
       })
       setSelectedTrayToDelete(null)
     }
   }
 
-  // Agregar bandeja
   const handleAddTray = () => {
     const newTray = {
+      columnsQuantity: 0, // Initially, the new tray has no
       columns: []
 
     }
+
     setSelectedLayoutDetails((prevDetails) => {
       const updatedDetails = {
         ...prevDetails,
-        trays: [...prevDetails.trays, newTray]
+        trays: [...prevDetails.trays, newTray],
+        traysQuantity: prevDetails.traysQuantity + 1
       }
 
-      // Asegurar que la nueva bandeja tenga la información necesaria
+      // Ensure that the new tray has the required information
       setSelectedTrayToDelete({ tray: newTray, index: updatedDetails.trays.length - 1 })
-
       return updatedDetails
     })
   }
 
+  const isAddTrayDisabled = !selectedLayoutDetails || !selectedLayoutDetails.trays
+
+  /**
+   * Handles changing tabs.
+   * @param {number} index - The index of the tab to activate.
+   */
   const handleTabChange = (index) => {
-    // console.log('Changing tab to index:', index)
     setTabsState((prevTabs) =>
       prevTabs.map((tab, i) => ({
         ...tab,
@@ -478,7 +491,8 @@ function Layout () {
         </div>
         <button
           onClick={handleAddTray}
-          className='w-full px-4'
+          className={`w-full px-4 ${isAddTrayDisabled ? 'cursor-not-allowed opacity-50' : ''}`}
+          disabled={isAddTrayDisabled}
         >
           <div className='flex flex-row text-xs items-center justify-center text-center p-2 mb-4 border border-gray-200 rounded-lg shadow  bg-white hover:bg-d-soft-soft-purple gap-4'>
             <svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' strokeWidth={1.5} stroke='currentColor' className='w-6 h-6'>

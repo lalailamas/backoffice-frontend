@@ -1,7 +1,11 @@
-'use client'
 import { GoogleTagManager, GoogleAnalytics } from '@next/third-parties/google'
 
-import React from 'react'
+/**
+ * Links component that displays a list of useful links for Despnsa Hernán Cortés.
+ * It also includes Google Tag Manager and Google Analytics for tracking.
+ *
+ * @returns {JSX.Element} The rendered Links component.
+ */
 function Links () {
   return (
 

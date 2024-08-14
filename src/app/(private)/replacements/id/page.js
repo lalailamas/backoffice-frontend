@@ -10,6 +10,12 @@ import useGetStores2 from '@/hooks/useStores2'
 import MainTitle from '@/components/admin/common/titles/MainTitle'
 // const store = 'https://despnsa247-public-files.s3.amazonaws.com/gabinete1.jpg'
 
+/**
+ * This component displays detailed information about a restocking operation,
+ * including metrics, images, and a table of operations.
+ *
+ * @returns {JSX.Element} The page component.
+ */
 function page () {
   const searchParams = useSearchParams()
   const id = searchParams.get('id')

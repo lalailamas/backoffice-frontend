@@ -11,12 +11,16 @@ import ButtonPrimary from '@/components/admin/common/buttons/ButtonPrimary'
 import MainTitle from '@/components/admin/common/titles/MainTitle'
 import DspLoader from '@/components/admin/common/loader'
 
+/**
+ * shopList component manages the stock supply for selected stores.
+ * It allows users to select stores, fetch data, and download an Excel file with stock information.
+ */
 function shopList () {
   const [ids, setIds] = useState([])
   const { stores } = useGetStores2(false)
   const [loading, setLoading] = useState(false)
   const [dataRequested, setDataRequested] = useState([])
-  // console.log(stores, 'stores')
+
   const handleStoreChange = (selectedIds) => {
     setIds(selectedIds)
   }
@@ -44,12 +48,9 @@ function shopList () {
   }
   const handleExcelDownloadRequested = async () => {
     Toast('Descargando archivo', 'espera unos segundos')
-
     try {
       const response = await downloadStoresStock(ids)
-
       const { buffer, filename } = response
-
       const blob = new Blob([Buffer.from(buffer)], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' })
       FileSaver.saveAs(blob, filename)
       Swal.close()
