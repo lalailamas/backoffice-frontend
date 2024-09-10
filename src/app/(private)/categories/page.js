@@ -11,22 +11,24 @@ function Categories () {
   const [categories, setCategories] = useState([])
   const [showModal, setShowModal] = useState(false)
   const [categoryName, setCategoryName] = useState('')
+  const [categoryLevel, setCategoryLevel] = useState('first') // Default level: 'first'
   const [limit] = useState(10)
   const [page, setPage] = useState(1)
-  const [search] = useState('')
   const [meta, setMeta] = useState(null)
+  console.log(meta, 'meta en component')
 
   const fetchCategories = async () => {
     try {
-      const response = await listCategories(limit, page, search)
+      const response = await listCategories(limit, page)
+      console.log(response, 'response')
       if (response) {
         setCategories(response.data)
         setMeta({
           pagination: {
-            page: parseInt(response.meta.pagination.page),
-            pages: response.meta.pagination.pages,
-            total: response.meta.pagination.total,
-            limit: parseInt(response.meta.pagination.limit)
+            page: parseInt(response.data.meta.pagination.page),
+            pages: response.data.meta.pagination.pages,
+            total: response.data.meta.pagination.total,
+            limit: parseInt(response.data.meta.pagination.limit)
           }
         })
       }
@@ -37,7 +39,7 @@ function Categories () {
 
   useEffect(() => {
     fetchCategories()
-  }, [limit, page, search])
+  }, [limit, page])
 
   const openModal = () => {
     setShowModal(true)
@@ -52,7 +54,8 @@ function Categories () {
    */
   const onSubmit = async () => {
     try {
-      await createCategory({ name: categoryName })
+      // Pasamos el nombre y el nivel de la categoría
+      await createCategory({ name: categoryName }, categoryLevel)
       swallInfo('Categoría creada exitosamente')
       closeModal()
     } catch (error) {
@@ -76,7 +79,7 @@ function Categories () {
                 <div className='inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full sm:p-6'>
                   <div className='mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left'>
                     <h3 className='text-lg leading-6 font-medium text-gray-900' id='modal-headline'>
-                      Crear Categoría
+                      Nueva Categoría
                     </h3>
                     <div className='mt-2'>
                       <input
@@ -87,16 +90,30 @@ function Categories () {
                         placeholder='Nombre de la categoría'
                       />
                     </div>
+                    {/* Selector para el nivel de la categoría */}
+                    <div className='mt-2'>
+                      <select
+                        value={categoryLevel}
+                        onChange={(e) => setCategoryLevel(e.target.value)}
+                        className='border border-gray-300 p-2 rounded-md w-full'
+                      >
+                        <option value='first'>Primaria</option>
+                        <option value='second'>Secundaria</option>
+                        <option value='third'>Terciaria</option>
+                      </select>
+                    </div>
+
                   </div>
                   <div className='flex items-center mt-5 sm:mt-4 sm:flex sm:flex-row-reverse gap-4'>
                     <ButtonPrimary text='Crear' onClick={() => onSubmit()} />
                     <ButtonCancel onClick={closeModal} />
+
                   </div>
                 </div>
               </div>
             </div>
           )}
-          <ButtonPrimary text='Crear Categoría' onClick={openModal} />
+          <ButtonPrimary text='Nueva Categoría' onClick={openModal} />
         </div>
       </div>
       <div className='px-8 mb-11'>

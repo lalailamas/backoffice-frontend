@@ -9,6 +9,7 @@ import useGetCategories from '@/hooks/useGetCategories'
 import { swallError } from '@/utils/sweetAlerts'
 import Pager from '@/components/admin/common/pager'
 import MainTitle from '@/components/admin/common/titles/MainTitle'
+import { getAllReiteData } from '@/api/product/reite'
 
 export default function Inventory () {
   const [cachekey, setCachekey] = useState(0)
@@ -56,7 +57,19 @@ export default function Inventory () {
       const response = await listProducts(params.limit, page, params.search)
 
       if (response) {
-        setProducts(response.data)
+        const reiteData = await getAllReiteData()
+
+        const reiteDataMap = reiteData.reduce((map, product) => {
+          map[product.metadata.EAN] = product.metadata.imageUrl
+          return map
+        }, {})
+        console.log(reiteDataMap, 'reiteDataMap')
+        // Merge listProducts products with reiteData images
+        const productsWithImages = response.data.map((product) => ({
+          ...product,
+          imageUrl: reiteDataMap[product.ean] || null
+        }))
+        setProducts(productsWithImages)
         setMeta({
           pagination: {
             page: parseInt(response.meta.pagination.page),
@@ -67,7 +80,7 @@ export default function Inventory () {
         })
       }
     } catch (error) {
-      console.error('Error fetching categories', error)
+      console.error('Error fetching products with images', error)
     }
   }
   useEffect(() => {

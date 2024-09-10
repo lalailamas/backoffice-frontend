@@ -1,3 +1,4 @@
+/* eslint-disable multiline-ternary */
 import React, { useState } from 'react'
 import Link from 'next/link'
 import DspLoader from '@/components/admin/common/loader'
@@ -13,6 +14,7 @@ import { deleteCategory } from '@/api/categories'
  * @returns {JSX.Element} The CategoriesTable component.
  */
 export default function CategoriesTable ({ data, updateCategories }) {
+  console.log(data, 'data categories')
   const [showModal, setShowModal] = useState(false)
   const [selectedCategory, setSelectedCategory] = useState(null)
   const [checkedStates, setCheckedStates] = useState({})
@@ -95,27 +97,84 @@ export default function CategoriesTable ({ data, updateCategories }) {
     isActive ? 'translate-x-6' : 'translate-x-0'
   }`
 
+  const capitalizeWords = (str) => {
+    return str
+      .toLowerCase()
+      .split(' ')
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(' ')
+  }
+
   return (
     <>
       <form>
         <div className='overflow-x-auto flex justify-center'>
-          <table className='table text-d-dark-dark-purple table-zebra max-[431px]:hidden w-2/4'>
+          <table className='table table-zebra text-d-dark-dark-purple max-[431px]:hidden w-full border border-b'>
             <thead>
               <tr className='bg-d-dark-dark-purple text-d-white'>
                 <th />
                 <th>ID</th>
-                <th>Nombre</th>
+                <th>Título</th>
+                <th>Categoría</th>
+                <th>Subcategoría</th>
                 <th>Status</th>
                 <th>Editar</th>
                 <th>Eliminar</th>
               </tr>
             </thead>
             <tbody>
-              {data.map((category) => (
+              {data.data.map((category) => (
                 <tr key={category.id}>
                   <td />
                   <td>{category.id}</td>
-                  <td>{category.name}</td>
+                  <td className='font-semibold'>{(category.name).toUpperCase()}</td>
+
+                  {/* Columna de las segundas categorías */}
+                  <td>
+                    {category.second_categories && category.second_categories.length > 0 ? (
+                      <ul className='list-disc'>
+                        {category.second_categories.map((secondCategory, index) => (
+                          <li key={secondCategory.id} className={`second-category second-category-${index}`}>
+
+                            <span className=' text-d-dark-dark-purple'>{capitalizeWords(secondCategory.name)}
+
+                            </span>
+
+                          </li>
+                        ))}
+                      </ul>
+                    ) : (
+                      <span>Sin subcategorías</span>
+                    )}
+                  </td>
+
+                  {/* Nueva columna para las terceras categorías */}
+                  <td>
+                    {category.second_categories && category.second_categories.length > 0 ? (
+                      <ul className=''>
+                        {category.second_categories.map((secondCategory) => (
+                          <li key={secondCategory.id}>
+                            {secondCategory.third_categories && secondCategory.third_categories.length > 0 ? (
+                              <ul>
+                                {secondCategory.third_categories.map((thirdCategory) => (
+                                  <li key={thirdCategory.id} className='border-b ml-6 text-d-soft-purple'>
+                                    {/* Aquí se aplica el estilo para que se vea diferente */}
+                                    <span className='text-xs text-gray-600 '>
+                                      {capitalizeWords(thirdCategory.name) || 'Sin nombre'}
+                                    </span>
+                                  </li>
+                                ))}
+                              </ul>
+                            ) : (
+                            // Si no hay terceras categorías, no renderizamos nada
+                              null
+                            )}
+                          </li>
+                        ))}
+                      </ul>
+                    ) : 'Sin nombre'}
+                  </td>
+
                   <td>
                     <div className='flex items-center justify-center'>
                       <input
@@ -131,6 +190,7 @@ export default function CategoriesTable ({ data, updateCategories }) {
                       </label>
                     </div>
                   </td>
+
                   <td>
                     <Link href={`/categories/edit?id=${category.id}`}>
                       <svg
@@ -145,6 +205,7 @@ export default function CategoriesTable ({ data, updateCategories }) {
                       </svg>
                     </Link>
                   </td>
+
                   <td>
                     <button onClick={(e) => handleDeleteClick(e, category.id)}>
                       <svg
@@ -163,6 +224,7 @@ export default function CategoriesTable ({ data, updateCategories }) {
               ))}
             </tbody>
           </table>
+
           {showModal && (
             <ConfirmationModal
               title='Confirmación'
@@ -178,7 +240,7 @@ export default function CategoriesTable ({ data, updateCategories }) {
       {/* MOBILE */}
       <form className='min-[431px]:hidden'>
         <div className='overflow-x-auto'>
-          {data.map((category) => (
+          {data.data.map((category) => (
             <div key={category.id} className='pb-2 w-screen'>
               <div className='flex flex-col md:hidden bg-d-soft-purple rounded-md'>
                 <div className='flex justify-end mr-16 mt-2 gap-4'>
