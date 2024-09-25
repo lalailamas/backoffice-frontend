@@ -7,22 +7,26 @@ import { swallInfo, swallError } from '@/utils/sweetAlerts'
 import ButtonPrimary from '@/components/admin/common/buttons/ButtonPrimary'
 import ButtonCancel from '@/components/admin/common/buttons/ButtonCancel'
 import MainTitle from '@/components/admin/common/titles/MainTitle'
+
 function Categories () {
   const [categories, setCategories] = useState([])
+  const [allCategories, setAllCategories] = useState([])
+  // console.log(allCategories, 'allCategories')
   const [showModal, setShowModal] = useState(false)
   const [categoryName, setCategoryName] = useState('')
-  const [categoryLevel, setCategoryLevel] = useState('first') // Default level: 'first'
+  const [categoryLevel, setCategoryLevel] = useState('first')
+  const [firstCategory, setFirstCategory] = useState('')
+  const [secondCategory, setSecondCategory] = useState('')
   const [limit] = useState(10)
   const [page, setPage] = useState(1)
   const [meta, setMeta] = useState(null)
-  console.log(meta, 'meta en component')
 
+  // Fetch categories desde la API
   const fetchCategories = async () => {
     try {
       const response = await listCategories(limit, page)
-      console.log(response, 'response')
       if (response) {
-        setCategories(response.data)
+        setCategories(response.data.data)
         setMeta({
           pagination: {
             page: parseInt(response.data.meta.pagination.page),
@@ -37,92 +41,171 @@ function Categories () {
     }
   }
 
+  const fetchAllCategories = async () => {
+    try {
+      const response = await listCategories(100, 1)
+      if (response) {
+        setAllCategories(response.data.data)
+      }
+    } catch (error) {
+      console.error('Error fetching categories', error)
+    }
+  }
   useEffect(() => {
     fetchCategories()
-  }, [limit, page])
+    fetchAllCategories()
+  }, [limit, page, categoryName])
 
-  const openModal = () => {
+  const openModal = (level) => {
+    setCategoryLevel(level)
     setShowModal(true)
   }
+
   const closeModal = () => {
     setShowModal(false)
     setCategoryName('')
+    setFirstCategory('')
+    setSecondCategory('')
+    // setThirdCategories([])
   }
-  /**
-   * Submits the new category to the API.
-   * Displays success or error messages based on the API response.
-   */
+
+  // Función para manejar la selección de la segunda categoría
+  const handleSecondCategoryChange = (e) => {
+    const selectedSecondCategoryId = e.target.value
+    setSecondCategory(selectedSecondCategoryId)
+
+    // Encontrar la segunda categoría seleccionada y mapear sus terceras categorías
+    // const selectedSecondCategory = categories
+    //   .flatMap(cat => cat.second_categories || [])
+    //   .find(secondCat => secondCat.id === parseInt(selectedSecondCategoryId))
+
+    // if (selectedSecondCategory) {
+    //   setThirdCategories(selectedSecondCategory.third_categories || [])
+    // } else {
+    //   setThirdCategories([]) // Si no hay terceras categorías, limpiamos el array
+    // }
+  }
+
   const onSubmit = async () => {
     try {
-      // Pasamos el nombre y el nivel de la categoría
-      await createCategory({ name: categoryName }, categoryLevel)
+      let categoryData = { name: categoryName }
+
+      if (categoryLevel === 'second') {
+        if (!firstCategory) {
+          swallError('Por favor, selecciona una primera categoría', false)
+          return
+        }
+        categoryData = {
+          ...categoryData,
+          first_category_id: firstCategory
+        }
+      }
+
+      if (categoryLevel === 'third') {
+        if (!firstCategory || !secondCategory) {
+          swallError('Por favor, selecciona una primera y segunda categoría', false)
+          return
+        }
+        categoryData = {
+          ...categoryData,
+          second_category_id: secondCategory
+        }
+      }
+
+      const response = await createCategory(categoryData, categoryLevel)
+      if (response) {
+        setCategoryName('')
+      }
       swallInfo('Categoría creada exitosamente')
+
       closeModal()
     } catch (error) {
-      swallError('Error al crear la categoría', false)
-      console.error('Error al crear la categoría. Por favor, inténtelo de nuevo', error)
+      swallError('Error al crear la categoría. Por favor, inténtelo de nuevo', false)
+      console.error('Error al crear la categoría:', error)
     }
   }
 
   return (
     <>
       <MainTitle>Categorías</MainTitle>
-      <div className='flex flex-row md:flex-row gap-y-2 md:gap-y-0 md:gap-x-2 justify-end'>
-        <div className='p-2 pb-8 pr-10'>
-          {showModal && (
-            <div className='fixed z-50 inset-0 overflow-y-auto'>
-              <div className='flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0'>
-                <div className='fixed inset-0 transition-opacity' aria-hidden='true'>
-                  <div className='absolute inset-0 bg-gray-500 opacity-75' />
-                </div>
-                <span className='hidden sm:inline-block sm:align-middle sm:h-screen' aria-hidden='true'>&#8203;</span>
-                <div className='inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full sm:p-6'>
-                  <div className='mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left'>
-                    <h3 className='text-lg leading-6 font-medium text-gray-900' id='modal-headline'>
-                      Nueva Categoría
-                    </h3>
-                    <div className='mt-2'>
-                      <input
-                        type='text'
-                        value={categoryName}
-                        onChange={(e) => setCategoryName(e.target.value)}
-                        className='border border-gray-300 p-2 rounded-md w-full'
-                        placeholder='Nombre de la categoría'
-                      />
-                    </div>
-                    {/* Selector para el nivel de la categoría */}
-                    <div className='mt-2'>
-                      <select
-                        value={categoryLevel}
-                        onChange={(e) => setCategoryLevel(e.target.value)}
-                        className='border border-gray-300 p-2 rounded-md w-full'
-                      >
-                        <option value='first'>Primaria</option>
-                        <option value='second'>Secundaria</option>
-                        <option value='third'>Terciaria</option>
-                      </select>
-                    </div>
-
-                  </div>
-                  <div className='flex items-center mt-5 sm:mt-4 sm:flex sm:flex-row-reverse gap-4'>
-                    <ButtonPrimary text='Crear' onClick={() => onSubmit()} />
-                    <ButtonCancel onClick={closeModal} />
-
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-          <ButtonPrimary text='Nueva Categoría' onClick={openModal} />
+      <div className='flex flex-col md:flex-row gap-y-2 md:gap-y-0 md:gap-x-2 justify-end px-8'>
+        <div className='flex flex-col md:flex-row gap-4 justify-end pb-4'>
+          <ButtonPrimary text='Nuevo título' onClick={() => openModal('first')} />
+          <ButtonPrimary text='Nueva categoría' onClick={() => openModal('second')} />
+          <ButtonPrimary text='Nueva subcategoría' onClick={() => openModal('third')} />
         </div>
+
+        {/* Modal */}
+        {showModal && (
+          <div className='fixed z-50 inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50'>
+            <div className='bg-white p-6 rounded-lg shadow-lg max-w-md w-full'>
+              <h3>{`Crear nueva ${categoryLevel === 'first' ? 'título' : categoryLevel === 'second' ? 'categoría' : 'subcategoria'} `}</h3>
+
+              <input
+                type='text'
+                value={categoryName}
+                onChange={(e) => setCategoryName(e.target.value)}
+                placeholder='Nombre de la subcategoría'
+                className='border p-2 w-full mt-2'
+              />
+
+              {categoryLevel === 'second' && (
+                <select
+                  value={firstCategory}
+                  onChange={(e) => setFirstCategory(e.target.value)}
+                  className='border p-2 w-full mt-2'
+                >
+                  <option value=''>Selecciona primera categoría</option>
+                  {allCategories?.map(cat => (
+                    <option key={cat.id} value={cat.id}>{cat.name}</option>
+                  ))}
+                </select>
+              )}
+
+              {categoryLevel === 'third' && (
+                <>
+                  <select
+                    value={firstCategory}
+                    onChange={(e) => setFirstCategory(e.target.value)}
+                    className='border p-2 w-full mt-2'
+                  >
+                    <option value=''>Selecciona título</option>
+                    {allCategories?.map(cat => (
+                      <option key={cat.id} value={cat.id}>{cat.name}</option>
+                    ))}
+                  </select>
+
+                  <select
+                    value={secondCategory}
+                    onChange={handleSecondCategoryChange}
+                    className='border p-2 w-full mt-2'
+                    disabled={!firstCategory}
+                  >
+                    <option value=''>Selecciona categoría</option>
+                    {firstCategory && allCategories
+                      .find(cat => cat.id === parseInt(firstCategory))?.second_categories.map(subcat => (
+                        <option key={subcat.id} value={subcat.id}>{subcat.name}</option>
+                      ))}
+                  </select>
+                </>
+              )}
+
+              <div className='py-4 mt-6 gap-4 flex justify-center'>
+                <ButtonPrimary text='Guardar' onClick={onSubmit} />
+                <ButtonCancel text='Cancelar' onClick={closeModal} />
+              </div>
+
+            </div>
+          </div>
+        )}
       </div>
-      <div className='px-8 mb-11'>
+
+      <div className='px-8 mb-11 '>
         <CategoriesTable data={categories} updateCategories={fetchCategories} />
         <div className='w-full flex flex-row mt-4 justify-center'>
           <Pager meta={meta} setPage={setPage} />
         </div>
       </div>
-
     </>
   )
 }
