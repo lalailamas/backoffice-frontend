@@ -23,3 +23,9 @@ export const patchReitePrices = async (data, productId) => {
   const response = await patchData(data, url, 'application/x-www-form-urlencoded')
   return response.data
 }
+
+export const findReiteProductByEAN = async (ean) => {
+  const url = `reite/product/list?eans=${ean}`
+  const response = await getDataOnly(url, 'application/x-www-form-urlencoded')
+  return response.data
+}
