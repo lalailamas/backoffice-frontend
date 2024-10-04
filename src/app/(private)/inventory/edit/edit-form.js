@@ -264,7 +264,7 @@ export default function EditForm ({
 
       {/* Selector de Categorías */}
       <div className='pb-4'>
-        <label className='label'>Categoría</label>
+        <label className='label'>Título</label>
         <Controller
           name='first_category'
           control={control}
@@ -289,7 +289,7 @@ export default function EditForm ({
       {/* Select de Subcategoría */}
       {selectedFirstCategory && (
         <div className='pb-4'>
-          <label className='label'>Subcategoría</label>
+          <label className='label'>Categoría</label>
           <Controller
             name='second_category'
             control={control}
@@ -315,7 +315,7 @@ export default function EditForm ({
       {/* Select de Categoría Terciaria */}
       {selectedSecondCategory && (
         <div className='pb-4'>
-          <label className='label'>Tercera Categoría</label>
+          <label className='label'>SubCategoría</label>
           <Controller
             name='third_category'
             control={control}
