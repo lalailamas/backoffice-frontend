@@ -55,6 +55,7 @@
   "devDependencies": {
     "daisyui": "^3.8.3",
     "eslint": "^8.50.0",
+    "msw": "^2.4.11",
     "standard": "^17.1.0"
   },
   "eslintConfig": {

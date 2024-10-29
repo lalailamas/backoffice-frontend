@@ -23,6 +23,10 @@ export default function Home () {
   const HJID = process.env.NEXT_PUBLIC_HOTJAR_HJID
   const HJSV = process.env.NEXT_PUBLIC_HOTJAR_HJSV
 
+  const displayName = session?.user?.name || 'Usuario';
+console.log('Nombre del usuario:', displayName);
+
+
   const performLogin = async () => {
     setLoading(true)
     setLoginError(false)
@@ -37,21 +41,32 @@ export default function Home () {
     }
   }
 
+  
+    useEffect(() => {
+      console.log('Datos de la sesión:', session);
+      if (session) {
+        console.log('Usuario autenticado:', session.user);
+      }
+    }, [session]);
+    
+
   useEffect(() => {
     hotjar.initialize(HJID, HJSV)
   }, [])
 
   useEffect(() => {
-    if (status === 'loading') {
-      setPreviousLoading(true)
-    } else if (status === 'unauthenticated') { setPreviousLoading(false) }
-    if (session) {
-      // console.log(session, 'session del useEffect')
-      // if (session.user.role === 'admin') router.push('/dashboard')
-      if (session.user.role === 'admin') router.push('/stores')
-      if (session.user.role === 'restock') router.push('/restock')
+    if (status === 'authenticated' && session) {
+      console.log('Session user role:', session.user.role);
+      if (session.user.role === 'admin') {
+        router.push('/stores');
+      } else if (session.user.role === 'restock') {
+        router.push('/restock');
+      }
+    } else if (status === 'unauthenticated') {
+      setPreviousLoading(false); // Mostrar el formulario de login si no está autenticado
     }
-  }, [session, status])
+  }, [session, status]);
+  
   if (previousLoading) {
     return <DspLoader />
   }
