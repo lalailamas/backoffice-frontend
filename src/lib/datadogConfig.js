@@ -7,7 +7,7 @@ export default function InitDataDog () {
   useEffect(() => {
     const initDD = () => {
       datadogLogs.init({
-        clientToken: process.env.DATADOG_CLIENT_TOKEN || 'pub9d5f9180ea92fe995dfc400744ee6979',
+        clientToken: process.env.DATADOG_CLIENT_TOKEN || '',
         env: process.env.NODE_ENV || 'development',
         site: 'datadoghq.com',
         forwardConsoleLogs: ['error', 'info'],
